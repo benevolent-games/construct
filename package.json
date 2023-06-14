@@ -12,11 +12,8 @@
 	],
 	"scripts": {
 		"prepare": "rm -rf node_modules/@babylonjs/core/index.d.ts node_modules/@babylonjs/core/index.js",
-		"build": "turtle-ts-app && npm run web -s",
-		"web": "turtle --in='s:x' --out='x' --exclude='**/*.partial.html.js' +verbose",
-		"start": "turtle-ts-app-watch & turtle-watch & wait",
-		"dev-link-nubs": "rm -rf node_modules/@benev/nubs && ln -s $(realpath ../nubs) node_modules/@benev/nubs",
-		"dev-link-turtle": "rm -rf node_modules/@benev/turtle && ln -s $(realpath ../turtle) node_modules/@benev/turtle",
+		"build": "turtle-standard",
+		"start": "turtle-standard-watch",
 		"test": "exit 0"
 	},
 	"dependencies": {
@@ -32,7 +29,7 @@
 		"@babylonjs/loaders": "^6.6.1"
 	},
 	"devDependencies": {
-		"@benev/turtle": "^0.3.4",
+		"@benev/turtle": "^0.3.5",
 		"@rollup/plugin-node-resolve": "^15.1.0",
 		"chokidar": "^3.5.3",
 		"chokidar-cli": "^3.0.0",
