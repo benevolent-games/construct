@@ -1,0 +1,64 @@
+{
+	"name": "@benev/edit",
+	"version": "0.0.0-dev.0",
+	"description": "game map editing suite for babylon",
+	"license": "MIT",
+	"author": "Chase Moskal <chasemoskal@gmail.com>",
+	"type": "module",
+	"main": "x/index.js",
+	"files": [
+		"x",
+		"s"
+	],
+	"scripts": {
+		"prepare": "rm -rf node_modules/@babylonjs/core/index.d.ts node_modules/@babylonjs/core/index.js",
+		"build": "turtle-ts-app && npm run web -s",
+		"web": "turtle --in='s:x' --out='x' --exclude='**/*.partial.html.js' +verbose",
+		"start": "turtle-ts-app-watch & turtle-watch & wait",
+		"dev-link-nubs": "rm -rf node_modules/@benev/nubs && ln -s $(realpath ../nubs) node_modules/@benev/nubs",
+		"dev-link-turtle": "rm -rf node_modules/@benev/turtle && ln -s $(realpath ../turtle) node_modules/@benev/turtle",
+		"test": "exit 0"
+	},
+	"dependencies": {
+		"@benev/nubs": "^0.2.4",
+		"@chasemoskal/magical": "^0.1.4",
+		"@chasemoskal/snapstate": "^0.0.9",
+		"es-module-shims": "^1.7.3",
+		"lit": "^2.7.5",
+		"simplex-noise": "^4.0.1"
+	},
+	"peerDependencies": {
+		"@babylonjs/core": "^6.6.1",
+		"@babylonjs/loaders": "^6.6.1"
+	},
+	"devDependencies": {
+		"@benev/turtle": "^0.3.4",
+		"@rollup/plugin-node-resolve": "^15.1.0",
+		"chokidar": "^3.5.3",
+		"chokidar-cli": "^3.0.0",
+		"http-server": "^14.1.1",
+		"importly": "^0.2.0",
+		"mkdirp": "^3.0.1",
+		"npm-run-all": "^4.1.5",
+		"rimraf": "^5.0.1",
+		"rollup": "^3.25.1",
+		"terser": "^5.18.0",
+		"typescript": "^5.1.3"
+	},
+	"keywords": [
+		"editor",
+		"editing",
+		"web-games",
+		"toolkit",
+		"babylon",
+		"babylonjs"
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/benevolent-games/edit.git"
+	},
+	"bugs": {
+		"url": "https://github.com/benevolent-games/edit/issues"
+	},
+	"homepage": "https://github.com/benevolent-games/edit#readme"
+}
