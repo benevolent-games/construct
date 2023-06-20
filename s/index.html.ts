@@ -11,6 +11,7 @@ export default template(async basic => {
 		head: startup_scripts_with_debug_mode(path),
 		body: html`
 			<p><strong>@benev/</strong>edit</p>
+			<benev-theater></benev-theater>
 		`,
 	})
 })
