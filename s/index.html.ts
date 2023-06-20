@@ -12,6 +12,7 @@ export default template(async basic => {
 		body: html`
 			<p><strong>@benev/</strong>edit</p>
 			<benev-theater></benev-theater>
+			<edit-outliner></edit-outliner>
 		`,
 	})
 })

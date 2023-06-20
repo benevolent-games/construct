@@ -23,7 +23,8 @@
 		"@chasemoskal/snapstate": "^0.0.9",
 		"es-module-shims": "^1.7.3",
 		"lit": "^2.7.5",
-		"simplex-noise": "^4.0.1"
+		"simplex-noise": "^4.0.1",
+		"xiome": "^0.0.45"
 	},
 	"peerDependencies": {
 		"@babylonjs/core": "^6.8.0",
