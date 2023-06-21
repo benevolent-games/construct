@@ -7,3 +7,8 @@ export type Thing = {
 	mesh: AbstractMesh
 }
 
+export type Folder = {
+	name: string,
+	things: Thing[],
+	folders: Folder[] | []
+}
