@@ -1,7 +1,9 @@
 
-import {Folder, Thing} from "./types.js"
 import {snapstate} from "@chasemoskal/snapstate"
 import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
+
+import {Thing} from "./types.js"
+import {Folder} from "../tools/outliner-pubsub.js"
 
 export class Context {
 
@@ -17,30 +19,7 @@ export class Context {
 	})
 
 	folders = snapstate({
-		root_folder: {
-			name: "Scene",
-			things: [{id: "1", name: "thing1", mesh: new Mesh("mesh")}] as Thing[],
-			folders: [
-					{
-					name: "some folder1",
-					things: [{id: "1", name: "thing1", mesh: new Mesh("mesh")}],
-					folders: [{
-						name: "some folderXX",
-						things: [{id: "1", name: "thing1", mesh: new Mesh("mesh")}],
-						folders: []
-				}]
-				},
-				{
-					name: "some folder2",
-					things: [{id: "1", name: "thing1", mesh: new Mesh("mesh")}],
-					folders: [{
-						name: "some folder3",
-						things: [{id: "1", name: "thing1", mesh: new Mesh("mesh")}],
-						folders: []
-				}]
-				}
-			] as Folder[]
-		}
+		root_folder: new Folder()
 	})
 }
 
