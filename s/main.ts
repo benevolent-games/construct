@@ -1,25 +1,31 @@
 
 import "@benev/toolbox/x/html.js"
+
+import "@babylonjs/core/Culling/ray.js"
+import "@babylonjs/core/Rendering/edgesRenderer.js"
+
+import {NubCauseEvent} from "@benev/nubs"
+import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {registerElements} from "@chasemoskal/magical"
+import {Color4} from "@babylonjs/core/Maths/math.color.js"
+import {Vector3} from "@babylonjs/core/Maths/math.vector.js"
+import {spawn_light} from "@benev/toolbox/x/demo/spawn_light.js"
+import {InstancedMesh} from "@babylonjs/core/Meshes/instancedMesh.js"
 import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
+import {invert_y_axis} from "@benev/toolbox/x/babylon/flycam/utils/inversions.js"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 import {integrate_nubs_to_control_fly_camera} from "@benev/toolbox/x/babylon/flycam/integrate_nubs_to_control_fly_camera.js"
 
+import {make_box} from "./tools/make-box.js"
 import {Context} from "./components/context.js"
 import {prepare_all_components} from "./components/prepare_all_components.js"
-
-import {spawn_boxes} from "@benev/toolbox/x/demo/spawn_boxes.js"
-import {spawn_light} from "@benev/toolbox/x/demo/spawn_light.js"
-import {NubCauseEvent} from "@benev/nubs"
-import {AbstractMesh, Color4, InstancedMesh, Mesh, Vector3} from "@babylonjs/core"
-import {invert_y_axis} from "@benev/toolbox/x/babylon/flycam/utils/inversions.js"
 
 const context = new Context()
 
 registerElements(prepare_all_components(context))
 
 const theater = document.querySelector<BenevTheater>("benev-theater")!
-await theater.updateComplete
+await (theater.updateComplete)
 
 const {
 	scene, start, resize, renderLoop
@@ -47,14 +53,18 @@ integrate_nubs_to_control_fly_camera({
 })
 
 spawn_light(scene, [0.11, 0.88, 0.44])
-spawn_boxes(scene)
 
+const box = make_box(scene)
+world.originals = [...world.originals, {id: "box", mesh: box, name: "box"}]
+
+const inst = box.createInstance("box_instance")
+world.instances = [...world.instances, {id: "box_instance", mesh: inst, name: "box_instance"}]
 
 // selecting, tracking and highlighting meshes
 let currentMesh: InstancedMesh | null
 let id = 0
 let shift_is_pressed = false
-let key_D_is_pressed = false
+let key_W_is_pressed = false
 let key_X_is_pressed = false
 
 let move_enabled = false
@@ -62,10 +72,8 @@ let move_enabled = false
 const red = new Color4(1, 0, 0, 1)
 const green = new Color4(0, 1, 0, 1)
 
-function higlightCurrentMesh(prev?: Mesh | InstancedMesh) {
-
+function higlightCurrentMesh(prev?: InstancedMesh) {
 	if(prev) prev.disableEdgesRendering()
-
 	if(currentMesh) {
 		currentMesh.enableEdgesRendering()
 		currentMesh.edgesWidth = 8
@@ -79,11 +87,10 @@ NubCauseEvent.target(window)
 			// pointer down
 			if (detail.pressed) {
 				const pick = scene.pick(scene.pointerX, scene.pointerY)
-				if (pick.hit) {
+				if (pick?.hit) {
 					if (currentMesh) currentMesh?.disableEdgesRendering()
 					currentMesh = pick.pickedMesh as unknown as InstancedMesh
 					move_enabled = true
-					// camera.detachControl()
 					higlightCurrentMesh()
 				}
 				else {
@@ -93,7 +100,6 @@ NubCauseEvent.target(window)
 			}
 			// pointer up
 			else {
-				// camera.attachControl(canvas, true)
 				move_enabled = false
 			}
 		}
@@ -113,30 +119,48 @@ NubCauseEvent.target(window)
 		}
 
 		if (detail.kind === "key" && detail.cause === "KeyW") {
-			key_D_is_pressed = detail.pressed
+			key_W_is_pressed = detail.pressed
 		}
 
 		if (detail.kind === "key" && detail.cause === "KeyX") {
 			key_X_is_pressed = detail.pressed
 		}
 
-		if (shift_is_pressed && key_D_is_pressed && currentMesh) {
+		if (shift_is_pressed && key_W_is_pressed && currentMesh) {
 			const prev = currentMesh
 			const prevPos = prev.position
-			const newMeshInstance = currentMesh?.createInstance(`${id}dsd`)
-			newMeshInstance.position = new Vector3(prevPos.x, prevPos.y + 5, prevPos.z)
+			const instance_name = `instance${id}`
+			const newMeshInstance = currentMesh?.createInstance(instance_name)
+			newMeshInstance.position = new Vector3(prevPos.x, prevPos.y + 3, prevPos.z)
 			currentMesh = newMeshInstance
+
+			world.instances = [
+				...world.instances,
+				{
+					id: instance_name,
+					mesh: newMeshInstance,
+					name: instance_name
+				}
+			]
+
 			higlightCurrentMesh(prev)
 			shift_is_pressed = false
-			key_D_is_pressed = false
+			key_W_is_pressed = false
 			id++
 		}
 
 		if (shift_is_pressed && key_X_is_pressed && currentMesh) {
-			if (currentMesh.isAnInstance) {
+			if (world.instances.length > 1) {
 				currentMesh.dispose(false)
+				world.instances	 = world.instances.filter(
+					instance => instance.name !== currentMesh?.name
+				)
 			}
 		}
+})
+
+world.originals.forEach(({mesh}) => {
+	mesh.isVisible = false
 })
 
 
