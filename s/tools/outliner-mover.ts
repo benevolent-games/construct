@@ -30,6 +30,7 @@ export class OutlinerMover {
 			this.#source?.parent_folder.folders
 				=== folder.folders
 			|| folder === this.#source?.child_folder
+			|| this.#source?.child_folder.folders.includes(folder)
 		)
 			return true
 	}
