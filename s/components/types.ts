@@ -1,4 +1,5 @@
 
+import {Folder} from "../tools/folder.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 export type Thing = {
@@ -6,3 +7,10 @@ export type Thing = {
 	name: string
 	mesh: AbstractMesh | undefined
 }
+
+export interface Source {
+	parent_folder: Folder
+	child_folder: Folder
+}
+
+export type Publish = () => Promise<void>
