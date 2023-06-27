@@ -1,16 +1,8 @@
-
-import {Thing} from "./types.js"
-import {snapstate} from "@chasemoskal/snapstate"
+import {CueGroup} from "@benev/frog"
+import {Folder} from "../tools/folder.js"
 
 export class Context {
-
-	world = snapstate({
-		originals: [] as Thing[],
-		instances: [] as Thing[],
-		details: {
-			scene_name: "untitled scene",
-			vertex_count: 0,
-		},
-	})
+	cues = new CueGroup()
+	folders = this.cues.create(new Folder())
 }
 

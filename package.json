@@ -17,6 +17,7 @@
 		"test": "exit 0"
 	},
 	"dependencies": {
+		"@benev/frog": "^0.0.0",
 		"@benev/nubs": "^0.2.4",
 		"@benev/toolbox": "^0.4.1",
 		"@chasemoskal/magical": "^0.1.5",
