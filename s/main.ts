@@ -21,7 +21,6 @@ import {Context} from "./components/context.js"
 import {prepare_all_components} from "./components/prepare_all_components.js"
 
 const context = new Context()
-
 registerElements(prepare_all_components(context))
 
 const theater = document.querySelector<BenevTheater>("benev-theater")!
@@ -54,6 +53,7 @@ integrate_nubs_to_control_fly_camera({
 
 spawn_light(scene, [0.11, 0.88, 0.44])
 
+const world = context.folders.value
 const box = make_box(scene)
 world.originals = [...world.originals, {id: "box", mesh: box, name: "box"}]
 

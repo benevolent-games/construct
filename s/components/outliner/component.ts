@@ -42,8 +42,8 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 						</span>
 					</div>
 					<div class=folder-objects>
-						${root_folder.things.map(thing => html`
-							<p>${thing.name}</p>
+						${root_folder.instances.map(instance => html`
+							<p>${instance.name}</p>
 						`)}
 					</div>
 					${recursively_load_folders(root_folder, publish, this.#outliner_mover)}
