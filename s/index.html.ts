@@ -1,5 +1,5 @@
 
-import {template, html, easypage, startup_scripts_with_debug_mode} from "@benev/turtle"
+import {template, html, easypage, startup_scripts_with_dev_mode} from "@benev/turtle"
 
 export default template(async basic => {
 	const path = basic.path(import.meta.url)
@@ -8,10 +8,10 @@ export default template(async basic => {
 		path,
 		css: "style.css",
 		title: "@benev/edit",
-		head: startup_scripts_with_debug_mode(path),
+		head: startup_scripts_with_dev_mode(path),
 		body: html`
 			<p><strong>@benev/</strong>edit</p>
-			<benev-theater></benev-theater>
+			<benev-theater disable-pointer-lock></benev-theater>
 			<edit-outliner></edit-outliner>
 		`,
 	})

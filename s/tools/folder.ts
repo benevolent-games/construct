@@ -3,7 +3,8 @@ import {Publish, Thing} from "../components/types.js"
 export class Folder {
 	name = "folder"
 	folders: Folder[] = []
-	things: Thing[] = [{name: "thing", id: "1", mesh: undefined}]
+	originals: Thing[] = []
+	instances: Thing[] = []
 
 	delete_folder(sourceFolder: Folder) {
 		const filtered = this.folders.filter(folder => folder !== sourceFolder)

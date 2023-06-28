@@ -22,8 +22,8 @@ export function recursively_load_folders(folder: Folder, publish: Publish, outli
 				<span @pointerdown=${() => child_folder.create_folder(child_folder, publish)}>+</span>
 			</div>
 			<div class=folder-objects>
-				${child_folder?.things?.map(thing => html`
-				<p>${thing.name}</p>
+				${child_folder?.instances?.map(instance => html`
+				<p>${instance.name}</p>
 				`)}d 
 			</div>
 			${recursively_load_folders(child_folder, publish, outliner_mover)}

@@ -28,11 +28,11 @@
 		"xiome": "^0.0.45"
 	},
 	"peerDependencies": {
-		"@babylonjs/core": "^6.8.0",
-		"@babylonjs/loaders": "^6.8.0"
+		"@babylonjs/core": "^6.9.0",
+		"@babylonjs/loaders": "^6.9.0"
 	},
 	"devDependencies": {
-		"@benev/turtle": "^0.3.7",
+		"@benev/turtle": "^0.4.0",
 		"@rollup/plugin-node-resolve": "^15.1.0",
 		"chokidar": "^3.5.3",
 		"chokidar-cli": "^3.0.0",
