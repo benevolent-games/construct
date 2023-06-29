@@ -19,4 +19,13 @@ export class Folder {
 	add_folder(folder: Folder) {
 		this.folders = [...this.folders, folder]
 	}
+
+	add_object(object: Thing) {
+		this.instances.push(object)
+	}
+
+	delete_object(object: Thing) {
+		const filtered = this.instances.filter(instance => instance !== object)
+		this.instances = filtered
+	}
 }

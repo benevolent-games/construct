@@ -8,9 +8,14 @@ export type Thing = {
 	mesh: AbstractMesh
 }
 
-export interface Source {
+export interface FolderSource {
 	parent_folder: Folder
 	child_folder: Folder
+}
+
+export interface ObjectSource {
+	object: Thing
+	folder: Folder
 }
 
 export type Publish = () => Promise<void>

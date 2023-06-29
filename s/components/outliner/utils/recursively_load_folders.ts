@@ -2,17 +2,23 @@ import {html, TemplateResult} from "lit"
 
 import {Publish} from "../../types.js"
 import {Folder} from "../../../tools/folder.js"
-import {OutlinerMover} from "../../../tools/outliner-mover.js"
+import {OutlinerManager} from "../../../tools/outliner-manager.js"
 
-export function recursively_load_folders(folder: Folder, publish: Publish, outliner_mover: OutlinerMover): TemplateResult[] {
+export function recursively_load_folders(folder: Folder, publish: Publish, outliner_manager: OutlinerManager): TemplateResult[] {
 	return folder.folders.map(child_folder => html`
 		<div class="folder">
 			<div draggable="true"
-			@dragend=${() => outliner_mover.drag_folder_end()}
-			@dragstart=${() => outliner_mover.drag_folder_start(folder, child_folder)}
-			@dragover=${(e: DragEvent) => e.preventDefault()}
-			@drop=${() => outliner_mover.drag_folder_drop(child_folder, publish)}
-			class=folder-header>
+				@dragend=${() => {
+					outliner_manager.drag_folder_end()
+					outliner_manager.drag_object_end()
+				}}
+				@dragstart=${() => outliner_manager.drag_folder_start(folder, child_folder)}
+				@dragover=${(e: DragEvent) => e.preventDefault()}
+				@drop=${() => {
+					outliner_manager.drag_folder_drop(child_folder, publish)
+					outliner_manager.drag_object_drop(child_folder, publish)
+				}}
+				class=folder-header>
 				<p>${folder.name}</p>
 				<span @pointerdown=${(e: PointerEvent) => {
 					const rootFolder = (e.target as HTMLElement).closest(".folder")
@@ -23,10 +29,16 @@ export function recursively_load_folders(folder: Folder, publish: Publish, outli
 			</div>
 			<div class=folder-objects>
 				${child_folder?.instances?.map(instance => html`
-				<p>${instance.name}</p>
-				`)}d 
+				<p class="object"
+					draggable="true"
+					@dragstart=${() => outliner_manager.drag_object_start(instance, child_folder)}
+					@dragover=${(e: DragEvent) => e.preventDefault()}
+				>
+					${instance.name}
+				</p>
+				`)}
 			</div>
-			${recursively_load_folders(child_folder, publish, outliner_mover)}
+			${recursively_load_folders(child_folder, publish, outliner_manager)}
 	</div>
 	`)
 }

@@ -32,7 +32,7 @@ div {
 	}
 }
 
-.root-folder-header, .folder-header, .folder-objects {
+.root-folder-header, .folder-header, .object {
 	height: 24px;
 }
 
@@ -71,6 +71,7 @@ div {
 	.folder[data-opened] {
 		> .folder-objects {
 			display: flex;
+			flex-direction: column;
 		}
 	}
 	.folder[data-opened] > .folder {
