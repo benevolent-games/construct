@@ -1,5 +1,7 @@
 
 import {Folder} from "../tools/folder.js"
+import {FoldersManager} from "../tools/folders-manager.js"
+import {ObjectsManager} from "../tools/objects-manager.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 export type Thing = {
@@ -19,3 +21,8 @@ export interface ObjectSource {
 }
 
 export type Publish = () => Promise<void>
+
+export interface Managers {
+	folders_manager: FoldersManager
+	objects_manager: ObjectsManager
+}

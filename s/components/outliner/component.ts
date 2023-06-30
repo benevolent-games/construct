@@ -4,17 +4,14 @@ import {QuickElement} from "@benev/frog"
 
 import {style} from "./style.js"
 import {Context} from "../context.js"
-import {OutlinerManager} from "../../tools/outliner-manager.js"
+import {FoldersManager} from "../../tools/folders-manager.js"
+import {ObjectsManager} from "../../tools/objects-manager.js"
 import {recursively_load_folders} from "./utils/recursively_load_folders.js"
 
 export const EditOutliner = (context: Context) => class extends QuickElement {
 	static styles = style
-	#outliner_manager: OutlinerManager
-
-	constructor() {
-		super()
-		this.#outliner_manager = new OutlinerManager()
-	}
+	folders_manager = new FoldersManager()
+	objects_manager = new ObjectsManager()
 
 	render() {
 
@@ -27,9 +24,9 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 				<div class=root-folder>
 					<div
 						draggable="true"
-						@dragend=${() => this.#outliner_manager.drag_folder_end()}
+						@dragend=${() => this.folders_manager.drag_folder_end()}
 						@dragover=${(e: DragEvent) => e.preventDefault()}
-						@drop=${() => this.#outliner_manager.drag_folder_drop(root_folder, publish)}
+						@drop=${() => this.folders_manager.drag_folder_drop(root_folder, publish)}
 						class=root-folder-header>
 						<p>${root_folder.name}</p>
 						<span @pointerdown=${(e: PointerEvent) => {
@@ -46,7 +43,7 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 							<p>${instance.name}</p>
 						`)}
 					</div>
-					${recursively_load_folders(root_folder, publish, this.#outliner_manager)}
+					${recursively_load_folders(root_folder, publish, this.folders_manager, this.objects_manager)}
 				</div>
 			</div>
 		`
