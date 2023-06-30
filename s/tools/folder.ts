@@ -21,7 +21,7 @@ export class Folder {
 	}
 
 	add_object(object: Thing) {
-		this.instances.push(object)
+		this.instances = [...this.instances, object]
 	}
 
 	delete_object(object: Thing) {

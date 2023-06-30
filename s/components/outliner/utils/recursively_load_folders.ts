@@ -14,10 +14,7 @@ export function recursively_load_folders(
 	return folder.folders.map(child_folder => html`
 		<div class="folder">
 			<div draggable="true"
-				@dragend=${() => {
-					folders_manager.drag_folder_end()
-					objects_manager.drag_object_end()
-				}}
+				@dragend=${() => {folders_manager.drag_folder_end()}}
 				@dragstart=${() => folders_manager.drag_folder_start(folder, child_folder)}
 				@dragover=${(e: DragEvent) => e.preventDefault()}
 				@drop=${() => {
@@ -37,6 +34,7 @@ export function recursively_load_folders(
 				${child_folder?.instances?.map(instance => html`
 				<p class="object"
 					draggable="true"
+					@dragend=${() => objects_manager.drag_object_end()}
 					@dragstart=${() => objects_manager.drag_object_start(instance, child_folder)}
 					@dragover=${(e: DragEvent) => e.preventDefault()}
 				>

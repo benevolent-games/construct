@@ -10,6 +10,7 @@ import {recursively_load_folders} from "./utils/recursively_load_folders.js"
 
 export const EditOutliner = (context: Context) => class extends QuickElement {
 	static styles = style
+
 	folders_manager = new FoldersManager()
 	objects_manager = new ObjectsManager()
 
@@ -19,18 +20,21 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 		const publish = () => context.folders.publish()
 
 		return html`
-		<h1>Outliner</h1>
+			<h1>Outliner</h1>
 			<div class=folders>
-				<div class=root-folder>
+				<div class=folder>
 					<div
 						draggable="true"
 						@dragend=${() => this.folders_manager.drag_folder_end()}
 						@dragover=${(e: DragEvent) => e.preventDefault()}
-						@drop=${() => this.folders_manager.drag_folder_drop(root_folder, publish)}
-						class=root-folder-header>
+						@drop=${() => {
+							this.folders_manager.drag_folder_drop(root_folder, publish)
+							this.objects_manager.drag_object_drop(root_folder, publish)
+						}}
+						class=folder-header>
 						<p>${root_folder.name}</p>
 						<span @pointerdown=${(e: PointerEvent) => {
-							const rootFolder = (e.target as HTMLElement).closest(".root-folder")
+							const rootFolder = (e.target as HTMLElement).closest(".folder")
 							rootFolder?.toggleAttribute("data-opened")
 						}}>-
 						</span>
@@ -40,7 +44,13 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 					</div>
 					<div class=folder-objects>
 						${root_folder.instances.map(instance => html`
-							<p>${instance.name}</p>
+							<p class="object"
+								draggable="true"
+								@dragend=${() => this.objects_manager.drag_object_end()}
+								@dragstart=${() => this.objects_manager.drag_object_start(instance, root_folder)}
+								@dragover=${(e: DragEvent) => e.preventDefault()}>
+								${instance.name}
+							</p>
 						`)}
 					</div>
 					${recursively_load_folders(root_folder, publish, this.folders_manager, this.objects_manager)}

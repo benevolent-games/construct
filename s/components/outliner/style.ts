@@ -32,25 +32,25 @@ div {
 	}
 }
 
-.root-folder-header, .folder-header, .object {
+.folder-header, .folder-header, .object {
 	height: 24px;
 }
 
-.root-folder {
+.folder {
 	.folder-objects, .folder-header {
 		display: none;
 	}
 }
 
-.root-folder-header {
+.folder-header {
 	display: flex;
 }
 
-.root-folder-header p, .folder-header p {
+.folder-header p, .folder-header p {
 	margin-right: 0.3em;
 }
 
-.root-folder-header, .folder-header {
+.folder-header, .folder-header {
 	gap: 0.4em;
 	span {
 		cursor: pointer;
@@ -64,7 +64,11 @@ div {
 	}
 }
 
-.root-folder[data-opened]{
+.folder[data-opened] {
+	> .folder-objects {
+		display: flex;
+		flex-direction: column;
+	}
 	> .folder > .folder-header {
 		display: flex;
 	}
@@ -72,11 +76,6 @@ div {
 		> .folder-objects {
 			display: flex;
 			flex-direction: column;
-		}
-	}
-	.folder[data-opened] > .folder {
-		> .folder-header {
-			display: flex;
 		}
 	}
 	.folder, .folder-objects {

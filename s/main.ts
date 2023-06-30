@@ -58,7 +58,7 @@ const box = make_box(scene)
 world.originals = [...world.originals, {id: "box", mesh: box, name: "box"}]
 
 const inst = box.createInstance("box_instance")
-world.instances = [...world.instances, {id: "box_instance", mesh: inst, name: "box_instance"}]
+world.add_object({id: "box_instance", mesh: inst, name: "box_instance"})
 
 // selecting, tracking and highlighting meshes
 let currentMesh: InstancedMesh | null
