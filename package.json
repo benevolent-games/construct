@@ -19,7 +19,7 @@
 	"dependencies": {
 		"@benev/frog": "^0.0.0",
 		"@benev/nubs": "^0.2.4",
-		"@benev/toolbox": "^0.4.2",
+		"@benev/toolbox": "^0.5.0-dev.0",
 		"@chasemoskal/magical": "^0.1.5",
 		"@chasemoskal/snapstate": "^0.0.9",
 		"es-module-shims": "^1.7.3",

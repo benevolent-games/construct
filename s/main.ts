@@ -75,7 +75,9 @@ let id = 0
 let shift_is_pressed = false
 let key_W_is_pressed = false
 let key_X_is_pressed = false
+let key_F_is_pressed = false
 
+const is_pointer_locked = !!document.pointerLockElement
 let move_enabled = false
 
 const red = new Color4(1, 0, 0, 1)
@@ -135,6 +137,10 @@ NubCauseEvent.target(window)
 			key_X_is_pressed = detail.pressed
 		}
 
+		if (detail.kind === "key" && detail.cause === "KeyF") {
+			key_F_is_pressed = detail.pressed
+		}
+
 		if (shift_is_pressed && key_W_is_pressed && currentMesh) {
 			const prev = currentMesh
 			const prevPos = prev.position
@@ -162,6 +168,8 @@ NubCauseEvent.target(window)
 				)
 			}
 		}
+
+		if(key_F_is_pressed && !is_pointer_locked) theater.requestPointerLock()
 })
 
 world.originals.forEach(({mesh}) => {
@@ -175,3 +183,9 @@ start()
 
 console.log("🎨")
 
+
+
+
+// TODO
+// request pointer lock when F is clicked, exit pointer lock when f is also clicked
+// 
