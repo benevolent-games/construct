@@ -1,7 +1,7 @@
 import {Folder} from "./folder.js"
 import {FolderSource, Publish} from "../components/types.js"
 
-export class FoldersManager {
+export class FoldersDragDropManager {
 	#folder_source: FolderSource | undefined
 
 	drag_folder_start(parent_folder: Folder, child_folder: Folder) {

@@ -2,24 +2,24 @@ import {html, TemplateResult} from "lit"
 
 import {Publish} from "../../types.js"
 import {Folder} from "../../../tools/folder.js"
-import {FoldersManager} from "../../../tools/folders-manager.js"
-import {ObjectsManager} from "../../../tools/objects-manager.js"
+import {FoldersDragDropManager} from "../../../tools/folders-drag-drop-manager.js"
+import {ObjectsDragDropManager} from "../../../tools/objects-drag-drop-manager.js"
 
 export function recursively_load_folders(
 	folder: Folder,
 	publish: Publish,
-	folders_manager: FoldersManager,
-	objects_manager: ObjectsManager): TemplateResult[] {
+	folders_drag_drop_manager: FoldersDragDropManager,
+	objects_drag_drop_manager: ObjectsDragDropManager): TemplateResult[] {
 
 	return folder.folders.map(child_folder => html`
 		<div class="folder">
 			<div draggable="true"
-				@dragend=${() => {folders_manager.drag_folder_end()}}
-				@dragstart=${() => folders_manager.drag_folder_start(folder, child_folder)}
+				@dragend=${() => folders_drag_drop_manager.drag_folder_end()}
+				@dragstart=${() => folders_drag_drop_manager.drag_folder_start(folder, child_folder)}
 				@dragover=${(e: DragEvent) => e.preventDefault()}
 				@drop=${() => {
-					folders_manager.drag_folder_drop(child_folder, publish)
-					objects_manager.drag_object_drop(child_folder, publish)
+					folders_drag_drop_manager.drag_folder_drop(child_folder, publish)
+					objects_drag_drop_manager.drag_object_drop(child_folder, publish)
 				}}
 				class=folder-header>
 				<p>${folder.name}</p>
@@ -34,15 +34,15 @@ export function recursively_load_folders(
 				${child_folder?.instances?.map(instance => html`
 				<p class="object"
 					draggable="true"
-					@dragend=${() => objects_manager.drag_object_end()}
-					@dragstart=${() => objects_manager.drag_object_start(instance, child_folder)}
+					@dragend=${() => objects_drag_drop_manager.drag_object_end()}
+					@dragstart=${() => objects_drag_drop_manager.drag_object_start(instance, child_folder)}
 					@dragover=${(e: DragEvent) => e.preventDefault()}
 				>
 					${instance.name}
 				</p>
 				`)}
 			</div>
-			${recursively_load_folders(child_folder, publish, folders_manager, objects_manager)}
+			${recursively_load_folders(child_folder, publish, folders_drag_drop_manager, objects_drag_drop_manager)}
 	</div>
 	`)
 
