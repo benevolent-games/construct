@@ -1,10 +1,10 @@
 
 import {Folder} from "../tools/folder.js"
-import {FoldersManager} from "../tools/folders-manager.js"
-import {ObjectsManager} from "../tools/objects-manager.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
+import {FoldersDragDropManager} from "../tools/folders-drag-drop-manager.js"
+import {ObjectsDragDropManager} from "../tools/objects-drag-drop-manager.js"
 
-export type Thing = {
+export type Object = {
 	id: string
 	name: string
 	mesh: AbstractMesh
@@ -16,13 +16,13 @@ export interface FolderSource {
 }
 
 export interface ObjectSource {
-	object: Thing
+	object: Object
 	folder: Folder
 }
 
 export type Publish = () => Promise<void>
 
 export interface Managers {
-	folders_manager: FoldersManager
-	objects_manager: ObjectsManager
+	folders_drag_drop_manager: FoldersDragDropManager
+	objects_drag_drop_manager: ObjectsDragDropManager
 }
