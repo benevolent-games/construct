@@ -8,7 +8,7 @@ import {recursively_load_folders} from "./utils/recursively_load_folders.js"
 import {FoldersDragDropManager} from "../../tools/folders-drag-drop-manager.js"
 import {ObjectsDragDropManager} from "../../tools/objects-drag-drop-manager.js"
 
-export const EditOutliner = (context: Context) => class extends QuickElement {
+export const EditOutlinerDisplay = (context: Context) => class extends QuickElement {
 	static styles = style
 
 	folders_drag_drop_manager = new FoldersDragDropManager()
