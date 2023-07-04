@@ -16,6 +16,7 @@ import {invert_y_axis} from "@benev/toolbox/x/babylon/flycam/utils/inversions.js
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 import {integrate_nubs_to_control_fly_camera} from "@benev/toolbox/x/babylon/flycam/integrate_nubs_to_control_fly_camera.js"
 
+import {Item} from "./tools/item.js"
 import {make_box} from "./tools/make-box.js"
 import {Context} from "./components/context.js"
 import {prepare_all_components} from "./components/prepare_all_components.js"
@@ -52,13 +53,21 @@ integrate_nubs_to_control_fly_camera({
 })
 
 spawn_light(scene, [0.11, 0.88, 0.44])
-
-const world = context.folders.value
+const mesh_relations = new Map<InstancedMesh, Item>()
+const world = context.folders.value.tree
+const events = context.folders.value.events
 const box = make_box(scene)
 world.originals = [...world.originals, {id: "box", mesh: box, name: "box"}]
 
 const inst = box.createInstance("box_instance")
-world.add_object({id: "box_instance", mesh: inst, name: "box_instance"})
+
+events.on_item_add(item => mesh_relations.set(inst, item))
+
+world.add_item(new Item({id: "box_instance", name: "box_instance", parent: world}))
+
+const item = mesh_relations.get(inst)!
+
+// world.delete_item(item)
 
 // selecting, tracking and highlighting meshes
 let currentMesh: InstancedMesh | null
@@ -136,11 +145,7 @@ NubCauseEvent.target(window)
 
 			world.instances = [
 				...world.instances,
-				{
-					id: instance_name,
-					mesh: newMeshInstance,
-					name: instance_name
-				}
+				new Item({id: instance_name, name: instance_name, parent: world})
 			]
 
 			higlightCurrentMesh(prev)

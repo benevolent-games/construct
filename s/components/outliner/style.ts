@@ -32,7 +32,7 @@ div {
 	}
 }
 
-.folder-header, .folder-header, .object {
+.folder-header, .folder-header, .item {
 	height: 24px;
 }
 

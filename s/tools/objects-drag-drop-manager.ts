@@ -1,20 +1,21 @@
+import {Item} from "./item.js"
 import {Folder} from "./folder.js"
-import {ObjectSource, Publish, Object} from "../components/types.js"
+import {ObjectSource, Publish} from "../components/types.js"
 
 export class ObjectsDragDropManager {
 	#object_source: ObjectSource | undefined
 
-	drag_object_start(object: Object, folder: Folder) {
+	drag_object_start(item: Item, folder: Folder) {
 		this.#object_source = {
-			object,
+			item,
 			folder
 		}
 	}
 
 	drag_object_drop(folder: Folder, publish: Publish) {
 		if (this.#object_source && !this.have_error(folder)) {
-			folder.add_object(this.#object_source.object)
-			this.#object_source?.folder.delete_object_from_outliner(this.#object_source.object)
+			folder.add_item(this.#object_source.item)
+			this.#object_source?.folder.delete_item(this.#object_source.item)
 			publish()
 		}
 	}

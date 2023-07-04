@@ -16,7 +16,7 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 
 	render() {
 
-		const root_folder = context.folders.value
+		const root_folder = context.folders.value.tree
 		const publish = () => context.folders.publish()
 
 		return html`
@@ -44,7 +44,8 @@ export const EditOutliner = (context: Context) => class extends QuickElement {
 					</div>
 					<div class=folder-objects>
 						${root_folder.instances.map(instance => html`
-							<p class="object"
+							<p class="item"
+								?data-selected=${instance.selected}
 								draggable="true"
 								@dragend=${() => this.objects_drag_drop_manager.drag_object_end()}
 								@dragstart=${() => this.objects_drag_drop_manager.drag_object_start(instance, root_folder)}
