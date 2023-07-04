@@ -4,7 +4,7 @@ import "@benev/toolbox/x/html.js"
 import "@babylonjs/core/Culling/ray.js"
 import "@babylonjs/core/Rendering/edgesRenderer.js"
 
-import {NubCauseEvent} from "@benev/nubs"
+import {NubCauseEvent, NubContext, NubDetail, NubEffectEvent} from "@benev/nubs"
 import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {registerElements} from "@chasemoskal/magical"
 import {Color4} from "@babylonjs/core/Maths/math.color.js"
@@ -20,6 +20,8 @@ import {Item} from "./tools/item.js"
 import {make_box} from "./tools/make-box.js"
 import {Context} from "./components/context.js"
 import {prepare_all_components} from "./components/prepare_all_components.js"
+import {editor_schema} from "./editor-schema.js"
+import {setupListener} from "@benev/toolbox/x/babylon/theater/utils/setup-listener.js"
 
 const context = new Context()
 registerElements(prepare_all_components(context))
@@ -28,8 +30,16 @@ const theater = document.querySelector<BenevTheater>("benev-theater")!
 await (theater.updateComplete)
 
 const {
-	scene, start, resize, renderLoop
-} = theater.babylon
+	nubContext,
+	babylon: {
+		scene, start, resize, renderLoop
+	}
+} = theater
+
+if (nubContext) {
+	nubContext.modes_set.assign(["selection", "transform", "fly"])
+	nubContext!.schema = editor_schema
+}
 
 const fly = make_fly_camera({scene, position: [0, 0, 0]})
 integrate_nubs_to_control_fly_camera({
@@ -75,9 +85,8 @@ let id = 0
 let shift_is_pressed = false
 let key_W_is_pressed = false
 let key_X_is_pressed = false
-let key_F_is_pressed = false
 
-const is_pointer_locked = !!document.pointerLockElement
+const is_pointer_locked = () => theater["pointer-lock"]
 let move_enabled = false
 
 const red = new Color4(1, 0, 0, 1)
@@ -92,85 +101,89 @@ function higlightCurrentMesh(prev?: InstancedMesh) {
 	}
 }
 
-NubCauseEvent.target(window)
-	.listen(({detail}) => {
-		if (detail.kind === 'key' && detail.cause === 'Mouse1') {
-			// pointer down
-			if (detail.pressed) {
-				const pick = scene.pick(scene.pointerX, scene.pointerY)
-				if (pick?.hit) {
-					if (currentMesh) currentMesh?.disableEdgesRendering()
-					currentMesh = pick.pickedMesh as unknown as InstancedMesh
-					move_enabled = true
-					higlightCurrentMesh()
+
+NubEffectEvent.target(window)
+	.listen(({detail}: NubEffectEvent) => {
+		if (detail.cause.startsWith("Shift")) {
+			shift_is_pressed = (detail as NubDetail.Key).pressed
+		}
+		if (detail.cause === "KeyW") {
+			key_W_is_pressed = (detail as NubDetail.Key).pressed
+		}
+		if (detail.cause === "KeyX") {
+			key_X_is_pressed = (detail as NubDetail.Key).pressed
+		}
+
+		switch (detail.effect) {
+			case "select": {
+				const pressed = (detail as NubDetail.Key).pressed
+				if (pressed) {
+					const pick = scene.pick(scene.pointerX, scene.pointerY)
+					if (pick?.hit) {
+						if (currentMesh) currentMesh?.disableEdgesRendering()
+						currentMesh = pick.pickedMesh as unknown as InstancedMesh
+						move_enabled = true
+						higlightCurrentMesh()
+					}
+					else {
+						currentMesh?.disableEdgesRendering()
+						currentMesh = null
+					}
 				}
-				else {
-					currentMesh?.disableEdgesRendering()
-					currentMesh = null
+				else move_enabled = false
+
+
+				break
+			}
+		
+			case "look": {
+				if (currentMesh && move_enabled && detail.cause === "Pointer") {
+					const [x, y] = invert_y_axis(
+						(detail as NubDetail.Pointer).movement
+					)
+					const newPos = new Vector3(x / 10, y / 10, 0)
+					currentMesh.position.addInPlace(newPos)
 				}
+				break
 			}
-			// pointer up
-			else {
-				move_enabled = false
+
+			case "duplicate": {
+				if(shift_is_pressed && key_W_is_pressed && currentMesh) {
+					const prev = currentMesh
+					const prevPos = prev.position
+					const instance_name = `instance${id}`
+					const newMeshInstance = currentMesh?.createInstance(instance_name)
+					newMeshInstance.position = new Vector3(prevPos.x, prevPos.y + 3, prevPos.z)
+					currentMesh = newMeshInstance
+
+					higlightCurrentMesh(prev)
+					shift_is_pressed = false
+					key_W_is_pressed = false
+					id++
+				}
+				break
 			}
-		}
 
-		// pointer move
-		if (currentMesh && move_enabled) {
-			if (detail.kind === 'pointer') {
-				const [x, y] = invert_y_axis(detail.movement)
-				const newPos = new Vector3(x / 10, y / 10, 0)
-				currentMesh?.position.addInPlace(newPos)
+			case "delete": {
+				if (shift_is_pressed && key_X_is_pressed && currentMesh) {
+					if (world.instances.length > 1) {
+						currentMesh.dispose(false)
+						world.instances	 = world.instances.filter(
+							instance => instance.name !== currentMesh?.name
+						)
+					}
+				}
+				break
 			}
-		}
 
-
-		if (detail.kind === "key" && detail.cause.startsWith("Shift")) {
-			shift_is_pressed = detail.pressed
-		}
-
-		if (detail.kind === "key" && detail.cause === "KeyW") {
-			key_W_is_pressed = detail.pressed
-		}
-
-		if (detail.kind === "key" && detail.cause === "KeyX") {
-			key_X_is_pressed = detail.pressed
-		}
-
-		if (detail.kind === "key" && detail.cause === "KeyF") {
-			key_F_is_pressed = detail.pressed
-		}
-
-		if (shift_is_pressed && key_W_is_pressed && currentMesh) {
-			const prev = currentMesh
-			const prevPos = prev.position
-			const instance_name = `instance${id}`
-			const newMeshInstance = currentMesh?.createInstance(instance_name)
-			newMeshInstance.position = new Vector3(prevPos.x, prevPos.y + 3, prevPos.z)
-			currentMesh = newMeshInstance
-
-			world.instances = [
-				...world.instances,
-				new Item({id: instance_name, name: instance_name, parent: world})
-			]
-
-			higlightCurrentMesh(prev)
-			shift_is_pressed = false
-			key_W_is_pressed = false
-			id++
-		}
-
-		if (shift_is_pressed && key_X_is_pressed && currentMesh) {
-			if (world.instances.length > 1) {
-				currentMesh.dispose(false)
-				world.instances	 = world.instances.filter(
-					instance => instance.name !== currentMesh?.name
-				)
+			case "pointer_lock": {
+				if(!is_pointer_locked()) {
+					theater.requestPointerLock()
+				}
+				break
 			}
 		}
-
-		if(key_F_is_pressed && !is_pointer_locked) theater.requestPointerLock()
-})
+	})
 
 world.originals.forEach(({mesh}) => {
 	mesh.isVisible = false
@@ -182,10 +195,3 @@ start()
 
 
 console.log("🎨")
-
-
-
-
-// TODO
-// request pointer lock when F is clicked, exit pointer lock when f is also clicked
-// 
