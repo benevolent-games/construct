@@ -22,14 +22,24 @@ h1 {
 .folders {
 	background: linear-gradient(to bottom, rgba(40,40,40, 0.50) 50%, rgba(50,50,50, 0.50) 50%);
 	background-size: 100% 48px;
-	padding-left: 1em;
-	padding-right: 1em;
+	padding-left: 0.7em;
+	padding-right: 0.7em;
 }
 
 div {
 	p {
 		color: white;
 	}
+}
+
+svg {
+	width: 21px;
+	height: 22px;
+}
+
+span {
+	display: flex;
+	align-items: center;
 }
 
 .folder-header, .folder-header, .item {
@@ -44,17 +54,36 @@ div {
 
 .folder-header {
 	display: flex;
+	align-items: center;
+	p {
+		margin: 0 0.3em;
+	}
+}
+
+.open-folder:hover, .delete-folder:hover, .toggle-visibility:hover, .add-folder:hover {
+	filter: brightness(0.7);
+}
+.delete-folder {
+	margin-left: 0.1em;
+	width: 18px;
+	height: 19px;
+	cursor: pointer;
+}
+.toggle-visibility {
+	margin-left: 0.6em;
+	width: 18px;
+	height: 19px;
+	cursor: pointer;
 }
 
 .folder-header p, .folder-header p {
 	margin-right: 0.3em;
 }
 
-.folder-header, .folder-header {
-	gap: 0.4em;
+.folder-header {
+	gap: 0.1em;
 	span {
 		cursor: pointer;
-		font-weight: bold;
 	}
 }
 
@@ -67,7 +96,8 @@ div {
 .folder[data-opened] {
 	> .folder-objects {
 		display: flex;
-		flex-direction: column;
+		gap: 0.4em;
+		align-items: center;
 	}
 	> .folder > .folder-header {
 		display: flex;
@@ -75,7 +105,8 @@ div {
 	.folder[data-opened] {
 		> .folder-objects {
 			display: flex;
-			flex-direction: column;
+			gap: 0.4em;
+			align-items: center;
 		}
 	}
 	.folder, .folder-objects {

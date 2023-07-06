@@ -5,6 +5,12 @@ import {Folder} from "../../../tools/folder.js"
 import {FoldersDragDropManager} from "../../../tools/folders-drag-drop-manager.js"
 import {ObjectsDragDropManager} from "../../../tools/objects-drag-drop-manager.js"
 
+import arrowDownSvg from "../../../icons/akar/arrow-down.svg.js"
+import folderSvg from "../../../icons/material-design-icons/folder.svg.js"
+import objectSvg from "../../../icons/material-design-icons/object.svg.js"
+import deleteBinSvg from "../../../icons/material-design-icons/delete-bin.svg.js"
+import visibilitySvg from "../../../icons/material-design-icons/visibility.svg.js"
+
 export function recursively_load_folders(
 	folder: Folder,
 	publish: Publish,
@@ -22,16 +28,27 @@ export function recursively_load_folders(
 					objects_drag_drop_manager.drag_object_drop(child_folder, publish)
 				}}
 				class=folder-header>
+				${folderSvg}
 				<p>${folder.name}</p>
-				<span @pointerdown=${(e: PointerEvent) => {
+				<span class="open-folder" @pointerdown=${(e: PointerEvent) => {
 					const rootFolder = (e.target as HTMLElement).closest(".folder")
 					rootFolder?.toggleAttribute("data-opened")
-					}}>-
+				}}>
+					${arrowDownSvg}
 				</span>
-				<span @pointerdown=${() => child_folder.create_folder(child_folder, publish)}>+</span>
+				<span class="add-folder" @pointerdown=${() => child_folder.create_folder(child_folder, publish)}>
+					+
+				</span>
+				<span class="toggle-visibility">
+					${visibilitySvg}
+				</span>
+				<span @pointerdown=${() => folder.delete_folder(child_folder)} class="delete-folder">
+					${deleteBinSvg}
+				</span>
 			</div>
 			<div class=folder-objects>
 				${child_folder?.instances?.map(instance => html`
+				${objectSvg}
 				<p class="item"
 					?data-selected=${instance.selected}
 					draggable="true"

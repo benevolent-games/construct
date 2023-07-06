@@ -34,9 +34,8 @@ export class Folder {
 	}
 
 	delete_item(item: Item) {
-		const itemFolder = item.parent
-		const filtered = itemFolder.instances.filter(instance => instance !== item)
-		itemFolder.instances = filtered
+		const filtered = this.instances.filter(instance => instance !== item)
+		this.instances = filtered
 		this.#outliner_events.on_item_remove.publish(item)
 	}
 
