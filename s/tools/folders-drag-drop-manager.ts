@@ -11,12 +11,11 @@ export class FoldersDragDropManager {
 		}
 	}
 
-	drag_folder_drop(folder: Folder, publish: Publish) {
+	drag_folder_drop(folder: Folder) {
 		if (this.#folder_source && !this.have_error(folder)) {
 			folder.add_folder(this.#folder_source.child_folder)
 			this.#folder_source.parent_folder
 				.delete_folder(this.#folder_source.child_folder)
-			publish()
 		}
 	}
 

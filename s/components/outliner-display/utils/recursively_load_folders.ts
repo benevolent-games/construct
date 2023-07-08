@@ -24,8 +24,8 @@ export function recursively_load_folders(
 				@dragstart=${() => folders_drag_drop_manager.drag_folder_start(folder, child_folder)}
 				@dragover=${(e: DragEvent) => e.preventDefault()}
 				@drop=${() => {
-					folders_drag_drop_manager.drag_folder_drop(child_folder, publish)
-					objects_drag_drop_manager.drag_object_drop(child_folder, publish)
+					folders_drag_drop_manager.drag_folder_drop(child_folder)
+					objects_drag_drop_manager.drag_object_drop(child_folder)
 				}}
 				class=folder-header>
 				${folderSvg}
@@ -58,6 +58,12 @@ export function recursively_load_folders(
 				>
 					${instance.name}
 				</p>
+				<span class="toggle-visibility">
+					${visibilitySvg}
+				</span>
+				<span @pointerdown=${() => child_folder.delete_item(instance)} class="delete-folder">
+					${deleteBinSvg}
+				</span>
 				`)}
 			</div>
 			${recursively_load_folders(child_folder, publish, folders_drag_drop_manager, objects_drag_drop_manager)}

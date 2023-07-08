@@ -19,6 +19,13 @@ export const EditOutlinerDisplay = (context: Context) => class extends QuickElem
 	folders_drag_drop_manager = new FoldersDragDropManager()
 	objects_drag_drop_manager = new ObjectsDragDropManager()
 
+	connectedCallback() {
+		super.connectedCallback()
+		for (const event of Object.values(context.folders.value.events)) {
+			event(() => this.requestUpdate())
+		}
+	}
+
 	render() {
 
 		const root_folder = context.folders.value.tree
@@ -33,8 +40,8 @@ export const EditOutlinerDisplay = (context: Context) => class extends QuickElem
 						@dragend=${() => this.folders_drag_drop_manager.drag_folder_end()}
 						@dragover=${(e: DragEvent) => e.preventDefault()}
 						@drop=${() => {
-							this.folders_drag_drop_manager.drag_folder_drop(root_folder, publish)
-							this.objects_drag_drop_manager.drag_object_drop(root_folder, publish)
+							this.folders_drag_drop_manager.drag_folder_drop(root_folder)
+							this.objects_drag_drop_manager.drag_object_drop(root_folder)
 						}}
 						class=folder-header>
 						${folderSvg}

@@ -12,11 +12,10 @@ export class ObjectsDragDropManager {
 		}
 	}
 
-	drag_object_drop(folder: Folder, publish: Publish) {
+	drag_object_drop(folder: Folder) {
 		if (this.#object_source && !this.have_error(folder)) {
 			folder.add_item(this.#object_source.item)
 			this.#object_source?.folder.delete_item(this.#object_source.item)
-			publish()
 		}
 	}
 
