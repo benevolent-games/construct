@@ -94,6 +94,9 @@ span {
 }
 
 .folder[data-opened] {
+	> .folder-header .open-folder {
+		transform: rotate(-90deg)
+	}
 	> .folder-objects {
 		display: flex;
 		gap: 0.4em;
