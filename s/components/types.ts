@@ -33,4 +33,6 @@ export interface OutlinerEvents {
 	on_item_add: Pub<Item>
 	on_item_remove: Pub<Item>
 	on_folder_remove: Pub<Item[]>
+	on_item_select: Pub<Item[]>
+	on_item_deselect: Pub<Item[]>
 }

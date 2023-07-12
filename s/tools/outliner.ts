@@ -9,6 +9,8 @@ export class Outliner {
 		on_item_add: pub<Item>(),
 		on_item_remove: pub<Item>(),
 		on_folder_remove: pub<Item[]>(),
+		on_item_select: pub<Item[]>(),
+		on_item_deselect: pub<Item[]>()
 	}
 
 	tree = new Folder(this.events)
