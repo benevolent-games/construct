@@ -22,8 +22,8 @@ h1 {
 .folders {
 	background: linear-gradient(to bottom, rgba(40,40,40, 0.50) 50%, rgba(50,50,50, 0.50) 50%);
 	background-size: 100% 48px;
-	padding-left: 1em;
-	padding-right: 1em;
+	padding-left: 0.7em;
+	padding-right: 0.7em;
 }
 
 div {
@@ -32,29 +32,58 @@ div {
 	}
 }
 
-.root-folder-header, .folder-header, .folder-objects {
+svg {
+	width: 21px;
+	height: 22px;
+}
+
+span {
+	display: flex;
+	align-items: center;
+}
+
+.folder-header, .folder-header, .item {
 	height: 24px;
 }
 
-.root-folder {
+.folder {
 	.folder-objects, .folder-header {
 		display: none;
 	}
 }
 
-.root-folder-header {
+.folder-header {
 	display: flex;
+	align-items: center;
+	p {
+		margin: 0 0.3em;
+	}
 }
 
-.root-folder-header p, .folder-header p {
+.open-folder:hover, .delete-folder:hover, .toggle-visibility:hover, .add-folder:hover {
+	filter: brightness(0.7);
+}
+.delete-folder {
+	margin-left: 0.1em;
+	width: 18px;
+	height: 19px;
+	cursor: pointer;
+}
+.toggle-visibility {
+	margin-left: 0.6em;
+	width: 18px;
+	height: 19px;
+	cursor: pointer;
+}
+
+.folder-header p, .folder-header p {
 	margin-right: 0.3em;
 }
 
-.root-folder-header, .folder-header {
-	gap: 0.4em;
+.folder-header {
+	gap: 0.1em;
 	span {
 		cursor: pointer;
-		font-weight: bold;
 	}
 }
 
@@ -64,18 +93,20 @@ div {
 	}
 }
 
-.root-folder[data-opened]{
+.folder[data-opened] {
+	> .folder-objects {
+		display: flex;
+		gap: 0.4em;
+		align-items: center;
+	}
 	> .folder > .folder-header {
 		display: flex;
 	}
 	.folder[data-opened] {
 		> .folder-objects {
 			display: flex;
-		}
-	}
-	.folder[data-opened] > .folder {
-		> .folder-header {
-			display: flex;
+			gap: 0.4em;
+			align-items: center;
 		}
 	}
 	.folder, .folder-objects {
