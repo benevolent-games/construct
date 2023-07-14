@@ -6,6 +6,7 @@ import {FoldersDragDropManager} from "../../../tools/folders-drag-drop-manager.j
 import {ObjectsDragDropManager} from "../../../tools/objects-drag-drop-manager.js"
 
 import arrowDownSvg from "../../../icons/akar/arrow-down.svg.js"
+import {remove_indicator, set_indicator} from "./drag-drop-indicators.js"
 import folderSvg from "../../../icons/material-design-icons/folder.svg.js"
 import objectSvg from "../../../icons/material-design-icons/object.svg.js"
 import deleteBinSvg from "../../../icons/material-design-icons/delete-bin.svg.js"
@@ -23,10 +24,13 @@ export function recursively_load_folders(
 				@dragend=${() => folders_drag_drop_manager.drag_folder_end()}
 				@dragstart=${() => folders_drag_drop_manager.drag_folder_start(folder, child_folder)}
 				@dragover=${(e: DragEvent) => e.preventDefault()}
-				@drop=${() => {
+				@drop=${(e: DragEvent) => {
 					folders_drag_drop_manager.drag_folder_drop(child_folder)
 					objects_drag_drop_manager.drag_object_drop(child_folder)
+					remove_indicator(e)
 				}}
+				@dragenter=${set_indicator}
+				@dragleave=${remove_indicator}
 				class=folder-header>
 				${folderSvg}
 				<p>${folder.name}</p>

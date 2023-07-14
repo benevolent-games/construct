@@ -36,7 +36,6 @@ export const EditOutlinerDisplay = (context: Context) => class extends QuickElem
 			<div class=folders>
 				<div class=folder>
 					<div
-						draggable="true"
 						@dragend=${() => this.folders_drag_drop_manager.drag_folder_end()}
 						@dragover=${(e: DragEvent) => e.preventDefault()}
 						@drop=${() => {

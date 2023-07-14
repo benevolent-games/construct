@@ -93,6 +93,13 @@ span {
 	}
 }
 
+.folder-header[data-outline] {
+	box-shadow: inset 0 0 0.5em 0 #15d515;
+	> *:not(.folder-header) {
+		pointer-events: none;
+	}
+}
+
 .folder[data-opened] {
 	> .folder-header .open-folder {
 		transform: rotate(-90deg)
