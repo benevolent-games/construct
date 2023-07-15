@@ -7,6 +7,7 @@ export class Folder {
 	originals: Original[] = []
 	instances: Item[] = []
 	#outliner_events
+	isVisible = true
 
 	constructor(events: OutlinerEvents) {
 		this.#outliner_events = events
@@ -41,5 +42,16 @@ export class Folder {
 
 	select_items() {
 		this.instances.forEach(instance => instance.selected = true)
+	}
+
+	setVisibility(bool: boolean) {
+		this.isVisible = bool
+		this.instances.forEach(item => item.isVisible = bool)
+		this.folders.forEach(folder => folder.setVisibility(bool))
+	}
+
+	toggleVisibility(publish: Publish) {
+		this.setVisibility(!this.isVisible)
+		publish()
 	}
 }

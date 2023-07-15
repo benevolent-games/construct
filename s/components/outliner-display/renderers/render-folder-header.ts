@@ -2,10 +2,11 @@ import {html} from "lit"
 
 import {Publish} from "../../types.js"
 import {Folder} from "../../../tools/folder.js"
+import eyeOpenSvg from "../../../icons/akar/eye-open.svg.js"
 import arrowDownSvg from "../../../icons/akar/arrow-down.svg.js"
+import eyeSlashedSvg from "../../../icons/akar/eye-slashed.svg.js"
 import folderSvg from "../../../icons/material-design-icons/folder.svg.js"
 import deleteBinSvg from "../../../icons/material-design-icons/delete-bin.svg.js"
-import visibilitySvg from "../../../icons/material-design-icons/visibility.svg.js"
 import {FoldersDragDropManager} from "../../../tools/folders-drag-drop-manager.js"
 import {ObjectsDragDropManager} from "../../../tools/objects-drag-drop-manager.js"
 
@@ -47,6 +48,7 @@ export function renderFolderHeader(
 			}}
 			@dragenter=${attribute_manager.set_drag_indicator}
 			@dragleave=${attribute_manager.remove_drag_indicator}
+			?data-notvisible=${!child_folder.isVisible}
 			class=folder-header>
 			${folderSvg}
 			<p>${folder.name}</p>
@@ -56,8 +58,8 @@ export function renderFolderHeader(
 			<span class="add-folder" @pointerdown=${() => child_folder.create_folder(child_folder, publish)}>
 				+
 			</span>
-			<span class="toggle-visibility">
-				${visibilitySvg}
+			<span @pointerdown=${() => child_folder.toggleVisibility(publish)} class="toggle-visibility">
+				${child_folder.isVisible ? eyeOpenSvg : eyeSlashedSvg}
 			</span>
 			<span @pointerdown=${() => folder.delete_folder(child_folder)} class="delete-folder">
 				${deleteBinSvg}

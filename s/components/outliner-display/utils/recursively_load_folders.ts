@@ -18,7 +18,7 @@ export function recursively_load_folders(
 			${renderFolderHeader(
 				folder, publish, child_folder,
 				folders_drag_drop_manager, objects_drag_drop_manager)}
-			${renderFolderObjects(child_folder, objects_drag_drop_manager)}
+			${renderFolderObjects(child_folder, objects_drag_drop_manager, publish)}
 			${recursively_load_folders(child_folder, publish, folders_drag_drop_manager, objects_drag_drop_manager)}
 		</div>
 	`)

@@ -1,10 +1,12 @@
 import {Folder} from "./folder.js"
+import {Publish} from "../components/types.js"
 
 export class Item {
 	id: string
 	name: string
 	parent: Folder
 	selected? = false
+	isVisible = true
 	
 	constructor({id, name, parent, selected}: {id: string, name: string, parent: Folder, selected?: boolean}) {
 		this.id = id
@@ -24,5 +26,10 @@ export class Item {
 
 	deselect_item() {
 		this.selected = false
+	}
+
+	toggleVisibility(publish: Publish) {
+		this.isVisible = !this.isVisible
+		publish()
 	}
 }

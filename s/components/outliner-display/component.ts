@@ -4,13 +4,14 @@ import {QuickElement} from "@benev/frog"
 
 import {style} from "./style.js"
 import {Context} from "../context.js"
+import eyeOpenSvg from "../../icons/akar/eye-open.svg.js"
 import arrowDownSvg from "../../icons/akar/arrow-down.svg.js"
+import eyeSlashedSvg from "../../icons/akar/eye-slashed.svg.js"
 import folderSvg from "../../icons/material-design-icons/folder.svg.js"
 import {renderFolderObjects} from "./renderers/render-folder-objects.js"
 import {recursively_load_folders} from "./utils/recursively_load_folders.js"
 import {FoldersDragDropManager} from "../../tools/folders-drag-drop-manager.js"
 import {ObjectsDragDropManager} from "../../tools/objects-drag-drop-manager.js"
-import visibilitySvg from "../../icons/material-design-icons/visibility.svg.js"
 
 export const EditOutlinerDisplay = (context: Context) => class extends QuickElement {
 	static styles = style
@@ -41,6 +42,7 @@ export const EditOutlinerDisplay = (context: Context) => class extends QuickElem
 							this.folders_drag_drop_manager.drag_folder_drop(root_folder)
 							this.objects_drag_drop_manager.drag_object_drop(root_folder)
 						}}
+						?data-notvisible=${!root_folder.isVisible}
 						class=folder-header>
 						${folderSvg}
 						<p>${root_folder.name}</p>
@@ -53,11 +55,11 @@ export const EditOutlinerDisplay = (context: Context) => class extends QuickElem
 						<span class="add-folder" @pointerdown=${() => root_folder.create_folder(root_folder, publish)}>
 							+
 						</span>
-						<span class="toggle-visibility">
-							${visibilitySvg}
+						<span @pointerdown=${() => root_folder.toggleVisibility(publish)} class="toggle-visibility">
+							${root_folder.isVisible ? eyeOpenSvg : eyeSlashedSvg}
 						</span>
 					</div>
-					${renderFolderObjects(root_folder, this.objects_drag_drop_manager)}
+					${renderFolderObjects(root_folder, this.objects_drag_drop_manager, publish)}
 					${recursively_load_folders(root_folder, publish, this.folders_drag_drop_manager, this.objects_drag_drop_manager)}
 				</div>
 			</div>
