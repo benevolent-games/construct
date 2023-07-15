@@ -28,8 +28,12 @@ export class Item {
 		this.selected = false
 	}
 
-	toggleVisibility(publish: Publish) {
+	toggle_visibility(publish: Publish) {
 		this.isVisible = !this.isVisible
 		publish()
+	}
+
+	set_item_name(name: string) {
+		this.name = name
 	}
 }

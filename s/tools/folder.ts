@@ -44,14 +44,18 @@ export class Folder {
 		this.instances.forEach(instance => instance.selected = true)
 	}
 
-	setVisibility(bool: boolean) {
+	set_visibility(bool: boolean) {
 		this.isVisible = bool
 		this.instances.forEach(item => item.isVisible = bool)
-		this.folders.forEach(folder => folder.setVisibility(bool))
+		this.folders.forEach(folder => folder.set_visibility(bool))
 	}
 
-	toggleVisibility(publish: Publish) {
-		this.setVisibility(!this.isVisible)
+	toggle_visibility(publish: Publish) {
+		this.set_visibility(!this.isVisible)
 		publish()
+	}
+
+	set_folder_name(name: string) {
+		this.name = name
 	}
 }

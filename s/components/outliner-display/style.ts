@@ -128,5 +128,13 @@ span {
 	}
 }
 
+.input-rename {
+	background-color: transparent;
+	border: 1px solid white;
+	border-radius: 5px;
+	font-size: 20px;
+	color: white;
+}
+
 `
 
