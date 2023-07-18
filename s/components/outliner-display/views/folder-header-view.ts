@@ -65,11 +65,11 @@ export const FolderHeaderView = view({}, use => (
 			${renameStarted
 			? html`
 				<input
-					@input=${(e: InputEvent) => folder
+					@input=${(e: InputEvent) => child_folder
 						.set_folder_name((e.target as HTMLInputElement).value)}
 					class="input-rename"
-					.value=${folder.name}>`
-			: html`<p @dblclick=${() => setRenameStarted(true)}>${folder.name}</p>`}
+					value=${child_folder.name}>`
+			: html`<p @dblclick=${() => setRenameStarted(true)}>${child_folder.name}</p>`}
 			<span class="open-folder" @pointerdown=${attribute_manager.toggle_folder_opened}>
 				${arrowDownSvg}
 			</span>
