@@ -1,8 +1,8 @@
 import {CueGroup} from "@benev/frog"
-import {Outliner} from "../tools/outliner.js"
+import {Graph} from "../tools/graph.js"
 
 export class Context {
 	cues = new CueGroup()
-	folders = this.cues.create(new Outliner())
+	folders = this.cues.create(new Graph())
 }
 

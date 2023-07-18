@@ -3,7 +3,7 @@ import {pub} from "@benev/frog"
 import {Folder} from "./folder.js"
 import {Item} from "./item.js"
 
-export class Outliner {
+export class Graph {
 
 	events = {
 		on_item_add: pub<Item>(),
