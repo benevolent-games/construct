@@ -1,15 +1,19 @@
+
+import {Pipe, provide_context, apply_theme, cue_reactivity} from "@benev/frog"
+
 import {theme} from "./theme.js"
 import {Context} from "./context.js"
 import {EditOutlinerDisplay} from "./outliner-display/component.js"
-import {pass_context_to_elements, theme_elements, update_elements_on_cue_changes} from "@benev/frog"
 
 export const elements = {
-	EditOutlinerDisplay
+	EditOutlinerDisplay,
 }
 
 export function prepare_all_components(context: Context) {
-	return theme_elements(theme,
-		update_elements_on_cue_changes(context.cues,
-			pass_context_to_elements(context, elements)))
+	return Pipe.with(elements)
+		.to(provide_context(context))
+		.to(cue_reactivity(context.cues))
+		.to(apply_theme(theme))
+		.done()
 }
 
