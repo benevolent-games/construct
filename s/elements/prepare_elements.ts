@@ -3,7 +3,7 @@ import {css} from "lit"
 import {Pipe, apply_theme, flatstate_reactivity, provide_context} from "@benev/frog"
 
 import {Context} from "../context/context.js"
-import {EdCatalog} from "./ed-catalog/elements.js"
+import {EdCatalog} from "./ed-catalog/element.js"
 
 export const elements = {EdCatalog}
 
