@@ -9,10 +9,10 @@ export class Graph {
 	#selection = new Set<Id>
 
 	on = {
-		item_added: pub<[Id, Unit]>(),
-		item_removed: pub<Id>(),
-		item_selected: pub<Id>(),
-		item_deselected: pub<Id>(),
+		added: pub<[Id, Unit]>(),
+		removed: pub<Id>(),
+		selected: pub<Id>(),
+		deselected: pub<Id>(),
 	}
 
 	get items() {
@@ -30,12 +30,12 @@ export class Graph {
 	add(item: Unit) {
 		const id = generateId()
 		this.#units.set(id, item)
-		this.on.item_added.publish([id, item])
+		this.on.added.publish([id, item])
 	}
 
 	remove(id: string) {
 		this.#units.delete(id)
-		this.on.item_removed.publish(id)
+		this.on.removed.publish(id)
 	}
 
 	selected(id: Id) {
@@ -44,12 +44,12 @@ export class Graph {
 
 	select(id: Id) {
 		this.#selection.add(id)
-		this.on.item_selected.publish(id)
+		this.on.selected.publish(id)
 	}
 
 	deselect(id: Id) {
 		this.#selection.delete(id)
-		this.on.item_deselected.publish(id)
+		this.on.deselected.publish(id)
 	}
 }
 

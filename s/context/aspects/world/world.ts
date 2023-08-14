@@ -14,8 +14,8 @@ export class World {
 			graph: Graph,
 		) {
 		this.#scene = scene
-		graph.on.item_added(this.#add)
-		graph.on.item_removed(this.#remove)
+		graph.on.added(this.#add)
+		graph.on.removed(this.#remove)
 	}
 
 	#add = ([id, item]: [Id, Unit]) => {
