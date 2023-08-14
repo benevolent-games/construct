@@ -1,6 +1,7 @@
 
 import {Flat} from "@benev/frog"
 import {Scene} from "@babylonjs/core/scene.js"
+
 import {Graph} from "./controllers/graph/graph.js"
 import {World} from "./controllers/world/world.js"
 import {Catalog} from "./controllers/catalog/catalog.js"

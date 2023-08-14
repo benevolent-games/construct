@@ -1,11 +1,12 @@
 
 import {TemplateResult, html} from "lit"
 import {QuickElement} from "@benev/frog"
+
 import {Context} from "../../context/context.js"
 import {Id} from "../../context/controllers/graph/parts/types.js"
 import {Item} from "../../context/controllers/outliner/parts/item.js"
 
-export const EdOutliner = (context: Context) => class extends QuickElement {
+export const EdOutliner = ({outliner}: Context) => class extends QuickElement {
 
 	#whatever(item: Item.Whatever, parent: Item.Folder): TemplateResult {
 		switch (item.kind) {
@@ -48,7 +49,7 @@ export const EdOutliner = (context: Context) => class extends QuickElement {
 	render() {
 		return html`
 			<ol>
-				${this.#folder(context.outliner.root)}
+				${this.#folder(outliner.root)}
 			</ol>
 		`
 	}
