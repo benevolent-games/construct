@@ -8,11 +8,11 @@ export class Graph {
 	#items = new Map<Id, Item>()
 	#selection = new Set<Id>
 
-	events = {
-		on_item_added: pub<[Id, Item]>(),
-		on_item_removed: pub<Id>(),
-		on_item_selected: pub<Id>(),
-		on_item_deselected: pub<Id>(),
+	on = {
+		item_added: pub<[Id, Item]>(),
+		item_removed: pub<Id>(),
+		item_selected: pub<Id>(),
+		item_deselected: pub<Id>(),
 	}
 
 	get items() {
@@ -30,12 +30,12 @@ export class Graph {
 	add(item: Item) {
 		const id = generateId()
 		this.#items.set(id, item)
-		this.events.on_item_added.publish([id, item])
+		this.on.item_added.publish([id, item])
 	}
 
 	remove(id: string) {
 		this.#items.delete(id)
-		this.events.on_item_removed.publish(id)
+		this.on.item_removed.publish(id)
 	}
 
 	selected(id: Id) {
@@ -44,12 +44,12 @@ export class Graph {
 
 	select(id: Id) {
 		this.#selection.add(id)
-		this.events.on_item_selected.publish(id)
+		this.on.item_selected.publish(id)
 	}
 
 	deselect(id: Id) {
 		this.#selection.delete(id)
-		this.events.on_item_deselected.publish(id)
+		this.on.item_deselected.publish(id)
 	}
 }
 
