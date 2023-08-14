@@ -1,7 +1,7 @@
 
 import {Flat} from "@benev/frog"
-import {Catalog} from "./parts/catalog.js"
 import {Scene} from "@babylonjs/core/scene.js"
+import {Catalog} from "./aspects/catalog/catalog.js"
 
 export class Context {
 	readonly catalog: Catalog

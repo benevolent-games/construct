@@ -1,21 +1,10 @@
 
 import {Flat} from "@benev/frog"
 import {Scene} from "@babylonjs/core/scene.js"
-import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
-import {quick_hash} from "../../tools/quick_hash.js"
-
-export type Glb = {
-	hash: string
-	name: string
-	size: number
-	container: AssetContainer
-}
-
-export type CatalogState = {
-	glbs: Glb[]
-}
+import {CatalogState, Glb} from "./parts/types.js"
+import {quick_hash} from "../../../tools/quick_hash.js"
 
 export class Catalog {
 	#scene: Scene
@@ -39,19 +28,17 @@ export class Catalog {
 		if (already_exists)
 			return false
 
-		const container = await SceneLoader.LoadAssetContainerAsync(
-			URL.createObjectURL(file),
-			undefined,
-			this.#scene,
-			() => {},
-			".glb",
-		)
-
 		this.add_glb({
 			hash,
-			container,
 			name: file.name,
 			size: file.size,
+			container: await SceneLoader.LoadAssetContainerAsync(
+				URL.createObjectURL(file),
+				undefined,
+				this.#scene,
+				() => {},
+				".glb",
+			),
 		})
 
 		return true
