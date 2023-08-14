@@ -1,10 +1,10 @@
 
 import {Flat} from "@benev/frog"
 import {Scene} from "@babylonjs/core/scene.js"
-import {Graph} from "./aspects/graph/graph.js"
-import {World} from "./aspects/world/world.js"
-import {Catalog} from "./aspects/catalog/catalog.js"
-import {Outliner} from "./aspects/outliner/outliner.js"
+import {Graph} from "./controllers/graph/graph.js"
+import {World} from "./controllers/world/world.js"
+import {Catalog} from "./controllers/catalog/catalog.js"
+import {Outliner} from "./controllers/outliner/outliner.js"
 
 export class Context {
 	readonly catalog: Catalog

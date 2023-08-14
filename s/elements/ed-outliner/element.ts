@@ -2,8 +2,8 @@
 import {TemplateResult, html} from "lit"
 import {QuickElement} from "@benev/frog"
 import {Context} from "../../context/context.js"
-import {Id} from "../../context/aspects/graph/parts/types.js"
-import {Item} from "../../context/aspects/outliner/parts/item.js"
+import {Id} from "../../context/controllers/graph/parts/types.js"
+import {Item} from "../../context/controllers/outliner/parts/item.js"
 
 export const EdOutliner = (context: Context) => class extends QuickElement {
 
