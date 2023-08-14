@@ -2,21 +2,21 @@
 import {pub} from "@benev/frog"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
-import {Id, Item} from "./parts/types.js"
+import {Id, Unit} from "./parts/types.js"
 
 export class Graph {
-	#items = new Map<Id, Item>()
+	#units = new Map<Id, Unit>()
 	#selection = new Set<Id>
 
 	on = {
-		item_added: pub<[Id, Item]>(),
+		item_added: pub<[Id, Unit]>(),
 		item_removed: pub<Id>(),
 		item_selected: pub<Id>(),
 		item_deselected: pub<Id>(),
 	}
 
 	get items() {
-		return this.#items.entries()
+		return this.#units.entries()
 	}
 
 	get selection() {
@@ -24,17 +24,17 @@ export class Graph {
 	}
 
 	has(id: Id) {
-		return this.#items.has(id)
+		return this.#units.has(id)
 	}
 
-	add(item: Item) {
+	add(item: Unit) {
 		const id = generateId()
-		this.#items.set(id, item)
+		this.#units.set(id, item)
 		this.on.item_added.publish([id, item])
 	}
 
 	remove(id: string) {
-		this.#items.delete(id)
+		this.#units.delete(id)
 		this.on.item_removed.publish(id)
 	}
 

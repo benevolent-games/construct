@@ -3,7 +3,7 @@ import {Scene} from "@babylonjs/core/scene.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
 import {Graph} from "../graph/graph.js"
-import {Id, Item} from "../graph/parts/types.js"
+import {Id, Unit} from "../graph/parts/types.js"
 
 export class World {
 	#scene: Scene
@@ -18,7 +18,7 @@ export class World {
 		graph.on.item_removed(this.#remove)
 	}
 
-	#add = ([id, item]: [Id, Item]) => {
+	#add = ([id, item]: [Id, Unit]) => {
 		const instance = item.node.instantiateHierarchy()!
 		this.#instances.set(id, instance)
 		this.#scene.addTransformNode(instance)
