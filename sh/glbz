@@ -1,0 +1,105 @@
+#!/bin/bash
+
+if [ "$1" == "--help" ]; then
+	echo "usage: $0 <quality> <input> <output>"
+	echo "quality: max, mid, or potato (obviously)"
+	echo "input: input glb file path (duh)"
+	echo "output: output path (do I have to spell everything out?)"
+	exit 0
+fi
+
+quality=$1
+input=$2
+output=$3
+
+if [[ "$quality" != "max" && "$quality" != "mid" && "$quality" != "potato" ]]; then
+	echo "error: quality must be max, mid, or potato. can't you read instructions?"
+	exit 1
+fi
+
+if [ -z "$input" ]; then
+	echo "error: no input specified. what are you doing?"
+	exit 1
+fi
+
+if [ -z "$output" ]; then
+	echo "error: no output specified. get it together."
+	exit 1
+fi
+
+cp $input $output
+
+npx gltf-transform dedup \
+	$output \
+	$output \
+	> /dev/null
+
+case $quality in
+	"max")
+		echo "processing with max quality. brace yourself for perfection."
+
+		npx gltf-transform resize \
+			--width 2048 \
+			--height 2048 \
+			$output \
+			$output \
+			> /dev/null
+
+		npx gltf-transform webp \
+			--quality 90 \
+			$output \
+			$output \
+			> /dev/null
+
+		;;
+	"mid")
+		echo "processing with mid quality. standard fare for standard people."
+
+		npx gltf-transform resize \
+			--width 1024 \
+			--height 1024 \
+			$output \
+			$output \
+			> /dev/null
+
+		npx gltf-transform webp \
+			--quality 70 \
+			$output \
+			$output \
+			> /dev/null
+
+		;;
+	"potato")
+		echo "processing with potato quality. are you running this on a toaster?"
+
+		npx gltf-transform resize \
+			--width 256 \
+			--height 256 \
+			$output \
+			$output \
+			> /dev/null
+
+		npx gltf-transform webp \
+			--quality 40 \
+			$output \
+			$output \
+			> /dev/null
+
+		;;
+	*)
+		echo "error: quality must be max, mid, or potato. how did you even get here?"
+		exit 1
+		;;
+esac
+
+npx gltf-transform draco \
+	$output \
+	$output \
+	> /dev/null
+
+npx gltf-transform inspect \
+	$output
+
+filesize=$(du -h "$output" | cut -f1)
+echo "$filesize"
+
