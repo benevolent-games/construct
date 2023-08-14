@@ -1,0 +1,27 @@
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+html {
+	font-size: 21px;
+	font-family: sans-serif;
+	background: #111;
+	color: #fff8;
+	min-height: 100%;
+
+	&[data-drop-highlight] {
+		background: cyan;
+		border: 0.5em dashed white;
+	}
+}
+
+body {
+	padding: 2em;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
