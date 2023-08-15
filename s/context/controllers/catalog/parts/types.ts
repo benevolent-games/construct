@@ -23,15 +23,9 @@ export type AssetProp = {
 	collision: undefined | PropNode
 }
 
-export const lod_names = ["high", "mid", "potato", "cringe", "meme"] as (keyof LODs)[]
+export const lod_names = ["incredible", "nice", "plain", "squinty", "pathetic"] as const
 
-export type LODs = {
-	high: LOD
-	mid: LOD
-	potato: LOD
-	cringe: LOD
-	meme: LOD | undefined
-}
+export type LODs = [LOD, LOD, LOD, LOD, LOD | undefined]
 
 export type LOD = {
 	node: PropNode

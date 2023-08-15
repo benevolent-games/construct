@@ -1,7 +1,8 @@
 
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
-import {AssetProp, LODs, PropNode, lod_names} from "./types.js"
 import {AssetContainer} from "@babylonjs/core/assetContainer.js"
+
+import {AssetProp, LOD, LODs, PropNode, lod_names} from "./types.js"
 
 export function parse_props(container: AssetContainer): AssetProp[] {
 	const transforms = container.transformNodes
@@ -9,8 +10,7 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 	const naked_meshes = new Set(container.meshes.filter(m => !meshes_under_transforms.has(m)))
 	const nodes = new Set([...transforms, ...naked_meshes])
 
-	const pattern = /^(.+?)(?:#(\d+))?(?:(:.+))?$/;
-	// const pattern = /^(.+?)(?:#(\d+))?(?::(.+))?$/
+	const pattern = /^(.+?)(?:#(\d+))?(?:(:.+))?$/
 
 	const stage1 = {
 		map: new Map<string, {
@@ -40,7 +40,7 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 		if (propstring.startsWith("__"))
 			continue
 
-		const match = propstring.match(pattern);
+		const match = propstring.match(pattern)
 
 		if (match) {
 			const name = match[1]
@@ -63,15 +63,14 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 	}
 
 	const stage2 = [...stage1.map.entries()].map(([name, {lods, collision}]) => {
-		const lod_slots: Partial<LODs> = {}
+		const lod_slots: (LOD | undefined)[] = lod_names.map(() => undefined)
 
 		for (const {index, node, twosided} of lods) {
-			const key = lod_name_by_index(index)
 
-			if (lod_slots[key] !== undefined)
-				throw new Error(`duplicate lod ${index} "${key}"`)
+			if (lod_slots[index] !== undefined)
+				throw new Error(`duplicate lod ${index} "${lod_name_by_index(index)}"`)
 
-			lod_slots[key] = {node, twosided}
+			lod_slots[index] = {node, twosided}
 		}
 
 		const prop: AssetProp = {
@@ -87,7 +86,7 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 	return stage2
 }
 
-function lod_name_by_index(index: number): keyof LODs {
+function lod_name_by_index(index: number) {
 	const name = lod_names[index]
 
 	if (!name)
@@ -96,16 +95,18 @@ function lod_name_by_index(index: number): keyof LODs {
 	return name
 }
 
-function lods_fill_forward(partial: Partial<LODs>): LODs {
-	let {high, mid, potato, cringe, meme} = partial
-
-	if (!high)
+function lods_fill_forward(lods: (LOD | undefined)[]) {
+	if (!lods[0])
 		throw new Error(`high lod missing`)
 
-	mid = mid ?? high
-	potato = potato ?? mid
-	cringe = cringe ?? potato
+	let previous: LOD | undefined = lods[0]
 
-	return {high, mid, potato, cringe, meme}
+	return lods.map((lod, index) => {
+		previous = lods[index - 1]
+		const is_final = index === lods.length - 1
+		return is_final
+			? lod!
+			: lod ?? previous!
+	}) as LODs
 }
 

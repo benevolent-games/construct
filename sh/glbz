@@ -1,19 +1,21 @@
 #!/bin/bash
 
-if [ "$1" == "--help" ]; then
-	echo "usage: $0 <quality> <input> <output>"
-	echo "quality: high, mid, potato, cringe, meme (obviously)"
-	echo "input: input glb file path (duh)"
-	echo "output: output path (do I have to spell everything out?)"
+if [ "$1" == "--help" ] || [ -z "$1" ]; then
+	echo "💈 $0 <quality> <input> <output> <chatter>"
+	echo "  ➢ quality: 'fancy', 'mid', or 'potato' (obviously)"
+	echo "  ➢ input: input glb file path (duh)"
+	echo "  ➢ output: output path (do I have to spell everything out?)"
+	echo "  ➢ chatter: 'inspect', 'silent', or omitted for basic info"
 	exit 0
 fi
 
 quality=$1
 input=$2
 output=$3
+chatter=$4
 
 if [ -z "$quality" ]; then
-	echo "error: quality must be high, mid, potato, cringe, or meme. can't you read instructions?"
+	echo "error: quality must be provided. get some --help. can't you read instructions?"
 	exit 1
 fi
 
@@ -35,25 +37,10 @@ npx gltf-transform dedup \
 	> /dev/null
 
 case $quality in
-	"high")
-		echo "processing with high quality. brace yourself for perfection."
-
-		npx gltf-transform resize \
-			--width 2048 \
-			--height 2048 \
-			$output \
-			$output \
-			> /dev/null
-
-		npx gltf-transform webp \
-			--quality 90 \
-			$output \
-			$output \
-			> /dev/null
-
-		;;
-	"mid")
-		echo "processing with mid quality. standard fare for standard people."
+	"fancy")
+		if [ "$chatter" != "silent" ]; then
+			echo "🧁 fancy quality. brace yourself for a fat file."
+		fi
 
 		npx gltf-transform resize \
 			--width 1024 \
@@ -63,14 +50,16 @@ case $quality in
 			> /dev/null
 
 		npx gltf-transform webp \
-			--quality 70 \
+			--quality 80 \
 			$output \
 			$output \
 			> /dev/null
 
 		;;
-	"potato")
-		echo "processing with potato quality. are you running this on a toaster?"
+	"mid")
+		if [ "$chatter" != "silent" ]; then
+			echo "🍏 mid quality. standard fare for standard people."
+		fi
 
 		npx gltf-transform resize \
 			--width 512 \
@@ -80,14 +69,16 @@ case $quality in
 			> /dev/null
 
 		npx gltf-transform webp \
-			--quality 50 \
+			--quality 60 \
 			$output \
 			$output \
 			> /dev/null
 
 		;;
-	"cringe")
-		echo "processing with cringe quality. it will hurt to look at."
+	"potato")
+		if [ "$chatter" != "silent" ]; then
+			echo "🥔 potato quality. are you running this on a toaster?"
+		fi
 
 		npx gltf-transform quantize \
 			--quantize-color 4 \
@@ -101,49 +92,21 @@ case $quality in
 			> /dev/null
 
 		npx gltf-transform resize \
-			--width 256 \
-			--height 256 \
+			--width 128 \
+			--height 128 \
 			$output \
 			$output \
 			> /dev/null
 
 		npx gltf-transform webp \
-			--quality 40 \
-			$output \
-			$output \
-			> /dev/null
-
-		;;
-	"meme")
-		echo "processing with meme quality. literally a joke"
-
-		npx gltf-transform quantize \
-			--quantize-color 4 \
-			--quantize-generic 8 \
-			--quantize-normal 8 \
-			--quantize-position 8 \
-			--quantize-texcoord 8 \
-			--quantize-weight 8 \
-			$output \
-			$output \
-			> /dev/null
-
-		npx gltf-transform resize \
-			--width 32 \
-			--height 32 \
-			$output \
-			$output \
-			> /dev/null
-
-		npx gltf-transform webp \
-			--quality 3 \
+			--quality 10 \
 			$output \
 			$output \
 			> /dev/null
 
 		;;
 	*)
-		echo "invalid quality >:["
+		echo "invalid quality >:[ screw you"
 		exit 1
 		;;
 esac
@@ -153,9 +116,13 @@ npx gltf-transform draco \
 	$output \
 	> /dev/null
 
-npx gltf-transform inspect \
-	$output
+if [ "$chatter" == "inspect" ]; then
+	npx gltf-transform inspect \
+		$output
+fi
 
-filesize=$(du -h "$output" | cut -f1)
-echo "$filesize"
+if [ "$chatter" != "silent" ]; then
+	echo "ℹ️ $(du -h "$output" | cut -f1)"
+	echo "✅ $(realpath "$output")"
+fi
 

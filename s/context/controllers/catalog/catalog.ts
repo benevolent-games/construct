@@ -4,9 +4,9 @@ import {Scene} from "@babylonjs/core/scene.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
 import {Graph} from "../graph/graph.js"
-import {CatalogState, Glb} from "./parts/types.js"
+import {parse_props} from "./parts/parse_props.js"
+import {CatalogState, Glb, lod_names} from "./parts/types.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
-import { parse_props } from "./parts/parse_props.js"
 
 export class Catalog {
 	#scene: Scene
@@ -45,8 +45,9 @@ export class Catalog {
 			console.log(prop.name)
 			console.log("  - collision", prop.collision?.name)
 			console.log("  - lods:")
-			for (const [key, lod] of Object.entries(prop.lods))
-				console.log("    - ", key, lod)
+			prop.lods.forEach((lod, index) =>
+				console.log("    - ", index, lod_names[index], lod)
+			)
 		}
 
 		this.add_glb({
