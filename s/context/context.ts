@@ -18,8 +18,8 @@ export class Context {
 			public scene: Scene,
 		) {
 
-		this.catalog = new Catalog(this.flat, scene)
 		this.graph = new Graph()
+		this.catalog = new Catalog(this.flat, this.graph, scene)
 		this.world = new World(scene, this.graph)
 		this.outliner = new Outliner(this.flat, this.graph)
 	}
