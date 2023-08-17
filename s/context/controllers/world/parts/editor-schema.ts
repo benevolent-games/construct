@@ -10,7 +10,8 @@ export const editor_schema = {
 			clear_selection: {causes: ["KeyD"]},
 			duplicate: {causes: ["ShiftLeft", "KeyW"]},
 			delete: {causes: ["ShiftLeft", "KeyX"]},
-			pointer_lock: {causes: ["KeyF"]}
+			pointer_lock: {causes: ["KeyF"]},
+			move: {causes: ["KeyM"]}
 		},
 	},
 

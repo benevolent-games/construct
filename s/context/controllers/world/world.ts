@@ -96,11 +96,7 @@ export class World {
 						} else {
 							this.#graph.select(id)
 						}
-						this.#move_enabled = true
 					}
-				}
-				else {
-					this.#move_enabled = false
 				}
 				break
 			}
@@ -139,6 +135,13 @@ export class World {
 			case "pointer_lock": {
 				if(!this.#is_pointer_locked()) {
 					this.#theater.requestPointerLock()
+				}
+				break
+			}
+
+			case "move": {
+				if ((detail as NubDetail.Key).pressed) {
+					this.#move_enabled = !this.#move_enabled
 				}
 				break
 			}
