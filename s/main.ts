@@ -8,13 +8,12 @@ import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
 import {Context} from "./context/context.js"
 import {drag_and_drop} from "./tools/drag_and_drop.js"
 import {prepare_elements} from "./elements/prepare_elements.js"
-import {editor_schema} from "./context/controllers/world/parts/editor-schema.js"
 
 const theater = document.querySelector<BenevTheater>("benev-theater")!
 await (theater.updateComplete)
 
 const flat = new Flat()
-const context = new Context(flat, theater.babylon.scene)
+const context = new Context(flat, theater)
 register_to_dom(prepare_elements(context))
 
 drag_and_drop(document.documentElement, async list => {
@@ -22,13 +21,7 @@ drag_and_drop(document.documentElement, async list => {
 		context.catalog.add_file(file)
 })
 
-const nubContext = theater.nubContext!
-nubContext.modes_set.assign(["selection", "transform", "fly"])
-nubContext.schema = editor_schema
-context.world.start_world({
-	nubContext,
-	renderLoop: theater.babylon.renderLoop
-})
+context.world.start_world()
 
 theater.babylon.start()
 

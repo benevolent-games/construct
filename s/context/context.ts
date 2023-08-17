@@ -1,6 +1,6 @@
 
 import {Flat} from "@benev/frog"
-import {Scene} from "@babylonjs/core/scene.js"
+import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
 
 import {Graph} from "./controllers/graph/graph.js"
 import {World} from "./controllers/world/world.js"
@@ -15,13 +15,13 @@ export class Context {
 
 	constructor(
 			public flat: Flat,
-			public scene: Scene,
+			public theater: BenevTheater,
 		) {
 
 		this.graph = new Graph()
-		this.catalog = new Catalog(this.flat, this.graph, scene)
-		this.world = new World(scene, this.graph)
+		this.world = new World(this.graph, theater)
 		this.outliner = new Outliner(this.flat, this.graph)
+		this.catalog = new Catalog(this.flat, this.graph, theater.babylon.scene)
 	}
 }
 

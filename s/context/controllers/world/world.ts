@@ -4,10 +4,11 @@ import "@babylonjs/core/Rendering/edgesRenderer.js"
 
 import {Scene} from "@babylonjs/core/scene.js"
 import {Vector3} from "@babylonjs/core/Maths/math.js"
+import {NubDetail, NubEffectEvent} from "@benev/nubs"
 import {spawn_light} from "@benev/toolbox/x/demo/spawn_light.js"
-import {NubContext, NubDetail, NubEffectEvent} from "@benev/nubs"
 import {InstancedMesh} from "@babylonjs/core/Meshes/instancedMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
+import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
 import {invert_y_axis} from "@benev/toolbox/x/babylon/flycam/utils/inversions.js"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 import {integrate_nubs_to_control_fly_camera} from "@benev/toolbox/x/babylon/flycam/integrate_nubs_to_control_fly_camera.js"
@@ -15,20 +16,25 @@ import {integrate_nubs_to_control_fly_camera} from "@benev/toolbox/x/babylon/fly
 import {Graph} from "../graph/graph.js"
 import {make_box} from "./parts/make-box.js"
 import {Id, Unit} from "../graph/parts/types.js"
+import {editor_schema} from "./parts/editor-schema.js"
 
 export class World {
 	#scene: Scene
 	#graph: Graph
 	#move_enabled = false
+	#theater: BenevTheater
 	#keys_pressed = new Set<string>()
 	#instances = new Map<Id, TransformNode>()
+	#is_pointer_locked = () => this.#theater["pointer-lock"]
 
 	constructor(
-			scene: Scene,
 			graph: Graph,
+			theater: BenevTheater,
 		) {
 		this.#graph = graph
-		this.#scene = scene
+		this.#theater = theater
+		this.#scene = theater.babylon.scene
+
 		graph.on.added(this.#add)
 		graph.on.removed(this.#remove)
 		graph.on.selected(this.#select)
@@ -129,15 +135,26 @@ export class World {
 				}
 				break
 			}
+
+			case "pointer_lock": {
+				if(!this.#is_pointer_locked()) {
+					this.#theater.requestPointerLock()
+				}
+				break
+			}
 		}
 	}
 
-	start_world({
-		renderLoop, nubContext
-	}: {
-		nubContext: NubContext
-		renderLoop: Set<() => void>
-	}) {
+	start_world() {
+		const {
+			nubContext,
+			babylon: {
+				renderLoop
+			}
+		} = this.#theater
+
+		nubContext!.modes_set.assign(["selection", "transform", "fly"])
+		nubContext!.schema = editor_schema
 
 		const fly = make_fly_camera({
 			scene: this.#scene,
@@ -145,7 +162,7 @@ export class World {
 		})
 		integrate_nubs_to_control_fly_camera({
 			fly,
-			nub_context: nubContext,
+			nub_context: nubContext!,
 			render_loop: renderLoop,
 			look_sensitivity: {
 				pointer: 1/700,
