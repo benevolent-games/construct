@@ -4,7 +4,7 @@ import {Transform} from "@gltf-transform/core"
 import {textureCompress} from "@gltf-transform/functions"
 
 import {std_transforms} from "./std_transforms.js"
-import {delete_meshes} from "./custom_transforms.js"
+import {delete_meshes, generate_lods} from "./custom_transforms.js"
 
 export const tiers = [
 
@@ -36,6 +36,7 @@ export const tiers = [
 			resize: [256, 256],
 			quality: 50,
 		}),
+		generate_lods(),
 		delete_meshes("#0", "#1"),
 		...std_transforms,
 	]],
