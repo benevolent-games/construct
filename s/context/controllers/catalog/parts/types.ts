@@ -20,17 +20,30 @@ export type AssetProp = {
 	id: Id
 	name: string
 	lods: LODs
+	first_lod_index: number
+	top_lod: LOD
 	collision: undefined | PropNode
 }
 
-export const lod_names = ["incredible", "nice", "plain", "squinty", "pathetic"] as const
+export const lod_info = [
+	["incredible", 5],
+	["nice", 10],
+	["plain", 20],
+	["squinty", 40],
+	["pathetic", 80],
+] as const
 
-export type LODs = [LOD, LOD, LOD, LOD, LOD | undefined]
+export const lod_names = lod_info.map(([name]) => name)
+export const lod_distances = lod_info.map(([,distance]) => distance)
+
+export type LODs = [MaybeLOD, MaybeLOD, MaybeLOD, MaybeLOD, MaybeLOD]
 
 export type LOD = {
 	node: PropNode
 	twosided: boolean
 }
+
+export type MaybeLOD = LOD | undefined
 
 export type PropNode = TransformNode | AbstractMesh
 

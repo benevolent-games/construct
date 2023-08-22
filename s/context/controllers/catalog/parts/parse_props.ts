@@ -2,7 +2,7 @@
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 
-import {AssetProp, LOD, LODs, PropNode, lod_names} from "./types.js"
+import {AssetProp, LODs, PropNode, lod_names} from "./types.js"
 
 export function parse_props(container: AssetContainer): AssetProp[] {
 	const transforms = container.transformNodes
@@ -63,7 +63,7 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 	}
 
 	const stage2 = [...stage1.map.entries()].map(([name, {lods, collision}]) => {
-		const lod_slots: (LOD | undefined)[] = lod_names.map(() => undefined)
+		const lod_slots = lod_names.map(() => undefined) as LODs
 
 		for (const {index, node, twosided} of lods) {
 
@@ -73,11 +73,17 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 			lod_slots[index] = {node, twosided}
 		}
 
+		const first_lod_index = lod_slots.findIndex(item => !!item)
+		if (first_lod_index === -1)
+			throw new Error(`prop is missing any lod!? "${name}"`)
+
 		const prop: AssetProp = {
 			id: generateId(),
 			name,
 			collision,
-			lods: lods_fill_forward(lod_slots),
+			first_lod_index,
+			lods: lod_slots,
+			top_lod: lods[first_lod_index],
 		}
 
 		return prop
@@ -93,20 +99,5 @@ function lod_name_by_index(index: number) {
 		throw new Error(`invalid lod index number ${index}`)
 
 	return name
-}
-
-function lods_fill_forward(lods: (LOD | undefined)[]) {
-	if (!lods[0])
-		throw new Error(`high lod missing`)
-
-	let previous: LOD | undefined = lods[0]
-
-	return lods.map((lod, index) => {
-		previous = lods[index - 1]
-		const is_final = index === lods.length - 1
-		return is_final
-			? lod!
-			: lod ?? previous!
-	}) as LODs
 }
 

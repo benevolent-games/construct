@@ -5,8 +5,9 @@ import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
 import {Graph} from "../graph/graph.js"
 import {parse_props} from "./parts/parse_props.js"
-import {CatalogState, Glb, lod_names} from "./parts/types.js"
+import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
+import {CatalogState, Glb, lod_names} from "./parts/types.js"
 
 export class Catalog {
 	#scene: Scene
@@ -49,6 +50,8 @@ export class Catalog {
 				console.log("    - ", index, lod_names[index], lod)
 			)
 		}
+
+		wire_up_lods(props)
 
 		this.add_glb({
 			hash,
