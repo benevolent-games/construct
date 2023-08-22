@@ -1,6 +1,6 @@
 
 import {MeshoptSimplifier} from "meshoptimizer"
-import {Document, Mesh, Node} from "@gltf-transform/core"
+import {Document, Mesh, Node, Texture} from "@gltf-transform/core"
 import {simplifyPrimitive, weldPrimitive} from "@gltf-transform/functions"
 
 export function delete_meshes(...lods: string[]) {
@@ -12,25 +12,6 @@ export function delete_meshes(...lods: string[]) {
 		}
 	}
 }
-
-// export function simplify_meshes({select_meshes, ...options}: {
-// 		error: number,
-// 		ratio: number,
-// 		lockBorder: boolean,
-// 		select_meshes: (document: Document) => Set<Mesh>
-// 	}): Transform {
-
-// 	return document => {
-// 		for (const mesh of select_meshes(document)) {
-// 			for (const primitive of mesh.listPrimitives()) {
-// 				simplifyPrimitive(document, primitive, {
-// 					...options,
-// 					simplifier: MeshoptSimplifier,
-// 				})
-// 			}
-// 		}
-// 	}
-// }
 
 const pattern = /^(.+?)(?:#(\d+))?(?:(:.+))?$/
 
@@ -49,8 +30,11 @@ function parse_node(name: string) {
 }
 
 const ratios = [1.0, 0.5, 0.25, 0.125, 0.05] as const
+
 type LOD = Node | undefined
+
 type LODs = [LOD, LOD, LOD, LOD, LOD]
+
 type Group = {
 	lods: LODs
 	directives?: string
@@ -84,9 +68,17 @@ function gather_lods(document: Document) {
 	return groups
 }
 
-const set = new Set<any>()
+class Counter {
+	#count = 0
+
+	get count() {
+		return this.#count++
+	}
+}
 
 export const generate_lods = () => (document: Document) => {
+	const counter = new Counter()
+
 	for (const [basename, {lods}] of gather_lods(document)) {
 		const top_index = lods.findIndex(n => !!n)
 
@@ -102,7 +94,7 @@ export const generate_lods = () => (document: Document) => {
 		// backfill high quality lods
 		for (let i = 0; i < top_index; i++) {
 			const name = `${basename}#${i}`
-			lods[i] = clone_node(document, top_node, name)
+			lods[i] = clone_node(document, counter, top_node, name)
 		}
 
 		// fillforward lower quality lods
@@ -112,18 +104,14 @@ export const generate_lods = () => (document: Document) => {
 			const node = lods[i]
 			if (!node) {
 				const name = `${basename}#${i}`
-				const new_node = clone_node(document, top_node, name)
+				const new_node = clone_node(document, counter, top_node, name)
 				const new_mesh = new_node.getMesh()!
-
-				if (set.has(new_mesh))
-					throw new Error(`dupe mesh ${name}, ${new_mesh.getName()}`)
-				set.add(new_mesh)
-
-				const before = verts(new_mesh)
+				// const before = count_number_of_vertices(new_mesh)
 
 				for (const primitive of new_mesh.listPrimitives()) {
 					if (i >= 1)
 						weldPrimitive(document, primitive, {tolerance: 0.001, overwrite: true, exhaustive: true, toleranceNormal: 0.5})
+
 					simplifyPrimitive(document, primitive, {
 						error: 1,
 						lockBorder: false,
@@ -131,16 +119,15 @@ export const generate_lods = () => (document: Document) => {
 						simplifier: MeshoptSimplifier,
 					})
 				}
-				const after = verts(new_mesh)
-				// if (name.includes("barrel"))
-				console.log(` - ${name} @ ${new_mesh.getName()} (${current_ratio}/${target_ratio.toFixed(2)}) ${before} -> ${after}`)
+
+				// const after = count_number_of_vertices(new_mesh)
 				lods[i] = new_node
 			}
 		}
 	}
 }
 
-function verts(mesh: Mesh) {
+function count_number_of_vertices(mesh: Mesh) {
 	let vertices = 0
 	for (const primitive of mesh.listPrimitives()) {
 		const position = primitive.getAttribute('POSITION')!
@@ -149,25 +136,7 @@ function verts(mesh: Mesh) {
 	return vertices
 }
 
-// const clone_node = (document: Document, node: Node, new_name: string) => {
-// 	const newNode = document.createNode(new_name)
-// 		.setTranslation(node.getTranslation())
-// 		.setRotation(node.getRotation())
-// 		.setScale(node.getScale())
-
-// 	const mesh = node.getMesh()
-// 	if (mesh)
-// 		newNode.setMesh(mesh.clone())
-
-// 	for (const child of node.listChildren())
-// 		newNode.addChild(clone_node(document, child, child.getName() + "-clone"))
-
-// 	return newNode
-// }
-
-let count = 0
-
-const clone_node = (document: Document, node: Node, new_name: string) => {
+const clone_node = (document: Document, counter: Counter, node: Node, new_name: string) => {
 	const scene = document.getRoot().getDefaultScene()
 	if (!scene)
 		throw new Error("glb doesn't have a default scene")
@@ -179,24 +148,10 @@ const clone_node = (document: Document, node: Node, new_name: string) => {
 
 	const mesh = node.getMesh()
 
-	if (mesh) {
-		// const newMesh = mesh.clone()
-		// newMesh.setName(newMesh.getName() + "-clone")
-
-		// const primitives = newMesh.listPrimitives()
-		// const cloned_primitives = primitives
-		// 	.map(p => p.clone())
-		// 	.map(p => p.setName(p.getName() + "-clone"))
-
-		// for (const p of primitives)
-		// 	newMesh.removePrimitive(p)
-
-		// for (const p of cloned_primitives)
-		// 	newMesh.addPrimitive(p)
-
-		const newMesh = clone_mesh(document, mesh, mesh.getName() + "." + count++)
-		newNode.setMesh(newMesh)
-	}
+	if (mesh)
+		newNode.setMesh(
+			clone_mesh(document, mesh, `${mesh.getName()}+${counter.count}`)
+		)
 
 	scene.addChild(newNode)
 	return newNode
@@ -207,5 +162,23 @@ function clone_mesh(document: Document, mesh: Mesh, name: string) {
 		.createMesh(name)
 		.copy(mesh, ref => ref.clone())
 		.setName(name)
+}
+
+export function delete_all_normal_maps() {
+	return (document: Document) => {
+		const root = document.getRoot()
+		const normals = new Set<Texture>()
+
+		for (const material of root.listMaterials()) {
+			const texture = material.getNormalTexture()
+			if (texture) {
+				normals.add(texture)
+				material.setNormalTexture(null)
+			}
+		}
+
+		for (const texture of [...normals])
+			texture.dispose()
+	}
 }
 

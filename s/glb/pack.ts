@@ -1,10 +1,11 @@
 
+import {dedup} from "@gltf-transform/functions"
+
 import {join} from "path"
 import {args} from "./parts/args.js"
 import {tiers} from "./parts/tiers.js"
 import {glb_io} from "./parts/glb_io.js"
 import {log_glb} from "./parts/log_glb.js"
-import {dedup} from "@gltf-transform/functions"
 import {generate_lods} from "./parts/custom_transforms.js"
 
 const {inpath, outdir} = args()
