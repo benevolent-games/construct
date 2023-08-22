@@ -1,6 +1,6 @@
 
 export function args() {
-	const [,, inpath, outdir] = process.argv
+	const [,, inpath, outdir, verbose] = process.argv
 
 	if (!inpath)
 		throw new Error("inpath parameter missing")
@@ -8,6 +8,6 @@ export function args() {
 	if (!outdir)
 		throw new Error("outdir parameter missing")
 
-	return {inpath, outdir}
+	return {inpath, outdir, verbose}
 }
 

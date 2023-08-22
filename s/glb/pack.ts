@@ -8,7 +8,7 @@ import {glb_io} from "./parts/glb_io.js"
 import {log_glb} from "./parts/log_glb.js"
 import {generate_missing_lods} from "./parts/transforms/generate_missing_lods.js"
 
-const {inpath, outdir} = args()
+const {inpath, outdir, verbose} = args()
 const gio = await glb_io()
 
 const original = await gio.read(inpath)
@@ -23,6 +23,13 @@ for (const [index, [,transforms]] of tiers.entries()) {
 	const document = original.document.clone()
 	await document.transform(...transforms)
 	const report = await gio.write(join(outdir, `pack.${index}.glb`), document)
+
 	log_glb(report)
+
+	if (!!verbose && index === 0) {
+		for (const node of document.getRoot().listNodes()) {
+			console.log(` - ${node.getName()}`)
+		}
+	}
 }
 

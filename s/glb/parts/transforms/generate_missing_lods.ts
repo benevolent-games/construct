@@ -22,11 +22,11 @@ export const generate_missing_lods = () => (document: Document) => {
 		const top_node = lods[top_index]!
 		const top_ratio = lod_ratios[top_index]!
 
-		// backfill high quality lods
-		for (let i = 0; i < top_index; i++) {
-			const name = `${basename}#${i}`
-			lods[i] = clone_node(document, counter, top_node, name)
-		}
+		// // backfill high quality lods
+		// for (let i = 0; i < top_index; i++) {
+		// 	const name = `${basename}#${i}`
+		// 	lods[i] = clone_node(document, counter, top_node, name)
+		// }
 
 		// fillforward lower quality lods
 		for (let i = top_index + 1; i < lod_ratios.length; i++) {
