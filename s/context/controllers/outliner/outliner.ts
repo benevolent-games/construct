@@ -18,6 +18,7 @@ export class Outliner {
 			root: {
 				id: generateId(),
 				kind: "folder",
+				isVisible: true,
 				name: "root",
 				children: [],
 			},
@@ -33,17 +34,18 @@ export class Outliner {
 		return this.#state.root
 	}
 
-	add(parent: Item.Folder, draft: Omit<Item.Folder, "id">) {
+	add(folder: Item.Folder, draft: Omit<Item.Folder, "id">) {
 		const item = {
 			...draft,
 			id: generateId(),
 		} as Item.Whatever
-		parent.children.push(item)
+		folder.children.push(item)
 		this.#update()
 	}
 
 	remove(parent: Item.Folder, id: Id) {
-		// TODO remove item from folder by id
+		const filtered = parent.children.filter(f => f.id !== id)
+		parent.children = filtered
 		this.#update()
 	}
 
@@ -51,11 +53,20 @@ export class Outliner {
 		this.#state.root = this.#state.root
 	}
 
+	set_visibility(item: Item.Whatever, parent?: Item.Folder) {
+		item.isVisible = parent ? parent.isVisible : !item.isVisible
+		if(item.kind === "folder") {
+			item.children.forEach(child => this.set_visibility(child, item))
+		}
+		this.#update()
+	}
+
 	#add = ([id, unit]: [Id, Unit]) => {
 		this.root.children.push({
 			kind: "prop",
 			id,
 			unit,
+			isVisible: true
 		})
 		this.#update()
 	}

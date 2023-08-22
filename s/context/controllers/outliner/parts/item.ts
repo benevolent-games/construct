@@ -7,6 +7,7 @@ export namespace Item {
 	export interface Base {
 		kind: Kind
 		id: Id
+		isVisible: boolean
 	}
 
 	export interface Folder extends Base {

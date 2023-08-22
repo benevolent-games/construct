@@ -13,7 +13,7 @@ export default template(async basic => {
 			<p><strong>@benev/</strong>edit</p>
 			<ed-catalog></ed-catalog>
 			<benev-theater disable-pointer-lock></benev-theater>
-			<edit-outliner-display></edit-outliner-display>
+			<ed-outliner></ed-outliner>
 		`,
 	})
 })

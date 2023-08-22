@@ -4,8 +4,9 @@ import {Pipe, apply_theme, flatstate_reactivity, provide_context} from "@benev/f
 
 import {Context} from "../context/context.js"
 import {EdCatalog} from "./ed-catalog/element.js"
+import {EdOutliner} from "./ed-outliner/element.js"
 
-export const elements = {EdCatalog}
+export const elements = {EdCatalog, EdOutliner}
 
 const default_theme = css`
 	* {
