@@ -3,8 +3,9 @@ import sharp from "sharp"
 import {Transform} from "@gltf-transform/core"
 import {textureCompress} from "@gltf-transform/functions"
 
-import {std_transforms} from "./std_transforms.js"
-import {delete_all_normal_maps, delete_meshes} from "./custom_transforms.js"
+import {delete_meshes} from "./transforms/delete_meshes.js"
+import {std_transforms} from "./transforms/std_transforms.js"
+import {delete_all_normal_maps} from "./transforms/delete_all_normal_maps.js"
 
 export const tiers = [
 
@@ -39,10 +40,6 @@ export const tiers = [
 		delete_meshes("#0", "#1"),
 		delete_all_normal_maps(),
 		...std_transforms,
-		// document => {
-		// 	for (const node of document.getRoot().listNodes())
-		// 		console.log(node.getName())
-		// },
 	]],
 
 ] satisfies [string, Transform[]][]
