@@ -10,11 +10,16 @@ export default template(async basic => {
 		title: "@benev/edit",
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
-			<p><strong>@benev/</strong>edit</p>
-			<ed-catalog></ed-catalog>
-			<benev-theater disable-pointer-lock></benev-theater>
-			<ed-outliner></ed-outliner>
+			<div class=foundation>
+				<ed-catalog></ed-catalog>
+				<div class=viewport>
+					<benev-theater disable-pointer-lock></benev-theater>
+				</div>
+				<ed-outliner></ed-outliner>
+			</div>
 		`,
 	})
 })
+
+// <benev-theater disable-pointer-lock></benev-theater>
 

@@ -3,11 +3,7 @@ import {css} from "@chasemoskal/magical"
 export const style = css`
 
 :host {
-	position: absolute;
-	top: 0;
-	left: 0;
-	min-width: 100px;
-	min-height: 150px;
+	display: block;
 	background-color: rgba(0,0,0, 0.50);
 }
 
