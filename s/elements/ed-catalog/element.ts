@@ -3,9 +3,9 @@ import {html} from "lit"
 import {QuickElement} from "@benev/frog"
 
 import {Context} from "../../context/context.js"
+import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {AssetProp} from "../../context/controllers/catalog/parts/types.js"
-import { Mesh } from "@babylonjs/core/Meshes/mesh.js"
 
 export const EdCatalog = (context: Context) => class extends QuickElement {
 
