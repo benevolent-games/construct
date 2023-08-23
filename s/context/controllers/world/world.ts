@@ -191,8 +191,8 @@ export class World {
 				slow: 0.2
 			},
 			speeds_for_looking_with_keys_and_stick: {
-				base: 0.1,
-				fast: 0.2,
+				base: 0.03,
+				fast: 0.1,
 				slow: 0.01,
 			},
 		})
