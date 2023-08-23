@@ -107,7 +107,7 @@ span {
 	> .folder-header .open-folder {
 		transform: rotate(-90deg)
 	}
-	> .item {
+	> ol > li > .item {
 		display: flex;
 		gap: 0.4em;
 		align-items: center;
@@ -116,7 +116,7 @@ span {
 		display: flex;
 	}
 	.folder[data-opened] {
-		> .item {
+		> ol > li > .item {
 			display: flex;
 			gap: 0.4em;
 			align-items: center;
