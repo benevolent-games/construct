@@ -5,16 +5,33 @@ import {QuickElement} from "@benev/frog"
 import {style} from "./style.css.js"
 import {Context} from "../../context/context.js"
 import eyeOpenSvg from "../../icons/akar/eye-open.svg.js"
+import {setupListener} from "../../utils/setup-listener.js"
 import arrowDownSvg from "../../icons/akar/arrow-down.svg.js"
 import eyeSlashedSvg from "../../icons/akar/eye-slashed.svg.js"
 import {Id} from "../../context/controllers/graph/parts/types.js"
 import {Item} from "../../context/controllers/outliner/parts/item.js"
+import objectSvg from "../../icons/material-design-icons/object.svg.js"
 import folderSvg from "../../icons/material-design-icons/folder.svg.js"
 import deleteBinSvg from "../../icons/material-design-icons/delete-bin.svg.js"
 
-export const EdOutliner = ({outliner}: Context) => class extends QuickElement {
+export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElement {
+
+	#state = flat.state({
+		item_rename_stared_on: "",
+		new_name: ""
+	})
 
 	static styles = style
+
+	connectedCallback() {
+		super.connectedCallback()
+		setupListener(window, "click", (e: PointerEvent) => {
+			const input = e.composedPath().find((element) =>
+				(element as HTMLInputElement).className === "input-rename")
+			if(!input)
+				this.#state.item_rename_stared_on = ""
+		})
+	}
 
 	#whatever(item: Item.Whatever, parent: Item.Folder): TemplateResult {
 		switch (item.kind) {
@@ -35,38 +52,81 @@ export const EdOutliner = ({outliner}: Context) => class extends QuickElement {
 		`
 	}
 
+	#render_item_rename(item: Item.Whatever) {
+		return html`
+			${this.#state.item_rename_stared_on === item.id
+				? html`
+					<input
+						@input=${(e: InputEvent) => this.#state.new_name = (e.target as HTMLInputElement).value}
+						class="input-rename"
+						value=${item.kind !== "prop" ? item.name : item.id}>`
+				: html`
+					<span @dblclick=${() => this.#state.item_rename_stared_on = item.id}>
+						${item.kind !== "prop" ? item.name : item.id}
+					</span>`
+			}
+		`
+	}
+
+	#render_common_icons(item: Item.Whatever, parent?: Item.Folder) {
+		return html`
+			<span ?isVisible=${item.isVisible} @click=${() => outliner.set_visibility(item)} class="toggle-visibility">
+				${item.isVisible ? eyeOpenSvg : eyeSlashedSvg}
+			</span>
+			<span @pointerdown=${() => outliner.remove(parent!, item.id)} class="delete-folder">
+				${parent ? deleteBinSvg : null}
+			</span>
+		`
+	}
+
+	#render_add_folder_icon(folder: Item.Folder) {
+		return html`
+			<span class="open-folder" @pointerdown=${this.#toggle_folder_opened_attribute}>
+				${arrowDownSvg}
+			</span>
+			<span class="add-folder" @click=${() => outliner.add(folder, {
+				kind: "folder",
+				name: "New Folder",
+				children: [],
+				isVisible: true
+			})}>
+				+
+			</span>
+		`
+	}
+
 	#toggle_folder_opened_attribute(e: PointerEvent) {
 		const folder = (e.target as HTMLElement).closest(".folder")
 		folder?.toggleAttribute("data-opened")
 	}
 
+	#drag_drop(content: TemplateResult, div_class: string, item: Item.Whatever) {
+		return html`
+			<div
+				?data-notvisible=${!item.isVisible}
+				class="${div_class}"
+				draggable=true
+				@dragend=${() => console.log("drag end")}
+				@dragstart=${() => console.log("drag start")}
+				@dragover=${(e: DragEvent) => e.preventDefault()}>
+				${content}
+			</div>
+		`
+	}
+
 	#folder(folder: Item.Folder, parent?: Item.Folder) {
 		return this.#li(folder.id, html`
 			<div class=folder>
-				<div
-					class="folder-header"
-					?data-notvisible=${!folder.isVisible}
-				>
-					${folderSvg}
-					<span>${folder.name}</span>
-						<span class="open-folder" @pointerdown=${this.#toggle_folder_opened_attribute}>
-							${arrowDownSvg}
-						</span>
-						<span class="add-folder" @click=${() => outliner.add(folder, {
-							kind: "folder",
-							name: "New Folder",
-							children: [],
-							isVisible: true
-						})}>
-							+
-						</span>
-						<span ?isVisible=${folder.isVisible} @click=${() => outliner.set_visibility(folder)} class="toggle-visibility">
-							${folder.isVisible ? eyeOpenSvg : eyeSlashedSvg}
-						</span>
-						<span @pointerdown=${() => outliner.remove(parent!, folder.id)} class="delete-folder">
-							${parent ? deleteBinSvg : null}
-						</span>
-				</div>
+				${this.#drag_drop(
+					html`
+						${folderSvg}
+						${this.#render_item_rename(folder)}
+						${this.#render_add_folder_icon(folder)}
+						${this.#render_common_icons(folder, parent)}
+				`,
+				"folder-header",
+				folder
+				)}
 				<ol>
 					${folder.children.map(item => this.#whatever(item, folder))}
 				</ol>
@@ -75,11 +135,31 @@ export const EdOutliner = ({outliner}: Context) => class extends QuickElement {
 	}
 
 	#prop(prop: Item.Prop, parent: Item.Folder) {
-		return this.#li(prop.id, html``)
+		return this.#li(prop.id,
+			this.#drag_drop(
+				html`
+					${objectSvg}
+					${this.#render_item_rename(prop)}
+					${this.#render_common_icons(prop, parent)}
+				`,
+				"item",
+				prop
+			)
+		)
 	}
 
 	#light(light: Item.Light, parent: Item.Folder) {
-		return this.#li(light.id, html``)
+		return this.#li(light.id,
+			this.#drag_drop(
+				html`
+					${objectSvg}
+					${this.#render_item_rename(light)}
+					${this.#render_common_icons(light, parent)}
+				`,
+				"item",
+				light
+			)
+		)
 	}
 
 	render() {

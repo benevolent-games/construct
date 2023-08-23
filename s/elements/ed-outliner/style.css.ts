@@ -50,7 +50,7 @@ span {
 }
 
 .folder {
-	.folder-object, .folder-header {
+	.item, .folder-header {
 		display: none;
 	}
 }
@@ -96,7 +96,7 @@ span {
 	}
 }
 
-.folder-object[data-notvisible], .folder-header[data-notvisible] {
+.item[data-notvisible], .folder-header[data-notvisible] {
 	opacity: 0.25;
 }
 
@@ -111,7 +111,7 @@ span {
 	> .folder-header .open-folder {
 		transform: rotate(-90deg)
 	}
-	> .folder-object {
+	> .item {
 		display: flex;
 		gap: 0.4em;
 		align-items: center;
@@ -120,13 +120,13 @@ span {
 		display: flex;
 	}
 	.folder[data-opened] {
-		> .folder-object {
+		> .item {
 			display: flex;
 			gap: 0.4em;
 			align-items: center;
 		}
 	}
-	.folder, .folder-object {
+	.folder, .item {
 		margin-left: 1rem;
 	}
 }
