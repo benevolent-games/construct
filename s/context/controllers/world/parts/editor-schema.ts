@@ -50,8 +50,8 @@ export const editor_schema = {
 			look_left: {causes: ["KeyJ"]},
 			look_right: {causes: ["KeyL"]},
 
-			look_fast: {causes: ["Slash"]},
-			look_slow: {causes: ["Period"]},
+			look_fast: {causes: ["Semicolon"]},
+			look_slow: {causes: ["Slash"]},
 		},
 	}
 } satisfies BindingsSchema

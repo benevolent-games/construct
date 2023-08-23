@@ -3,9 +3,11 @@ import "@babylonjs/core/Culling/ray.js"
 import "@babylonjs/core/Rendering/edgesRenderer.js"
 
 import {Scene} from "@babylonjs/core/scene.js"
+import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {Vector3} from "@babylonjs/core/Maths/math.js"
 import {NubDetail, NubEffectEvent} from "@benev/nubs"
 import {spawn_light} from "@benev/toolbox/x/demo/spawn_light.js"
+import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {InstancedMesh} from "@babylonjs/core/Meshes/instancedMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
@@ -18,19 +20,27 @@ import {make_box} from "./parts/make-box.js"
 import {Id, Unit} from "../graph/parts/types.js"
 import {editor_schema} from "./parts/editor-schema.js"
 
+function get_actual_meshes(node: TransformNode | Mesh | InstancedMesh) {
+	return node instanceof AbstractMesh
+		? [node, ...node.getChildMeshes()]
+		: node.getChildMeshes()
+}
+
 export class World {
 	#scene: Scene
 	#graph: Graph
 	#move_enabled = false
 	#theater: BenevTheater
 	#keys_pressed = new Set<string>()
-	#instances = new Map<Id, TransformNode>()
+	#instances = new Map<Id, TransformNode | Mesh>()
+	#ids = new Map<AbstractMesh, Id>()
 	#is_pointer_locked = () => this.#theater["pointer-lock"]
 
 	constructor(
 			graph: Graph,
 			theater: BenevTheater,
 		) {
+
 		this.#graph = graph
 		this.#theater = theater
 		this.#scene = theater.babylon.scene
@@ -45,56 +55,60 @@ export class World {
 	}
 
 	#add = ([id, item]: [Id, Unit]) => {
-		const pos = item.node.position
-		const instance = item.node.instantiateHierarchy()!
+		const position = item.node.position.clone()
+		const instance = item.node.instantiateHierarchy()! as TransformNode | Mesh
 		instance.id = id
 		this.#instances.set(id, instance)
-		this.#scene.addTransformNode(instance)
-
-		instance.position = new Vector3(pos.x, pos.y + 3, pos.z)
+		instance.position = position
+		for (const mesh of get_actual_meshes(instance))
+			this.#ids.set(mesh, id)
 	}
 
 	#remove = (id: Id) => {
 		const instance = this.#instances.get(id)!
 		instance.dispose()
 		this.#instances.delete(id)
+		for (const mesh of get_actual_meshes(instance))
+			this.#ids.delete(mesh)
 	}
 
 	#select = (id: Id) => {
 		const instance = this.#instances.get(id)!
-		const mesh = instance.getChildMeshes(true)[0]
-		mesh.enableEdgesRendering()
-		mesh.edgesWidth = 8
+		for (const mesh of get_actual_meshes(instance)) {
+			mesh.enableEdgesRendering()
+			mesh.edgesWidth = 8
+		}
 	}
 
 	#deselect = (id: Id) => {
 		const instance = this.#instances.get(id)!
-		const mesh = instance.getChildMeshes(true)[0]
-		mesh.disableEdgesRendering()
+		for (const mesh of get_actual_meshes(instance)) {
+			mesh.disableEdgesRendering()
+		}
 	}
 
 	#manage_effect_events = ({detail}: NubEffectEvent) => {
-		if ((detail as NubDetail.Key).pressed) {
+		if ((detail as NubDetail.Key).pressed)
 			this.#keys_pressed.add(detail.cause)
-		}
-		else {
+		else
 			this.#keys_pressed.delete(detail.cause)
-		}
 
 		switch (detail.effect) {
 			case "select": {
 				const pressed = (detail as NubDetail.Key).pressed
 				if (pressed) {
 					const pick = this.#scene.pick(
-						this.#scene.pointerX, this.#scene.pointerY
+						this.#scene.pointerX,
+						this.#scene.pointerY,
 					)
 					if (pick?.hit) {
-						const pickedMesh = pick.pickedMesh as unknown as InstancedMesh
-						const id = pickedMesh.parent!.id
-						if (this.#graph.selected(id)) {
-							this.#graph.deselect(id)
-						} else {
-							this.#graph.select(id)
+						const mesh = pick.pickedMesh as unknown as AbstractMesh
+						const id = this.#ids.get(mesh)
+						if (id) {
+							if (this.#graph.selected(id))
+								this.#graph.deselect(id)
+							else
+								this.#graph.select(id)
 						}
 					}
 				}
@@ -177,9 +191,9 @@ export class World {
 				slow: 0.2
 			},
 			speeds_for_looking_with_keys_and_stick: {
-				base: 1,
-				fast: 2,
-				slow: 0.5
+				base: 0.1,
+				fast: 0.2,
+				slow: 0.01,
 			},
 		})
 
@@ -188,7 +202,7 @@ export class World {
 		const box = make_box(this.#scene)
 		const box_parent = new TransformNode("box", this.#scene)
 		box.parent = box_parent
-		box.isVisible = false
+		box.setEnabled(false)
 
 		this.#graph.add({name: "box", node: box_parent})
 	}

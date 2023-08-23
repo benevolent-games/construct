@@ -77,13 +77,17 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 		if (first_lod_index === -1)
 			throw new Error(`prop is missing any lod!? "${name}"`)
 
+		const top_lod = lod_slots[first_lod_index]
+		if (!top_lod)
+			throw new Error("no top lod!?")
+
 		const prop: AssetProp = {
 			id: generateId(),
 			name,
 			collision,
 			first_lod_index,
 			lods: lod_slots,
-			top_lod: lods[first_lod_index],
+			top_lod: lod_slots[first_lod_index]!,
 		}
 
 		return prop

@@ -31,9 +31,12 @@ export class Graph {
 		const id = generateId()
 		this.#units.set(id, item)
 		this.on.added.publish([id, item])
+		return id
 	}
 
 	remove(id: string) {
+		if (this.selected(id))
+			this.deselect(id)
 		this.#units.delete(id)
 		this.on.removed.publish(id)
 	}
