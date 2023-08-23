@@ -12,14 +12,10 @@ export default template(async basic => {
 		body: html`
 			<div class=foundation>
 				<ed-catalog></ed-catalog>
-				<div class=viewport>
-					<benev-theater disable-pointer-lock></benev-theater>
-				</div>
+				<benev-theater disable-pointer-lock></benev-theater>
 				<ed-outliner></ed-outliner>
 			</div>
 		`,
 	})
 })
-
-// <benev-theater disable-pointer-lock></benev-theater>
 
