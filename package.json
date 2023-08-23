@@ -1,5 +1,5 @@
 {
-	"name": "@benev/edit",
+	"name": "@benev/construct",
 	"version": "0.0.0-dev.0",
 	"description": "game map editing suite for babylon",
 	"license": "MIT",
@@ -61,10 +61,10 @@
 	],
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/benevolent-games/edit.git"
+		"url": "git+https://github.com/benevolent-games/construct.git"
 	},
 	"bugs": {
-		"url": "https://github.com/benevolent-games/edit/issues"
+		"url": "https://github.com/benevolent-games/construct/issues"
 	},
-	"homepage": "https://github.com/benevolent-games/edit#readme"
+	"homepage": "https://github.com/benevolent-games/construct#readme"
 }

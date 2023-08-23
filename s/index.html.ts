@@ -7,7 +7,7 @@ export default template(async basic => {
 	return easypage({
 		path,
 		css: "style.css",
-		title: "@benev/edit",
+		title: "@benev/construct",
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
 			<div class=foundation>
