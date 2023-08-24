@@ -73,7 +73,7 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 			<span ?isVisible=${item.isVisible} @click=${() => outliner.set_visibility(item)} class="toggle-visibility">
 				${item.isVisible ? eyeOpenSvg : eyeSlashedSvg}
 			</span>
-			<span @pointerdown=${() => outliner.remove(parent!, item.id)} class="delete-folder">
+			<span @pointerdown=${() => outliner.remove(item.id)} class="delete-folder">
 				${parent ? deleteBinSvg : null}
 			</span>
 		`
