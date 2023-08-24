@@ -79,6 +79,15 @@ span {
 	margin-right: 0.3em;
 }
 
+.icons, .item-name {
+	display: flex;
+	align-items: center;
+}
+
+.item, .folder-header {
+	justify-content: space-between;
+}
+
 .folder-header {
 	gap: 0.1em;
 	span {

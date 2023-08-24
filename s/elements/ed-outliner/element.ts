@@ -13,7 +13,7 @@ import {Item} from "../../context/controllers/outliner/parts/item.js"
 import objectSvg from "../../icons/material-design-icons/object.svg.js"
 import folderSvg from "../../icons/material-design-icons/folder.svg.js"
 import deleteBinSvg from "../../icons/material-design-icons/delete-bin.svg.js"
-
+import { svg } from "lit"
 export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElement {
 
 	#state = flat.state({
@@ -52,8 +52,9 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 		`
 	}
 
-	#render_item_rename(item: Item.Whatever) {
+	#render_item_name(item: Item.Whatever, icon: TemplateResult) {
 		return html`
+			${icon}
 			${this.#state.item_rename_stared_on === item.id
 				? html`
 					<input
@@ -100,7 +101,7 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 		folder?.toggleAttribute("data-opened")
 	}
 
-	#drag_drop(content: TemplateResult, div_class: string, item: Item.Whatever) {
+	#drag_drop(name: TemplateResult, icons: TemplateResult, div_class: string, item: Item.Whatever) {
 		return html`
 			<div
 				?data-notvisible=${!item.isVisible}
@@ -109,7 +110,8 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 				@dragend=${() => console.log("drag end")}
 				@dragstart=${() => console.log("drag start")}
 				@dragover=${(e: DragEvent) => e.preventDefault()}>
-				${content}
+				<div class=item-name>${name}</div>
+				<div class=icons>${icons}</div>
 			</div>
 		`
 	}
@@ -118,12 +120,11 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 		return this.#li(folder.id, html`
 			<div data-opened class=folder>
 				${this.#drag_drop(
+					this.#render_item_name(folder, folderSvg),
 					html`
-						${folderSvg}
-						${this.#render_item_rename(folder)}
 						${this.#render_add_folder_icon(folder)}
 						${this.#render_common_icons(folder, parent)}
-				`,
+					`,
 				"folder-header",
 				folder
 				)}
@@ -137,11 +138,8 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 	#prop(prop: Item.Prop, parent: Item.Folder) {
 		return this.#li(prop.id,
 			this.#drag_drop(
-				html`
-					${objectSvg}
-					${this.#render_item_rename(prop)}
-					${this.#render_common_icons(prop, parent)}
-				`,
+				this.#render_item_name(prop, objectSvg),
+				this.#render_common_icons(prop, parent),
 				"item",
 				prop
 			)
@@ -151,11 +149,8 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 	#light(light: Item.Light, parent: Item.Folder) {
 		return this.#li(light.id,
 			this.#drag_drop(
-				html`
-					${objectSvg}
-					${this.#render_item_rename(light)}
-					${this.#render_common_icons(light, parent)}
-				`,
+				this.#render_item_name(light, objectSvg),
+				this.#render_common_icons(light, parent),
 				"item",
 				light
 			)

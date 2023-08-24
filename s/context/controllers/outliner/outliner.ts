@@ -79,7 +79,7 @@ export class Outliner {
 	#find_and_remove_by_id(folder: Item.Folder, id: string) {
 		const found = folder.children.find(c => c.id === id)
 		if(found) return folder.children.filter(c => c.id !== id)
-		else folder.children.forEach(c => c .kind === "folder"
+		else folder.children.forEach(c => c.kind === "folder"
 			? this.#find_and_remove_by_id(c, id)
 			: null)
 	}
