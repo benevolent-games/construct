@@ -103,9 +103,13 @@ span {
 	}
 }
 
+.open-folder {
+	transform: rotate(-90deg);
+}
+
 .folder[data-opened] {
 	> .folder-header .open-folder {
-		transform: rotate(-90deg)
+		transform: rotate(0deg)
 	}
 	> ol > li > .item {
 		display: flex;
