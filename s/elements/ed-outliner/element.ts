@@ -116,7 +116,7 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 
 	#folder(folder: Item.Folder, parent?: Item.Folder) {
 		return this.#li(folder.id, html`
-			<div class=folder>
+			<div data-opened class=folder>
 				${this.#drag_drop(
 					html`
 						${folderSvg}
