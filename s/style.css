@@ -37,30 +37,5 @@ html, body {
 .foundation {
 	width: 100vw;
 	height: 100vh;
-
-	display: grid;
-	grid:
-		" left middle           right"
-		/ 1fr  minmax(4em, 2fr) 1fr;
-
-	> :is(ed-catalog, ed-outliner) {
-		overflow-x: hidden;
-		overflow-y: auto;
-	}
-
-	> ed-catalog { grid-area: left; }
-	> ed-outliner { grid-area: right; }
-
-	> benev-theater {
-		grid-area: middle;
-		display: block;
-
-		width: 100%;
-		height: 100%;
-		overflow: hidden;
-
-		max-width: unset;
-		aspect-ratio: unset;
-	}
 }
 

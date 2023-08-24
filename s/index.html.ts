@@ -11,11 +11,12 @@ export default template(async basic => {
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
 			<div class=foundation>
-				<ed-catalog></ed-catalog>
-				<benev-theater disable-pointer-lock></benev-theater>
-				<ed-outliner></ed-outliner>
 			</div>
 		`,
 	})
 })
 
+// <benev-theater class=viewport disable-pointer-lock></benev-theater>
+// <ed-catalog></ed-catalog>
+// <div class=viewport></div>
+// <ed-outliner></ed-outliner>
