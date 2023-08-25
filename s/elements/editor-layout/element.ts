@@ -4,11 +4,11 @@ import {LightElement} from "@benev/frog"
 
 import {TreeView} from "./views/tree.js"
 import {component} from "../component.js"
-import {layout} from "./parts/default_layout.js"
+import {default_layout} from "./parts/default_layout.js"
 
 export const EditorLayout = component(context => class extends LightElement {
 	#TreeView = TreeView(context)
-	layout = layout
+	layout = default_layout
 
 	render() {
 		return this.#TreeView({

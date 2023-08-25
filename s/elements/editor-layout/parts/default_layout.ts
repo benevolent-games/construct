@@ -1,7 +1,7 @@
 
 import {Layout} from "./layout.js"
 
-export const layout: Layout.Cell = {
+export const default_layout: Layout.Cell = {
 	kind: "cell",
 	vertical: false,
 
