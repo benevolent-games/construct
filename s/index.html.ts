@@ -11,16 +11,9 @@ export default template(async basic => {
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
 			<main class=foundation>
-				<editor-layout>
-					<p slot="plate-0-0-0">hi</p>
-					<p slot="plate-1-0-0">there</p>
-				</editor-layout>
+				<editor-layout></editor-layout>
 			</main>
 		`,
 	})
 })
 
-// <benev-theater class=viewport disable-pointer-lock></benev-theater>
-// <ed-catalog></ed-catalog>
-// <div class=viewport></div>
-// <ed-outliner></ed-outliner>
