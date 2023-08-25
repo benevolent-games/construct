@@ -10,9 +10,12 @@ export default template(async basic => {
 		title: "@benev/construct",
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
-			<editor-layout>
-				<p slot="leaf">hi</p>
-			</editor-layout>
+			<main class=foundation>
+				<editor-layout>
+					<p slot="plate-0-0-0">hi</p>
+					<p slot="plate-1-0-0">there</p>
+				</editor-layout>
+			</main>
 		`,
 	})
 })

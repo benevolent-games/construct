@@ -22,7 +22,7 @@ export const EditorLayout = component(context => class extends QuickElement {
 
 	layout = layout
 
-	#render_layout(node: Layout.Node): TemplateResult | void {
+	#render_layout(node: Layout.Node, path: number[] = []): TemplateResult | void {
 		const {CellView, PaneView, PlateView} = this.#views
 		switch (node.kind) {
 
@@ -31,7 +31,7 @@ export const EditorLayout = component(context => class extends QuickElement {
 					props: [{vertical: node.vertical}],
 					content: html`${
 						node.children
-							.map(child => this.#render_layout(child))
+							.map((child, index) => this.#render_layout(child, [...path, index]))
 					}`
 				})
 
@@ -40,15 +40,16 @@ export const EditorLayout = component(context => class extends QuickElement {
 					props: [{size: node.size}],
 					content: html`${
 						node.children
-							.map(plate => this.#render_layout(plate))
+							.map((plate, index) => this.#render_layout(plate, [...path, index]))
 					}`
 				})
 
 			case "plate":
+				const name = `plate-${path.join('-')}`
 				return html`${PlateView({
 					props: [],
 					content: html`
-						<slot name="leaf"></slot>
+						<slot name="${name}"></slot>
 					`,
 				})}`
 		}
