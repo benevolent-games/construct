@@ -22,7 +22,7 @@ export namespace Layout {
 		vertical: boolean
 	}
 
-	export type Whatever = (
+	export type Node = (
 		| Plate
 		| Pane
 		| Cell

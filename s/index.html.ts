@@ -6,12 +6,13 @@ export default template(async basic => {
 
 	return easypage({
 		path,
-		css: "style.css",
+		css: "index.css",
 		title: "@benev/construct",
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
-			<div class=foundation>
-			</div>
+			<editor-layout>
+				<p slot="leaf">hi</p>
+			</editor-layout>
 		`,
 	})
 })
