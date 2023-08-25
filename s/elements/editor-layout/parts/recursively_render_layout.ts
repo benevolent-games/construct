@@ -2,15 +2,15 @@
 import {html} from "lit"
 
 import {Layout} from "./layout.js"
-import {Views} from "./layout_views.js"
+import {LayoutViews} from "./layout_views.js"
 
 export function recursively_render_layout(
-		views: Views,
+		views: LayoutViews,
 		node: Layout.Node,
 		path: number[] = [],
 	) {
 
-	const {CellView, PaneView, PlateView} = views
+	const {CellView, PaneView, LeafView} = views
 
 	switch (node.kind) {
 
@@ -32,17 +32,17 @@ export function recursively_render_layout(
 				props: [{size: node.size}],
 				content: html`${
 					node.children
-						.map((plate, index): any => recursively_render_layout(
+						.map((leaf, index): any => recursively_render_layout(
 							views,
-							plate,
+							leaf,
 							[...path, index],
 						))
 				}`
 			})
 
-		case "plate":
-			const name = `plate-${path.join('-')}`
-			return html`${PlateView({
+		case "leaf":
+			const name = `leaf-${path.join('-')}`
+			return html`${LeafView({
 				props: [],
 				content: html`<slot name="${name}"></slot>`,
 			})}`

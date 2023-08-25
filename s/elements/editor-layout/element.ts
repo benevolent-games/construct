@@ -14,8 +14,8 @@ export const EditorLayout = component(context => class extends LightElement {
 		return this.#TreeView({
 			props: [this.layout],
 			content: html`
-				<p slot="plate-0-0-0">hello</p>
-				<p slot="plate-1-0-0">world</p>
+				<p slot="leaf-0-0-0">hello</p>
+				<p slot="leaf-1-0-0">world</p>
 			`,
 		})
 	}

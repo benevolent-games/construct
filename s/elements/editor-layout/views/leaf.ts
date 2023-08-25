@@ -2,7 +2,7 @@
 import {html, css} from "lit"
 import {view} from "../../view.js"
 
-export const PlateView = view("plate", _ => ({
+export const LeafView = view("leaf", _ => ({
 
 	render: _ => () => {
 		return html`

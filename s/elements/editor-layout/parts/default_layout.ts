@@ -11,7 +11,7 @@ export const default_layout: Layout.Cell = {
 		children: [{
 			kind: "pane",
 			size: undefined,
-			children: [{kind: "plate"}, {kind: "plate"}],
+			children: [{kind: "leaf"}, {kind: "leaf"}],
 		}],
 	},
 
@@ -21,7 +21,7 @@ export const default_layout: Layout.Cell = {
 		children: [{
 			kind: "pane",
 			size: undefined,
-			children: [{kind: "plate"}],
+			children: [{kind: "leaf"}],
 		}],
 	},
 
@@ -31,12 +31,12 @@ export const default_layout: Layout.Cell = {
 		children: [{
 			kind: "pane",
 			size: 50,
-			children: [{kind: "plate"}],
+			children: [{kind: "leaf"}],
 		},
 		{
 			kind: "pane",
 			size: undefined,
-			children: [{kind: "plate"}],
+			children: [{kind: "leaf"}],
 		}],
 	}],
 }

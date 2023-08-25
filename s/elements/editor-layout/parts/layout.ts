@@ -1,18 +1,18 @@
 
 export namespace Layout {
-	export type Kind = "cell" | "pane" | "plate"
+	export type Kind = "cell" | "pane" | "leaf"
 
 	export interface Base {
 		kind: Kind
 	}
 
-	export interface Plate {
-		kind: "plate"
+	export interface Leaf {
+		kind: "leaf"
 	}
 
 	export interface Pane {
 		kind: "pane"
-		children: Plate[]
+		children: Leaf[]
 		size: number | undefined
 	}
 
@@ -23,7 +23,7 @@ export namespace Layout {
 	}
 
 	export type Node = (
-		| Plate
+		| Leaf
 		| Pane
 		| Cell
 	)
