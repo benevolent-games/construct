@@ -105,7 +105,7 @@ span {
 	opacity: 0.25;
 }
 
-.folder-header[data-outline] {
+.folder-header[data-highlight] {
 	box-shadow: inset 0 0 0.5em 0 #15d515;
 	> *:not(.folder-header) {
 		pointer-events: none;
