@@ -1,16 +1,19 @@
 
-import {css, html} from "lit"
+import {html, css} from "lit"
 import {view} from "../../view.js"
 
-export const CellView = view("cell")
-	.render(context => use => () => {
+export const CellView = view("cell", context => ({
+
+	render: use => () => {
 		return html`
 			<slot></slot>
 		`
-	})
-	.styles(css`
+	},
+
+	styles: css`
 		:host {
 			display: block;
 		}
-	`)
+	`,
+}))
 
