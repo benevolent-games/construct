@@ -19,8 +19,11 @@ export const EditorLayout = component.views({
 		return views.TreeView({
 			props: [this.layout],
 			content: html`
-				<p slot="leaf-0-0-0">hello</p>
-				<p slot="leaf-1-0-0">world</p>
+				<p slot="leaf-0-0-0">alpha</p>
+				<p slot="leaf-0-0-1">bravo</p>
+				<p slot="leaf-1-0-0">charlie</p>
+				<p slot="leaf-2-0-0">delta</p>
+				<p slot="leaf-2-1-0">echo</p>
 			`,
 		})
 	}

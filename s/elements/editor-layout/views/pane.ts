@@ -8,11 +8,10 @@ export const PaneView = view({
 		styles: css`
 			:host {
 				display: block;
+				outline: 1px solid red;
 			}
 		`,
-	}).render(_context => _views => _use => ({size}: {
-		size: number | undefined
-	}) => {
+	}).render(_context => _views => _use => () => {
 
 	return html`
 		<slot></slot>

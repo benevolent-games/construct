@@ -13,12 +13,15 @@ export const CellView = view({
 				display: flex;
 				width: 100%;
 				height: 100%;
-				border: 2px solid #fff4;
 			}
 
 			:host([vertical]) {
 				flex-direction: column;
 				border: 2px solid #8f84;
+			}
+
+			::slotted(*) {
+				flex-grow: 1;
 			}
 		`,
 	}).render(_context => _views => use => ({vertical}: {vertical: boolean}) => {

@@ -18,34 +18,47 @@ export function recursively_render_layout(
 			return CellView({
 				props: [{vertical: node.vertical}],
 				content: html`${
-					node.children
-						.map((child, index): any => recursively_render_layout(
+					node.children.map((child, index): any =>
+						recursively_render_layout(
 							views,
 							child,
 							[...path, index],
-						))
+						)
+					)
 				}`
 			})
 
 		case "pane":
 			return PaneView({
-				props: [{size: node.size}],
+				props: [],
+				attributes: {
+					style: (node.size
+						? (`
+							flex-basis: ${node.size}%;
+							flex-grow: 0;
+						`)
+						: (`
+							flex-basis: auto;
+						`)
+					),
+				},
 				content: html`${
-					node.children
-						.map((leaf, index): any => recursively_render_layout(
+					node.children.map((leaf, index): any =>
+						recursively_render_layout(
 							views,
 							leaf,
 							[...path, index],
-						))
+						)
+					)
 				}`
 			})
 
 		case "leaf":
 			const name = `leaf-${path.join('-')}`
-			return html`${LeafView({
+			return LeafView({
 				props: [],
 				content: html`<slot name="${name}"></slot>`,
-			})}`
+			})
 	}
 }
 
