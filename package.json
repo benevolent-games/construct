@@ -17,7 +17,7 @@
 		"test": "exit 0"
 	},
 	"dependencies": {
-		"@benev/frog": "^0.6.0-dev.4",
+		"@benev/frog": "^0.6.0-dev.5",
 		"@benev/nubs": "^0.2.4",
 		"@benev/toolbox": "^0.5.0-dev.0",
 		"@chasemoskal/magical": "^0.1.7",
@@ -48,7 +48,7 @@
 		"npm-run-all": "^4.1.5",
 		"rimraf": "^5.0.1",
 		"rollup": "^3.28.1",
-		"terser": "^5.19.2",
+		"terser": "^5.19.3",
 		"typescript": "^5.2.2"
 	},
 	"keywords": [
