@@ -1,7 +1,7 @@
 
 import {css} from "lit";
 
-export const style = css`
+export const styles = css`
 
 :host {
 	display: flex;

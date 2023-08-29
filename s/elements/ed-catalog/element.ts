@@ -1,12 +1,12 @@
 
-import {html} from "lit"
-import {QuickElement} from "@benev/frog"
-import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
+// import {html} from "lit"
+// import {QuickElement} from "@benev/frog"
+// import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 
-import {style} from "./style.css.js"
-import {Context} from "../../context/context.js"
-import {human_bytes} from "../../tools/human_bytes.js"
-import {AssetProp, Glb} from "../../context/controllers/catalog/parts/types.js"
+// import {style} from "./style.css.js"
+// import {Context} from "../../context/context.js"
+// import {human_bytes} from "../../tools/human_bytes.js"
+// import {AssetProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 
 // export const EdCatalog = (context: Context) => class extends QuickElement {
 // 	static styles = style

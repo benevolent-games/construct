@@ -4,10 +4,10 @@ import {Scene} from "@babylonjs/core/scene.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
 import {Graph} from "../graph/graph.js"
+import {CatalogState, Glb} from "./parts/types.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
-import {CatalogState, Glb} from "./parts/types.js"
 
 export class Catalog {
 	#scene: Scene

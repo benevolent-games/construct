@@ -17,7 +17,7 @@
 		"test": "exit 0"
 	},
 	"dependencies": {
-		"@benev/frog": "^0.6.0-dev.2",
+		"@benev/frog": "^0.6.0-dev.4",
 		"@benev/nubs": "^0.2.4",
 		"@benev/toolbox": "^0.5.0-dev.0",
 		"@chasemoskal/magical": "^0.1.7",
@@ -32,8 +32,8 @@
 		"simplex-noise": "^4.0.1"
 	},
 	"peerDependencies": {
-		"@babylonjs/core": "^6.17.1",
-		"@babylonjs/loaders": "^6.17.1"
+		"@babylonjs/core": "^6.18.0",
+		"@babylonjs/loaders": "^6.18.0"
 	},
 	"devDependencies": {
 		"@benev/turtle": "^0.5.0",
@@ -49,7 +49,7 @@
 		"rimraf": "^5.0.1",
 		"rollup": "^3.28.1",
 		"terser": "^5.19.2",
-		"typescript": "^5.1.6"
+		"typescript": "^5.2.2"
 	},
 	"keywords": [
 		"editor",

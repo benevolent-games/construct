@@ -1,19 +1,19 @@
 
 import {html, css} from "lit"
-import {view} from "../../view.js"
+import {view} from "../../frontend.js"
 
-export const LeafView = view("leaf", _ => ({
+export const LeafView = view({
+		name: "leaf",
+		views: {},
+		styles: css`
+			:host {
+				display: block;
+			}
+		`,
+	}).render(_context => _views => _use => () => {
 
-	render: _ => () => {
-		return html`
-			<slot></slot>
-		`
-	},
-
-	styles: css`
-		:host {
-			display: block;
-		}
-	`,
-}))
+	return html`
+		<slot></slot>
+	`
+})
 

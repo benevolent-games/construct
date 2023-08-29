@@ -1,32 +1,33 @@
 
 import {html, css} from "lit"
 
-import {view} from "../../view.js"
+import {view} from "../../frontend.js"
 import {flip_attrs} from "../../../tools/flip_attrs.js"
 
-export const CellView = view("cell", _ => ({
+export const CellView = view({
+		name: "cell",
+		views: {},
+		styles: css`
 
-	render: use => ({vertical}: {vertical: boolean}) => {
-		const attrs = flip_attrs<{vertical: string}>(use)
-		attrs.boolean.vertical = vertical
+			:host {
+				display: flex;
+				width: 100%;
+				height: 100%;
+				border: 2px solid #fff4;
+			}
 
-		return html`
-			<slot></slot>
-		`
-	},
+			:host([vertical]) {
+				flex-direction: column;
+				border: 2px solid #8f84;
+			}
+		`,
+	}).render(_context => _views => use => ({vertical}: {vertical: boolean}) => {
 
-	styles: css`
-		:host {
-			display: flex;
-			width: 100%;
-			height: 100%;
-			border: 2px solid #fff4;
-		}
+	const attrs = flip_attrs<{vertical: string}>(use)
+	attrs.boolean.vertical = vertical
 
-		:host([vertical]) {
-			flex-direction: column;
-			border: 2px solid #8f84;
-		}
-	`,
-}))
+	return html`
+		<slot></slot>
+	`
+})
 
