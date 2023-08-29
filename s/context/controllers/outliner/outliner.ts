@@ -12,6 +12,7 @@ export type OutlinerState = {
 
 export class Outliner {
 	#state: OutlinerState
+	#graph: Graph
 
 	constructor(flat: Flat, graph: Graph) {
 		this.#state = flat.state({
@@ -24,6 +25,7 @@ export class Outliner {
 			},
 		})
 
+		this.#graph = graph
 		graph.on.added(this.#add)
 		graph.on.removed(this.#remove)
 		graph.on.selected(this.#selection_changed)
@@ -43,10 +45,8 @@ export class Outliner {
 		this.#update()
 	}
 
-	remove(parent: Item.Folder, id: Id) {
-		const filtered = parent.children.filter(f => f.id !== id)
-		parent.children = filtered
-		this.#update()
+	remove(id: Id) {
+		this.#graph.remove(id)
 	}
 
 	#update() {
@@ -72,7 +72,16 @@ export class Outliner {
 	}
 
 	#remove = (id: Id) => {
-		// remove the item from anywhere in the tree??
+		this.root.children = this.#find_and_remove_by_id(this.root, id)!
+		this.#update()
+	}
+
+	#find_and_remove_by_id(folder: Item.Folder, id: string) {
+		const found = folder.children.find(c => c.id === id)
+		if(found) return folder.children.filter(c => c.id !== id)
+		else folder.children.forEach(c => c.kind === "folder"
+			? this.#find_and_remove_by_id(c, id)
+			: null)
 	}
 
 	#selection_changed = () => {

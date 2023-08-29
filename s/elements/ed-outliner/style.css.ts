@@ -79,6 +79,15 @@ span {
 	margin-right: 0.3em;
 }
 
+.icons, .item-name {
+	display: flex;
+	align-items: center;
+}
+
+.item, .folder-header {
+	justify-content: space-between;
+}
+
 .folder-header {
 	gap: 0.1em;
 	span {
@@ -96,16 +105,20 @@ span {
 	opacity: 0.25;
 }
 
-.folder-header[data-outline] {
+.folder-header[data-highlight] {
 	box-shadow: inset 0 0 0.5em 0 #15d515;
 	> *:not(.folder-header) {
 		pointer-events: none;
 	}
 }
 
+.open-folder {
+	transform: rotate(-90deg);
+}
+
 .folder[data-opened] {
 	> .folder-header .open-folder {
-		transform: rotate(-90deg)
+		transform: rotate(0deg)
 	}
 	> ol > li > .item {
 		display: flex;

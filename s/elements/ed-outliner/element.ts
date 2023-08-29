@@ -9,6 +9,7 @@ import {setupListener} from "../../utils/setup-listener.js"
 import arrowDownSvg from "../../icons/akar/arrow-down.svg.js"
 import eyeSlashedSvg from "../../icons/akar/eye-slashed.svg.js"
 import {Id} from "../../context/controllers/graph/parts/types.js"
+import {outliner_drag_drop} from "../../tools/outliner_drag_drop.js"
 import {Item} from "../../context/controllers/outliner/parts/item.js"
 import objectSvg from "../../icons/material-design-icons/object.svg.js"
 import folderSvg from "../../icons/material-design-icons/folder.svg.js"
@@ -20,6 +21,8 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 		item_rename_stared_on: "",
 		new_name: ""
 	})
+
+	#outliner_drag_drop = new outliner_drag_drop()
 
 	static styles = style
 
@@ -52,8 +55,9 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 		`
 	}
 
-	#render_item_rename(item: Item.Whatever) {
+	#render_item_name(item: Item.Whatever, icon: TemplateResult) {
 		return html`
+			${icon}
 			${this.#state.item_rename_stared_on === item.id
 				? html`
 					<input
@@ -73,7 +77,7 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 			<span ?isVisible=${item.isVisible} @click=${() => outliner.set_visibility(item)} class="toggle-visibility">
 				${item.isVisible ? eyeOpenSvg : eyeSlashedSvg}
 			</span>
-			<span @pointerdown=${() => outliner.remove(parent!, item.id)} class="delete-folder">
+			<span @pointerdown=${() => outliner.remove(item.id)} class="delete-folder">
 				${parent ? deleteBinSvg : null}
 			</span>
 		`
@@ -100,31 +104,47 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 		folder?.toggleAttribute("data-opened")
 	}
 
-	#drag_drop(content: TemplateResult, div_class: string, item: Item.Whatever) {
+	#set_drag_indicator(e: DragEvent) {
+		const target = e.target as HTMLElement
+		const folder = target.closest(".folder-header")
+		folder?.setAttribute("data-highlight", "")
+	}
+
+	#remove_drag_indicator(e: DragEvent) {
+		const target = e.target as HTMLElement
+		if(target.className === "folder-header")
+			target.removeAttribute("data-highlight")
+	}
+
+	#drag_drop(name: TemplateResult, icons: TemplateResult, div_class: string, parent: Item.Folder, item: Item.Whatever) {
 		return html`
 			<div
 				?data-notvisible=${!item.isVisible}
 				class="${div_class}"
-				draggable=true
-				@dragend=${() => console.log("drag end")}
-				@dragstart=${() => console.log("drag start")}
+				draggable="true"
+				@dragenter=${this.#set_drag_indicator}
+				@dragleave=${this.#remove_drag_indicator}
+				@drop=${() =>	this.#outliner_drag_drop.drop(item)}
+				@dragend=${this.#outliner_drag_drop.end}
+				@dragstart=${() => this.#outliner_drag_drop.start(parent, item)}
 				@dragover=${(e: DragEvent) => e.preventDefault()}>
-				${content}
+				<div class=item-name>${name}</div>
+				<div class=icons>${icons}</div>
 			</div>
 		`
 	}
 
 	#folder(folder: Item.Folder, parent?: Item.Folder) {
 		return this.#li(folder.id, html`
-			<div class=folder>
+			<div data-opened class=folder>
 				${this.#drag_drop(
+					this.#render_item_name(folder, folderSvg),
 					html`
-						${folderSvg}
-						${this.#render_item_rename(folder)}
 						${this.#render_add_folder_icon(folder)}
 						${this.#render_common_icons(folder, parent)}
-				`,
+					`,
 				"folder-header",
+				parent!,
 				folder
 				)}
 				<ol>
@@ -137,12 +157,10 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 	#prop(prop: Item.Prop, parent: Item.Folder) {
 		return this.#li(prop.id,
 			this.#drag_drop(
-				html`
-					${objectSvg}
-					${this.#render_item_rename(prop)}
-					${this.#render_common_icons(prop, parent)}
-				`,
+				this.#render_item_name(prop, objectSvg),
+				this.#render_common_icons(prop, parent),
 				"item",
+				parent!,
 				prop
 			)
 		)
@@ -151,12 +169,10 @@ export const EdOutliner = ({outliner, flat}: Context) => class extends QuickElem
 	#light(light: Item.Light, parent: Item.Folder) {
 		return this.#li(light.id,
 			this.#drag_drop(
-				html`
-					${objectSvg}
-					${this.#render_item_rename(light)}
-					${this.#render_common_icons(light, parent)}
-				`,
+				this.#render_item_name(light, objectSvg),
+				this.#render_common_icons(light, parent),
 				"item",
+				parent!,
 				light
 			)
 		)
