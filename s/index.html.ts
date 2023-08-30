@@ -11,7 +11,7 @@ export default template(async basic => {
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
 			<main class=foundation>
-				<editor-layout></editor-layout>
+				<construct-layout></construct-layout>
 			</main>
 		`,
 	})

@@ -1,9 +1,9 @@
 
 import {components} from "./frontend.js"
-import {EditorLayout} from "./editor-layout/element.js"
+import {ConstructLayout} from "./construct-layout/element.js"
 
 export const elements = components({
-	EditorLayout,
+	ConstructLayout,
 })
 
 export type Elements = ReturnType<typeof elements>
