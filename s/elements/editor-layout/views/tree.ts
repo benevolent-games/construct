@@ -2,13 +2,12 @@
 import {css} from "lit"
 
 import {view} from "../../frontend.js"
-import {Layout} from "../parts/layout.js"
-import {layout_views} from "../parts/layout_views.js"
+import {LayoutMachine} from "../parts/layout_machine.js"
 import {recursively_render_layout} from "../parts/recursively_render_layout.js"
 
 export const TreeView = view({
 		name: "tree",
-		views: layout_views,
+		views: {},
 		styles: css`
 			:host {
 				display: flex;
@@ -16,8 +15,8 @@ export const TreeView = view({
 				height: 100%;
 			}
 		`,
-	}).render(_context => views => _use => (cell: Layout.Cell) => {
+	}).render(_context => _views => _use => (machine: LayoutMachine) => {
 
-	return recursively_render_layout(views, cell)
+	return recursively_render_layout(machine, machine.root)
 })
 

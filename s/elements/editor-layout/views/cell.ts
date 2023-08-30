@@ -21,7 +21,17 @@ export const CellView = view({
 			}
 
 			::slotted(*) {
-				flex-grow: 1;
+				flex: 0 0 auto;
+			}
+
+			::slotted(.resizer) {
+				flex: 0 0 1em;
+				background: yellow;
+				cursor: ew-resize;
+			}
+
+			:host([vertical]) ::slotted(.resizer) {
+				cursor: ns-resize;
 			}
 		`,
 	}).render(_context => _views => use => ({vertical}: {vertical: boolean}) => {

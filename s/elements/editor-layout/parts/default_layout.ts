@@ -1,13 +1,15 @@
 
 import {Layout} from "./layout.js"
 
-export const default_layout: Layout.Cell = {
+export const default_layout: () => Layout.Cell = () => ({
 	kind: "cell",
 	vertical: false,
+	size: undefined,
 
 	children: [{
 		kind: "cell",
 		vertical: true,
+		size: 50,
 		children: [{
 			kind: "pane",
 			size: undefined,
@@ -18,6 +20,7 @@ export const default_layout: Layout.Cell = {
 	{
 		kind: "cell",
 		vertical: true,
+		size: undefined,
 		children: [{
 			kind: "pane",
 			size: undefined,
@@ -28,6 +31,7 @@ export const default_layout: Layout.Cell = {
 	{
 		kind: "cell",
 		vertical: true,
+		size: undefined,
 		children: [{
 			kind: "pane",
 			size: 50,
@@ -39,5 +43,5 @@ export const default_layout: Layout.Cell = {
 			children: [{kind: "leaf"}],
 		}],
 	}],
-}
+})
 

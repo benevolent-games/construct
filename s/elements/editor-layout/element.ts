@@ -5,19 +5,20 @@ import {LightElement} from "@benev/frog"
 import {styles} from "./styles.css.js"
 import {TreeView} from "./views/tree.js"
 import {component} from "../frontend.js"
-import {default_layout} from "./parts/default_layout.js"
+import {LayoutMachine, layout_views} from "./parts/layout_machine.js"
 
 export const EditorLayout = component.views({
 		TreeView,
+		...layout_views,
 	}).element(_ => views => class extends LightElement {
 
 	static styles = styles
 
-	layout = default_layout
+	machine = new LayoutMachine(views, () => this.requestUpdate())
 
 	render() {
 		return views.TreeView({
-			props: [this.layout],
+			props: [this.machine],
 			content: html`
 				<p slot="leaf-0-0-0">alpha</p>
 				<p slot="leaf-0-0-1">bravo</p>

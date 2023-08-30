@@ -20,6 +20,7 @@ export namespace Layout {
 		kind: "cell"
 		children: (Cell | Pane)[]
 		vertical: boolean
+		size: number | undefined
 	}
 
 	export type Node = (
