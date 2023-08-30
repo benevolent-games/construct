@@ -4,13 +4,19 @@ import {css} from "lit";
 export const styles = css`
 
 :host {
-	display: flex;
+	display: block;
 	width: 100%;
 	height: 100%;
 }
 
-:host > .cell {
-	flex-basis: 100%;
+.layout {
+	display: flex;
+	width: 100%;
+	height: 100%;
+
+	> .cell {
+		flex-basis: 100%;
+	}
 }
 
 .cell {

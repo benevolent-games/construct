@@ -18,6 +18,42 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 			: `flex: 1 1 100%;`
 	}
 
+	#resize_operation: undefined | {
+		node: Layout.Cell | Layout.Pane
+		vertical: boolean
+		initial_size: number
+		x: number
+		y: number
+	}
+
+	#track_movement = (event: MouseEvent) => {
+		const resize = this.#resize_operation
+
+		if (resize) {
+			let diff = 0
+			if (resize.vertical)
+				diff = resize.y - event.clientY
+			else
+				diff = resize.x - event.clientX
+
+			let newsize = resize.initial_size - diff
+
+			newsize = (newsize < 0)
+				? 0
+				: (newsize > 100)
+					? 100
+					: newsize
+
+			resize.node.size = newsize
+			this.requestUpdate()
+			console.log("resize", newsize)
+		}
+	}
+
+	#end_resize = (event: MouseEvent) => {
+		this.#resize_operation = undefined
+	}
+
 	#render_layout(node: Layout.Node, path: number[] = []): TemplateResult | void {
 		switch (node.kind) {
 
@@ -30,13 +66,18 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 
 						${alternator(
 							node.children,
-							(child, index) => this.#render_layout(child,[...path, index]),
+							(child, index) => (
+								this.#render_layout(child,[...path, index])
+							),
 							(child, _index) => html`
-								<div class=resizer @click=${() => {
-									child.size = child.size
-										? child.size + 1
-										: child.size
-									this.requestUpdate()
+								<div class=resizer @mousedown=${(event: MouseEvent) => {
+									this.#resize_operation = {
+										node: child,
+										vertical: node.vertical,
+										initial_size: child.size ?? 50,
+										x: event.clientX,
+										y: event.clientY,
+									}
 								}}></div>
 							`,
 						)}
@@ -51,7 +92,9 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 						style="${this.#sizing_styles(node.size)}">
 
 						${node.children.map(
-							(leaf, index) => this.#render_layout(leaf, [...path, index])
+							(leaf, index) => (
+								this.#render_layout(leaf, [...path, index])
+							)
 						)}
 					</div>
 				`
@@ -68,7 +111,15 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	}
 
 	render() {
-		return this.#render_layout(this.#layout)
+		return html`
+			<div
+				class=layout
+				@mousemove=${this.#track_movement}
+				@mouseup=${this.#end_resize}>
+
+				${this.#render_layout(this.#layout)}
+			</div>
+		`
 	}
 })
 
