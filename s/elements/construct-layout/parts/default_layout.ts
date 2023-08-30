@@ -20,7 +20,7 @@ export const default_layout: () => Layout.Cell = () => ({
 	{
 		kind: "cell",
 		vertical: true,
-		size: undefined,
+		size: 25,
 		children: [{
 			kind: "pane",
 			size: undefined,

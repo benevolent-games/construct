@@ -13,7 +13,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	#layout = default_layout()
 
 	#sizing_styles(size: number | undefined) {
-		return size
+		return size !== undefined
 			? `flex: 0 0 ${size}%;`
 			: `flex: 1 1 100%;`
 	}
@@ -36,7 +36,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 			else
 				diff = resize.x - event.clientX
 
-			let newsize = resize.initial_size - diff
+			let newsize = resize.initial_size - (diff * 0.1)
 
 			newsize = (newsize < 0)
 				? 0
@@ -46,11 +46,10 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 
 			resize.node.size = newsize
 			this.requestUpdate()
-			console.log("resize", newsize)
 		}
 	}
 
-	#end_resize = (event: MouseEvent) => {
+	#end_resize = () => {
 		this.#resize_operation = undefined
 	}
 
