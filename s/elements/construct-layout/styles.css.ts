@@ -24,7 +24,6 @@ export const styles = css`
 
 	&[data-vertical] {
 		flex-direction: column;
-		border: 2px solid #8f84;
 	}
 
 	> * {
@@ -33,7 +32,7 @@ export const styles = css`
 
 	> .resizer {
 		flex: 0 0 1em;
-		background: yellow;
+		background: #444;
 		cursor: ew-resize;
 	}
 
@@ -44,7 +43,6 @@ export const styles = css`
 
 .pane {
 	display: block;
-	outliner: 1px solid red;
 }
 
 .leaf {

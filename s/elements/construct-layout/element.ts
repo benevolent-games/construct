@@ -8,6 +8,14 @@ import {component} from "../frontend.js"
 import {alternator} from "./parts/alternator.js"
 import {default_layout} from "./parts/default_layout.js"
 
+export function cap(x: number, min: number, max: number) {
+	return (x < min)
+		? min
+		: (x > max)
+			? max
+			: x
+}
+
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
 	#layout = default_layout()
@@ -19,11 +27,17 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	}
 
 	#resize_operation: undefined | {
+		parent: Layout.Cell
 		node: Layout.Cell | Layout.Pane
-		vertical: boolean
+		next: undefined | {
+			node: Layout.Cell | Layout.Pane
+			initial_size: number | undefined
+		}
 		initial_size: number
 		x: number
 		y: number
+		width: number
+		height: number
 	}
 
 	#track_movement = (event: MouseEvent) => {
@@ -31,20 +45,28 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 
 		if (resize) {
 			let diff = 0
-			if (resize.vertical)
-				diff = resize.y - event.clientY
-			else
-				diff = resize.x - event.clientX
 
-			let newsize = resize.initial_size - (diff * 0.1)
+			if (resize.parent.vertical) {
+				const pixels = resize.y - event.clientY
+				const percent = (pixels / resize.height) * 100
+				diff = percent
+			}
+			else {
+				const pixels = resize.x - event.clientX
+				const percent = (pixels / resize.width) * 100
+				diff = percent
+			}
 
-			newsize = (newsize < 0)
-				? 0
-				: (newsize > 100)
-					? 100
-					: newsize
-
+			const newsize = cap(resize.initial_size - diff, 0, 100)
 			resize.node.size = newsize
+
+			if (resize.next) {
+				if (resize.next.initial_size !== undefined && resize.next.node.size !== undefined) {
+					const nsize = cap(resize.next.initial_size + diff, 0, 100)
+					resize.next.node.size = nsize
+				}
+			}
+
 			this.requestUpdate()
 		}
 	}
@@ -68,14 +90,22 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 							(child, index) => (
 								this.#render_layout(child,[...path, index])
 							),
-							(child, _index) => html`
+							(child, index) => html`
 								<div class=resizer @mousedown=${(event: MouseEvent) => {
+									const target = event.target as HTMLElement
+									const rect = target.parentElement!.getBoundingClientRect()
+									const next = node.children.at(index + 1)
 									this.#resize_operation = {
 										node: child,
-										vertical: node.vertical,
+										parent: node,
 										initial_size: child.size ?? 50,
+										next: next
+											? {node: next, initial_size: next.size}
+											: undefined,
 										x: event.clientX,
 										y: event.clientY,
+										width: rect.width,
+										height: rect.height,
 									}
 								}}></div>
 							`,
