@@ -13,6 +13,7 @@ export const styles = css`
 	display: flex;
 	width: 100%;
 	height: 100%;
+	overflow: hidden;
 
 	> .cell {
 		flex-basis: 100%;
@@ -31,7 +32,8 @@ export const styles = css`
 	}
 
 	> .resizer {
-		flex: 0 0 1em;
+		position: relative;
+		flex: 0 0 1rem;
 		background: #444;
 		cursor: ew-resize;
 	}

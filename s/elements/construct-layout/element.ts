@@ -16,6 +16,10 @@ export function cap(x: number, min: number, max: number) {
 			: x
 }
 
+export function cap_percent(x: number) {
+	return cap(x, 0, 100)
+}
+
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
 	#layout = default_layout()
@@ -23,7 +27,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	#sizing_styles(size: number | undefined) {
 		return size !== undefined
 			? `flex: 0 0 ${size}%;`
-			: `flex: 1 1 100%;`
+			: `flex: 1 1 auto;`
 	}
 
 	#resize_operation: undefined | {
@@ -57,12 +61,33 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 				diff = percent
 			}
 
-			const newsize = cap(resize.initial_size - diff, 0, 100)
-			resize.node.size = newsize
+			const newsize = cap_percent(resize.initial_size - diff)
+
+			const overboard = (() => {
+				const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize)
+				const remInPercent = resize.parent.vertical
+					? (remInPx / resize.height) * 100
+					: (remInPx / resize.width) * 100
+				const number_of_resize_handles = resize.parent.children.length < 2
+					? 0
+					: resize.parent.children.length - 1
+				const siblingpercent = resize.parent.children
+					.filter(node => node !== resize.node)
+					.reduce((sum, node) => sum + (node.size ?? 0), 0)
+				const resizingpercent = (number_of_resize_handles * remInPercent)
+				const totalpercent = newsize + siblingpercent + resizingpercent
+				return (totalpercent > 100)
+					? totalpercent - 100
+					: 0
+			})()
+
+			const coolsize = newsize - overboard
+
+			resize.node.size = coolsize
 
 			if (resize.next) {
 				if (resize.next.initial_size !== undefined && resize.next.node.size !== undefined) {
-					const nsize = cap(resize.next.initial_size + diff, 0, 100)
+					const nsize = cap_percent(resize.next.initial_size + (resize.initial_size - coolsize))
 					resize.next.node.size = nsize
 				}
 			}
