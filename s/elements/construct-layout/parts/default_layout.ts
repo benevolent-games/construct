@@ -1,7 +1,18 @@
 
 import {Layout} from "./layout.js"
 
-export const default_layout: () => Layout.Cell = () => ({
+export const default_layout = (): Layout.Cell => ({
+	kind: "cell",
+	vertical: true,
+	size: undefined,
+	children: [{
+		kind: "pane",
+		size: undefined,
+		children: [{kind: "leaf"}],
+	}],
+})
+
+export const default_layout2: () => Layout.Cell = () => ({
 	kind: "cell",
 	vertical: false,
 	size: undefined,

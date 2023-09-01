@@ -1,7 +1,7 @@
 
 import {css} from "lit";
 
-export const size_of_resize_handle_in_rem = 0.3
+export const size_of_resize_handle_in_rem = 0.4
 
 export const styles = css`
 

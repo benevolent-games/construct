@@ -4,7 +4,7 @@ import {cap_percent, percentage} from "../../../../tools/number_functions.js"
 
 export function calculate_new_size_indicated_by_drag(
 		resize: ResizeOperation,
-		{clientX, clientY}: MouseEvent,
+		{clientX, clientY}: PointerEvent,
 	) {
 
 	let diff = 0

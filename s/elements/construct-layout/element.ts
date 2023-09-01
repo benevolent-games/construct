@@ -10,6 +10,21 @@ import {alternator} from "./parts/alternator.js"
 import {sizing_styles} from "./parts/sizing_styles.js"
 import {default_layout} from "./parts/default_layout.js"
 
+function get_node<N extends Layout.Node>(layout: Layout.Cell, path: number[]) {
+	let node: any = layout
+
+	for (const index of path)
+		node = node?.children
+			? node.children.at(index)
+			: undefined
+
+	if (node)
+		return node as N
+
+	else
+		throw new Error("invalid path")
+}
+
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
 
@@ -39,11 +54,33 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 		`
 	}
 
-	#render_pane(node: Layout.Cell | Layout.Pane, path: number[]) {
+	#split = (pane: Layout.Pane, path: number[]) => (event: PointerEvent) => {
+		if (event.button === 1) {
+			const parent_path = path.slice(0, path.length - 1)
+			const cell = get_node<Layout.Cell>(this.#layout, parent_path)
+			const pane_index = path.at(-1)!
+
+			cell.children.splice(pane_index, 1, {
+				kind: "cell",
+				size: undefined,
+				vertical: !cell.vertical,
+				children: [pane, {
+					kind: "pane",
+					size: undefined,
+					children: [{kind: "leaf"}],
+				}],
+			})
+
+			this.requestUpdate()
+		}
+	}
+
+	#render_pane(node: Layout.Pane, path: number[]) {
 		return html`
 			<div
 				class=pane
-				style="${sizing_styles(node.size)}">
+				style="${sizing_styles(node.size)}"
+				@pointerdown="${this.#split(node, path)}">
 
 				${node.children.map(
 					(leaf, index) => (
@@ -54,7 +91,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 		`
 	}
 
-	#render_leaf(path: number[]) {
+	#render_leaf(_: Layout.Leaf, path: number[]) {
 		return html`
 			<div class=leaf>
 				<slot name="${`leaf-${path.join('-')}`}"></slot>
@@ -75,7 +112,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 				return this.#render_pane(node, path)
 
 			case "leaf":
-				return this.#render_leaf(path)
+				return this.#render_leaf(node, path)
 		}
 	}
 

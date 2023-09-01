@@ -17,7 +17,7 @@ export class Resizer {
 			node: Layout.Cell,
 			child: Layout.Cell | Layout.Pane,
 			index: number,
-		) => (event: MouseEvent) => {
+		) => (event: PointerEvent) => {
 
 		const target = event.target as HTMLElement
 		const rect = target.parentElement!.getBoundingClientRect()
@@ -37,7 +37,7 @@ export class Resizer {
 		}
 	}
 
-	track_mouse_movement = (event: MouseEvent) => {
+	track_mouse_movement = (event: PointerEvent) => {
 		const resize = this.#operation
 
 		if (resize) {
