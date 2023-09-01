@@ -1,6 +1,8 @@
 
 import {css} from "lit";
 
+export const size_of_resize_handle_in_rem = 0.2
+
 export const styles = css`
 
 :host {
@@ -33,9 +35,15 @@ export const styles = css`
 
 	> .resizer {
 		position: relative;
-		flex: 0 0 1rem;
+		flex: 0 0 ${size_of_resize_handle_in_rem}rem;
 		background: #444;
 		cursor: ew-resize;
+		user-select: none;
+		-webkit-user-drag: none;
+		user-drag: none;
+		&:hover {
+			background: #777;
+		}
 	}
 
 	&[data-vertical] > .resizer {

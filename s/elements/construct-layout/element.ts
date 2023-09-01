@@ -2,7 +2,7 @@
 import {QuickElement} from "@benev/frog"
 import {TemplateResult, html} from "lit"
 
-import {styles} from "./styles.css.js"
+import {size_of_resize_handle_in_rem, styles} from "./styles.css.js"
 import {Layout} from "./parts/layout.js"
 import {component} from "../frontend.js"
 import {alternator} from "./parts/alternator.js"
@@ -20,8 +20,106 @@ export function cap_percent(x: number) {
 	return cap(x, 0, 100)
 }
 
+export type ResizeOperation = {
+	parent: Layout.Cell
+	node: Layout.Cell | Layout.Pane
+	next: undefined | {
+		node: Layout.Cell | Layout.Pane
+		initial_size: number | undefined
+	}
+	initial_size: number
+	x: number
+	y: number
+	width: number
+	height: number
+}
+
+export function calculate_resize_value(
+		resize: ResizeOperation,
+		clientX: number,
+		clientY: number,
+	) {
+
+	let diff = 0
+
+	if (resize.parent.vertical) {
+		const pixels = resize.y - clientY
+		const percent = (pixels / resize.height) * 100
+		diff = percent
+	}
+	else {
+		const pixels = resize.x - clientX
+		const percent = (pixels / resize.width) * 100
+		diff = percent
+	}
+
+	const newsize = cap_percent(resize.initial_size - diff)
+
+	const overboard = (() => {
+		const rem_px = parseFloat(
+			getComputedStyle(document.documentElement).fontSize
+		)
+
+		const handle_size_px = rem_px * size_of_resize_handle_in_rem
+
+		const handle_size_percent = resize.parent.vertical
+			? (handle_size_px / resize.height) * 100
+			: (handle_size_px / resize.width) * 100
+
+		const number_of_resize_handles = resize.parent.children.length < 2
+			? 0
+			: resize.parent.children.length - 1
+
+		const siblingpercent = resize.parent.children
+			.filter(node => node !== resize.node)
+			.reduce((sum, node) => sum + (node.size ?? 0), 0)
+
+		const resizingpercent = (number_of_resize_handles * handle_size_percent)
+
+		const totalpercent = newsize + siblingpercent + resizingpercent
+
+		return (totalpercent > 100)
+			? totalpercent - 100
+			: 0
+	})()
+
+	return newsize - overboard
+}
+
+export function apply_relevant_sizing_to_next_sibling(
+		resize: ResizeOperation,
+		new_size_of_current_cell: number,
+	) {
+
+	if (
+			resize.next &&
+			resize.next.initial_size !== undefined &&
+			resize.next.node.size !== undefined
+		) {
+
+		resize.next.node.size = cap_percent(
+			resize.next.initial_size + (resize.initial_size - new_size_of_current_cell)
+		)
+	}
+}
+
+export function get_values_for_next_cell(resize: ResizeOperation) {
+	if (
+		resize.next &&
+		resize.next.initial_size !== undefined &&
+		resize.next.node.size !== undefined
+	) {
+		return {
+			initial_size: resize.next.initial_size,
+			size: resize.next.node.size,
+		}
+	}
+}
+
+
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
+
 	#layout = default_layout()
 
 	#sizing_styles(size: number | undefined) {
@@ -30,67 +128,16 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 			: `flex: 1 1 auto;`
 	}
 
-	#resize_operation: undefined | {
-		parent: Layout.Cell
-		node: Layout.Cell | Layout.Pane
-		next: undefined | {
-			node: Layout.Cell | Layout.Pane
-			initial_size: number | undefined
-		}
-		initial_size: number
-		x: number
-		y: number
-		width: number
-		height: number
-	}
+	#resize_operation: undefined | ResizeOperation
 
-	#track_movement = (event: MouseEvent) => {
+	#track_movement = ({clientX, clientY}: MouseEvent) => {
 		const resize = this.#resize_operation
 
 		if (resize) {
-			let diff = 0
+			const newSize = calculate_resize_value(resize, clientX, clientY)
+			resize.node.size = newSize
 
-			if (resize.parent.vertical) {
-				const pixels = resize.y - event.clientY
-				const percent = (pixels / resize.height) * 100
-				diff = percent
-			}
-			else {
-				const pixels = resize.x - event.clientX
-				const percent = (pixels / resize.width) * 100
-				diff = percent
-			}
-
-			const newsize = cap_percent(resize.initial_size - diff)
-
-			const overboard = (() => {
-				const remInPx = parseFloat(getComputedStyle(document.documentElement).fontSize)
-				const remInPercent = resize.parent.vertical
-					? (remInPx / resize.height) * 100
-					: (remInPx / resize.width) * 100
-				const number_of_resize_handles = resize.parent.children.length < 2
-					? 0
-					: resize.parent.children.length - 1
-				const siblingpercent = resize.parent.children
-					.filter(node => node !== resize.node)
-					.reduce((sum, node) => sum + (node.size ?? 0), 0)
-				const resizingpercent = (number_of_resize_handles * remInPercent)
-				const totalpercent = newsize + siblingpercent + resizingpercent
-				return (totalpercent > 100)
-					? totalpercent - 100
-					: 0
-			})()
-
-			const coolsize = newsize - overboard
-
-			resize.node.size = coolsize
-
-			if (resize.next) {
-				if (resize.next.initial_size !== undefined && resize.next.node.size !== undefined) {
-					const nsize = cap_percent(resize.next.initial_size + (resize.initial_size - coolsize))
-					resize.next.node.size = nsize
-				}
-			}
+			apply_relevant_sizing_to_next_sibling(resize, newSize)
 
 			this.requestUpdate()
 		}
