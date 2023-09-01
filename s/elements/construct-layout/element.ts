@@ -31,7 +31,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 					(child, index) => html`
 						<div
 							class=resizer
-							@mousedown=${this.#resizer.start(node, child, index)}
+							@pointerdown=${this.#resizer.start(node, child, index)}
 						></div>
 					`,
 				)}
@@ -83,8 +83,8 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 		return html`
 			<div
 				class=layout
-				@mousemove=${this.#resizer.track_mouse_movement}
-				@mouseup=${this.#resizer.end}>
+				@pointermove=${this.#resizer.track_mouse_movement}
+				@pointerup=${this.#resizer.end}>
 
 				${this.#render_layout(this.#layout)}
 			</div>
