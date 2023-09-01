@@ -1,7 +1,7 @@
 
 import {css} from "lit";
 
-export const size_of_resize_handle_in_rem = 0.2
+export const size_of_resize_handle_in_rem = 0.3
 
 export const styles = css`
 
@@ -22,6 +22,12 @@ export const styles = css`
 	}
 }
 
+:is(.resizer, .cell, .pane) {
+	user-select: none;
+	-webkit-user-drag: none;
+	user-drag: none;
+}
+
 .cell {
 	display: flex;
 
@@ -33,21 +39,20 @@ export const styles = css`
 		flex: 0 0 auto;
 	}
 
-	> .resizer {
-		position: relative;
-		flex: 0 0 ${size_of_resize_handle_in_rem}rem;
-		background: #444;
-		cursor: ew-resize;
-		user-select: none;
-		-webkit-user-drag: none;
-		user-drag: none;
-		&:hover {
-			background: #777;
-		}
-	}
-
 	&[data-vertical] > .resizer {
 		cursor: ns-resize;
+	}
+}
+
+.resizer {
+	flex: 0 0 ${size_of_resize_handle_in_rem}rem;
+	cursor: ew-resize;
+	background: #fff1;
+	border-left: 1px solid #fff1;
+	border-right: 2px solid #0001;
+
+	&:hover {
+		background: #fff3;
 	}
 }
 
