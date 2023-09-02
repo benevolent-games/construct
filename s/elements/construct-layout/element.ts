@@ -9,21 +9,7 @@ import {Resizer} from "./resize/resizer.js"
 import {alternator} from "./parts/alternator.js"
 import {sizing_styles} from "./parts/sizing_styles.js"
 import {default_layout} from "./parts/default_layout.js"
-
-function get_node<N extends Layout.Node>(layout: Layout.Cell, path: number[]) {
-	let node: any = layout
-
-	for (const index of path)
-		node = node?.children
-			? node.children.at(index)
-			: undefined
-
-	if (node)
-		return node as N
-
-	else
-		throw new Error("invalid path")
-}
+import {find_layout_node} from "./parts/find_layout_node.js"
 
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
@@ -57,7 +43,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	#split = (pane: Layout.Pane, path: number[]) => (event: PointerEvent) => {
 		if (event.button === 1) {
 			const parent_path = path.slice(0, path.length - 1)
-			const cell = get_node<Layout.Cell>(this.#layout, parent_path)
+			const cell = find_layout_node<Layout.Cell>(this.#layout, parent_path)
 			const pane_index = path.at(-1)!
 
 			cell.children.splice(pane_index, 1, {
