@@ -18,13 +18,13 @@
 	},
 	"dependencies": {
 		"@benev/frog": "^0.6.0-dev.5",
-		"@benev/nubs": "^0.2.4",
-		"@benev/toolbox": "^0.5.0-dev.0",
+		"@benev/nubs": "^0.3.0-dev.1",
+		"@benev/toolbox": "^0.5.0-dev.1",
 		"@chasemoskal/magical": "^0.1.7",
 		"@chasemoskal/snapstate": "^0.0.9",
-		"@gltf-transform/core": "^3.5.1",
-		"@gltf-transform/extensions": "^3.5.1",
-		"@gltf-transform/functions": "^3.5.1",
+		"@gltf-transform/core": "^3.6.0",
+		"@gltf-transform/extensions": "^3.6.0",
+		"@gltf-transform/functions": "^3.6.0",
 		"draco3dgltf": "^1.5.6",
 		"es-module-shims": "^1.8.0",
 		"lit": "^2.8.0",
@@ -32,12 +32,12 @@
 		"simplex-noise": "^4.0.1"
 	},
 	"peerDependencies": {
-		"@babylonjs/core": "^6.18.0",
-		"@babylonjs/loaders": "^6.18.0"
+		"@babylonjs/core": "^6.19.1",
+		"@babylonjs/loaders": "^6.19.1"
 	},
 	"devDependencies": {
 		"@benev/turtle": "^0.5.0",
-		"@gltf-transform/cli": "^3.5.1",
+		"@gltf-transform/cli": "^3.6.0",
 		"@rollup/plugin-node-resolve": "^15.2.1",
 		"chokidar": "^3.5.3",
 		"chokidar-cli": "^3.0.0",
@@ -47,8 +47,8 @@
 		"mkdirp": "^3.0.1",
 		"npm-run-all": "^4.1.5",
 		"rimraf": "^5.0.1",
-		"rollup": "^3.28.1",
-		"terser": "^5.19.3",
+		"rollup": "^3.29.0",
+		"terser": "^5.19.4",
 		"typescript": "^5.2.2"
 	},
 	"keywords": [
