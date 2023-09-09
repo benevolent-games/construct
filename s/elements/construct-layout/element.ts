@@ -10,7 +10,7 @@ import {alternator} from "./parts/alternator.js"
 import {sizing_styles} from "./parts/sizing_styles.js"
 import {default_layout} from "./parts/default_layout.js"
 import {find_layout_node} from "./parts/find_layout_node.js"
-import { grid_icon } from "../../icons/feather/grid.svg.js"
+import {grid_icon} from "../../sprites/sources/feather/grid.js"
 
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles

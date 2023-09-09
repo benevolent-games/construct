@@ -1,20 +1,7 @@
 
-import {svg} from "lit"
+import {xmlns, id} from "./svg_constants.js"
 
-const id = "sprite"
-const xmlns = "http://www.w3.org/2000/svg"
-
-export function sprite(svg_string: string) {
-	const details = process_svg_into_instantiable_blob_url(svg_string)
-
-	return svg`
-		<svg width="${details.width}" height="${details.height}">
-			<use href="${details.url}#${id}"></use>
-		</svg>
-	`
-}
-
-function process_svg_into_instantiable_blob_url(svg_string: string) {
+export function process_svg_into_instantiable_blob_url(svg_string: string) {
 	const container = document.createElement("div")
 	container.innerHTML = svg_string
 
