@@ -10,6 +10,7 @@ import {alternator} from "./parts/alternator.js"
 import {sizing_styles} from "./parts/sizing_styles.js"
 import {default_layout} from "./parts/default_layout.js"
 import {find_layout_node} from "./parts/find_layout_node.js"
+import { grid_icon } from "../../icons/feather/grid.svg.js"
 
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
@@ -53,7 +54,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 				children: [pane, {
 					kind: "pane",
 					size: undefined,
-					children: [{kind: "leaf"}],
+					children: [],
 				}],
 			})
 
@@ -68,11 +69,28 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 				style="${sizing_styles(node.size)}"
 				@pointerdown="${this.#split(node, path)}">
 
-				${node.children.map(
-					(leaf, index) => (
-						this.#render_layout(leaf, [...path, index])
-					)
-				)}
+				${this.#render_tabs(node.children)}
+
+				<div class=leaves>
+					${node.children.map(
+						(leaf, index) => (
+							this.#render_leaf(leaf, [...path, index])
+						)
+					)}
+				</div>
+			</div>
+		`
+	}
+
+	#render_tabs(leaves: Layout.Leaf[]) {
+		return html`
+			<div class=tabs>
+				<div>test ${grid_icon}</div>
+				${leaves.map((leaf, index) => html`
+					<div class=tab>
+						${index}
+					</div>
+				`)}
 			</div>
 		`
 	}
