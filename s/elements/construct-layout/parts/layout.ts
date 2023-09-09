@@ -2,7 +2,7 @@
 export namespace Layout {
 	export type Kind = "cell" | "pane" | "leaf"
 
-	export type Content = (
+	export type Tab = (
 		| "viewport"
 		| "outliner"
 		| "inspector"
@@ -17,7 +17,7 @@ export namespace Layout {
 
 	export interface Leaf {
 		kind: "leaf"
-		content: Content
+		tab: Tab
 	}
 
 	export interface Pane {

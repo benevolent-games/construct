@@ -57,7 +57,15 @@ export const styles = css`
 }
 
 .pane {
-	display: block;
+	display: flex;
+	flex-direction: column;
+
+	.tabs {
+		flex: 0 0 auto;
+		display: flex;
+		flex-direction: row;
+		border: 1px solid red;
+	}
 }
 
 .leaf {
