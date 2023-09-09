@@ -1,9 +1,10 @@
 
 import {xmlns, id} from "./svg_constants.js"
+import {render, SVGTemplateResult} from "lit"
 
-export function process_svg_into_instantiable_blob_url(svg_string: string) {
+export function process_svg_into_instantiable_blob_url(template: SVGTemplateResult) {
 	const container = document.createElement("div")
-	container.innerHTML = svg_string
+	render(template, container)
 
 	const svg = container.querySelector("svg") as SVGSVGElement
 	const g = document.createElementNS(xmlns, "g") as SVGGElement

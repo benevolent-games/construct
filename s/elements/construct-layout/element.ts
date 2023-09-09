@@ -10,7 +10,7 @@ import {alternator} from "./parts/alternator.js"
 import {sizing_styles} from "./parts/sizing_styles.js"
 import {default_layout} from "./parts/default_layout.js"
 import {find_layout_node} from "./parts/find_layout_node.js"
-import {grid_icon} from "../../sprites/sources/feather/grid.js"
+import {sprite_grid} from "../../sprites/groups/feather/grid.js"
 
 export const ConstructLayout = component(_ => class extends QuickElement {
 	static styles = styles
@@ -85,7 +85,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	#render_tabs(leaves: Layout.Leaf[]) {
 		return html`
 			<div class=tabs>
-				<div>test ${grid_icon}</div>
+				<div>test ${sprite_grid}</div>
 				${leaves.map((leaf, index) => html`
 					<div class=tab>
 						${index}
