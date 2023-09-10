@@ -4,6 +4,7 @@ export namespace Layout {
 
 	export type Tab = (
 		| "adder"
+		| "about"
 		| "viewport"
 		| "outliner"
 		| "inspector"
@@ -16,6 +17,7 @@ export namespace Layout {
 	}
 
 	export interface Leaf {
+		id: number
 		kind: "leaf"
 		tab: Tab
 	}

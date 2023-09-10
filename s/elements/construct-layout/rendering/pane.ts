@@ -26,7 +26,7 @@ export const render_pane = (meta: LayoutMeta) => (
 						@click=${() => {
 							meta.layout.set_pane_active_leaf(
 								pane_path,
-								meta.layout.add_leaf(pane_path, "inspector"),
+								meta.layout.add_leaf(pane_path, "inspector").at(-1)!,
 							)
 						}}>
 						inspector

@@ -1,18 +1,26 @@
 
 import {Layout} from "./layout.js"
+import {IdBooth} from "../../../tools/id_booth.js"
 import {find_layout_node} from "./find_layout_node.js"
+
+export interface LayoutControllerOptions {
+	id_booth: IdBooth
+	on_change: () => void
+	on_leaf_added: (leaf: Layout.Leaf, path: number[]) => void
+	on_leaf_deleted: (leaf: Layout.Leaf, path: number[]) => void
+}
 
 export class LayoutController {
 	#root: Layout.Cell
-	#on_change: () => void
+	#options: LayoutControllerOptions
 
 	get root() {
 		return this.#root
 	}
 
-	constructor(layout: Layout.Cell, on_change: () => void) {
+	constructor(layout: Layout.Cell, options: LayoutControllerOptions) {
 		this.#root = layout
-		this.#on_change = on_change
+		this.#options = options
 	}
 
 	find(path: number[]) {
@@ -46,26 +54,31 @@ export class LayoutController {
 				active_leaf_index: undefined,
 			}],
 		})
-		this.#on_change()
+		this.#options.on_change()
 	}
 
 	delete_leaf(leaf_path: number[]) {
-		const {leaf_index, parent_pane} = this.find_leaf(leaf_path)
+		const {leaf, leaf_index, parent_pane} = this.find_leaf(leaf_path)
 		parent_pane.children.splice(leaf_index, 1)
-		this.#on_change()
+		this.#options.on_change()
+		this.#options.on_leaf_deleted(leaf, leaf_path)
 	}
 
 	add_leaf(pane_path: number[], tab: Layout.Tab) {
 		const {pane} = this.find_pane(pane_path)
-		pane.children.push({kind: "leaf", tab})
-		this.#on_change()
-		return pane.children.length - 1
+		const id = this.#options.id_booth.next()
+		const leaf: Layout.Leaf = {id, kind: "leaf", tab}
+		pane.children.push(leaf)
+		const leaf_path = [...pane_path, pane.children.length - 1]
+		this.#options.on_change()
+		this.#options.on_leaf_added(leaf, leaf_path)
+		return leaf_path
 	}
 
 	set_pane_active_leaf(pane_path: number[], active_leaf_index: number | undefined) {
 		const {pane} = this.find_pane(pane_path)
 		pane.active_leaf_index = active_leaf_index
-		this.#on_change()
+		this.#options.on_change()
 	}
 }
 
