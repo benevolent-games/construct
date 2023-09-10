@@ -43,13 +43,15 @@ export class LayoutController {
 
 	split_pane(pane_path: number[]) {
 		const {pane, pane_index, parent_cell} = this.find_pane(pane_path)
+		const previous_size = pane.size
+		pane.size = 50
 		parent_cell.children.splice(pane_index, 1, {
 			kind: "cell",
-			size: pane.size,
+			size: previous_size,
 			vertical: !parent_cell.vertical,
 			children: [pane, {
 				kind: "pane",
-				size: 50,
+				size: undefined,
 				children: [],
 				active_leaf_index: undefined,
 			}],
