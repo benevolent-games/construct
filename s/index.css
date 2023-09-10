@@ -14,7 +14,7 @@
 }
 
 html {
-	font-size: 10px;
+	font-size: 16px;
 	font-family: sans-serif;
 	background: #111;
 	color: #fff8;
@@ -37,9 +37,5 @@ html, body {
 .foundation {
 	width: 100vw;
 	height: 100vh;
-}
-
-construct-layout {
-	font-size: 1.5em;
 }
 

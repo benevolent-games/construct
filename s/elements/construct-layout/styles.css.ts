@@ -1,7 +1,7 @@
 
 import {css} from "lit";
 
-export const size_of_resize_handle_in_rem = 0.4
+export const size_of_resize_handle_in_rem = 1
 
 export const styles = css`
 
@@ -9,6 +9,13 @@ export const styles = css`
 	display: block;
 	width: 100%;
 	height: 100%;
+
+	--alpha: var(--construct-alpha, yellow);
+
+	--resizer: var(--construct-resize, #000000);
+	--pane: var(--construct-pane, #080808);
+	--tab: var(--construct-tab, transparent);
+	--leaf: var(--construct-leaf, #111);
 }
 
 .layout {
@@ -50,20 +57,13 @@ export const styles = css`
 .resizer {
 	flex: 0 0 ${size_of_resize_handle_in_rem}rem;
 	cursor: ew-resize;
-	background: #fff1;
-	border-left: 1px solid #fff1;
-	border-right: 2px solid #0001;
-
-	&:hover {
-		background: #fff3;
-	}
+	background: var(--resizer);
 }
 
 .pane {
 	display: flex;
 	flex-direction: column;
-
-	background: #111;
+	background: var(--pane);
 
 	> .tabs {
 		flex: 0 0 auto;
@@ -71,12 +71,14 @@ export const styles = css`
 		flex-direction: row;
 
 		> .tab {
-			padding: 0.2em;
-			background: #181818;
+			padding: 0.2em 0.4em;
+			background: var(--tab);
+			border-top: 0.1em solid transparent;
 
 			&[data-active] {
-				color: yellow;
-				background: #222;
+				border-color: var(--alpha);
+				color: var(--alpha);
+				background: var(--leaf);
 			}
 
 			> svg {
@@ -90,7 +92,7 @@ export const styles = css`
 		flex: 1 1 auto;
 		display: block;
 		padding: 0.5em;
-		background: #222;
+		background: var(--leaf);
 	}
 }
 
