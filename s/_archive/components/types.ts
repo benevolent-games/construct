@@ -1,4 +1,5 @@
-import {Pub} from "@benev/frog"
+
+import {Pub} from "@benev/slate"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 import {Item} from "../tools/item.js"

@@ -1,6 +1,6 @@
 
 import {CSSResultGroup} from "lit"
-import {Flat, PrepperContext, requirement} from "@benev/frog"
+import {BaseContext, Flat} from "@benev/slate"
 
 // import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
 
@@ -9,12 +9,10 @@ import {Flat, PrepperContext, requirement} from "@benev/frog"
 // import {Catalog} from "./controllers/catalog/catalog.js"
 // import {Outliner} from "./controllers/outliner/outliner.js"
 
-export const contextualize = requirement.provide<Context>
-
-export class Context implements PrepperContext {
+export class Context implements BaseContext {
 	constructor(
-		public readonly flat: Flat,
-		public readonly theme: CSSResultGroup,
+		public flat: Flat,
+		public theme: CSSResultGroup,
 	) {}
 }
 

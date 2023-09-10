@@ -1,5 +1,5 @@
 
-import {requirement} from "@benev/frog"
+import {requirement} from "@benev/slate"
 
 import {render_cell} from "../cell.js"
 import {render_pane} from "../pane.js"

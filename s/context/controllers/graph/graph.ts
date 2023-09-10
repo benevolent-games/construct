@@ -1,5 +1,5 @@
 
-import {pub} from "@benev/frog"
+import {pub} from "@benev/slate"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {Id, Unit} from "./parts/types.js"

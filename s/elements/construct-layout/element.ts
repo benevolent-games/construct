@@ -1,17 +1,17 @@
 
 import {html, render} from "lit"
-import {QuickElement} from "@benev/frog"
+import {GoldElement} from "@benev/slate"
 
 import {styles} from "./styles.css.js"
-import {component} from "../frontend.js"
 import {Resizer} from "./resize/resizer.js"
 import {IdBooth} from "../../tools/id_booth.js"
+import {component} from "../../framework/frontend.js"
 import {leaf_slot_name} from "./parts/leaf_slot_name.js"
 import {default_layout} from "./parts/default_layout.js"
 import {LayoutController} from "./parts/layout_controller.js"
 import {setup_layout_renderer} from "./rendering/utils/setup_layout_renderer.js"
 
-export const ConstructLayout = component(_ => class extends QuickElement {
+export const ConstructLayout = component(_ => class extends GoldElement {
 	static styles = styles
 
 	#id_booth = new IdBooth()

@@ -1,5 +1,5 @@
 
-import {Flat} from "@benev/frog"
+import {Flat} from "@benev/slate"
 import {Scene} from "@babylonjs/core/scene.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 

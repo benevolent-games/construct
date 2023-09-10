@@ -1,5 +1,5 @@
 
-import {Flat} from "@benev/frog"
+import {Flat} from "@benev/slate"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {Item} from "./parts/item.js"

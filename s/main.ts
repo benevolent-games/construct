@@ -2,10 +2,10 @@
 // import "@benev/toolbox/x/html.js"
 // import "@babylonjs/loaders/glTF/index.js"
 
-import {Flat, register_to_dom} from "@benev/frog"
+import {Flat, register_to_dom} from "@benev/slate"
 // import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
 
-import {theme} from "./elements/theme.js"
+import {theme} from "./framework/theme.js"
 import {Context} from "./context/context.js"
 import {elements} from "./elements/elements.js"
 
