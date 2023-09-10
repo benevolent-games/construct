@@ -6,7 +6,11 @@ import {LayoutMeta} from "./utils/layout_meta.js"
 import {alternator} from "../parts/alternator.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
 
-export const render_cell = (meta: LayoutMeta) => (node: Layout.Cell, path: number[]) => html`
+export const render_cell = (meta: LayoutMeta) => (
+		node: Layout.Cell,
+		path: number[],
+	) => html`
+
 	<div
 		class=cell
 		?data-vertical=${node.vertical}
@@ -24,5 +28,4 @@ export const render_cell = (meta: LayoutMeta) => (node: Layout.Cell, path: numbe
 		)}
 	</div>
 `
-
 

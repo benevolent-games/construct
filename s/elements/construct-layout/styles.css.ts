@@ -59,17 +59,36 @@ export const styles = css`
 .pane {
 	display: flex;
 	flex-direction: column;
+	background: #111;
 
-	.tabs {
+	> .tabs {
 		flex: 0 0 auto;
 		display: flex;
 		flex-direction: row;
-		border: 1px solid red;
-	}
-}
 
-.leaf {
-	display: block;
+		> .tab {
+			padding: 0.2em;
+			background: #181818;
+
+			&[data-active] {
+				color: yellow;
+				background: #222;
+				border-radius: 0.5em 0.5em 0 0;
+			}
+
+			> svg {
+				width: 1em;
+				height: 1em;
+			}
+		}
+	}
+
+	> .leaf {
+		flex: 1 1 auto;
+		display: block;
+		padding: 0.5em;
+		background: #222;
+	}
 }
 
 `

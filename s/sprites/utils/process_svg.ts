@@ -41,6 +41,7 @@ export function process_svg_into_instantiable_blob_url(template: SVGTemplateResu
 		url,
 		width,
 		height,
+		viewBox,
 	}
 }
 

@@ -9,6 +9,7 @@ export const default_layout = (): Layout.Cell => ({
 		kind: "pane",
 		size: undefined,
 		children: [],
+		active_leaf_index: undefined,
 	}],
 })
 

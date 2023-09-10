@@ -16,11 +16,8 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 	#resizer = new Resizer(() => this.requestUpdate())
 
 	#render_layout = setup_layout_renderer({
+		layout: this.#layout,
 		resizer: this.#resizer,
-		on_pane_pointerdown: (path: number[]) => (event: PointerEvent) => {
-			if (event.button === 1)
-				this.#layout.split_pane(path)
-		},
 	})
 
 	render() {

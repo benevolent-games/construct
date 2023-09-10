@@ -3,12 +3,12 @@ export namespace Layout {
 	export type Kind = "cell" | "pane" | "leaf"
 
 	export type Tab = (
+		| "adder"
 		| "viewport"
 		| "outliner"
 		| "inspector"
 		| "catalog"
 		| "settings"
-		| "general"
 	)
 
 	export interface Base {
@@ -24,6 +24,7 @@ export namespace Layout {
 		kind: "pane"
 		children: Leaf[]
 		size: number | undefined
+		active_leaf_index: number | undefined
 	}
 
 	export interface Cell {
