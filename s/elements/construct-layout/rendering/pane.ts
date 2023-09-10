@@ -13,7 +13,7 @@ export const render_pane = (meta: LayoutMeta) => (node: Layout.Pane, path: numbe
 		style="${sizing_styles(node.size)}"
 		@pointerdown="${meta.on_pane_pointerdown(path)}">
 
-		${render_tabs(node.children)}
+		${render_tabs(node.children, path)}
 
 		<div class=leaves>
 			${node.children.map(

@@ -1,6 +1,6 @@
 
-import {QuickElement} from "@benev/frog"
 import {html} from "lit"
+import {QuickElement} from "@benev/frog"
 
 import {styles} from "./styles.css.js"
 import {component} from "../frontend.js"
@@ -19,7 +19,7 @@ export const ConstructLayout = component(_ => class extends QuickElement {
 		resizer: this.#resizer,
 		on_pane_pointerdown: (path: number[]) => (event: PointerEvent) => {
 			if (event.button === 1)
-				this.#layout.split(path)
+				this.#layout.split_pane(path)
 		},
 	})
 

@@ -1,7 +1,7 @@
 
 import {Layout} from "./layout.js"
 import {find_layout_node} from "./find_layout_node.js"
-import { WalkMission, walk_layout } from "./walk_layout.js"
+import {WalkMission, walk_layout} from "./walk_layout.js"
 
 export class LayoutController {
 	#root: Layout.Cell
@@ -24,10 +24,10 @@ export class LayoutController {
 		return find_layout_node(this.#root, path)
 	}
 
-	split(path: number[]) {
-		const pane_index = path.at(-1)!
-		const pane = this.find(path) as Layout.Pane
-		const parent_cell = this.find(path.slice(0, path.length - 1)) as Layout.Cell
+	split_pane(pane_path: number[]) {
+		const pane_index = pane_path.at(-1)!
+		const pane = this.find(pane_path) as Layout.Pane
+		const parent_cell = this.find(parent(pane_path)) as Layout.Cell
 
 		parent_cell.children.splice(pane_index, 1, {
 			kind: "cell",
@@ -42,5 +42,24 @@ export class LayoutController {
 
 		this.#on_change()
 	}
+
+	delete_leaf(leaf_path: number[]) {
+		const leaf_index = leaf_path.at(-1)!
+		const parent_pane = this.find(parent(leaf_path)) as Layout.Pane
+		parent_pane.children.splice(leaf_index, 1)
+		this.#on_change()
+	}
+
+	add_leaf(pane_path: number[], tab: Layout.Tab) {
+		const pane = this.find(pane_path) as Layout.Pane
+		pane.children.push({kind: "leaf", tab})
+		this.#on_change()
+	}
+}
+
+// utils
+
+function parent(path: number[]) {
+	return path.slice(0, path.length - 1)
 }
 
