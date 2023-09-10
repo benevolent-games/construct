@@ -1,7 +1,6 @@
 
 import {Layout} from "./layout.js"
 import {find_layout_node} from "./find_layout_node.js"
-import {WalkMission, walk_layout} from "./walk_layout.js"
 
 export class LayoutController {
 	#root: Layout.Cell
@@ -14,10 +13,6 @@ export class LayoutController {
 	constructor(layout: Layout.Cell, on_change: () => void) {
 		this.#root = layout
 		this.#on_change = on_change
-	}
-
-	walk<T>(mission: WalkMission<T>) {
-		return walk_layout<T>(this.#root, mission)
 	}
 
 	find(path: number[]) {
@@ -42,11 +37,11 @@ export class LayoutController {
 		const {pane, pane_index, parent_cell} = this.find_pane(pane_path)
 		parent_cell.children.splice(pane_index, 1, {
 			kind: "cell",
-			size: undefined,
+			size: pane.size,
 			vertical: !parent_cell.vertical,
 			children: [pane, {
 				kind: "pane",
-				size: undefined,
+				size: 50,
 				children: [],
 				active_leaf_index: undefined,
 			}],
@@ -64,6 +59,7 @@ export class LayoutController {
 		const {pane} = this.find_pane(pane_path)
 		pane.children.push({kind: "leaf", tab})
 		this.#on_change()
+		return pane.children.length - 1
 	}
 
 	set_pane_active_leaf(pane_path: number[], active_leaf_index: number | undefined) {

@@ -7,11 +7,6 @@ import {Layout} from "../parts/layout.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
 
-const middle_click = (fun: () => void) => (event: PointerEvent) => {
-	if (event.button === 1)
-		fun()
-}
-
 export const render_pane = (meta: LayoutMeta) => (
 		node: Layout.Pane,
 		pane_path: number[],
@@ -27,7 +22,13 @@ export const render_pane = (meta: LayoutMeta) => (
 		<div class=leaf>
 			${node.active_leaf_index === undefined
 				? html`
-					<button @click=${() => meta.layout.add_leaf(pane_path, "inspector")}>
+					<button
+						@click=${() => {
+							meta.layout.set_pane_active_leaf(
+								pane_path,
+								meta.layout.add_leaf(pane_path, "inspector"),
+							)
+						}}>
 						inspector
 					</button>
 				`
@@ -38,4 +39,11 @@ export const render_pane = (meta: LayoutMeta) => (
 		</div>
 	</div>
 `
+
+function middle_click(fun: () => void) {
+	return (event: PointerEvent) => {
+		if (event.button === 1)
+			fun()
+	}
+}
 

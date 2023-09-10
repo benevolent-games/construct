@@ -37,6 +37,9 @@ export const styles = css`
 
 	> * {
 		flex: 0 0 auto;
+		min-width: 0;
+		min-height: 0;
+		overflow: hidden;
 	}
 
 	&[data-vertical] > .resizer {
@@ -59,6 +62,7 @@ export const styles = css`
 .pane {
 	display: flex;
 	flex-direction: column;
+
 	background: #111;
 
 	> .tabs {
@@ -73,7 +77,6 @@ export const styles = css`
 			&[data-active] {
 				color: yellow;
 				background: #222;
-				border-radius: 0.5em 0.5em 0 0;
 			}
 
 			> svg {
