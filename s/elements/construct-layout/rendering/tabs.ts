@@ -42,17 +42,16 @@ export function tab({content, title, removable, active, activate, close}: {
 		close: () => void
 	}) {
 
-	const show_x = removable && active
-
 	const click = (event: MouseEvent) => {
-		const target = event.target as Element
-		const tab = event.currentTarget as HTMLElement
-		const x = tab.querySelector(".x") as HTMLElement
+		if (removable && active) {
+			const target = event.target as Element
+			const tab = event.currentTarget as HTMLElement
+			const x = tab.querySelector(".x") as HTMLElement
+			const click_is_inside_x = event.target === x || x.contains(target)
 
-		const click_is_inside_x = event.target === x || x.contains(target)
-
-		if (show_x && click_is_inside_x)
-			close()
+			if (click_is_inside_x)
+				close()
+		}
 		else
 			activate()
 	}
@@ -62,19 +61,22 @@ export function tab({content, title, removable, active, activate, close}: {
 			class=tab
 			title="${title}"
 			?data-active=${active}
+			?data-permanent=${!removable}
 			@click=${click}>
 
 			<span class=icon>
 				${content}
 			</span>
 
-			<span
-				class=x
-				?data-available=${show_x}>
-				${show_x
-					? sprite_x
-					: undefined}
-			</span>
+			${removable ? html`
+				<span
+					class=x
+					?data-available=${active}>
+					${active
+						? sprite_x
+						: undefined}
+				</span>
+			` : undefined}
 		</div>
 	`
 }

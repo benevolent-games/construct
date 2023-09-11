@@ -13,7 +13,7 @@ export const styles = css`
 	--alpha: var(--construct-alpha, yellow);
 
 	--resizer: var(--construct-resize, #000000);
-	--pane: var(--construct-pane, #080808);
+	--pane: var(--construct-pane, #0c0c0c);
 	--tab: var(--construct-tab, transparent);
 	--leaf: var(--construct-leaf, #111);
 }
@@ -80,6 +80,10 @@ export const styles = css`
 			padding-right: 0.1em;
 			background: var(--tab);
 			border-top: 0.1em solid transparent;
+
+			&[data-permanent] {
+				padding: 0.2em;
+			}
 
 			&[data-active] {
 				border-color: var(--alpha);
