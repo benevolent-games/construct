@@ -6,6 +6,7 @@ import {render_leaf} from "./leaf.js"
 import {Layout} from "../parts/layout.js"
 import {tiles} from "../../../tiles/tiles.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
+import {middle_click} from "./utils/middle_click.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
 
 export const render_pane = (meta: LayoutMeta) => (
@@ -44,11 +45,4 @@ export const render_pane = (meta: LayoutMeta) => (
 		</div>
 	</div>
 `
-
-function middle_click(fun: () => void) {
-	return (event: PointerEvent) => {
-		if (event.button === 1)
-			fun()
-	}
-}
 
