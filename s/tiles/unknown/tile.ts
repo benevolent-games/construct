@@ -13,7 +13,7 @@ export const UnknownTile = tile({
 
 		render() {
 			return html`
-				<p>unknown</p>
+				<p>...unknown...</p>
 			`
 		}
 	}),
