@@ -7,12 +7,16 @@ export {svg}
 
 export function sprite(template: SVGTemplateResult) {
 
-	const {viewBox, width, height, url} = (
+	const {viewBox, width, height, url, className} = (
 		process_svg_into_instantiable_blob_url(template)
 	)
 
 	return svg`
-		<svg viewBox="${viewBox}" width="${width}" height="${height}">
+		<svg
+			viewBox="${viewBox}"
+			class="${className}"
+			width="${width}"
+			height="${height}">
 			<use href="${url}#${id}"></use>
 		</svg>
 	`

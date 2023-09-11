@@ -1,7 +1,7 @@
 
 import {css} from "lit";
 
-export const size_of_resize_handle_in_rem = 1
+export const size_of_resize_handle_in_rem = 0.2
 
 export const styles = css`
 
@@ -71,7 +71,13 @@ export const styles = css`
 		flex-direction: row;
 
 		> .tab {
-			padding: 0.2em 0.4em;
+			display: flex;
+			align-items: center;
+
+			gap: 0.1em;
+			padding: 0.2em;
+			padding-left: 0.3em;
+			padding-right: 0.1em;
 			background: var(--tab);
 			border-top: 0.1em solid transparent;
 
@@ -81,9 +87,28 @@ export const styles = css`
 				background: var(--leaf);
 			}
 
-			> svg {
+			& svg {
+				position: absolute;
+				inset: 0;
+				width: 100%;
+				height: 100%;
+			}
+
+			> .icon {
+				position: relative;
 				width: 1em;
 				height: 1em;
+			}
+
+			> .x {
+				position: relative;
+				width: 0.7em;
+				height: 0.7em;
+				&[data-available]:hover {
+					color: white;
+					background: red;
+					border-radius: 1em;
+				}
 			}
 		}
 	}

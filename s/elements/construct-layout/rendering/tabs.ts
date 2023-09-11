@@ -4,9 +4,10 @@ import {TemplateResult, html} from "lit"
 import {Layout} from "../parts/layout.js"
 import {tiles} from "../../../tiles/tiles.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
+import {sprite_x} from "../../../sprites/groups/feather/x.js"
 import {sprite_plus} from "../../../sprites/groups/feather/plus.js"
 
-export const render_tabs = (meta: LayoutMeta, node: Layout.Pane, path: number[]) => html`
+export const render_tabs = (meta: LayoutMeta, node: Layout.Pane, pane_path: number[]) => html`
 	<div class=tabs>
 
 		${node.children.map((leaf, index) => {
@@ -14,26 +15,47 @@ export const render_tabs = (meta: LayoutMeta, node: Layout.Pane, path: number[])
 			return tab({
 				content: icon,
 				title: label,
+				removable: true,
 				active: node.active_leaf_index === index,
-				click: () => meta.layout.set_pane_active_leaf(path, index),
+				activate: () => meta.layout.set_pane_active_leaf(pane_path, index),
+				close: () => meta.layout.delete_leaf([...pane_path, index]),
 			})}
 		)}
 
 		${tab({
 			content: sprite_plus,
 			title: "add new tab",
+			removable: false,
 			active: node.active_leaf_index === undefined,
-			click: () => meta.layout.set_pane_active_leaf(path, undefined)
+			activate: () => meta.layout.set_pane_active_leaf(pane_path, undefined),
+			close: () => {},
 		})}
 	</div>
 `
 
-export function tab({content, title, active, click}: {
+export function tab({content, title, removable, active, activate, close}: {
 		content: string | TemplateResult
 		title: string
+		removable: boolean
 		active: boolean
-		click: () => void
+		activate: () => void
+		close: () => void
 	}) {
+
+	const show_x = removable && active
+
+	const click = (event: MouseEvent) => {
+		const target = event.target as Element
+		const tab = event.currentTarget as HTMLElement
+		const x = tab.querySelector(".x") as HTMLElement
+
+		const click_is_inside_x = event.target === x || x.contains(target)
+
+		if (show_x && click_is_inside_x)
+			close()
+		else
+			activate()
+	}
 
 	return html`
 		<div
@@ -42,7 +64,17 @@ export function tab({content, title, active, click}: {
 			?data-active=${active}
 			@click=${click}>
 
-			${content}
+			<span class=icon>
+				${content}
+			</span>
+
+			<span
+				class=x
+				?data-available=${show_x}>
+				${show_x
+					? sprite_x
+					: undefined}
+			</span>
 		</div>
 	`
 }

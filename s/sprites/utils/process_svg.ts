@@ -19,6 +19,7 @@ export function process_svg_into_instantiable_blob_url(template: SVGTemplateResu
 	const width = yoink("width")
 	const height = yoink("height")
 	const viewBox = yoink("viewBox")
+	const className = yoink("class")
 
 	for (const {name, value} of Array.from(svg.attributes)) {
 		g.setAttribute(name, value)
@@ -42,6 +43,7 @@ export function process_svg_into_instantiable_blob_url(template: SVGTemplateResu
 		width,
 		height,
 		viewBox,
+		className,
 	}
 }
 
