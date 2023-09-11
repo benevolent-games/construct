@@ -66,7 +66,7 @@ export class LayoutController {
 		this.#options.on_leaf_deleted(leaf, leaf_path)
 	}
 
-	add_leaf(pane_path: number[], tab: Layout.Tab) {
+	add_leaf(pane_path: number[], tab: Layout.LeafName) {
 		const {pane} = this.find_pane(pane_path)
 		const id = this.#options.id_booth.next()
 		const leaf: Layout.Leaf = {id, kind: "leaf", tab}

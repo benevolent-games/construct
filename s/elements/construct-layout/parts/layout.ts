@@ -2,14 +2,14 @@
 export namespace Layout {
 	export type Kind = "cell" | "pane" | "leaf"
 
-	export type Tab = (
-		| "adder"
-		| "about"
-		| "viewport"
-		| "outliner"
-		| "inspector"
-		| "catalog"
-		| "settings"
+	export type LeafName = (
+		| "AdderTile"
+		| "AboutTile"
+		| "ViewportTile"
+		| "OutlinerTile"
+		| "InspectorTile"
+		| "CatalogTile"
+		| "SettingsTile"
 	)
 
 	export interface Base {
@@ -19,7 +19,7 @@ export namespace Layout {
 	export interface Leaf {
 		id: number
 		kind: "leaf"
-		tab: Tab
+		tab: LeafName
 	}
 
 	export interface Pane {
