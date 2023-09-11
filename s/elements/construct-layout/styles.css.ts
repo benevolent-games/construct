@@ -74,6 +74,8 @@ export const styles = css`
 			display: flex;
 			align-items: center;
 
+			opacity: 0.5;
+
 			gap: 0.1em;
 			padding: 0.2em;
 			padding-left: 0.3em;
@@ -82,10 +84,16 @@ export const styles = css`
 			border-top: 0.1em solid transparent;
 
 			&[data-permanent] {
-				padding: 0.2em;
+				opacity: 0.2;
+				padding: 0.2em 1em;
+			}
+
+			&:hover {
+				opacity: 1;
 			}
 
 			&[data-active] {
+				opacity: 1;
 				border-color: var(--alpha);
 				color: var(--alpha);
 				background: var(--leaf);
@@ -105,10 +113,12 @@ export const styles = css`
 			}
 
 			> .x {
+				opacity: 0.1;
 				position: relative;
 				width: 0.7em;
 				height: 0.7em;
 				&[data-available]:hover {
+					opacity: 1;
 					color: white;
 					background: red;
 					border-radius: 1em;
