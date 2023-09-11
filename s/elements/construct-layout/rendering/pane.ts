@@ -4,10 +4,11 @@ import {html} from "lit"
 import {render_tabs} from "./tabs.js"
 import {render_leaf} from "./leaf.js"
 import {Layout} from "../parts/layout.js"
-import {tiles} from "../../../tiles/tiles.js"
+import {defined} from "../../../tools/defined.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
 import {middle_click} from "./utils/middle_click.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
+import {render_adder_leaf} from "./utils/render_adder_leaf.js"
 
 export const render_pane = (meta: LayoutMeta) => (
 		node: Layout.Pane,
@@ -22,26 +23,10 @@ export const render_pane = (meta: LayoutMeta) => (
 		${render_tabs(meta, node, pane_path)}
 
 		<div class=leaf>
-			${node.active_leaf_index === undefined
-				? html`
-					${Object.entries(tiles).map(([name, tile]) => html`
-						<button
-							@click=${() => meta.layout.set_pane_active_leaf(
-								pane_path,
-								meta.layout.add_leaf(
-									pane_path,
-									name as keyof typeof tiles,
-								).at(-1)!,
-							)}>
-							<span>${tile.icon}</span>
-							<span>${tile.label}</span>
-						</button>
-					`)}
-				`
-				: render_leaf(meta)(
-					node.children[node.active_leaf_index],
-					[...pane_path, node.active_leaf_index],
-				)}
+			${defined(node.active_leaf_index, {
+				yes: index => render_leaf(meta)(node.children[index], [...pane_path, index]),
+				no: () => render_adder_leaf(meta, pane_path),
+			})}
 		</div>
 	</div>
 `

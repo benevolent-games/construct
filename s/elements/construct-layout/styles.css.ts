@@ -113,7 +113,7 @@ export const styles = css`
 			}
 
 			> .x {
-				opacity: 0.1;
+				opacity: 0.3;
 				position: relative;
 				width: 0.7em;
 				height: 0.7em;

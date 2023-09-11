@@ -33,7 +33,7 @@ export const render_tabs = (meta: LayoutMeta, node: Layout.Pane, pane_path: numb
 	</div>
 `
 
-export function tab({content, title, removable, active, activate, close}: {
+function tab({content, title, removable, active, activate, close}: {
 		content: string | TemplateResult
 		title: string
 		removable: boolean
