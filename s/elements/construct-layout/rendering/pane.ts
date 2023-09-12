@@ -10,6 +10,10 @@ import {middle_click} from "./utils/middle_click.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
 import {render_adder_leaf} from "./utils/render_adder_leaf.js"
 
+import {sprite_x} from "../../../sprites/groups/feather/x.js"
+import {sprite_split_row} from "../../../sprites/groups/akar/panel-split-row.js"
+import {sprite_split_column} from "../../../sprites/groups/akar/panel-split-column.js"
+
 export const render_pane = (meta: LayoutMeta) => (
 		node: Layout.Pane,
 		pane_path: number[],
@@ -20,7 +24,16 @@ export const render_pane = (meta: LayoutMeta) => (
 		style="${sizing_styles(node.size)}"
 		@pointerdown=${middle_click(() => meta.layout.split_pane(pane_path))}>
 
-		${render_tabs(meta, node, pane_path)}
+		<div class=taskbar>
+			<div class=tabs>
+				${render_tabs(meta, node, pane_path)}
+			</div>
+			<div class=actions>
+				<button>${sprite_split_row}</button>
+				<button>${sprite_split_column}</button>
+				<button>${sprite_x}</button>
+			</div>
+		</div>
 
 		<div class=leaf>
 			${defined(node.active_leaf_index, {

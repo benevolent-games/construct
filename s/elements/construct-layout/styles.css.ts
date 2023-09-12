@@ -68,63 +68,92 @@ export const styles = css`
 	flex-direction: column;
 	background: var(--pane);
 
-	> .tabs {
-		flex: 0 0 auto;
+	> .taskbar {
 		display: flex;
-		flex-direction: row;
 
-		> .tab {
+		> * {
+			flex: 0 0 auto;
 			display: flex;
-			align-items: center;
 
-			opacity: 0.5;
+			> button {
+				border: none;
+				border-radius: 0;
+				background: transparent;
 
-			gap: 0.1em;
-			padding: 0.2em;
-			padding-left: 0.3em;
-			padding-right: 0.1em;
-			background: var(--tab);
-			border-top: 0.1em solid transparent;
-
-			&[data-permanent] {
-				opacity: 0.2;
-				padding: 0.2em 1em;
+				opacity: 0.6;
+				&:hover { opacity: 1; }
+				&:hover:active { color: var(--alpha); }
 			}
+		}
 
-			&:hover {
-				opacity: 1;
-			}
+		> .tabs {
+			flex: 0 0 auto;
+			display: flex;
+			flex-direction: row;
 
-			&[data-active] {
-				opacity: 1;
-				border-color: var(--alpha);
-				color: var(--alpha);
-				background: var(--leaf);
-			}
+			> button {
+				display: flex;
+				align-items: center;
 
-			& svg {
-				position: absolute;
-				inset: 0;
-				width: 100%;
-				height: 100%;
-			}
+				gap: 0.1em;
+				padding: 0.2em;
+				padding-left: 0.3em;
+				padding-right: 0.1em;
+				background: var(--tab);
+				border-top: 0.1em solid transparent;
 
-			> .icon {
-				position: relative;
-				width: 1em;
-				height: 1em;
-			}
+				&[data-permanent] {
+					padding: 0.2em 1em;
+					&:not(:hover) {
+						opacity: 0.2;
+					}
+				}
 
-			> .x {
-				opacity: 0.3;
-				position: relative;
-				width: 0.7em;
-				height: 0.7em;
-				&[data-available]:hover {
+				&[data-active] {
 					opacity: 1;
-					color: white;
-					background: red;
-					border-radius: 1em;
+					color: var(--alpha);
+					border-color: var(--alpha);
+					background: var(--leaf);
+				}
+
+				> .icon {
+					position: relative;
+					width: 1em;
+					height: 1em;
+				}
+
+				> .x {
+					opacity: 0.3;
+					position: relative;
+					width: 0.7em;
+					height: 0.7em;
+
+					&[data-available]:hover {
+						opacity: 1;
+						color: white;
+						background: red;
+						border-radius: 1em;
+					}
+				}
+
+				& svg {
+					position: absolute;
+					inset: 0;
+					width: 100%;
+					height: 100%;
+				}
+			}
+		}
+
+		.actions {
+			margin-left: auto;
+
+			> button {
+				padding: 0.2em 0.3em;
+
+				> svg {
+					width: 1em;
+					height: 1em;
 				}
 			}
 		}
