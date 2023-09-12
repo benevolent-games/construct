@@ -147,6 +147,14 @@ export class LayoutController {
 			clear_size_of_last_child(grandparent_cell)
 		}
 
+		else if (parent_cell.children.length === 1) {
+			const [only_child] = parent_cell.children
+			if (only_child.kind === "cell") {
+				parent_cell.children = only_child.children
+				parent_cell.vertical = only_child.vertical
+			}
+		}
+
 		this.#options.on_change()
 	}
 
