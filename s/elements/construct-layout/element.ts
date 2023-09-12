@@ -19,7 +19,7 @@ export const ConstructLayout = component(context => class extends GoldElement {
 	#resizer = new Resizer(() => this.requestUpdate())
 	#tile_views = views(context, tile.views(tiles))
 
-	#layout = new LayoutController(default_layout(), {
+	#layout = new LayoutController(default_layout, {
 		id_booth: this.#id_booth,
 		on_change: () => this.requestUpdate(),
 		on_leaf_added: leaf => {
@@ -34,19 +34,17 @@ export const ConstructLayout = component(context => class extends GoldElement {
 			if (div)
 				div.remove()
 		},
+		on_reset: layout => {
+			const pane_path = [0]
+			const leaf_path = layout.add_leaf(pane_path, "AboutTile")
+			layout.set_pane_active_leaf(pane_path, leaf_path.at(-1)!)
+		},
 	})
 
 	#render_layout = setup_layout_renderer({
 		layout: this.#layout,
 		resizer: this.#resizer,
 	})
-
-	constructor() {
-		super()
-		const pane_path = [0]
-		const leaf_path = this.#layout.add_leaf(pane_path, "AboutTile")
-		this.#layout.set_pane_active_leaf(pane_path, leaf_path.at(-1)!)
-	}
 
 	render() {
 		return html`

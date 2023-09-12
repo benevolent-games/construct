@@ -6,7 +6,6 @@ import {render_leaf} from "./leaf.js"
 import {Layout} from "../parts/layout.js"
 import {defined} from "../../../tools/defined.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
-import {middle_click} from "./utils/middle_click.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
 import {render_adder_leaf} from "./utils/render_adder_leaf.js"
 
@@ -21,17 +20,25 @@ export const render_pane = (meta: LayoutMeta) => (
 
 	<div
 		class=pane
-		style="${sizing_styles(node.size)}"
-		@pointerdown=${middle_click(() => meta.layout.split_pane(pane_path))}>
+		style="${sizing_styles(node.size)}">
 
 		<div class=taskbar>
 			<div class=tabs>
 				${render_tabs(meta, node, pane_path)}
 			</div>
+
 			<div class=actions>
-				<button>${sprite_split_row}</button>
-				<button>${sprite_split_column}</button>
-				<button>${sprite_x}</button>
+				<button @click=${() => meta.layout.split_pane(pane_path, false)}>
+					${sprite_split_row}
+				</button>
+
+				<button @click=${() => meta.layout.split_pane(pane_path, true)}>
+					${sprite_split_column}
+				</button>
+
+				<button @click=${() => meta.layout.delete_pane(pane_path)}>
+					${sprite_x}
+				</button>
 			</div>
 		</div>
 
