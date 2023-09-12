@@ -2,19 +2,19 @@
 import {CSSResultGroup} from "lit"
 import {BaseContext, Flat} from "@benev/slate"
 
-// import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
-
-// import {Graph} from "./controllers/graph/graph.js"
-// import {World} from "./controllers/world/world.js"
-// import {Catalog} from "./controllers/catalog/catalog.js"
-// import {Outliner} from "./controllers/outliner/outliner.js"
-
 export class Context implements BaseContext {
 	constructor(
 		public flat: Flat,
 		public theme: CSSResultGroup,
 	) {}
 }
+
+// import {BenevTheater} from "@benev/toolbox/x/babylon/theater/element.js"
+
+// import {Graph} from "./controllers/graph/graph.js"
+// import {World} from "./controllers/world/world.js"
+// import {Catalog} from "./controllers/catalog/catalog.js"
+// import {Outliner} from "./controllers/outliner/outliner.js"
 
 // export class Context implements PrepperContext {
 // 	readonly catalog: Catalog
