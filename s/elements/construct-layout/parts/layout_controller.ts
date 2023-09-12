@@ -161,7 +161,11 @@ export class LayoutController {
 	delete_leaf(leaf_path: number[]) {
 		const {leaf, leaf_index, parent_pane} = this.find_leaf(leaf_path)
 		parent_pane.children.splice(leaf_index, 1)
-		parent_pane.active_leaf_index = undefined
+		parent_pane.active_leaf_index = parent_pane.active_leaf_index === undefined
+			? undefined
+			: parent_pane.active_leaf_index > (parent_pane.children.length - 1)
+				? undefined
+				: parent_pane.active_leaf_index
 		this.#options.on_change()
 		this.#options.on_leaf_deleted(leaf, leaf_path)
 	}
