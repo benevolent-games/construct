@@ -16,7 +16,8 @@ export const styles = css`
 	--bg-b: var(--construct-bg-b, #000);
 
 	--resizer: var(--construct-resize, var(--bg-b));
-	--pane: var(--construct-resize, color-mix(in srgb, var(--bg-a), var(--bg-b) 50%));
+	--pane: var(--construct-resize, color-mix(in srgb, var(--bg-a), var(--bg-b) 10%));
+	/* --pane: var(--construct-resize, var(--bg-a)); */
 	--tab: var(--construct-resize, transparent);
 	--leaf: var(--construct-resize, var(--bg-a));
 }
