@@ -12,10 +12,13 @@ export const styles = css`
 
 	--alpha: var(--construct-alpha, yellow);
 
-	--resizer: var(--construct-resize, #000000);
-	--pane: var(--construct-pane, #0c0c0c);
-	--tab: var(--construct-tab, transparent);
-	--leaf: var(--construct-leaf, #111);
+	--bg-a: var(--construct-bg-a, #111);
+	--bg-b: var(--construct-bg-b, #000);
+
+	--resizer: var(--construct-resize, var(--bg-b));
+	--pane: var(--construct-resize, color-mix(in srgb, var(--bg-a), var(--bg-b) 50%));
+	--tab: var(--construct-resize, transparent);
+	--leaf: var(--construct-resize, var(--bg-a));
 }
 
 .layout {
