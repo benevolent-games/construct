@@ -42,12 +42,18 @@ export const render_pane = (meta: LayoutMeta) => (
 			</div>
 		</div>
 
-		<div class=leaf>
-			${defined(node.active_leaf_index, {
-				yes: index => render_leaf(meta)(node.children[index], [...pane_path, index]),
-				no: () => render_adder_leaf(meta, pane_path),
-			})}
-		</div>
+		${defined(node.active_leaf_index, {
+			yes: index => html`
+				<div class="leaf tile">
+					${render_leaf(meta)(node.children[index], [...pane_path, index])}
+				</div>
+			`,
+			no: () => html`
+				<div class="leaf adder">
+					${render_adder_leaf(meta, pane_path)}
+				</div>
+			`,
+		})}
 	</div>
 `
 

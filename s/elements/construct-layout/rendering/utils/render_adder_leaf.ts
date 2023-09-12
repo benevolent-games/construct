@@ -8,8 +8,9 @@ export function render_adder_leaf(
 		pane_path: number[],
 	) {
 
-	return html`
-		${Object.entries(tiles).map(([name, tile]) => html`
+	return html`${Object.entries(tiles)
+		.filter(([,tile]) => tile !== tiles.AdderTile)
+		.map(([name, tile]) => html`
 			<button
 				@click=${() => layout.set_pane_active_leaf(
 					pane_path,
@@ -21,7 +22,6 @@ export function render_adder_leaf(
 				${tile.icon}
 				<span>${tile.label}</span>
 			</button>
-		`)}
-	`
+		`)}`
 }
 

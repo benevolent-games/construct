@@ -163,11 +163,27 @@ export const styles = css`
 	}
 
 	> .leaf {
+		position: relative;
 		flex: 1 1 auto;
 		display: block;
 		padding: 0.5em;
 		background: var(--leaf);
 	}
+
+	> .adder {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		align-content: start;
+		> button {
+			flex: 0 1 auto;
+			width: 12em;
+		}
+	}
+}
+
+::slotted(*) {
+	display: contents;
 }
 
 `
