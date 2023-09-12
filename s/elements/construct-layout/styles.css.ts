@@ -40,6 +40,8 @@ export const styles = css`
 
 .cell {
 	display: flex;
+	width: 100%;
+	height: 100%;
 
 	&[data-vertical] {
 		flex-direction: column;
@@ -70,6 +72,7 @@ export const styles = css`
 
 	> .taskbar {
 		display: flex;
+		justify-content: end;
 
 		> * {
 			flex: 0 0 auto;
