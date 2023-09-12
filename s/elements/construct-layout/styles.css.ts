@@ -16,10 +16,10 @@ export const styles = css`
 	--bg-b: var(--construct-bg-b, #000);
 
 	--resizer: var(--construct-resize, var(--bg-b));
-	--pane: var(--construct-resize, color-mix(in srgb, var(--bg-a), var(--bg-b) 10%));
-	/* --pane: var(--construct-resize, var(--bg-a)); */
+	--taskbar: var(--construct-resize, var(--bg-a));
+	/* --taskbar: var(--construct-resize, color-mix(in srgb, var(--bg-a), var(--bg-b) 10%)); */
 	--tab: var(--construct-resize, transparent);
-	--leaf: var(--construct-resize, var(--bg-a));
+	--pane: var(--construct-resize, var(--bg-a));
 }
 
 .layout {
@@ -69,7 +69,7 @@ export const styles = css`
 .pane {
 	display: flex;
 	flex-direction: column;
-	background: var(--pane);
+	background: var(--taskbar);
 
 	> .taskbar {
 		display: flex;
@@ -117,7 +117,7 @@ export const styles = css`
 					opacity: 1;
 					color: var(--alpha);
 					border-color: var(--alpha);
-					background: var(--leaf);
+					background: var(--pane);
 				}
 
 				> .icon {
@@ -171,7 +171,7 @@ export const styles = css`
 		flex: 1 1 auto;
 		display: block;
 		padding: 0.5em;
-		background: var(--leaf);
+		background: var(--pane);
 	}
 
 	> .adder {
