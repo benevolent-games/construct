@@ -104,7 +104,7 @@ export const styles = css`
 
 				&[data-permanent] {
 					padding: 0.2em 1em;
-					&:not(:hover) {
+					&:not(:hover):not([data-active]) {
 						opacity: 0.2;
 					}
 				}
@@ -150,6 +150,9 @@ export const styles = css`
 
 			> button {
 				padding: 0.2em 0.3em;
+
+				&.x:hover { color: red; }
+				&.x:hover:active { color: color-mix(in srgb, white, red); }
 
 				> svg {
 					width: 1em;

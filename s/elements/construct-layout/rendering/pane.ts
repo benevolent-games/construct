@@ -36,7 +36,7 @@ export const render_pane = (meta: LayoutMeta) => (
 					${sprite_split_column}
 				</button>
 
-				<button @click=${() => meta.layout.delete_pane(pane_path)}>
+				<button class=x @click=${() => meta.layout.delete_pane(pane_path)}>
 					${sprite_x}
 				</button>
 			</div>
