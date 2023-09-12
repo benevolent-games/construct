@@ -6,15 +6,13 @@ export default template(async basic => {
 
 	return easypage({
 		path,
-		css: "style.css",
+		css: "index.css",
 		title: "@benev/construct",
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
-			<div class=foundation>
-				<ed-catalog></ed-catalog>
-				<benev-theater disable-pointer-lock></benev-theater>
-				<ed-outliner></ed-outliner>
-			</div>
+			<main class=foundation>
+				<construct-layout></construct-layout>
+			</main>
 		`,
 	})
 })
