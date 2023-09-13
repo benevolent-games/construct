@@ -4,6 +4,7 @@ import {GoldElement} from "@benev/slate"
 
 import {styles} from "./styles.css.js"
 import {tiles} from "../../tiles/tiles.js"
+import {Dragger} from "./parts/dragger.js"
 import {Resizer} from "./resize/resizer.js"
 import {leaf_slot} from "./parts/leaf_slot.js"
 import {IdBooth} from "../../tools/id_booth.js"
@@ -44,6 +45,7 @@ export const ConstructLayout = component(context => class extends GoldElement {
 	#render_layout = setup_layout_renderer({
 		layout: this.#layout,
 		resizer: this.#resizer,
+		dragger: new Dragger(this.#layout),
 	})
 
 	render() {

@@ -1,5 +1,5 @@
 
-import {css} from "lit";
+import {css} from "lit"
 
 export const size_of_resize_handle_in_rem = 0.2
 
@@ -11,8 +11,9 @@ export const styles = css`
 	height: 100%;
 
 	--alpha: var(--construct-alpha, yellow);
+	--bravo: var(--construct-bravo, lime);
 
-	--bg-a: var(--construct-bg-a, #111);
+	--bg-a: var(--construct-bg-a, #181818);
 	--bg-b: var(--construct-bg-b, #000);
 
 	--resizer: var(--construct-resize, var(--bg-b));
@@ -31,12 +32,6 @@ export const styles = css`
 	> .cell {
 		flex-basis: 100%;
 	}
-}
-
-:is(.resizer, .cell, .pane) {
-	user-select: none;
-	-webkit-user-drag: none;
-	user-drag: none;
 }
 
 .cell {
@@ -94,6 +89,13 @@ export const styles = css`
 			flex: 0 0 auto;
 			display: flex;
 			flex-direction: row;
+
+			> .inserter {
+				height: 100%;
+				width: 2px;
+				background: var(--bravo);
+				border-radius: 1em;
+			}
 
 			> button {
 				display: flex;
