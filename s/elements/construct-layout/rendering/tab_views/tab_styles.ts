@@ -6,13 +6,18 @@ export const tab_styles = css`
 :host {
 	display: flex;
 	flex-direction: row;
+	position: relative;
 }
 
 .insert-indicator {
+	position: absolute;
+	top: 0;
+	left: 0;
 	height: 100%;
 	width: 2px;
 	background: var(--bravo);
 	border-radius: 1em;
+	pointer-events: none;
 
 	opacity: 0;
 	&[data-drag] { opacity: 1; }

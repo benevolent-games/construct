@@ -184,7 +184,6 @@ export class LayoutController {
 
 		if (source_pane === destination_pane) {
 			if (source_index === destination_index || source_index === (destination_index - 1)) {
-				console.log("same position, lol")
 				return
 			}
 			if (source_index < destination_index) {
