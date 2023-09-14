@@ -4,12 +4,13 @@ import {ShaleView} from "@benev/slate"
 
 import {tab_styles} from "./tab_styles.js"
 import {Layout} from "../../parts/layout.js"
+import {DragUnit} from "../../parts/dragger.js"
 import {tiles} from "../../../../tiles/tiles.js"
 import {LayoutMeta} from "../utils/layout_meta.js"
 import {view} from "../../../../framework/frontend.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
 
-export const OrdinaryTab = view(_context => class extends ShaleView {
+export const OrdinaryTab = view(context => class extends ShaleView {
 	static name = "ordinary-tab"
 	static styles = tab_styles
 
@@ -20,6 +21,14 @@ export const OrdinaryTab = view(_context => class extends ShaleView {
 		return event.target === x || x.contains(target)
 	}
 
+	#state = context.flat.state({
+		drag: false,
+	})
+
+	#drag_unit = new DragUnit(drag => {
+		this.#state.drag = drag
+	})
+
 	render({meta, pane, leaf, pane_path, leaf_index}: {
 			meta: LayoutMeta
 			pane: Layout.Pane
@@ -27,6 +36,9 @@ export const OrdinaryTab = view(_context => class extends ShaleView {
 			pane_path: number[]
 			leaf_index: number
 		}) {
+
+		const unit = this.#drag_unit
+		meta.dragger.register_unit(unit)
 
 		const {icon, label} = tiles[leaf.tab]
 		const leaf_path = [...pane_path, leaf_index]
@@ -38,6 +50,11 @@ export const OrdinaryTab = view(_context => class extends ShaleView {
 		const activate = () =>
 			meta.layout.set_pane_active_leaf(pane_path, leaf_index)
 
+		const drag = {
+			source: meta.dragger.source_handlers(leaf_path),
+			destination: meta.dragger.destination_handlers(unit, leaf_path),
+		}
+
 		const click = (event: MouseEvent) => {
 			if (!active) {
 				activate()
@@ -48,14 +65,24 @@ export const OrdinaryTab = view(_context => class extends ShaleView {
 		}
 
 		return html`
-			<div class=insert-indicator></div>
+			<div
+				class=insert-indicator
+				?data-drag=${this.#state.drag}
+			></div>
 
 			<button
 				data-ordinary
 				title="${label}"
 				?data-active=${active}
 				@click=${click}
-				draggable>
+
+				draggable=true
+				@dragstart=${drag.source.dragstart}
+				@dragend=${drag.source.dragend}
+				@dragenter=${drag.destination.dragenter}
+				@dragover=${drag.destination.dragover}
+				@dragleave=${drag.destination.dragleave}
+				@drop=${drag.destination.drop}>
 
 				<span class=icon>
 					${icon}

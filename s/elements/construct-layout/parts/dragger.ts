@@ -18,9 +18,47 @@ export type DragDestinationHandlers = {
 	drop: (event: DragEvent) => void
 }
 
+export class DragUnit {
+	#count = 0
+	#on_change: (drag: boolean) => void
+
+	constructor(on_change: (drag: boolean) => void) {
+		this.#on_change = on_change
+	}
+
+	get drag() {
+		return this.#count > 0
+	}
+
+	increment() {
+		this.#count++
+		this.#on_change(this.drag)
+	}
+
+	decrement() {
+		this.#count--
+		this.#on_change(this.drag)
+	}
+
+	reset() {
+		this.#count = 0
+		this.#on_change(this.drag)
+	}
+}
+
 export class Dragger {
-	#operation: DragOperation | undefined
 	#layout: LayoutController
+	#units = new Set<DragUnit>()
+	#operation: DragOperation | undefined
+
+	register_unit(unit: DragUnit) {
+		this.#units.add(unit)
+	}
+
+	#reset_all_units() {
+		for (const unit of this.#units)
+			unit.reset()
+	}
 
 	constructor(layout: LayoutController) {
 		this.#layout = layout
@@ -39,31 +77,30 @@ export class Dragger {
 				source_leaf_path,
 				proposed_insertion_path: undefined,
 			}
+			this.#reset_all_units()
 		},
 
 		dragend: () => {
 			this.#operation = undefined
+			this.#reset_all_units()
 		},
 	})
 
 	destination_handlers = (
+			unit: DragUnit,
 			proposed_insertion_path: number[],
 		): DragDestinationHandlers => ({
 
-		dragenter: event => {
-			console.log("dragenter", event.currentTarget, event.target)
-			if (is_relevant(event)) {
-				if (this.#operation)
-					this.#operation.proposed_insertion_path = proposed_insertion_path
-			}
+		dragenter: () => {
+			if (!unit.drag && this.#operation)
+				this.#operation.proposed_insertion_path = proposed_insertion_path
+			unit.increment()
 		},
 
-		dragleave: event => {
-			console.log("dragleave", event.currentTarget, event.target)
-			if (is_relevant(event)) {
-				if (this.#operation)
-					this.#operation.proposed_insertion_path = undefined
-			}
+		dragleave: () => {
+			unit.decrement()
+			if (!unit.drag && this.#operation)
+				this.#operation.proposed_insertion_path = undefined
 		},
 
 		dragover: event => {
@@ -71,19 +108,9 @@ export class Dragger {
 		},
 
 		drop: () => {
+			this.#reset_all_units()
 			console.log("DROP", this.#operation)
 		},
 	})
-}
-
-// utils
-
-function is_relevant(event: DragEvent) {
-	const target = event.target as HTMLElement
-	const currentTarget = event.currentTarget as HTMLElement
-
-	return (target && currentTarget)
-		?	(currentTarget === target) && !currentTarget.contains(target)
-		: false
 }
 

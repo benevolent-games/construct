@@ -13,6 +13,9 @@ export const tab_styles = css`
 	width: 2px;
 	background: var(--bravo);
 	border-radius: 1em;
+
+	opacity: 0;
+	&[data-drag] { opacity: 1; }
 }
 
 button {
