@@ -109,7 +109,14 @@ export class Dragger {
 
 		drop: () => {
 			this.#reset_all_units()
-			console.log("DROP", this.#operation)
+
+			if (!(this.#operation?.source_leaf_path && this.#operation.proposed_insertion_path))
+				return
+
+			this.#layout.move_leaf(
+				this.#operation.source_leaf_path,
+				this.#operation.proposed_insertion_path,
+			)
 		},
 	})
 }

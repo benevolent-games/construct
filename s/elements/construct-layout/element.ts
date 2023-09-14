@@ -32,13 +32,14 @@ export const ConstructLayout = component(context => class extends GoldElement {
 		on_change: () => this.requestUpdate(),
 		on_leaf_added: leaf => {
 			const div = document.createElement("div")
+			div.setAttribute("data-id", leaf.id.toString())
 			div.setAttribute("slot", leaf_slot(leaf.id))
 			const content = html`${this.#tile_views[leaf.tab]({props: []})}`
 			render(content, div)
 			this.appendChild(div)
 		},
 		on_leaf_deleted: leaf => {
-			const div = this.querySelector<HTMLElement>(`[slot="${leaf_slot(leaf.id)}"]`)
+			const div = this.querySelector<HTMLElement>(`[data-id="${leaf.id}"]`)
 			if (div)
 				div.remove()
 		},

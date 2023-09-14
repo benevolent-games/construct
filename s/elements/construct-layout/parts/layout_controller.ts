@@ -161,13 +161,48 @@ export class LayoutController {
 	delete_leaf(leaf_path: number[]) {
 		const {leaf, leaf_index, parent_pane} = this.find_leaf(leaf_path)
 		parent_pane.children.splice(leaf_index, 1)
-		parent_pane.active_leaf_index = parent_pane.active_leaf_index === undefined
-			? undefined
-			: parent_pane.active_leaf_index > (parent_pane.children.length - 1)
-				? undefined
-				: parent_pane.active_leaf_index
+		ensure_active_index_is_in_safe_range(parent_pane)
 		this.#options.on_change()
 		this.#options.on_leaf_deleted(leaf, leaf_path)
+	}
+
+	move_leaf(from: number[], to: number[]) {
+		const {leaf, parent_pane: source_pane} = this.find_leaf(from)
+		const {pane: destination_pane} = this.find_pane(to.slice(0, -1))
+		const source_index = from.at(-1)!
+		const destination_index = to.at(-1)!
+
+		const delete_at_source = () => {
+			source_pane.children.splice(source_index, 1)
+			ensure_active_index_is_in_safe_range(source_pane)
+		}
+
+		const insert_at_destination = () => {
+			destination_pane.children.splice(destination_index, 0, leaf)
+			destination_pane.active_leaf_index = destination_index
+		}
+
+		if (source_pane === destination_pane) {
+			if (source_index === destination_index || source_index === (destination_index - 1)) {
+				console.log("same position, lol")
+				return
+			}
+			if (source_index < destination_index) {
+				insert_at_destination()
+				delete_at_source()
+				this.#options.on_change()
+			}
+			else {
+				delete_at_source()
+				insert_at_destination()
+				this.#options.on_change()
+			}
+		}
+		else {
+			insert_at_destination()
+			delete_at_source()
+			this.#options.on_change()
+		}
 	}
 
 	add_leaf(pane_path: number[], tab: Layout.LeafName) {
@@ -198,5 +233,13 @@ function clear_size_of_last_child(node: Layout.Cell) {
 	const last = node.children.at(-1)
 	if (last)
 		last.size = undefined
+}
+
+function ensure_active_index_is_in_safe_range(pane: Layout.Pane) {
+	return pane.active_leaf_index = pane.active_leaf_index === undefined
+		? undefined
+		: pane.active_leaf_index > (pane.children.length - 1)
+			? undefined
+			: pane.active_leaf_index
 }
 
