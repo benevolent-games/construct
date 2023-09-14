@@ -8,10 +8,17 @@ import {Dragger} from "./parts/dragger.js"
 import {Resizer} from "./resize/resizer.js"
 import {leaf_slot} from "./parts/leaf_slot.js"
 import {IdBooth} from "../../tools/id_booth.js"
+import {Context} from "../../context/context.js"
 import {default_layout} from "./parts/default_layout.js"
+import {AdderTab} from "./rendering/tab_views/adder_tab.js"
 import {LayoutController} from "./parts/layout_controller.js"
+import {OrdinaryTab} from "./rendering/tab_views/ordinary_tab.js"
 import {component, tile, views} from "../../framework/frontend.js"
 import {setup_layout_renderer} from "./rendering/utils/setup_layout_renderer.js"
+
+export const setup_tab_views = (context: Context) => views(context, {OrdinaryTab, AdderTab})
+
+export type TabViews = ReturnType<typeof setup_tab_views>
 
 export const ConstructLayout = component(context => class extends GoldElement {
 	static styles = styles
@@ -46,6 +53,7 @@ export const ConstructLayout = component(context => class extends GoldElement {
 		layout: this.#layout,
 		resizer: this.#resizer,
 		dragger: new Dragger(this.#layout),
+		tab_views: setup_tab_views(context),
 	})
 
 	render() {

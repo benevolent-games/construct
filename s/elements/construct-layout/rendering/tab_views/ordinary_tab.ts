@@ -10,26 +10,14 @@ import {view} from "../../../../framework/frontend.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
 
 export const OrdinaryTab = view(_context => class extends ShaleView {
-	static name = "tab ordinary"
+	static name = "ordinary-tab"
 	static styles = tab_styles
 
-	#click = ({active, close, activate}: {
-			active: boolean
-			close: () => void
-			activate: () => void
-		}) => (event: MouseEvent) => {
-
-		if (active) {
-			const target = event.target as Element
-			const tab = event.currentTarget as HTMLElement
-			const x = tab.querySelector(".x") as HTMLElement
-			const click_is_inside_x = event.target === x || x.contains(target)
-
-			if (click_is_inside_x)
-				close()
-		}
-		else
-			activate()
+	#inside_x_button(event: MouseEvent) {
+		const target = event.target as Element
+		const tab = event.currentTarget as HTMLElement
+		const x = tab.querySelector(".x") as HTMLElement
+		return event.target === x || x.contains(target)
 	}
 
 	render({meta, pane, leaf, pane_path, leaf_index}: {
@@ -44,21 +32,29 @@ export const OrdinaryTab = view(_context => class extends ShaleView {
 		const leaf_path = [...pane_path, leaf_index]
 		const active = pane.active_leaf_index === leaf_index
 
-		const click = this.#click({
-			active,
-			activate: () =>
-				meta.layout.set_pane_active_leaf(pane_path, leaf_index),
-			close: () =>
-				meta.layout.delete_leaf(leaf_path),
-		})
+		const close = () =>
+			meta.layout.delete_leaf(leaf_path)
+
+		const activate = () =>
+			meta.layout.set_pane_active_leaf(pane_path, leaf_index)
+
+		const click = (event: MouseEvent) => {
+			if (!active) {
+				activate()
+				return
+			}
+			if (this.#inside_x_button(event))
+				close()
+		}
 
 		return html`
+			<div class=insert-indicator></div>
+
 			<button
 				data-ordinary
 				title="${label}"
 				?data-active=${active}
 				@click=${click}
-
 				draggable>
 
 				<span class=icon>

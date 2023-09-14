@@ -10,6 +10,14 @@ export const theme = css`
 }
 
 button {
+	font: inherit;
+	color: inherit;
+	border: none;
+	border-radius: 0.2em;
+	background: transparent;
+}
+
+button.based {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -17,11 +25,7 @@ button {
 	gap: 0.3em;
 	padding: 0.1em 0.2em;
 
-	font: inherit;
-	color: inherit;
 	background: transparent;
-	border-radius: 0.2em;
-	border: none;
 	border: 1px solid color-mix(in srgb, currentColor, transparent 80%);
 	background: color-mix(in srgb, currentColor, transparent 90%);
 
@@ -35,7 +39,7 @@ button {
 		background: color-mix(in srgb, currentColor, transparent 90%);
 	}
 
-	&:active {
+	&:hover:active {
 		border-color: color-mix(in srgb, currentColor, transparent 60%);
 		background: color-mix(in srgb, currentColor, transparent 85%);
 	}
