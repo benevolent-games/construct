@@ -6,9 +6,9 @@ import {find_layout_node} from "./find_layout_node.js"
 export interface LayoutControllerOptions {
 	id_booth: IdBooth
 	on_change: () => void
+	on_reset: (layout: LayoutController) => void
 	on_leaf_added: (leaf: Layout.Leaf, path: number[]) => void
 	on_leaf_deleted: (leaf: Layout.Leaf, path: number[]) => void
-	on_reset: (layout: LayoutController) => void
 }
 
 export class LayoutController {

@@ -22,59 +22,61 @@ export class Dragger {
 	#operation: DragOperation | undefined
 	#layout: LayoutController
 
-	get operation() {
-		return this.#operation
-	}
-
 	constructor(layout: LayoutController) {
 		this.#layout = layout
 	}
 
-	source_handlers(
+	get operation() {
+		return this.#operation
+	}
+
+	source_handlers = (
 			source_leaf_path: number[],
-		): DragSourceHandlers {
-		return {
+		): DragSourceHandlers => ({
 
-			dragstart: () => {
-				this.#operation = {
-					source_leaf_path,
-					proposed_insertion_path: undefined,
-				}
-			},
-
-			dragend: () => {
-				this.#operation = undefined
+		dragstart: () => {
+			this.#operation = {
+				source_leaf_path,
+				proposed_insertion_path: undefined,
 			}
-		}
-	}
+		},
 
-	destination_handlers(
+		dragend: () => {
+			this.#operation = undefined
+		},
+	})
+
+	destination_handlers = (
 			proposed_insertion_path: number[],
-		): DragDestinationHandlers {
-		return {
-			dragenter: event => {
-				console.log("dragenter", event.currentTarget, event.target)
-				if (is_relevant(event)) {
-					if (this.#operation)
-						this.#operation.proposed_insertion_path = proposed_insertion_path
-				}
-			},
-			dragleave: event => {
-				console.log("dragleave", event.currentTarget, event.target)
-				if (is_relevant(event)) {
-					if (this.#operation)
-						this.#operation.proposed_insertion_path = undefined
-				}
-			},
-			dragover: event => {
-				event.preventDefault()
-			},
-			drop: () => {
-				console.log("DROP", this.#operation)
-			},
-		}
-	}
+		): DragDestinationHandlers => ({
+
+		dragenter: event => {
+			console.log("dragenter", event.currentTarget, event.target)
+			if (is_relevant(event)) {
+				if (this.#operation)
+					this.#operation.proposed_insertion_path = proposed_insertion_path
+			}
+		},
+
+		dragleave: event => {
+			console.log("dragleave", event.currentTarget, event.target)
+			if (is_relevant(event)) {
+				if (this.#operation)
+					this.#operation.proposed_insertion_path = undefined
+			}
+		},
+
+		dragover: event => {
+			event.preventDefault()
+		},
+
+		drop: () => {
+			console.log("DROP", this.#operation)
+		},
+	})
 }
+
+// utils
 
 function is_relevant(event: DragEvent) {
 	const target = event.target as HTMLElement
