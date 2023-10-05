@@ -7,7 +7,10 @@ import {render_leaf} from "../leaf.js"
 import {LayoutMeta} from "./layout_meta.js"
 import {Layout} from "../../parts/layout.js"
 
-export function setup_layout_renderer(draft: Omit<LayoutMeta, "render_layout">) {
+export function setup_layout_renderer(
+		draft: Omit<LayoutMeta, "render_layout">,
+	) {
+
 	const meta: LayoutMeta = {...draft, render_layout}
 
 	const render = requirement.provide(meta)({

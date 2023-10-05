@@ -11,15 +11,13 @@ export const render_tabs = (
 	) => html`
 
 	${pane.children.map((leaf, leaf_index) => meta.tab_views.OrdinaryTab({
-		props: [{
 			meta,
 			pane,
 			leaf,
 			pane_path,
 			leaf_index,
-		}],
-	}))}
+		}))}
 
-	${meta.tab_views.AdderTab({props: [{meta, pane, pane_path}]})}
+	${meta.tab_views.AdderTab({meta, pane, pane_path})}
 `
 

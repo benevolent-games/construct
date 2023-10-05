@@ -37,6 +37,8 @@ export const AdderTab = view(context => class extends ShaleView {
 		const activate = () =>
 			meta.layout.set_pane_active_leaf(pane_path, undefined)
 
+		const nil = () => {}
+
 		return html`
 			<div
 				class=insert-indicator
@@ -48,10 +50,10 @@ export const AdderTab = view(context => class extends ShaleView {
 				title="add new tab"
 				?data-active="${active}"
 				@click=${activate}
-				@dragenter=${drag_destination.dragenter}
-				@dragover=${drag_destination.dragover}
-				@dragleave=${drag_destination.dragleave}
-				@drop=${drag_destination.drop}>
+				@dragenter=${nil}
+				@dragover=${nil}
+				@dragleave=${nil}
+				@drop=${nil}>
 
 				<span class=icon>
 					${sprite_plus}

@@ -64,6 +64,8 @@ export const OrdinaryTab = view(context => class extends ShaleView {
 				close()
 		}
 
+		const nil = () => {}
+
 		return html`
 			<div
 				class=insert-indicator
@@ -79,10 +81,10 @@ export const OrdinaryTab = view(context => class extends ShaleView {
 				draggable=true
 				@dragstart=${drag.source.dragstart}
 				@dragend=${drag.source.dragend}
-				@dragenter=${drag.destination.dragenter}
-				@dragover=${drag.destination.dragover}
-				@dragleave=${drag.destination.dragleave}
-				@drop=${drag.destination.drop}>
+				@dragenter=${nil}
+				@dragover=${nil}
+				@dragleave=${nil}
+				@drop=${nil}>
 
 				<span class=icon>
 					${icon}

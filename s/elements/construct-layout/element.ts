@@ -10,13 +10,21 @@ import {leaf_slot} from "./parts/leaf_slot.js"
 import {IdBooth} from "../../tools/id_booth.js"
 import {Context} from "../../context/context.js"
 import {default_layout} from "./parts/default_layout.js"
-import {AdderTab} from "./rendering/tab_views/adder_tab.js"
 import {LayoutController} from "./parts/layout_controller.js"
-import {OrdinaryTab} from "./rendering/tab_views/ordinary_tab.js"
+
 import {component, tile, views} from "../../framework/frontend.js"
 import {setup_layout_renderer} from "./rendering/utils/setup_layout_renderer.js"
 
-export const setup_tab_views = (context: Context) => views(context, {OrdinaryTab, AdderTab})
+import {AdderTab} from "./rendering/tabs/adder_tab.js"
+import {OrdinaryTab} from "./rendering/tabs/ordinary_tab.js"
+
+export const setup_tab_views = (context: Context) => views(
+	context,
+	{
+		OrdinaryTab,
+		AdderTab,
+	}
+)
 
 export type TabViews = ReturnType<typeof setup_tab_views>
 
