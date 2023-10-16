@@ -10,8 +10,8 @@ import {prep_layout_controller} from "./parts/prep_layout_controller.js"
 import {prep_layout_renderer} from "./rendering/utils/prep_layout_renderer.js"
 
 export const ConstructLayout = carbon({styles}, use => {
-	const id_booth = new IdBooth()
-	const resizer = new Resizer(() => use.rerender())
+	const id_booth = use.prepare(() => new IdBooth())
+	const resizer = use.prepare(() => new Resizer(() => use.rerender()))
 	const layout = use.prepare(prep_layout_controller(use, id_booth))
 	const render_layout = use.prepare(prep_layout_renderer({
 		layout,
