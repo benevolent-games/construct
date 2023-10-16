@@ -1,58 +1,48 @@
 
-import {html} from "lit"
-import {ClayView} from "@benev/slate"
+import {html} from "@benev/slate"
 
 import {Layout} from "../../parts/layout.js"
 import {LayoutMeta} from "../utils/layout_meta.js"
-import {view} from "../../../../framework/frontend.js"
+import {quartz} from "../../../../context/context.js"
 import {sprite_plus} from "../../../../sprites/groups/feather/plus.js"
 
 const nil = () => {}
 
-export const AdderTab = view(context => class extends ClayView {
+export const AdderTab = quartz(use => ({meta, pane, pane_path}: {
+		meta: LayoutMeta
+		pane: Layout.Pane
+		pane_path: number[]
+	}) => {
 
-	#state = context.flat.state({
-		drag: false,
-		active: false,
-	})
+	const drag = use.signal(false)
+	const active = pane.active_leaf_index === undefined
+	const activate = () => meta
+		.layout
+		.set_pane_active_leaf(pane_path, undefined)
 
-	render({
-			meta, pane, pane_path,
-		}: {
-			meta: LayoutMeta
-			pane: Layout.Pane
-			pane_path: number[]
-		}) {
+	return html`
+		<div class=tab>
+			<div
+				class=insert-indicator
+				?data-drag=${drag}
+			></div>
 
-		const active = pane.active_leaf_index === undefined
-		const activate = () => meta
-			.layout
-			.set_pane_active_leaf(pane_path, undefined)
+			<button
+				data-adder
+				title="add new tab"
+				?data-active="${active}"
+				@click=${activate}
+				@dragenter=${nil}
+				@dragover=${nil}
+				@dragleave=${nil}
+				@drop=${nil}>
 
-		return html`
-			<div class=tab>
-				<div
-					class=insert-indicator
-					?data-drag=${this.#state.drag}
-				></div>
+				<span class=icon>
+					${sprite_plus}
+				</span>
 
-				<button
-					data-adder
-					title="add new tab"
-					?data-active="${active}"
-					@click=${activate}
-					@dragenter=${nil}
-					@dragover=${nil}
-					@dragleave=${nil}
-					@drop=${nil}>
-
-					<span class=icon>
-						${sprite_plus}
-					</span>
-
-				</button>
-			</div>
-		`
-	}
+			</button>
+		</div>
+	`
 })
 

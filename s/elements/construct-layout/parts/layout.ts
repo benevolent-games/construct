@@ -1,16 +1,10 @@
 
+import {tiles} from "../../../tiles/tiles.js"
+
 export namespace Layout {
 	export type Kind = "cell" | "pane" | "leaf"
 
-	export type LeafName = (
-		| "AdderTile"
-		| "AboutTile"
-		| "ViewportTile"
-		| "OutlinerTile"
-		| "InspectorTile"
-		| "CatalogTile"
-		| "SettingsTile"
-	)
+	export type LeafName = keyof typeof tiles
 
 	export interface Base {
 		kind: Kind

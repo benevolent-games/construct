@@ -1,5 +1,5 @@
 
-import {css} from "lit"
+import {css} from "@benev/slate"
 
 export const size_of_resize_handle_in_rem = 0.2
 

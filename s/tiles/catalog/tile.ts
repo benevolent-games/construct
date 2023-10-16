@@ -1,21 +1,17 @@
 
-import {html, css} from "lit"
-import {ShaleView} from "@benev/slate"
+import {html} from "lit"
 
-import {tile, view} from "../../framework/frontend.js"
+import {tile} from "../tile_parts.js"
+import {obsidian} from "../../context/context.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 
 export const CatalogTile = tile({
 	label: "catalog",
 	icon: sprite_book_open,
-	view: view(_ => class extends ShaleView {
-		static styles = css``
-
-		render() {
-			return html`
-				<p>...catalog...</p>
-			`
-		}
+	view: obsidian({}, () => () => {
+		return html`
+			<p>...catalog...</p>
+		`
 	}),
 })
 
