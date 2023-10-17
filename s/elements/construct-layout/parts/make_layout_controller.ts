@@ -8,10 +8,10 @@ import {default_layout} from "./default_layout.js"
 import {AppContext} from "../../../context/context.js"
 import {LayoutController} from "./layout_controller.js"
 
-export const prep_layout_controller = (
+export const make_layout_controller = (
 		use: UseCarbon<AppContext>,
 		id_booth: IdBooth,
-	) => () => (
+	) => (
 
 	new LayoutController(default_layout, {
 		id_booth,

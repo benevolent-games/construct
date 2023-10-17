@@ -7,9 +7,9 @@ import {render_leaf} from "../leaf.js"
 import {LayoutMeta} from "./layout_meta.js"
 import {Layout} from "../../parts/layout.js"
 
-export const prep_layout_renderer = (
+export function make_layout_renderer(
 		draft: Omit<LayoutMeta, "render_layout">,
-	) => () => {
+	) {
 
 	const meta: LayoutMeta = {...draft, render_layout}
 
