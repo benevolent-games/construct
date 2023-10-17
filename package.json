@@ -18,7 +18,7 @@
 	},
 	"dependencies": {
 		"@benev/nubs": "^0.3.0-dev.1",
-		"@benev/slate": "^0.0.0-dev.8",
+		"@benev/slate": "^0.0.0-dev.11",
 		"@benev/toolbox": "^0.5.0-dev.1",
 		"@chasemoskal/snapstate": "^0.0.9",
 		"@gltf-transform/core": "^3.7.3",
