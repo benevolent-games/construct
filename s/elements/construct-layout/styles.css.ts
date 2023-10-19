@@ -66,6 +66,18 @@ export const styles = css`
 	display: flex;
 	flex-direction: column;
 	background: var(--taskbar);
+	position: relative;
+
+	&[data-drag]::after {
+		content: "";
+		display: block;
+		position: absolute;
+		inset: 0;
+		opacity: 0.1;
+		border: 0.2em dashed var(--bravo);
+		background: color-mix(in srgb, var(--bravo) 25%, transparent 75%);
+		pointer-events: none;
+	}
 
 	> .taskbar {
 		display: flex;

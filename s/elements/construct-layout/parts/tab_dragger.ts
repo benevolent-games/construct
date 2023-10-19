@@ -47,6 +47,19 @@ export class TabDragger {
 			: false
 	}
 
+	is_pane_indicated(path: number[]) {
+		const operation = this.#operation.value
+		// if (operation && operation.proposed_insertion_path) {
+		// 	const coolpath = operation.proposed_insertion_path.slice(0, -1)
+		// 	console.log(path, coolpath)
+		// 	return paths_are_the_same(path, coolpath)
+		// }
+		// else return false
+		return (operation && operation.proposed_insertion_path)
+			? paths_are_the_same(path, operation.proposed_insertion_path.slice(0, -1))
+			: false
+	}
+
 	tab = {
 		start: (source_leaf_path: number[]) =>  (_: DragEvent) => {
 			this.#operation.value = {
@@ -69,6 +82,7 @@ export class TabDragger {
 						).path
 						: [...pane_path, pane.children.length],
 				}
+				// console.log("proposed", this.#operation.value.proposed_insertion_path)
 			}
 		},
 		leave: () => (event: DragEvent) => {
