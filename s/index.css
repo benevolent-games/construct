@@ -19,6 +19,11 @@ html {
 	background: #111;
 	color: #fff8;
 
+	--construct-alpha: yellow;
+	--construct-bravo: lime;
+	--construct-bg-a: #181818;
+	--construct-bg-b: #000;
+
 	&[data-drop-highlight]::before {
 		display: block;
 		position: fixed;
