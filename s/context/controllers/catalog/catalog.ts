@@ -4,19 +4,22 @@ import {Scene} from "@babylonjs/core/scene.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
 import {Graph} from "../graph/graph.js"
+import {context} from "../../context.js"
 import {CatalogState, Glb} from "./parts/types.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
 
 export class Catalog {
+	#graph: Graph
 	#scene: Scene
 	#state: CatalogState
 	readonly state: CatalogState
 
-	constructor(flat: Flat, graph: Graph, scene: Scene) {
+	constructor(graph: Graph, scene: Scene) {
+		this.#graph = graph
 		this.#scene = scene
-		this.#state = flat.state({glbs: []})
+		this.#state = context.flat.state({glbs: []})
 		this.state = Flat.readonly(this.#state)
 	}
 
