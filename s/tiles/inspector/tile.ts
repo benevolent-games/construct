@@ -8,7 +8,7 @@ import {sprite_sliders} from "../../sprites/groups/feather/sliders.js"
 export const InspectorTile = tile({
 	label: "inspector",
 	icon: sprite_sliders,
-	view: obsidian({}, () => () => {
+	view: obsidian({name: "inspector"}, () => () => {
 			return html`
 				<p>...inspector...</p>
 			`

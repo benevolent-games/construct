@@ -9,7 +9,7 @@ import {sprite_info} from "../../sprites/groups/feather/info.js"
 export const AboutTile = tile({
 	label: "about",
 	icon: sprite_info,
-	view: obsidian({styles: styles()}, () => () => {
+	view: obsidian({name: "about", styles: styles()}, () => () => {
 		return html`
 			<div class=logo>
 				${sprite_b}

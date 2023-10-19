@@ -8,7 +8,7 @@ import {sprite_settings} from "../../sprites/groups/feather/settings.js"
 export const SettingsTile = tile({
 	label: "settings",
 	icon: sprite_settings,
-	view: obsidian({}, () => () => {
+	view: obsidian({name: "settings"}, () => () => {
 		return html`
 			<p>...settings...</p>
 		`

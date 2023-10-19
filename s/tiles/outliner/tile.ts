@@ -10,7 +10,7 @@ const styles = css``
 export const OutlinerTile = tile({
 	label: "outliner",
 	icon: sprite_folder,
-	view: obsidian({styles}, () => () => {
+	view: obsidian({name: "outliner", styles}, () => () => {
 		return html`
 			<p>...outliner...</p>
 		`
