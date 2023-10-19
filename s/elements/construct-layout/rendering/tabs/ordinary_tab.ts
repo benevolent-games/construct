@@ -26,10 +26,10 @@ export const OrdinaryTab = quartz(use => ({
 		leaf_index: number
 	}) => {
 
-	const drag = use.signal(false)
 	const {icon, label} = tiles[leaf.tab]
 	const leaf_path = [...pane_path, leaf_index]
 	const active = pane.active_leaf_index === leaf_index
+	const show_drag_indicator = meta.dragger.is_indicated(leaf_path)
 
 	const close = () =>
 		meta.layout.delete_leaf(leaf_path)
@@ -47,10 +47,10 @@ export const OrdinaryTab = quartz(use => ({
 	}
 
 	return html`
-		<div class=tab>
+		<div class=tab data-tab-for-leaf="${leaf.id}">
 			<div
 				class=insert-indicator
-				?data-drag=${drag}
+				?data-drag=${show_drag_indicator}
 			></div>
 
 			<button
@@ -60,12 +60,8 @@ export const OrdinaryTab = quartz(use => ({
 				@click=${click}
 
 				draggable=true
-				@dragstart=${nil}
-				@dragend=${nil}
-				@dragenter=${nil}
-				@dragover=${nil}
-				@dragleave=${nil}
-				@drop=${nil}>
+				@dragstart=${meta.dragger.tab.start(leaf_path)}
+				>
 
 				<span class=icon>
 					${icon}

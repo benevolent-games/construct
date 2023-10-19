@@ -3,18 +3,15 @@ import {UseCarbon, html, render} from "@benev/slate"
 
 import {leaf_slot} from "./leaf_slot.js"
 import {tiles} from "../../../tiles/tiles.js"
-import {IdBooth} from "../../../tools/id_booth.js"
 import {default_layout} from "./default_layout.js"
 import {AppContext} from "../../../context/context.js"
 import {LayoutController} from "./layout_controller.js"
 
 export const make_layout_controller = (
 		use: UseCarbon<AppContext>,
-		id_booth: IdBooth,
 	) => (
 
 	new LayoutController(default_layout, {
-		id_booth,
 		on_change: () => use.rerender(),
 		on_leaf_added: leaf => {
 			const div = document.createElement("div")

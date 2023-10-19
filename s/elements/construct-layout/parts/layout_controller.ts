@@ -4,7 +4,6 @@ import {IdBooth} from "../../../tools/id_booth.js"
 import {find_layout_node} from "./find_layout_node.js"
 
 export interface LayoutControllerOptions {
-	id_booth: IdBooth
 	on_change: () => void
 	on_reset: (layout: LayoutController) => void
 	on_leaf_added: (leaf: Layout.Leaf, path: number[]) => void
@@ -13,6 +12,7 @@ export interface LayoutControllerOptions {
 
 export class LayoutController {
 	#root!: Layout.Cell
+	#id_booth = new IdBooth()
 	#options: LayoutControllerOptions
 	#reset: () => void
 
@@ -58,6 +58,16 @@ export class LayoutController {
 		const parent_pane = this.find(parent(leaf_path)) as Layout.Pane
 		const leaf = this.find(leaf_path) as Layout.Leaf
 		return {leaf, leaf_index, parent_pane}
+	}
+
+	find_leaf_by_id(id: number) {
+		const result = this.list<Layout.Leaf>("leaf")
+			.find(({node}) => node.id === id)
+
+		if (!result)
+			throw new Error(`leaf #${id} not found`)
+
+		return result
 	}
 
 	list<N extends Layout.Node>(kind: N["kind"]) {
@@ -206,7 +216,7 @@ export class LayoutController {
 
 	add_leaf(pane_path: number[], tab: Layout.LeafName) {
 		const {pane} = this.find_pane(pane_path)
-		const id = this.#options.id_booth.next()
+		const id = this.#id_booth.next()
 		const leaf: Layout.Leaf = {id, kind: "leaf", tab}
 		pane.children.push(leaf)
 		const leaf_path = [...pane_path, pane.children.length - 1]
