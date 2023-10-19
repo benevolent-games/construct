@@ -192,23 +192,17 @@ export class LayoutController {
 		}
 
 		if (movement_is_within_same_pane(source_pane, destination_pane)) {
-			if (same_place(source_index, destination_index))
-				return
-
-			if (movement_is_forward(source_index, destination_index)) {
+			if (!same_place(source_index, destination_index))
 				maintain_which_leaf_is_active(source_pane, () => {
-					insert_at_destination()
-					delete_at_source()
+					if (movement_is_forward(source_index, destination_index)) {
+						insert_at_destination()
+						delete_at_source()
+					}
+					else {
+						delete_at_source()
+						insert_at_destination()
+					}
 				})
-				this.#options.on_change()
-			}
-			else {
-				maintain_which_leaf_is_active(source_pane, () => {
-					delete_at_source()
-					insert_at_destination()
-				})
-				this.#options.on_change()
-			}
 		}
 		else {
 			if (leaf_is_active) {
@@ -223,8 +217,9 @@ export class LayoutController {
 			maintain_which_leaf_is_active(source_pane, () => {
 				delete_at_source()
 			})
-			this.#options.on_change()
 		}
+
+		this.#options.on_change()
 	}
 
 	add_leaf(pane_path: number[], tab: Layout.LeafName) {
