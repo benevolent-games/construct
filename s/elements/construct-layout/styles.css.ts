@@ -10,18 +10,19 @@ export const styles = css`
 	width: 100%;
 	height: 100%;
 
-	--alpha: var(--construct-alpha, yellow);
-	--bravo: var(--construct-bravo, lime);
+	--alpha: var(--construct-alpha);
+	--bravo: var(--construct-bravo);
+	--bg-a: var(--construct-bg-a);
+	--bg-b: var(--construct-bg-b);
+}
 
-	--bg-a: var(--construct-bg-a, #181818);
-	--bg-b: var(--construct-bg-b, #000);
+:host {
+	--resizer: var(--bg-b);
+	--taskbar: var(--bg-a);
+	--xxx-taskbar: color-mix(in srgb, var(--bg-a), var(--bg-b) 10%);
 
-	--resizer: var(--construct-resize, var(--bg-b));
-	--taskbar: var(--construct-resize, var(--bg-a));
-	/* --taskbar: var(--construct-resize, color-mix(in srgb, var(--bg-a), var(--bg-b) 10%)); */
-
-	--tab: var(--construct-resize, transparent);
-	--pane: var(--construct-resize, var(--bg-a));
+	--tab: transparent;
+	--pane: var(--bg-a);
 }
 
 .layout {
@@ -66,6 +67,18 @@ export const styles = css`
 	display: flex;
 	flex-direction: column;
 	background: var(--taskbar);
+	position: relative;
+
+	&[data-drag]::after {
+		content: "";
+		display: block;
+		position: absolute;
+		inset: 0;
+		opacity: 0.1;
+		border: 0.2em dashed var(--bravo);
+		background: color-mix(in srgb, var(--bravo) 25%, transparent 75%);
+		pointer-events: none;
+	}
 
 	> .taskbar {
 		display: flex;

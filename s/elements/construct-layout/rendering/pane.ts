@@ -20,7 +20,14 @@ export const render_pane = (meta: LayoutMeta) => (
 
 	<div
 		class=pane
-		style="${sizing_styles(node.size)}">
+		style="${sizing_styles(node.size)}"
+		?data-drag=${meta.dragger.is_pane_indicated(pane_path)}
+		@dragenter=${meta.dragger.pane.enter(node, pane_path)}
+		@dragleave=${meta.dragger.pane.leave()}
+		@dragover=${meta.dragger.pane.over()}
+		@dragend=${meta.dragger.pane.end()}
+		@drop=${meta.dragger.pane.drop()}
+		>
 
 		<div class=taskbar>
 			<div class=tabs>

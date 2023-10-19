@@ -47,7 +47,11 @@ export class AppContext extends Context {
 	`
 }
 
-export const {carbon, oxygen, obsidian, quartz} = prepare_frontend(new AppContext)
+export const context = new AppContext()
+
+export const {carbon, oxygen, obsidian, quartz} = (
+	prepare_frontend(context)
+)
 
 // import {BaseContext, Flat} from "@benev/slate"
 
