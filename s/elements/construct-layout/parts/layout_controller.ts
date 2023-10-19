@@ -181,35 +181,48 @@ export class LayoutController {
 		const {pane: destination_pane} = this.find_pane(to.slice(0, -1))
 		const source_index = from.at(-1)!
 		const destination_index = to.at(-1)!
+		const leaf_is_active = leaf === get_active_leaf(source_pane)
 
 		const delete_at_source = () => {
 			source_pane.children.splice(source_index, 1)
-			ensure_active_index_is_in_safe_range(source_pane)
 		}
 
 		const insert_at_destination = () => {
 			destination_pane.children.splice(destination_index, 0, leaf)
-			destination_pane.active_leaf_index = destination_index
 		}
 
-		if (source_pane === destination_pane) {
-			if (source_index === destination_index || source_index === (destination_index - 1)) {
+		if (movement_is_within_same_pane(source_pane, destination_pane)) {
+			if (same_place(source_index, destination_index))
 				return
-			}
-			if (source_index < destination_index) {
-				insert_at_destination()
-				delete_at_source()
+
+			if (movement_is_forward(source_index, destination_index)) {
+				maintain_which_leaf_is_active(source_pane, () => {
+					insert_at_destination()
+					delete_at_source()
+				})
 				this.#options.on_change()
 			}
 			else {
-				delete_at_source()
-				insert_at_destination()
+				maintain_which_leaf_is_active(source_pane, () => {
+					delete_at_source()
+					insert_at_destination()
+				})
 				this.#options.on_change()
 			}
 		}
 		else {
-			insert_at_destination()
-			delete_at_source()
+			if (leaf_is_active) {
+				insert_at_destination()
+				destination_pane.active_leaf_index = destination_index
+			}
+			else {
+				maintain_which_leaf_is_active(destination_pane, () => {
+					insert_at_destination()
+				})
+			}
+			maintain_which_leaf_is_active(source_pane, () => {
+				delete_at_source()
+			})
 			this.#options.on_change()
 		}
 	}
@@ -234,6 +247,60 @@ export class LayoutController {
 
 // utils
 
+function movement_is_within_same_pane(
+		source_pane: Layout.Pane,
+		destination_pane: Layout.Pane,
+	) {
+	return source_pane === destination_pane
+}
+
+function same_place(
+		source_index: number,
+		destination_index: number,
+	) {
+	return (
+		source_index === destination_index ||
+		source_index === (destination_index - 1)
+	)
+}
+
+function movement_is_forward(
+		source_index: number,
+		destination_index: number,
+	) {
+	return source_index < destination_index
+}
+
+function get_active_leaf(pane: Layout.Pane) {
+	return pane.active_leaf_index !== undefined
+		? pane.children[pane.active_leaf_index]
+		: undefined
+}
+
+function maintain_which_leaf_is_active(pane: Layout.Pane, fun: () => void) {
+	const reapply = remember_which_leaf_is_active(pane)
+	fun()
+	reapply()
+}
+
+function remember_which_leaf_is_active(pane: Layout.Pane) {
+	const original_index = pane.active_leaf_index
+	const active_leaf_id = get_active_leaf(pane)?.id
+
+	return () => {
+		if (active_leaf_id === undefined)
+			pane.active_leaf_index = undefined
+		else {
+			const new_index = pane.children
+				.findIndex(leaf => leaf.id === active_leaf_id)
+			pane.active_leaf_index = (new_index === -1)
+				? original_index
+				: new_index
+			ensure_active_index_is_in_safe_range(pane)
+		}
+	}
+}
+
 function parent(path: number[]) {
 	return path.slice(0, path.length - 1)
 }
@@ -245,7 +312,7 @@ function clear_size_of_last_child(node: Layout.Cell) {
 }
 
 function ensure_active_index_is_in_safe_range(pane: Layout.Pane) {
-	return pane.active_leaf_index = pane.active_leaf_index === undefined
+	pane.active_leaf_index = pane.active_leaf_index === undefined
 		? undefined
 		: pane.active_leaf_index > (pane.children.length - 1)
 			? undefined
