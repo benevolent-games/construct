@@ -2,34 +2,11 @@
 import {Layout} from "./layout.js"
 import {context} from "../../../context/context.js"
 import {LayoutController} from "./layout_controller.js"
+import {is_within, paths_are_the_same} from "./drag_utils.js"
 
 export type TabDragOperation = {
 	source_leaf_path: number[]
 	proposed_insertion_path: undefined | number[]
-}
-
-function is_within(target: EventTarget | null, selector: string): HTMLElement | undefined {
-	let node = target as HTMLElement | null
-
-	while (node) {
-		if (node.matches && node.matches(selector))
-			return node
-
-		node = node.parentElement
-	}
-
-	return undefined
-}
-
-function paths_are_the_same(a: number[], b: number[]) {
-	if (a.length === b.length) {
-		for (let i = 0; i < a.length; i++) {
-			if (a[i] !== b[i])
-				return false
-		}
-		return true
-	}
-	return false
 }
 
 export class TabDragger {
@@ -49,12 +26,6 @@ export class TabDragger {
 
 	is_pane_indicated(path: number[]) {
 		const operation = this.#operation.value
-		// if (operation && operation.proposed_insertion_path) {
-		// 	const coolpath = operation.proposed_insertion_path.slice(0, -1)
-		// 	console.log(path, coolpath)
-		// 	return paths_are_the_same(path, coolpath)
-		// }
-		// else return false
 		return (operation && operation.proposed_insertion_path)
 			? paths_are_the_same(path, operation.proposed_insertion_path.slice(0, -1))
 			: false
@@ -82,7 +53,6 @@ export class TabDragger {
 						).path
 						: [...pane_path, pane.children.length],
 				}
-				// console.log("proposed", this.#operation.value.proposed_insertion_path)
 			}
 		},
 		leave: () => (event: DragEvent) => {
