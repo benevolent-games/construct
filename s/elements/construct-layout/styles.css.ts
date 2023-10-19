@@ -167,7 +167,7 @@ export const styles = css`
 		&[data-drag] { opacity: 1; }
 	}
 
-	button {
+	& button {
 		display: flex;
 		align-items: center;
 
