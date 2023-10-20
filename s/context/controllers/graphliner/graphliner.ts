@@ -114,7 +114,7 @@ export class Graphliner {
 		this.#update()
 	}
 
-	history = new Historian({
+	historian = new Historian({
 		add: actionHandlers<Action.Add>({
 			do: action => this.#add(action.changes),
 			undo: action => this.#delete(action.changes),
@@ -134,8 +134,8 @@ export class Graphliner {
 	})
 
 	add(...changes: ItemChange[]) {
-		this.history.dispatch<Action.Add>({
-			id: this.history.new_action_id,
+		this.historian.dispatch<Action.Add>({
+			id: this.historian.new_action_id,
 			purpose: "add",
 			changes,
 			label: (changes.length > 1 || changes.length === 0)
@@ -145,8 +145,8 @@ export class Graphliner {
 	}
 
 	delete(...changes: ItemChange[]) {
-		this.history.dispatch<Action.Delete>({
-			id: this.history.new_action_id,
+		this.historian.dispatch<Action.Delete>({
+			id: this.historian.new_action_id,
 			purpose: "delete",
 			changes,
 			label: (changes.length > 1 || changes.length === 0)
@@ -156,8 +156,8 @@ export class Graphliner {
 	}
 
 	select(...itemIds: Id[]) {
-		this.history.dispatch<Action.Select>({
-			id: this.history.new_action_id,
+		this.historian.dispatch<Action.Select>({
+			id: this.historian.new_action_id,
 			purpose: "select",
 			itemIds,
 			label: (itemIds.length > 1 || itemIds.length === 0)
@@ -167,8 +167,8 @@ export class Graphliner {
 	}
 
 	deselect(...itemIds: Id[]) {
-		this.history.dispatch({
-			id: this.history.new_action_id,
+		this.historian.dispatch({
+			id: this.historian.new_action_id,
 			purpose: "deselect",
 			itemIds,
 			label: (itemIds.length > 1 || itemIds.length === 0)

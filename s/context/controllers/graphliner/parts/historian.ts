@@ -1,14 +1,17 @@
 
+import {context} from "../../../context.js"
 import {Action, ActionHandlers} from "./types.js"
 
 export type Handlers = {
 	[P in Action.Purpose]: ActionHandlers<any>
 }
 
+const memory_limit = 1024
+
 export class Historian<H extends Handlers> {
 	#handlers: H
-	#past: Action.Unknown[] = []
-	#future: Action.Unknown[] = []
+	#past = context.tower.signal<Action.Unknown[]>([])
+	#future = context.tower.signal<Action.Unknown[]>([])
 	#action_count = 0
 
 	constructor(handlers: H) {
@@ -16,29 +19,77 @@ export class Historian<H extends Handlers> {
 	}
 
 	get new_action_id() {
-		return this.#action_count
+		return this.#action_count++
+	}
+
+	get past() {
+		return [...this.#past.value]
+	}
+
+	get future() {
+		return [...this.#future.value]
 	}
 
 	dispatch<A extends Action.Unknown>(action: A) {
-		this.#handlers[action.purpose].do(action)
-		this.#future = []
-		this.#past.push(action)
+		this.#do_action(action)
+		this.#wipe_the_future()
+		this.#add_to_past(action)
 	}
 
 	undo() {
-		if (this.#past.length > 0) {
-			const action = this.#past.pop()!
-			this.#future.push(action)
-			this.#handlers[action.purpose].undo(action)
-		}
+		const action = this.#step_backward()
+		if (action)
+			this.#rollback_action(action)
 	}
 
 	redo() {
-		if (this.#future.length > 0) {
-			const action = this.#future.pop()!
-			this.#past.push(action)
-			this.#handlers[action.purpose].do(action)
-		}
+		const action = this.#step_forward()
+		if (action)
+			this.#do_action(action)
+	}
+
+	//
+	// utilities
+	//
+
+	#do_action(action: Action.Unknown) {
+		this.#handlers[action.purpose].do(action)
+	}
+
+	#rollback_action(action: Action.Unknown) {
+		this.#handlers[action.purpose].undo(action)
+	}
+
+	#wipe_the_future() {
+		this.#future.value = []
+	}
+
+	#add_to_past(action: Action.Unknown) {
+		const new_past = [...this.#past.value, action]
+		while (new_past.length > memory_limit)
+			new_past.shift()
+		this.#past.value = new_past
+	}
+
+	#add_to_future(action: Action.Unknown) {
+		const new_future = [...this.#future.value, action]
+		this.#future.value = new_future
+	}
+
+	#step_backward() {
+		const action = this.#past.value.pop()
+		this.#past.publish()
+		if (action)
+			this.#add_to_future(action)
+		return action
+	}
+
+	#step_forward() {
+		const action = this.#future.value.pop()
+		this.#future.publish()
+		if (action)
+			this.#add_to_past(action)
+		return action
 	}
 }
 
