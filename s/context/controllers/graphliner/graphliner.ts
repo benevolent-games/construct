@@ -1,9 +1,8 @@
 
-import {pub} from "@benev/slate"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {context} from "../../context.js"
-import {PropRef} from "../catalog/parts/types.js"
+import {Action, Id, Item} from "./parts/types.js"
 
 export class Graphliner {
 	#root = context.tower.signal<Item.Folder>({
@@ -15,10 +14,8 @@ export class Graphliner {
 	})
 
 	#index = context.tower.computed(() => {
-		const reports: {
-			item: Item.Whatever
-			parent: Item.Folder
-		}[] = []
+		const root = this.#root.value
+		const reports: Item.Report[] = []
 
 		function recurse(
 				item: Item.Whatever,
@@ -30,14 +27,24 @@ export class Graphliner {
 					recurse(child, item)
 		}
 
-		for (const item of this.#root.value.children)
-			recurse(item, this.#root.value)
+		for (const item of root.children)
+			recurse(item, root)
 
 		const items = reports.map(report => report.item)
-		const folders = items.filter(item => item.kind === "folder")
-		const instances = items.filter(item => item.kind === "instance")
-		const lights = items.filter(item => item.kind === "light")
-		const selected = items.filter(item => item.selected)
+
+		const folders = [
+			root,
+			...items.filter(item => item.kind === "folder"),
+		] as Item.Folder[]
+
+		const instances = items
+			.filter(item => item.kind === "instance") as Item.Instance[]
+
+		const lights = items
+			.filter(item => item.kind === "light") as Item.Light[]
+
+		const selected = items
+			.filter(item => item.selected) as Item.Whatever[]
 
 		return {reports, items, folders, instances, lights, selected}
 	})
@@ -61,80 +68,93 @@ export class Graphliner {
 		return this.reports.find(report => report.item.id === id)
 	}
 
-	events = {
-		added: pub<Item.Whatever>(),
-		deleted: pub<Item.Whatever>(),
-		selected: pub<Item.Whatever>(),
-		deselected: pub<Item.Whatever>(),
+	find_folder(id: Id) {
+		return this.folders.find(folder => folder.id === id)
 	}
 
-	add(parent: Item.Folder, draft: Omit<Item.Whatever, "id">) {
-		const item = {...draft, id: generateId()} as Item.Whatever
-		parent.children.push(item)
-		this.events.added.publish(item)
+	#history: Action.Unknown[] = []
+
+	act(action: Action.Unknown) {
+		this.#history.push(action)
+	}
+
+	#add(parentId: Id, draft: Omit<Item.Whatever, "id">) {
+		const item = {
+			...draft,
+			id: generateId(),
+		} as Item.Whatever
+
+		const folder = this.find_folder(parentId)
+
+		if (!folder)
+			throw new Error("folder not found")
+
+		folder.children.push(item)
 		this.#update()
 	}
 
-	delete(id: Id) {
-		const found = this.find(id)
-		if (found) {
-			found.parent.children = (
-				found.parent.children.filter(item => item.id !== id)
-			)
-			this.events.deleted.publish(found.item)
-			this.#update()
+	#delete(itemIds: Id[]) {
+		for (const id of itemIds) {
+			const found = this.find(id)
+			if (found) {
+				found.parent.children = (
+					found.parent.children.filter(item => item.id !== id)
+				)
+			}
 		}
+		this.#update()
 	}
 
-	select(id: Id) {
-		const found = this.find(id)
-		if (found) {
-			found.item.selected = true
-			this.events.selected.publish(found.item)
-			this.#update()
-		}
+	actions = {
+		add: Action.actors<Action.AddAction>({
+			do: action => {},
+			undo: action => {},
+			// do: action => this.#add(action.parentId, action.draft),
+			// undo: action => this.#delete([action]),
+		}),
+		delete: Action.actors<Action.DeleteAction>({
+			do: action => {},
+			undo: action => {},
+		}),
+		select: Action.actors<Action.SelectAction>({
+			do: action => {},
+			undo: action => {},
+		}),
+		deselect: Action.actors<Action.DeselectAction>({
+			do: action => {},
+			undo: action => {},
+		}),
 	}
 
-	deselect(id: Id) {
-		const found = this.find(id)
-		if (found) {
-			found.item.selected = false
-			this.events.deselected.publish(found.item)
-			this.#update()
-		}
-	}
+	// add<I extends Item.Whatever>(parent: Item.Folder, draft: Omit<I, "id">) {
+	// 	const item = {...draft, id: generateId()} as Item.Whatever
+	// 	parent.children.push(item)
+	// 	this.#update()
+	// }
+
+	// delete(id: Id) {
+	// 	const found = this.find(id)
+	// 	if (found) {
+	// 		found.parent.children = (
+	// 			found.parent.children.filter(item => item.id !== id)
+	// 		)
+	// 		this.#update()
+	// 	}
+	// }
+
+	// select(id: Id) {
+	// 	const found = this.find(id)
+	// 	if (found) {
+	// 		found.item.selected = true
+	// 		this.#update()
+	// 	}
+	// }
+
+	// deselect(id: Id) {
+	// 	const found = this.find(id)
+	// 	if (found) {
+	// 		found.item.selected = false
+	// 		this.#update()
+	// 	}
+	// }
 }
-
-// utils
-
-export type Id = string
-
-export namespace Item {
-	export type Kind = "folder" | "instance" | "light"
-
-	export interface Base {
-		kind: Kind
-		id: Id
-		selected: boolean
-	}
-
-	export interface Folder extends Base {
-		kind: "folder"
-		name: string
-		children: Whatever[]
-	}
-
-	export interface Instance extends Base {
-		kind: "instance"
-		name: string
-		ref: PropRef
-	}
-
-	export interface Light extends Base {
-		kind: "light"
-		name: string
-	}
-
-	export type Whatever = Folder | Instance | Light
-}
-

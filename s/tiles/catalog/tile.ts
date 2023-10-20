@@ -32,10 +32,11 @@ export const CatalogTile = tile({
 	}),
 })
 
-function add_to_graph(prop: GlbProp) {
-	return () => context.graph.add({
+function instance_into_world(prop: GlbProp) {
+	return () => context.graphliner.add(context.graphliner.root, {
+		kind: "instance",
 		name: prop.name,
-		node: prop.top_lod.node,
+		selected: false,
 	})
 }
 
@@ -65,7 +66,7 @@ function render_glb_props(props: GlbProp[]) {
 		<ol class=glb-props>
 			${sorted.map(prop => html`
 				<li data-type="${proptype(prop)}">
-					<button @click=${add_to_graph(prop)}>
+					<button @click=${instance_into_world(prop)}>
 						${prop.name}
 					</button>
 				</li>

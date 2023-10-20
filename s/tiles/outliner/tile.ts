@@ -5,13 +5,14 @@ import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
 import {obsidian} from "../../context/context.js"
 import {sprite_folder} from "../../sprites/groups/feather/folder.js"
-import {Item} from "../../context/controllers/outliner/parts/item.js"
+import {Item} from "../../context/controllers/graphliner/graphliner.js"
+import { generateId } from "@benev/toolbox/x/utils/generate-id.js"
 
 export const OutlinerTile = tile({
 	label: "outliner",
 	icon: sprite_folder,
 	view: obsidian({name: "outliner", styles}, use => () => {
-		const {outliner} = use.context
+		const {graphliner} = use.context
 
 		function render_item(item: Item.Whatever): TemplateResult {
 			switch (item.kind) {
@@ -20,24 +21,28 @@ export const OutlinerTile = tile({
 					<li>
 						<button class=icon>[folder]</button>
 						<span class=name>${item.name}</span>
-						<button class=visible>${item.visible}</button>
+						<button class=newfolder @click=${() => {
+							graphliner.add(item, {
+								kind: "folder",
+								name: `new folder ${generateId().slice(0, 5)}`,
+								selected: false,
+							})
+						}}>+</button>
 						<ol>
 							${item.children.map(item => render_item(item))}
 						</ol>
 					</li>
 				`
 
-				case "prop": return html`
+				case "instance": return html`
 					<li>
 						<span class=name>${item.name}</span>
-						<button class=visible>${item.visible}</button>
 					</li>
 				`
 
 				case "light": return html`
 					<li>
 						<span class=name>${item.name}</span>
-						<button class=visible>${item.visible}</button>
 					</li>
 				`
 
@@ -48,7 +53,7 @@ export const OutlinerTile = tile({
 
 		return html`
 			<ol>
-				${render_item(outliner.root)}
+				${render_item(graphliner.root)}
 			</ol>
 		`
 	}),
