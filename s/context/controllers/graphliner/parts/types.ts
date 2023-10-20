@@ -1,5 +1,5 @@
 
-import {PropRef} from "../../catalog/parts/types.js"
+import {GlbRef, PropRef} from "../../catalog/parts/types.js"
 
 export type Id = string
 
@@ -10,6 +10,7 @@ export namespace Item {
 		kind: Kind
 		id: Id
 		selected: boolean
+		name: string
 	}
 
 	export interface Folder extends Base {
@@ -21,7 +22,7 @@ export namespace Item {
 	export interface Instance extends Base {
 		kind: "instance"
 		name: string
-		ref: PropRef
+		glb: GlbRef
 	}
 
 	export interface Light extends Base {
@@ -30,11 +31,16 @@ export namespace Item {
 	}
 
 	export type Whatever = Folder | Instance | Light
+}
 
-	export type Report = {
-		item: Whatever
-		parent: Folder
-	}
+export type ItemReport = {
+	item: Item.Whatever
+	parent: Item.Folder
+}
+
+export type ItemChange = {
+	folderId: Id
+	item: Item.Whatever
 }
 
 export namespace Action {
@@ -43,43 +49,44 @@ export namespace Action {
 	export interface Base {
 		id: number
 		purpose: Purpose
+		label: string
 	}
 
-	export interface AddAction<I extends Item.Whatever = Item.Whatever> extends Base {
+	export interface Add extends Base {
 		purpose: "add"
-		parentId: Id
-		draft: Omit<I, "id">
+		changes: ItemChange[]
 	}
 
-	export interface DeleteAction extends Base {
+	export interface Delete extends Base {
 		purpose: "delete"
-		itemIds: Id[]
+		changes: ItemChange[]
 	}
 
-	export interface SelectAction extends Base {
+	export interface Select extends Base {
 		purpose: "select"
 		itemIds: Id[]
 	}
 
-	export interface DeselectAction extends Base {
+	export interface Deselect extends Base {
 		purpose: "deselect"
 		itemIds: Id[]
 	}
 
 	export type Unknown = (
-		| AddAction<Item.Whatever>
-		| DeleteAction
-		| SelectAction
-		| DeselectAction
+		| Add
+		| Delete
+		| Select
+		| Deselect
 	)
+}
 
-	export type Actors<A extends Unknown> = {
-		do: (action: A) => void
-		undo: (action: A) => void
-	}
+export type ActionHandlers<A extends Action.Unknown> = {
+	do: (action: A) => void
+	undo: (action: A) => void
+}
 
-	export function actors<A extends Unknown>(a: Actors<A>) {
-		return a
-	}
+export function actionHandlers<A extends Action.Unknown>(
+	a: ActionHandlers<A>) {
+	return a
 }
 

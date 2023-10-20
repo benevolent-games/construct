@@ -6,6 +6,7 @@ import {tile} from "../tile_parts.js"
 import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {context, obsidian} from "../../context/context.js"
+import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 
@@ -24,7 +25,7 @@ export const CatalogTile = tile({
 					<div class=glb>
 						<h3>${glb.name}</h3>
 						${render_glb_stats(glb)}
-						${render_glb_props(glb.props)}
+						${render_glb_props(glb)}
 					</div>
 				`)}
 			</div>
@@ -32,11 +33,16 @@ export const CatalogTile = tile({
 	}),
 })
 
-function instance_into_world(prop: GlbProp) {
-	return () => context.graphliner.add(context.graphliner.root, {
-		kind: "instance",
-		name: prop.name,
-		selected: false,
+function instance_into_world(glb: Glb, prop: GlbProp) {
+	return () => context.graphliner.add({
+		folderId: context.graphliner.root.id,
+		item: {
+			id: generateId(),
+			kind: "instance",
+			selected: false,
+			name: prop.name,
+			glb: {hash: glb.hash, name: glb.name},
+		},
 	})
 }
 
@@ -52,8 +58,8 @@ function render_glb_stats({size, container}: Glb) {
 	`
 }
 
-function render_glb_props(props: GlbProp[]) {
-	const sorted = props
+function render_glb_props(glb: Glb) {
+	const sorted = glb.props
 		.sort((a, b) => a.name.localeCompare(b.name))
 
 	const proptype = (prop: GlbProp) => (
@@ -66,7 +72,7 @@ function render_glb_props(props: GlbProp[]) {
 		<ol class=glb-props>
 			${sorted.map(prop => html`
 				<li data-type="${proptype(prop)}">
-					<button @click=${instance_into_world(prop)}>
+					<button @click=${instance_into_world(glb, prop)}>
 						${prop.name}
 					</button>
 				</li>

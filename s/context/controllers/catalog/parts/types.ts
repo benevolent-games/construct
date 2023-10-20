@@ -3,6 +3,11 @@ import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
+export type GlbRef = {
+	hash: string
+	name: string
+}
+
 export type Glb = {
 	hash: string
 	name: string
@@ -17,11 +22,6 @@ export type GlbProp = {
 	first_lod_index: number
 	top_lod: LOD
 	collision: undefined | PropNode
-}
-
-export type GlbRef = {
-	hash: string
-	name: string
 }
 
 export type PropRef = {

@@ -2,7 +2,8 @@
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {context} from "../../context.js"
-import {Action, Id, Item} from "./parts/types.js"
+import {Historian} from "./parts/historian.js"
+import {Action, Id, Item, ItemChange, ItemReport, actionHandlers} from "./parts/types.js"
 
 export class Graphliner {
 	#root = context.tower.signal<Item.Folder>({
@@ -15,7 +16,7 @@ export class Graphliner {
 
 	#index = context.tower.computed(() => {
 		const root = this.#root.value
-		const reports: Item.Report[] = []
+		const reports: ItemReport[] = []
 
 		function recurse(
 				item: Item.Whatever,
@@ -64,97 +65,116 @@ export class Graphliner {
 	get lights() { return this.#index.value.lights }
 	get selected() { return this.#index.value.selected }
 
-	find(id: Id) {
-		return this.reports.find(report => report.item.id === id)
+	// #get_item_report(id: Id) {
+	// 	const report = this.reports.find(report => report.item.id === id)
+	// 	if (!report)
+	// 		throw new Error(`item report not found ${id}`)
+	// 	return report
+	// }
+
+	#get_item(id: Id) {
+		const item = this.items.find(item => item.id === id)
+		if (!item)
+			throw new Error(`item not found ${id}`)
+		return item
 	}
 
-	find_folder(id: Id) {
-		return this.folders.find(folder => folder.id === id)
-	}
-
-	#history: Action.Unknown[] = []
-
-	act(action: Action.Unknown) {
-		this.#history.push(action)
-	}
-
-	#add(parentId: Id, draft: Omit<Item.Whatever, "id">) {
-		const item = {
-			...draft,
-			id: generateId(),
-		} as Item.Whatever
-
-		const folder = this.find_folder(parentId)
-
+	#get_folder(id: Id) {
+		const folder = this.folders.find(folder => folder.id === id)
 		if (!folder)
-			throw new Error("folder not found")
-
-		folder.children.push(item)
-		this.#update()
+			throw new Error(`folder not found ${id}`)
+		return folder
 	}
 
-	#delete(itemIds: Id[]) {
-		for (const id of itemIds) {
-			const found = this.find(id)
-			if (found) {
-				found.parent.children = (
-					found.parent.children.filter(item => item.id !== id)
-				)
-			}
+	#add(changes: ItemChange[]) {
+		for (const {folderId, item} of changes) {
+			const folder = this.#get_folder(folderId)
+			folder.children.push(item)
 		}
 		this.#update()
 	}
 
-	actions = {
-		add: Action.actors<Action.AddAction>({
-			do: action => {},
-			undo: action => {},
-			// do: action => this.#add(action.parentId, action.draft),
-			// undo: action => this.#delete([action]),
-		}),
-		delete: Action.actors<Action.DeleteAction>({
-			do: action => {},
-			undo: action => {},
-		}),
-		select: Action.actors<Action.SelectAction>({
-			do: action => {},
-			undo: action => {},
-		}),
-		deselect: Action.actors<Action.DeselectAction>({
-			do: action => {},
-			undo: action => {},
-		}),
+	#delete(changes: ItemChange[]) {
+		for (const {folderId, item} of changes) {
+			const folder = this.#get_folder(folderId)
+			folder.children = folder.children.filter(child => child.id !== item.id)
+		}
+		this.#update()
 	}
 
-	// add<I extends Item.Whatever>(parent: Item.Folder, draft: Omit<I, "id">) {
-	// 	const item = {...draft, id: generateId()} as Item.Whatever
-	// 	parent.children.push(item)
-	// 	this.#update()
-	// }
+	#select(itemIds: Id[]) {
+		for (const id of itemIds)
+			this.#get_item(id).selected = true
+		this.#update()
+	}
 
-	// delete(id: Id) {
-	// 	const found = this.find(id)
-	// 	if (found) {
-	// 		found.parent.children = (
-	// 			found.parent.children.filter(item => item.id !== id)
-	// 		)
-	// 		this.#update()
-	// 	}
-	// }
+	#deselect(itemIds: Id[]) {
+		for (const id of itemIds)
+			this.#get_item(id).selected = false
+		this.#update()
+	}
 
-	// select(id: Id) {
-	// 	const found = this.find(id)
-	// 	if (found) {
-	// 		found.item.selected = true
-	// 		this.#update()
-	// 	}
-	// }
+	history = new Historian({
+		add: actionHandlers<Action.Add>({
+			do: action => this.#add(action.changes),
+			undo: action => this.#delete(action.changes),
+		}),
+		delete: actionHandlers<Action.Delete>({
+			do: action => this.#delete(action.changes),
+			undo: action => this.#add(action.changes),
+		}),
+		select: actionHandlers<Action.Select>({
+			do: action => this.#select(action.itemIds),
+			undo: action => this.#deselect(action.itemIds),
+		}),
+		deselect: actionHandlers<Action.Deselect>({
+			do: action => this.#deselect(action.itemIds),
+			undo: action => this.#select(action.itemIds),
+		}),
+	})
 
-	// deselect(id: Id) {
-	// 	const found = this.find(id)
-	// 	if (found) {
-	// 		found.item.selected = false
-	// 		this.#update()
-	// 	}
-	// }
+	add(...changes: ItemChange[]) {
+		this.history.dispatch<Action.Add>({
+			id: this.history.new_action_id,
+			purpose: "add",
+			changes,
+			label: (changes.length > 1 || changes.length === 0)
+				? `add ${changes.length} items`
+				: `add ${changes[0].item.name}`
+		})
+	}
+
+	delete(...changes: ItemChange[]) {
+		this.history.dispatch<Action.Delete>({
+			id: this.history.new_action_id,
+			purpose: "delete",
+			changes,
+			label: (changes.length > 1 || changes.length === 0)
+				? `delete ${changes.length} items`
+				: `delete ${changes[0].item.name}`
+		})
+	}
+
+	select(...itemIds: Id[]) {
+		this.history.dispatch<Action.Select>({
+			id: this.history.new_action_id,
+			purpose: "select",
+			itemIds,
+			label: (itemIds.length > 1 || itemIds.length === 0)
+				? `select ${itemIds.length} items`
+				: `select ${this.#get_item(itemIds[0]).name}`
+		})
+	}
+
+	deselect(...itemIds: Id[]) {
+		this.history.dispatch({
+			id: this.history.new_action_id,
+			purpose: "deselect",
+			itemIds,
+			label: (itemIds.length > 1 || itemIds.length === 0)
+				? `deselect ${itemIds.length} items`
+				: `deselect ${this.#get_item(itemIds[0]).name}`
+		})
+	}
 }
+

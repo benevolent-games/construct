@@ -1,12 +1,12 @@
 
 import {TemplateResult, html} from "@benev/slate"
+import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
 import {obsidian} from "../../context/context.js"
 import {sprite_folder} from "../../sprites/groups/feather/folder.js"
-import {Item} from "../../context/controllers/graphliner/graphliner.js"
-import { generateId } from "@benev/toolbox/x/utils/generate-id.js"
+import {Item} from "../../context/controllers/graphliner/parts/types.js"
 
 export const OutlinerTile = tile({
 	label: "outliner",
@@ -22,10 +22,16 @@ export const OutlinerTile = tile({
 						<button class=icon>[folder]</button>
 						<span class=name>${item.name}</span>
 						<button class=newfolder @click=${() => {
-							graphliner.add(item, {
-								kind: "folder",
-								name: `new folder ${generateId().slice(0, 5)}`,
-								selected: false,
+							const new_id = generateId()
+							graphliner.add({
+								folderId: item.id,
+								item: {
+									kind: "folder",
+									id: new_id,
+									name: `new folder ${new_id.slice(0, 5)}`,
+									selected: false,
+									children: [],
+								},
 							})
 						}}>+</button>
 						<ol>

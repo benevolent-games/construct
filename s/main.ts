@@ -18,5 +18,7 @@ drag_and_drop(document.documentElement, async list => {
 
 register_to_dom({ConstructLayout})
 
+;(window as any).context = context
+
 console.log("🎨")
 
