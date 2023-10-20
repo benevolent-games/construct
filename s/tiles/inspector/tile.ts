@@ -10,9 +10,9 @@ export const InspectorTile = tile({
 	label: "inspector",
 	icon: sprite_sliders,
 	view: obsidian({name: "inspector", styles}, () => () => {
-			return html`
-				<h1>inspector</h1>
-			`
+		return html`
+			<h1>inspector</h1>
+		`
 	}),
 })
 
