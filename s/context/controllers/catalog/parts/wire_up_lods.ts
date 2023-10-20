@@ -1,9 +1,9 @@
 
 import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 
-import {AssetProp, lod_distances} from "./types.js"
+import {GlbProp, lod_distances} from "./types.js"
 
-export function wire_up_lods(props: AssetProp[]) {
+export function wire_up_lods(props: GlbProp[]) {
 	for (const prop of props) {
 		const top_lod = prop.lods[prop.first_lod_index]
 

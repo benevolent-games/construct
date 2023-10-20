@@ -6,13 +6,24 @@ import {Id, Unit} from "./parts/types.js"
 
 export class Graph {
 	#units = new Map<Id, Unit>()
-	#selection = new Set<Id>
+	#selection = new Set<Id>()
 
 	on = {
 		added: pub<[Id, Unit]>(),
 		removed: pub<Id>(),
+
 		selected: pub<Id>(),
 		deselected: pub<Id>(),
+
+		visible: pub<Id>(),
+		invisible: pub<Id>(),
+	}
+
+	listen(listeners: {[P in keyof typeof this.on]: Parameters<typeof this.on[P]>[0]}) {
+		const unsubs: (() => void)[] = []
+		for (const [name, listener] of Object.entries(listeners))
+			this.on[name as keyof typeof this.on](listener as any)
+		return () => unsubs.forEach(u => u())
 	}
 
 	get items() {

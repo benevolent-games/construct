@@ -1,5 +1,5 @@
 
-import {Id, Unit} from "../../graph/parts/types.js"
+import {Id} from "../../graph/parts/types.js"
 
 export namespace Item {
 	export type Kind = "folder" | "prop" | "light"
@@ -7,7 +7,7 @@ export namespace Item {
 	export interface Base {
 		kind: Kind
 		id: Id
-		isVisible: boolean
+		visible: boolean
 	}
 
 	export interface Folder extends Base {
@@ -18,7 +18,7 @@ export namespace Item {
 
 	export interface Prop extends Base {
 		kind: "prop"
-		unit: Unit
+		name: string
 	}
 
 	export interface Light extends Base {

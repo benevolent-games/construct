@@ -1,28 +1,40 @@
 
-import {Id} from "../../graph/parts/types.js"
 import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
-
-export type CatalogState = {
-	glbs: Glb[]
-}
 
 export type Glb = {
 	hash: string
 	name: string
 	size: number
 	container: AssetContainer
-	props: AssetProp[]
+	props: GlbProp[]
 }
 
-export type AssetProp = {
-	id: Id
+export type GlbProp = {
 	name: string
 	lods: LODs
 	first_lod_index: number
 	top_lod: LOD
 	collision: undefined | PropNode
+}
+
+export type GlbRef = {
+	hash: string
+	name: string
+}
+
+export type PropRef = {
+	glb: GlbRef
+	name: string
+}
+
+export type PropStatus = "found" | "glb-missing" | "prop-missing"
+
+export type PropSearchReport = {
+	glb: Glb | undefined
+	prop: GlbProp | undefined
+	status: PropStatus
 }
 
 export const lod_info = [

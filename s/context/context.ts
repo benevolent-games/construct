@@ -5,6 +5,7 @@ import {theme} from "./theme.js"
 import {Graph} from "./controllers/graph/graph.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
+import {Outliner} from "./controllers/outliner/outliner.js"
 
 const deferred = undefined as any
 
@@ -14,15 +15,13 @@ export class AppContext extends Context {
 	babylon: Babylon = deferred
 	graph: Graph = deferred
 	catalog: Catalog = deferred
+	outliner: Outliner = deferred
 
 	setup() {
-		const babylon = new Babylon()
-		const graph = new Graph()
-		const catalog = new Catalog(graph, babylon.scene)
-
-		this.babylon = babylon
-		this.graph = graph
-		this.catalog = catalog
+		this.babylon = new Babylon()
+		this.graph = new Graph()
+		this.catalog = new Catalog(this.babylon.scene)
+		this.outliner = new Outliner(this.graph)
 	}
 }
 

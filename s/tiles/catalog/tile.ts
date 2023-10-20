@@ -7,7 +7,7 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {context, obsidian} from "../../context/context.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
-import {AssetProp, Glb} from "../../context/controllers/catalog/parts/types.js"
+import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 
 export const CatalogTile = tile({
 	label: "catalog",
@@ -16,11 +16,11 @@ export const CatalogTile = tile({
 		return html`
 			<div class=container>
 
-				${context.catalog.state.glbs.length === 0
+				${context.catalog.glbs.length === 0
 					? html`<h2>catalog</h2>`
 					: undefined}
 
-				${context.catalog.state.glbs.map(glb => html`
+				${context.catalog.glbs.map(glb => html`
 					<div class=glb>
 						<h3>${glb.name}</h3>
 						${render_glb_stats(glb)}
@@ -32,7 +32,7 @@ export const CatalogTile = tile({
 	}),
 })
 
-function add_to_graph(prop: AssetProp) {
+function add_to_graph(prop: GlbProp) {
 	return () => context.graph.add({
 		name: prop.name,
 		node: prop.top_lod.node,
@@ -51,11 +51,11 @@ function render_glb_stats({size, container}: Glb) {
 	`
 }
 
-function render_glb_props(props: AssetProp[]) {
+function render_glb_props(props: GlbProp[]) {
 	const sorted = props
 		.sort((a, b) => a.name.localeCompare(b.name))
 
-	const proptype = (prop: AssetProp) => (
+	const proptype = (prop: GlbProp) => (
 		prop.top_lod.node instanceof Mesh
 			? "mesh"
 			: "transform"
