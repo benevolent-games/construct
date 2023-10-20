@@ -32,7 +32,7 @@ export class Babylon {
 		scene.addCamera(fallbackCamera)
 
 		const box = MeshBuilder.CreateBox("box", {size: 1}, scene)
-		box.position = new Vector3(3, 3, 3)
+		box.position = new Vector3(0, 3, 3)
 		const material = new PBRMaterial("mat", scene)
 		material.albedoColor = new Color3(0.9, 0.9, 0.9)
 		material.roughness = 0.5

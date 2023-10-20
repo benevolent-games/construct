@@ -22,7 +22,7 @@ export const ViewportTile = tile({
 			const canvas = document.createElement("canvas")
 			const camera = new TargetCamera(
 				`cam_${cam_count++}`,
-				new Vector3(0, 0, 0),
+				new Vector3(Math.random() * 5, 0, 0),
 				scene,
 			)
 
