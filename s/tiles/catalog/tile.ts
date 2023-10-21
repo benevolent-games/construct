@@ -13,7 +13,9 @@ import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 export const CatalogTile = tile({
 	label: "catalog",
 	icon: sprite_book_open,
-	view: obsidian({name: "catalog", styles}, () => () => {
+	view: obsidian({name: "catalog", styles}, use => () => {
+		use.watch(() => context.domain.outline.id)
+
 		return html`
 			<div class=container>
 
@@ -34,8 +36,8 @@ export const CatalogTile = tile({
 })
 
 function instance_into_world(glb: Glb, prop: GlbProp) {
-	return () => context.graphliner.add({
-		folderId: context.graphliner.root.id,
+	return () => context.domain.actions.add({
+		folderId: context.domain.outline.id,
 		item: {
 			id: generateId(),
 			kind: "instance",
