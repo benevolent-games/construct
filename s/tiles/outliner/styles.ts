@@ -6,5 +6,9 @@ export const styles = css`
 
 ${standard_tile_styles}
 
+:host {
+	overflow-y: auto;
+}
+
 `
 

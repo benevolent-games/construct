@@ -27,16 +27,14 @@ export const HistoryTile = tile({
 
 		return html`
 			<h1>
-				<button @click=${() => domain.undo()}>
+				<button class=based @click=${() => domain.undo()}>
 					${sprite_rewind}
 					<span>undo</span>
-				</button
-
+				</button>
 				<span>history</span>
-
-				<button @click=${() => domain.redo()}>
-					${sprite_fast_forward}
+				<button class=based @click=${() => domain.redo()}>
 					<span>redo</span>
+					${sprite_fast_forward}
 				</button>
 			</h1>
 			<ol class=chronicles>
