@@ -4,6 +4,20 @@ import {StateTree, WatchTower, ob} from "@benev/slate"
 
 const history_limit = 1024
 
+function trim_to_history_limit<X>(array: X[]) {
+	while (array.length > history_limit)
+		array.shift()
+	return array
+}
+
+function save_snapshot(state: any) {
+	return (history: HistoryState<any>) => {
+		history.snapshots.push(structuredClone(state))
+		trim_to_history_limit(history.snapshots)
+		return history
+	}
+}
+
 export interface HistoryState<S> {
 	snapshots: S[]
 	past: Action.Base[]
@@ -11,46 +25,36 @@ export interface HistoryState<S> {
 }
 
 export class Basis<S, Specs extends Action.Specs<S>> {
-	#tree: StateTree<S>
+	#app: StateTree<S>
 	#specs: Specs
 	#history: StateTree<HistoryState<S>>
 
 	get state() {
-		return this.#tree.state
+		return this.#app.state
 	}
 
 	get history() {
 		return this.#history.state
 	}
 
-	#save_snapshot(state: S) {
-		this.#history.transmute(history => {
-			history.snapshots.push(structuredClone(state))
-			while (history.snapshots.length > history_limit)
-				history.snapshots.shift()
-			return history
-		})
-	}
-
 	actions: Action.Callers<Specs>
 	#action_count = 0
 
-	constructor(watch: WatchTower, tree: StateTree<S>, specs: Specs) {
-		this.#tree = tree
+	constructor(watch: WatchTower, app: StateTree<S>, specs: Specs) {
+		this.#app = app
 		this.#specs = specs
 		this.#history = watch.stateTree<HistoryState<S>>({snapshots: [], past: [], future: []})
-		this.#save_snapshot(this.#tree.state)
 
-		this.actions = ob.map(this.#specs, (spec, purpose) => (...args: any[]) => {
+		this.actions = ob.map(this.#specs, (spec, purpose) => (payload: any) => {
 			const action = {
-				...spec.make_action(...args),
 				id: this.#action_count++,
-				purpose,
+				purpose: purpose as string,
+				payload,
 			} satisfies Action.Base
 
-			this.#tree.transmute(state => {
-				this.#save_snapshot(state)
-				return spec.mutate_state(state, action)
+			this.#app.transmute(state => {
+				this.#history.transmute(save_snapshot(state))
+				return spec(state, payload)
 			})
 
 			this.#history.transmute(history => {
@@ -63,12 +67,13 @@ export class Basis<S, Specs extends Action.Specs<S>> {
 
 	undo() {
 		this.#history.transmute(history => {
-			const action = history.past.pop()
-			const previous_state = history.snapshots.pop()
-			if (action && previous_state) {
+			if (history.past.length > 0 && history.snapshots.length > 0) {
+				const action = history.past.pop()!
+				const previous_state = history.snapshots.pop()!
 				history.future.push(action)
-				this.#tree.transmute(() => previous_state)
+				this.#app.transmute(() => previous_state)
 			}
+			else console.warn("undo failed, action or previous_state was missing")
 			return history
 		})
 	}
@@ -78,12 +83,18 @@ export class Basis<S, Specs extends Action.Specs<S>> {
 			const action = history.future.pop()
 			if (action) {
 				const spec = this.#specs[action.purpose]
-				this.#tree.transmute(state => {
-					this.#save_snapshot(state)
-					return spec.mutate_state(state, action)
+
+				if (!spec)
+					throw new Error(`unknown action "${action.purpose}"`)
+
+				this.#app.transmute(state => {
+					save_snapshot(state)(history)
+					return spec(state, action.payload)
 				})
+
 				history.past.push(action)
 			}
+			else console.warn("redo failed")
 			return history
 		})
 	}

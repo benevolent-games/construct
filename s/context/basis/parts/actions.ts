@@ -1,42 +1,33 @@
 
 export namespace Action {
-	export interface Primitive {
-		purpose: string
-	}
-
-	export interface Base extends Primitive {
+	export interface Base<P = any> {
 		id: number
+		purpose: string
+		payload: P
 	}
 
-	export type MakeAction<P extends any[], A extends {}> = (...params: P) => A
-	export type MutateState<S, A extends {}> = (state: S, action: Action.Base & A) => S
-
-	export interface Spec<
-			S,
-			P extends any[],
-			A extends {},
-		> {
-		make_action: MakeAction<P, A>
-		mutate_state: MutateState<S, A>
-	}
-
-	export type Specs<S = any> = {[key: string]: Spec<S, any, any>}
+	export type Spec<S, P> = (state: S, payload: P) => S
+	export type GetPayload<Sp extends Spec<any, {}>> = Parameters<Sp>[1]
+	export type Specs<S = any> = {[key: string]: Spec<S, any>}
 
 	export type Callers<Sp extends Specs> = {
-		[P in keyof Sp]: (
-			(...p: Parameters<Sp[P]["make_action"]>) => void
+		[K in keyof Sp]: (
+			(payload: GetPayload<Sp[K]>) => void
 		)
 	}
 }
 
 export class ActionHelper<S> {
-	action = <P extends any[], A extends {}>(
-		spec: Action.Spec<S, P, A>,
-	) => spec
+	action = <P>(
+			fun: (state: S, payload: P) => void
+		) => ((state, payload) => {
+		fun(state, payload)
+		return state
+	}) as Action.Spec<S, P>
 
-	// insta = <A extends {}>(
-	// 	fun: (state: S) => (action: A) => void
-	// ) => {}
+	action_that_writes_whole_new_state = (
+		<Sp extends Action.Spec<S, any>>(spec: Sp) => spec
+	)
 }
 
 export const actions = <S>() => (

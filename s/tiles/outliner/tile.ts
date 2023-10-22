@@ -12,8 +12,8 @@ export const OutlinerTile = tile({
 	label: "outliner",
 	icon: sprite_folder,
 	view: obsidian({name: "outliner", styles}, use => () => {
-		const {state, actions} = use.context.basis
-		const outline = use.watch(() => state.outline)
+		const {basis} = use.context
+		const outline = use.watch(() => basis.state.outline)
 
 		function render_item(item: Item.Whatever): TemplateResult {
 			switch (item.kind) {
@@ -24,15 +24,17 @@ export const OutlinerTile = tile({
 						<span class=name>${item.name}</span>
 						<button class=newfolder @click=${() => {
 							const new_id = generateId()
-							actions.add({
-								folderId: item.id,
-								item: {
-									kind: "folder",
-									id: new_id,
-									name: `new folder ${new_id.slice(0, 5)}`,
-									selected: false,
-									children: [],
-								},
+							basis.actions.add({
+								changes: [{
+									folderId: item.id,
+									item: {
+										kind: "folder",
+										id: new_id,
+										name: `new folder ${new_id.slice(0, 5)}`,
+										selected: false,
+										children: [],
+									},
+								}],
 							})
 						}}>+</button>
 						<ol>

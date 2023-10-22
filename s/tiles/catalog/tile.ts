@@ -37,14 +37,16 @@ export const CatalogTile = tile({
 
 function instance_into_world(glb: Glb, prop: GlbProp) {
 	return () => context.basis.actions.add({
-		folderId: context.basis.state.outline.id,
-		item: {
-			id: generateId(),
-			kind: "instance",
-			selected: false,
-			name: prop.name,
-			glb: {hash: glb.hash, name: glb.name},
-		},
+		changes: [{
+			folderId: context.basis.state.outline.id,
+			item: {
+				id: generateId(),
+				kind: "instance",
+				selected: false,
+				name: prop.name,
+				glb: {hash: glb.hash, name: glb.name},
+			},
+		}],
 	})
 }
 
