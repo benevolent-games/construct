@@ -10,6 +10,8 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 
+const placeholder_asset_icon = "https://i.imgur.com/LtadIlN.webp"
+
 export const CatalogTile = tile({
 	label: "catalog",
 	icon: sprite_book_open,
@@ -20,7 +22,12 @@ export const CatalogTile = tile({
 			<div class=container>
 
 				${context.catalog.glbs.length === 0
-					? html`<h2>catalog</h2>`
+					? html`
+						<div class=intro>
+							<h1>glb catalog</h1>
+							<p>drag-and-drop a glb file</p>
+						</div>
+					`
 					: undefined}
 
 				${context.catalog.glbs.map(glb => html`
@@ -77,7 +84,8 @@ function render_glb_props(glb: Glb) {
 			${sorted.map(prop => html`
 				<li data-type="${proptype(prop)}">
 					<button @click=${instance_into_world(glb, prop)}>
-						${prop.name}
+						<img src="${placeholder_asset_icon}" alt=""/>
+						<span>${prop.name}</span>
 					</button>
 				</li>
 			`)}
