@@ -33,13 +33,13 @@ li {
 	}
 
 	> * {
-		flex: 0;
+		flex: 0 0 auto;
 	}
 
 	> .gutter {
 		width: 0.5em;
-		height: var(--line-height);
 		margin-left: 0.5em;
+		height: var(--line-height);
 		border-left: 1px solid #fff2;
 	}
 
@@ -67,7 +67,6 @@ li {
 	}
 
 	> .spacer {
-		flex: 0 0 auto;
 		width: 1em;
 		height: 1em;
 	}
