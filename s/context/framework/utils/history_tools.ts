@@ -1,7 +1,7 @@
 
 import {Annals} from "./annals"
 
-const history_limit = 1024
+const history_limit = 256
 
 export function trim_to_history_limit<X>(array: X[]) {
 	while (array.length > history_limit)

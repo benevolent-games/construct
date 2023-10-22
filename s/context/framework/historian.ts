@@ -3,7 +3,7 @@ import {StateTree, WatchTower} from "@benev/slate"
 
 import {Annals} from "./utils/annals.js"
 import {Action} from "./action_namespace.js"
-import {record_snapshot} from "./utils/history_tools.js"
+import {record_snapshot, trim_to_history_limit} from "./utils/history_tools.js"
 
 export class Historian<S> {
 	#annals: StateTree<Annals<S>>
@@ -40,6 +40,7 @@ export class Historian<S> {
 	proceed(action: Action.Base) {
 		this.#annals.transmute(annals => {
 			annals.past.push(action)
+			trim_to_history_limit(annals.past)
 			annals.future = []
 			return annals
 		})
@@ -54,7 +55,6 @@ export class Historian<S> {
 				future.push(action)
 				this.app.transmute(() => previous_state)
 			}
-			else console.warn("undo failed, action or previous_state was missing")
 			return annals
 		})
 	}
@@ -75,7 +75,6 @@ export class Historian<S> {
 
 				annals.past.push(action)
 			}
-			else console.warn("redo failed")
 			return annals
 		})
 	}
