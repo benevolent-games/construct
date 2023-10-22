@@ -28,7 +28,7 @@ export class Babylon {
 			scene,
 		)
 
-		scene.clearColor = new Color4(0.04, 0.04, 0.04, 1)
+		scene.clearColor = new Color4(0, 0, 0, 0)
 		scene.addCamera(fallbackCamera)
 
 		const box = MeshBuilder.CreateBox("box", {size: 1}, scene)
