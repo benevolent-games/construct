@@ -1,8 +1,8 @@
 
-import {AppState} from "../../app_state.js"
+import {State} from "../../state.js"
 import {Id, Item, ItemReport} from "./types.js"
 
-export type OutlineState = AppState["outline"]
+export type OutlineState = State["outline"]
 
 export function make_outline_tools(outline: OutlineState) {
 	const reports: ItemReport[] = []

@@ -24,7 +24,7 @@ export const OutlinerTile = tile({
 						<span class=name>${item.name}</span>
 						<button class=newfolder @click=${() => {
 							const new_id = generateId()
-							actions.add({
+							actions.add_item({
 								changes: [{
 									folderId: item.id,
 									item: {

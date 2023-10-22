@@ -1,10 +1,9 @@
 
 import {Context, prepare_frontend} from "@benev/slate"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {theme} from "./theme.js"
-import {AppState} from "./app_state.js"
-import {actions} from "./app_actions.js"
+import {actions} from "./actions.js"
+import {State, default_state} from "./state.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
@@ -13,18 +12,8 @@ import {Catalog} from "./controllers/catalog/catalog.js"
 export class AppContext extends Context {
 	theme = theme
 
-	#app = this.watch.stateTree<AppState>({
-		outline: {
-			name: "root",
-			kind: "folder",
-			id: generateId(),
-			selected: false,
-			children: [],
-		},
-	})
-
 	#action_specs = actions
-
+	#app = this.watch.stateTree<State>(default_state())
 	#historian = new Historian(
 		this.watch,
 		this.#app,

@@ -2,11 +2,11 @@
 import {Item} from "./domains/outline/types.js"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
-export interface AppState {
+export interface State {
 	outline: Item.Folder
 }
 
-export const default_app_state = (): AppState => ({
+export const default_state = (): State => ({
 	outline: {
 		id: generateId(),
 		name: "root",

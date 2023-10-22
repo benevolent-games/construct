@@ -1,12 +1,12 @@
 
-import {AppState} from "./app_state.js"
+import {State} from "./state.js"
 import {ItemChange} from "./domains/outline/types.js"
 import {Action} from "./framework/action_namespace.js"
 import {make_outline_tools} from "./domains/outline/tools.js"
 
-export const actions = Action.specs<AppState>()(({action}) => ({
+export const actions = Action.specs<State>()(({action}) => ({
 
-	add: action((state, payload: {changes: ItemChange[]}) => {
+	add_item: action((state, payload: {changes: ItemChange[]}) => {
 		const tools = make_outline_tools(state.outline)
 		for (const {folderId, item} of payload.changes) {
 			const folder = tools.getFolder(folderId)
@@ -14,7 +14,7 @@ export const actions = Action.specs<AppState>()(({action}) => ({
 		}
 	}),
 
-	delete: action((state, payload: {changes: ItemChange[]}) => {
+	delete_item: action((state, payload: {changes: ItemChange[]}) => {
 		const tools = make_outline_tools(state.outline)
 		for (const {folderId, item} of payload.changes) {
 			const folder = tools.getFolder(folderId)

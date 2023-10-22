@@ -36,7 +36,7 @@ export const CatalogTile = tile({
 })
 
 function instance_into_world(glb: Glb, prop: GlbProp) {
-	return () => context.actions.add({
+	return () => context.actions.add_item({
 		changes: [{
 			folderId: context.state.outline.id,
 			item: {
