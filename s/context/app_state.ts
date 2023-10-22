@@ -1,5 +1,5 @@
 
-import {Item} from "../controllers/graphliner/parts/types.js"
+import {Item} from "./domains/outline/types.js"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 export interface AppState {

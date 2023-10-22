@@ -1,8 +1,8 @@
 
 import {Scene} from "@babylonjs/core/scene.js"
+import {Signal, SignalTower} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
-import {context} from "../../context.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
@@ -10,13 +10,14 @@ import {Glb, PropRef, PropSearchReport} from "./parts/types.js"
 
 export class Catalog {
 	#scene: Scene
-	#glbs = context.tower.signal<Glb[]>([])
+	#glbs: Signal<Glb[]>
 
 	get glbs() {
 		return this.#glbs.value
 	}
 
-	constructor(scene: Scene) {
+	constructor(tower: SignalTower, scene: Scene) {
+		this.#glbs = tower.signal([])
 		this.#scene = scene
 	}
 

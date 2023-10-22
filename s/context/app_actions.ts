@@ -1,10 +1,10 @@
 
-import {AppState} from "../../app_state.js"
-import {make_outline_tools} from "./tools.js"
-import {actions} from "../../parts/actions.js"
-import {ItemChange} from "../../../controllers/graphliner/parts/types.js"
+import {AppState} from "./app_state.js"
+import {ItemChange} from "./domains/outline/types.js"
+import {Action} from "./framework/action_namespace.js"
+import {make_outline_tools} from "./domains/outline/tools.js"
 
-export const outline_actions = () => actions<AppState>()(({action}) => ({
+export const actions = Action.specs<AppState>()(({action}) => ({
 
 	add: action((state, payload: {changes: ItemChange[]}) => {
 		const tools = make_outline_tools(state.outline)

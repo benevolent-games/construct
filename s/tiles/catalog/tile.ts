@@ -14,7 +14,7 @@ export const CatalogTile = tile({
 	label: "catalog",
 	icon: sprite_book_open,
 	view: obsidian({name: "catalog", styles}, use => () => {
-		use.watch(() => context.basis.state.outline.id)
+		use.watch(() => context.state.outline.id)
 
 		return html`
 			<div class=container>
@@ -36,9 +36,9 @@ export const CatalogTile = tile({
 })
 
 function instance_into_world(glb: Glb, prop: GlbProp) {
-	return () => context.basis.actions.add({
+	return () => context.actions.add({
 		changes: [{
-			folderId: context.basis.state.outline.id,
+			folderId: context.state.outline.id,
 			item: {
 				id: generateId(),
 				kind: "instance",

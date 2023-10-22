@@ -1,6 +1,6 @@
 
 import {AppState} from "../../app_state.js"
-import {Id, Item, ItemReport} from "../../../controllers/graphliner/parts/types.js"
+import {Id, Item, ItemReport} from "./types.js"
 
 export type OutlineState = AppState["outline"]
 
@@ -57,32 +57,4 @@ export function make_outline_tools(outline: OutlineState) {
 		},
 	}
 }
-
-// export function outline_mutators(outline: OutlineState) {
-// 	const breakdown = outline_breakdown(outline)
-// 	const {getItem, getFolder} = breakdown
-// 	return {
-// 		...breakdown,
-// 		add(changes: ItemChange[]) {
-// 			for (const {folderId, item} of changes) {
-// 				const folder = getFolder(folderId)
-// 				folder.children.push(item)
-// 			}
-// 		},
-// 		delete(changes: ItemChange[]) {
-// 			for (const {folderId, item} of changes) {
-// 				const folder = getFolder(folderId)
-// 				folder.children = folder.children.filter(child => child.id !== item.id)
-// 			}
-// 		},
-// 		select(itemIds: Id[]) {
-// 			for (const id of itemIds)
-// 				getItem(id).selected = true
-// 		},
-// 		deselect(itemIds: Id[]) {
-// 			for (const id of itemIds)
-// 				getItem(id).selected = false
-// 		},
-// 	}
-// }
 

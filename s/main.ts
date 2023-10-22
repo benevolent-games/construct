@@ -5,8 +5,6 @@ import {context} from "./context/context.js"
 import {drag_and_drop} from "./tools/drag_and_drop.js"
 import {ConstructLayout} from "./elements/construct-layout/element.js"
 
-context.setup()
-
 context.babylon.engine.runRenderLoop(() => {
 	context.babylon.scene.render()
 })

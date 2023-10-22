@@ -5,15 +5,15 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
 import {obsidian} from "../../context/context.js"
+import {Item} from "../../context/domains/outline/types.js"
 import {sprite_folder} from "../../sprites/groups/feather/folder.js"
-import {Item} from "../../context/controllers/graphliner/parts/types.js"
 
 export const OutlinerTile = tile({
 	label: "outliner",
 	icon: sprite_folder,
 	view: obsidian({name: "outliner", styles}, use => () => {
-		const {basis} = use.context
-		const outline = use.watch(() => basis.state.outline)
+		const outline = use.watch(() => use.context.state.outline)
+		const {actions} = use.context
 
 		function render_item(item: Item.Whatever): TemplateResult {
 			switch (item.kind) {
@@ -24,7 +24,7 @@ export const OutlinerTile = tile({
 						<span class=name>${item.name}</span>
 						<button class=newfolder @click=${() => {
 							const new_id = generateId()
-							basis.actions.add({
+							actions.add({
 								changes: [{
 									folderId: item.id,
 									item: {

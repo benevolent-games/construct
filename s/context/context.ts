@@ -3,18 +3,17 @@ import {Context, prepare_frontend} from "@benev/slate"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {theme} from "./theme.js"
-import {Basis} from "./basis/basis.js"
-import {AppState} from "./basis/app_state.js"
+import {AppState} from "./app_state.js"
+import {actions} from "./app_actions.js"
+import {Historian} from "./framework/historian.js"
+import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
-import {outline_actions} from "./basis/domains/outline/actions.js"
-
-const deferred = undefined as any
 
 export class AppContext extends Context {
 	theme = theme
 
-	app = this.watch.stateTree<AppState>({
+	#app = this.watch.stateTree<AppState>({
 		outline: {
 			name: "root",
 			kind: "folder",
@@ -24,17 +23,27 @@ export class AppContext extends Context {
 		},
 	})
 
-	basis = new Basis(this.watch, this.app, {
-		...outline_actions(),
-	})
+	#action_specs = actions
 
-	babylon: Babylon = deferred
-	catalog: Catalog = deferred
+	#historian = new Historian(
+		this.watch,
+		this.#app,
+		this.#action_specs,
+	)
 
-	setup() {
-		this.babylon = new Babylon()
-		this.catalog = new Catalog(this.babylon.scene)
+	actions = Action.callers(
+		this.#app,
+		this.#historian,
+		this.#action_specs,
+	)
+
+	get state() {
+		return this.#app.state
 	}
+
+	history = this.#historian.history
+	babylon = new Babylon()
+	catalog = new Catalog(this.tower, this.babylon.scene)
 }
 
 export const context = new AppContext()
