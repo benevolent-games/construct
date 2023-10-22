@@ -4,16 +4,15 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
-import { EzMap } from "../../tools/ezmap.js"
+import {EzMap} from "../../tools/ezmap.js"
 import {obsidian} from "../../context/context.js"
+import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {Id, Item} from "../../context/domains/outline/types.js"
+import {sprite_plus} from "../../sprites/groups/feather/plus.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
-import { sprite_plus } from "../../sprites/groups/feather/plus.js"
-import { sprite_tabler_folder } from "../../sprites/groups/tabler/folder.js"
-import { sprite_tabler_eye } from "../../sprites/groups/tabler/eye.js"
-import { make_outline_tools } from "../../context/domains/outline/tools.js"
-import { sprite_tabler_folder_filled } from "../../sprites/groups/tabler/folder-filled.js"
-import { sprite_x } from "../../sprites/groups/feather/x.js"
+import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
+import {sprite_tabler_folder} from "../../sprites/groups/tabler/folder.js"
+import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
 
 export const OutlinerTile = tile({
 	label: "outliner",
@@ -101,10 +100,13 @@ export const OutlinerTile = tile({
 							<button class=icon @click=${toggle_opened}>
 								${settings.opened ?sprite_tabler_folder_filled :sprite_tabler_folder}
 							</button>
+
 							<span class=name>${item.name}</span>
+
 							<button class=newfolder @click=${click_to_create_new_folder(item)}>
 								${sprite_plus}
 							</button>
+
 							<button class=visibility>
 								${sprite_tabler_eye}
 							</button>
