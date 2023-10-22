@@ -3,17 +3,18 @@ import {Context, prepare_frontend} from "@benev/slate"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {theme} from "./theme.js"
-import {EditorState} from "./state.js"
-import {Domain} from "./controllers/domain/domain.js"
+import {Basis} from "./basis/basis.js"
+import {AppState} from "./basis/app_state.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
+import {outline_actions} from "./basis/domains/outline/actions.js"
 
 const deferred = undefined as any
 
 export class AppContext extends Context {
 	theme = theme
 
-	tree = this.watch.stateTree<EditorState>({
+	app = this.watch.stateTree<AppState>({
 		outline: {
 			name: "root",
 			kind: "folder",
@@ -21,20 +22,17 @@ export class AppContext extends Context {
 			selected: false,
 			children: [],
 		},
-		history: {
-			action_counter: 0,
-			past: [],
-			future: [],
-		},
+	})
+
+	basis = new Basis(this.watch, this.app, {
+		...outline_actions(),
 	})
 
 	babylon: Babylon = deferred
-	domain: Domain = deferred
 	catalog: Catalog = deferred
 
 	setup() {
 		this.babylon = new Babylon()
-		this.domain = new Domain()
 		this.catalog = new Catalog(this.babylon.scene)
 	}
 }

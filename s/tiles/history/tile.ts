@@ -13,8 +13,8 @@ export const HistoryTile = tile({
 	label: "history",
 	icon: sprite_history,
 	view: obsidian({name: "history", styles}, use => () => {
-		const {domain} = use.context
-		const {future, past} = use.watch(() => domain.history)
+		const {basis} = use.context
+		const {future, past} = use.watch(() => basis.history)
 
 		function render_action(timeline: "future" | "past") {
 			return (action: Action.Unknown) => html`
@@ -27,12 +27,12 @@ export const HistoryTile = tile({
 
 		return html`
 			<h1>
-				<button class=based @click=${() => domain.undo()}>
+				<button class=based @click=${() => basis.undo()}>
 					${sprite_rewind}
 					<span>undo</span>
 				</button>
 				<span>history</span>
-				<button class=based @click=${() => domain.redo()}>
+				<button class=based @click=${() => basis.redo()}>
 					<span>redo</span>
 					${sprite_fast_forward}
 				</button>
