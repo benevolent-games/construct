@@ -13,6 +13,8 @@ import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
 import {sprite_tabler_folder} from "../../sprites/groups/tabler/folder.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
+import { sprite_tabler_vector_triangle } from "../../sprites/groups/tabler/vector-triangle.js"
+import { sprite_tabler_folder_plus } from "../../sprites/groups/tabler/folder-plus.js"
 
 export const OutlinerTile = tile({
 	label: "outliner",
@@ -38,7 +40,7 @@ export const OutlinerTile = tile({
 					item: {
 						kind: "folder",
 						id: new_id,
-						name: `new folder ${new_id.slice(0, 5)}`,
+						name: `folder`,
 						selected: false,
 						children: [],
 					},
@@ -74,14 +76,37 @@ export const OutlinerTile = tile({
 				`
 			}
 
+			function render_id() {
+				return html`
+					<div class=id>
+						${item.id.slice(0, 6)}
+					</div>
+				`
+			}
+
+			function render_nonfolder_right_side() {
+				return html`
+					${render_id()}
+					<div class=spacer></div>
+					<button class=visibility>
+						${sprite_tabler_eye}
+					</button>
+				`
+			}
+
 			switch (item.kind) {
 				case "instance":
 					return render_line_item(html`
-						<span class=name>${item.name}</span>
+						<button class=icon>
+							${sprite_tabler_vector_triangle}
+						</button>
+						<div class=name>${item.name}</div>
+						${render_nonfolder_right_side()}
 					`)
 				case "light":
 					return render_line_item(html`
-						<span class=name>${item.name}</span>
+						<div class=name>${item.name}</div>
+						${render_nonfolder_right_side()}
 					`)
 				case "folder":
 					const settings = get_local_folder_settings(item.id)
@@ -95,10 +120,12 @@ export const OutlinerTile = tile({
 								${settings.opened ?sprite_tabler_folder_filled :sprite_tabler_folder}
 							</button>
 
-							<span class=name>${item.name}</span>
+							<div class=name @click=${toggle_opened}>${item.name}</div>
+
+							${render_id()}
 
 							<button class=newfolder @click=${click_to_create_new_folder(item)}>
-								${sprite_plus}
+								${sprite_tabler_folder_plus}
 							</button>
 
 							<button class=visibility>

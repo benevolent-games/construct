@@ -66,6 +66,12 @@ li {
 		white-space: nowrap;
 	}
 
+	> .id {
+		opacity: 0.5;
+		font-size: 0.6em;
+		font-family: monospace;
+	}
+
 	> .spacer {
 		width: 1em;
 		height: 1em;
