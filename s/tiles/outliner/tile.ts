@@ -8,13 +8,12 @@ import {EzMap} from "../../tools/ezmap.js"
 import {obsidian} from "../../context/context.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {Id, Item} from "../../context/domains/outline/types.js"
-import {sprite_plus} from "../../sprites/groups/feather/plus.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
 import {sprite_tabler_folder} from "../../sprites/groups/tabler/folder.js"
+import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
-import { sprite_tabler_vector_triangle } from "../../sprites/groups/tabler/vector-triangle.js"
-import { sprite_tabler_folder_plus } from "../../sprites/groups/tabler/folder-plus.js"
+import {sprite_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-triangle.js"
 
 export const OutlinerTile = tile({
 	label: "outliner",
