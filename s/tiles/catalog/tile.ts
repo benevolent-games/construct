@@ -82,7 +82,7 @@ function render_glb_props(glb: Glb) {
 			${sorted.map(prop => html`
 				<li data-type="${proptype(prop)}">
 					<button @click=${instance_into_world(glb, prop)}>
-						<img src="${placeholder_asset_icon}" alt=""/>
+						<img src="${placeholder_asset_icon}" alt="" draggable="false"/>
 						<span>${prop.name}</span>
 					</button>
 				</li>

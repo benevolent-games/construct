@@ -45,6 +45,7 @@ h3 {
 
 :is(.glb-stats, .glb-props) {
 	list-style: none;
+	user-select: none;
 
 	display: flex;
 	flex-wrap: wrap;
@@ -77,18 +78,22 @@ h3 {
 
 		position: relative;
 		z-index: 1;
+		border: 1px solid transparent;
 		transition: all 100ms cubic-bezier(0.34, 1.56, 0.64, 1);
 		transform: scale(1.0);
 
 		> img {
 			display: block;
-			width: 4em;
-			height: 4em;
+			width: 4rem;
+			height: 4rem;
+			user-drag: none;
+			-webkit-user-drag: none;
+			border-radius: 0.4em;
 		}
 
 		> span {
 			font-size: 0.6em;
-			max-width: 6em;
+			max-width: 6rem;
 			word-break: break-all;
 		}
 
@@ -96,6 +101,7 @@ h3 {
 			z-index: 2;
 			border-color: #fffa;
 			transform: scale(1.1);
+			border: 1px solid #fff4;
 		}
 
 		&:active {
@@ -110,10 +116,13 @@ h3 {
 .glb-props button {
 	padding: 0.5em;
 	color: #fff;
-	border: 1px solid #fff4;
-	border-radius: 0.2em;
 	text-align: center;
+	border-radius: 0.2em;
+}
+
+.glb-stats li {
 	background: #111;
+	border: 1px solid #fff4;
 }
 
 `
