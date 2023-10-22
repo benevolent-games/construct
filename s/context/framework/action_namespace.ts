@@ -7,6 +7,7 @@ export namespace Action {
 		id: number
 		purpose: string
 		payload: P
+		time: number
 	}
 
 	export type Spec<S, P> = (state: S, payload: P) => S
@@ -43,13 +44,14 @@ export namespace Action {
 			specs: Sp,
 		) {
 
-		let action_count = 0
+		let action_count = 1
 
 		return ob.map(specs, (spec, purpose) => (payload: any) => {
 			const action = {
 				id: action_count++,
 				purpose: purpose as string,
 				payload,
+				time: Date.now(),
 			} satisfies Action.Base
 
 			app.transmute(state => {
