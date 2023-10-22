@@ -33,18 +33,16 @@ export const OutlinerTile = tile({
 		function click_to_create_new_folder(parent: Item.Folder) {
 			return () => {
 				const new_id = generateId()
-				actions.add_item({
-					changes: [{
-						folderId: parent.id,
-						item: {
-							kind: "folder",
-							id: new_id,
-							name: `new folder ${new_id.slice(0, 5)}`,
-							selected: false,
-							children: [],
-						},
-					}],
-				})
+				actions.add_items([{
+					folderId: parent.id,
+					item: {
+						kind: "folder",
+						id: new_id,
+						name: `new folder ${new_id.slice(0, 5)}`,
+						selected: false,
+						children: [],
+					},
+				}])
 			}
 		}
 
@@ -56,13 +54,9 @@ export const OutlinerTile = tile({
 
 		function render_flat(item: Item.Whatever, parents: Item.Folder[]): TemplateResult {
 			function render_line_item(content: TemplateResult) {
-				const parent = parents.at(-1)
-				const delete_this_item = parent
-					? () => actions.delete_item({
-						changes: [{item, folderId: parent.id}]
-					})
+				const delete_this_item = parents.at(-1)
+					? () => actions.delete_items([item.id])
 					: undefined
-
 				return html`
 					<li data-kind="${item.kind}">
 						${render_gutters(parents)}

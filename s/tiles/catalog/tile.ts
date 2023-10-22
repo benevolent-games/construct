@@ -43,18 +43,16 @@ export const CatalogTile = tile({
 })
 
 function instance_into_world(glb: Glb, prop: GlbProp) {
-	return () => context.actions.add_item({
-		changes: [{
-			folderId: context.state.outline.id,
-			item: {
-				id: generateId(),
-				kind: "instance",
-				selected: false,
-				name: prop.name,
-				glb: {hash: glb.hash, name: glb.name},
-			},
-		}],
-	})
+	return () => context.actions.add_items([{
+		folderId: context.state.outline.id,
+		item: {
+			id: generateId(),
+			kind: "instance",
+			selected: false,
+			name: prop.name,
+			glb: {hash: glb.hash, name: glb.name},
+		},
+	}])
 }
 
 function render_glb_stats({size, container}: Glb) {
