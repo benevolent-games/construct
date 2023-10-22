@@ -74,7 +74,9 @@ export const OutlinerTile = tile({
 									${sprite_x}
 								</button>
 							`
-							: undefined}
+							: html`
+								<div class=spacer></div>
+							`}
 					</li>
 				`
 			}

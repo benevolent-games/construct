@@ -8,10 +8,12 @@ ${standard_tile_styles}
 
 :host {
 	overflow-y: auto;
+	--line-height: 1.5em;
 }
 
 ol {
 	list-style: none;
+	user-select: none;
 }
 
 li {
@@ -19,10 +21,14 @@ li {
 	flex-direction: row;
 	align-items: center;
 	width: 100%;
-	gap: 0.5em;
-	padding: 0 1em;
+	gap: 0.2em;
+	padding: 0 0.5em;
 
 	&:nth-child(odd) {
+		background: #88888808;
+	}
+
+	&:hover {
 		background: #8881;
 	}
 
@@ -32,7 +38,7 @@ li {
 
 	> .gutter {
 		width: 0.5em;
-		height: 1.2em;
+		height: var(--line-height);
 		margin-left: 0.5em;
 		border-left: 1px solid #fff2;
 	}
@@ -47,12 +53,23 @@ li {
 			width: 1em;
 			height: 1em;
 		}
+
+		&.delete:hover { color: red; }
 	}
 
 	> .name {
 		flex: 1 1 auto;
 		word-break: break-all;
-		line-height: 1;
+		line-height: var(--line-height);
+		text-overflow: ellipsis;
+		overflow: hidden;
+		white-space: nowrap;
+	}
+
+	> .spacer {
+		flex: 0 0 auto;
+		width: 1em;
+		height: 1em;
 	}
 }
 
