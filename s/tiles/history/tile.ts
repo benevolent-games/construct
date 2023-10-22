@@ -4,11 +4,11 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
 import {obsidian} from "../../context/context.js"
+import {human_time} from "../../tools/human_time.js"
 import {Action} from "../../context/framework/action_namespace.js"
 import {sprite_history} from "../../sprites/groups/akar/history.js"
 import {sprite_rewind} from "../../sprites/groups/feather/rewind.js"
 import {sprite_fast_forward} from "../../sprites/groups/feather/fast-forward.js"
-import { human_time } from "../../tools/human_time.js"
 
 export const HistoryTile = tile({
 	label: "history",
