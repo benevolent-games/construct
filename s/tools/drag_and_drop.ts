@@ -7,8 +7,13 @@ export function drag_and_drop(
 		handle_drop: (list: FileList) => void,
 	) {
 
-	function highlight() {
-		element.setAttribute("data-drop-highlight", "")
+	function is_file_drag(event: DragEvent) {
+		return event.dataTransfer && event.dataTransfer.types.includes("Files")
+	}
+
+	function highlight(event: DragEvent) {
+		if (is_file_drag(event))
+			element.setAttribute("data-drop-highlight", "")
 	}
 
 	function unhighlight(event: DragEvent) {
@@ -27,9 +32,9 @@ export function drag_and_drop(
 	on("dragleave", "drop")
 		(unhighlight)
 
-	on("drop")<DragEvent>(({dataTransfer}) => {
-		if (dataTransfer)
-			handle_drop(dataTransfer.files)
+	on("drop")<DragEvent>(event => {
+		if (is_file_drag(event))
+			handle_drop(event.dataTransfer!.files)
 	})
 }
 

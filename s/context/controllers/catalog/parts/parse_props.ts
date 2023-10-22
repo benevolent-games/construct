@@ -2,9 +2,9 @@
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 
-import {AssetProp, LODs, PropNode, lod_names} from "./types.js"
+import {GlbProp, LODs, PropNode, lod_names} from "./types.js"
 
-export function parse_props(container: AssetContainer): AssetProp[] {
+export function parse_props(container: AssetContainer): GlbProp[] {
 	const transforms = container.transformNodes
 	const meshes_under_transforms = new Set(transforms.flatMap(t => t.getChildMeshes()))
 	const naked_meshes = new Set(container.meshes.filter(m => !meshes_under_transforms.has(m)))
@@ -81,8 +81,7 @@ export function parse_props(container: AssetContainer): AssetProp[] {
 		if (!top_lod)
 			throw new Error("no top lod!?")
 
-		const prop: AssetProp = {
-			id: generateId(),
+		const prop: GlbProp = {
 			name,
 			collision,
 			first_lod_index,

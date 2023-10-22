@@ -1,32 +1,54 @@
 
-import {Flat} from "@benev/slate"
 import {Scene} from "@babylonjs/core/scene.js"
+import {Signal, SignalTower} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
-import {Graph} from "../graph/graph.js"
-import {CatalogState, Glb} from "./parts/types.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
+import {Glb, PropRef, PropSearchReport} from "./parts/types.js"
 
 export class Catalog {
 	#scene: Scene
-	#state: CatalogState
-	readonly state: CatalogState
+	#glbs: Signal<Glb[]>
 
-	constructor(flat: Flat, graph: Graph, scene: Scene) {
-		this.#scene = scene
-		this.#state = flat.state({glbs: []})
-		this.state = Flat.readonly(this.#state)
+	get glbs() {
+		return this.#glbs.value
 	}
 
-	add_glb(glb: Glb) {
-		this.#state.glbs = [glb, ...this.#state.glbs]
+	constructor(tower: SignalTower, scene: Scene) {
+		this.#glbs = tower.signal([])
+		this.#scene = scene
+	}
+
+	#add_glb(glb: Glb) {
+		this.#glbs.value = [glb, ...this.#glbs.value]
+	}
+
+	search_prop(ref: PropRef): PropSearchReport {
+		const report: Omit<PropSearchReport, "status"> = {
+			glb: undefined,
+			prop: undefined,
+		}
+
+		report.glb = this.glbs.find(glb => glb.hash === ref.glb.hash)
+
+		if (report.glb)
+			report.prop = report.glb.props.find(prop => prop.name === ref.name)
+
+		return {
+			...report,
+			status: report.glb
+				? report.prop
+					? "found"
+					: "prop-missing"
+				: "glb-missing",
+		}
 	}
 
 	async add_file(file: File) {
 		const hash = await quick_hash(file)
-		const already_exists = this.#state.glbs.find(g => g.hash === hash)
+		const already_exists = this.glbs.find(g => g.hash === hash)
 
 		if (already_exists)
 			return false
@@ -42,7 +64,7 @@ export class Catalog {
 		const props = parse_props(container)
 		wire_up_lods(props)
 
-		this.add_glb({
+		this.#add_glb({
 			hash,
 			name: file.name,
 			size: file.size,
