@@ -4,11 +4,12 @@ import {Context, prepare_frontend} from "@benev/slate"
 import {theme} from "./theme.js"
 import {actions} from "./actions.js"
 import {State, default_state} from "./state.js"
+import {Tactic} from "../tools/tactic/sketch.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
-import { Tactic } from "../tools/tactic/sketch.js"
+import { Instantiator } from "./controllers/instantiator/instantiator.js"
 
 export class AppContext extends Context {
 	theme = theme
@@ -35,9 +36,16 @@ export class AppContext extends Context {
 	history = this.#historian.history
 	babylon = new Babylon(this.renderLoop)
 	catalog = new Catalog(this.tower, this.babylon.scene)
+	instantiator = new Instantiator(
+		this.watch,
+		this.#app,
+		this.babylon,
+		this.catalog,
+	)
 
 	tactic = new Tactic({
 		tower: this.tower,
+		devices: [new Tactic.Keyboard(window)],
 		bindings: {
 			buttons: {
 				select: "LMB",
@@ -50,7 +58,6 @@ export class AppContext extends Context {
 				look: "mouse",
 			},
 		},
-		devices: [new Tactic.Keyboard(window)],
 	})
 }
 
