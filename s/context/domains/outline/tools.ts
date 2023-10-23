@@ -9,16 +9,16 @@ export function make_outline_tools(outline: OutlineState) {
 
 	function recurse(
 			item: Item.Whatever,
-			parent: Item.Folder,
+			parents: Item.Folder[],
 		) {
-		reports.push({item, parent})
+		reports.push({item, parents, parent: parents.at(-1)!})
 		if (item.kind === "folder")
 			for (const child of item.children)
-				recurse(child, item)
+				recurse(child, [...parents, item])
 	}
 
 	for (const item of outline.children)
-		recurse(item, outline)
+		recurse(item, [outline])
 
 	const items = reports.map(report => report.item)
 

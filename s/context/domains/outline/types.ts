@@ -36,10 +36,6 @@ export namespace Item {
 export type ItemReport = {
 	item: Item.Whatever
 	parent: Item.Folder
-}
-
-export type ItemChange = {
-	folderId: Id
-	item: Item.Whatever
+	parents: Item.Folder[]
 }
 

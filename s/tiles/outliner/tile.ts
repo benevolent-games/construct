@@ -52,8 +52,12 @@ export const OutlinerTile = tile({
 						drag.item_being_hovered_over = item
 						drag.mode = "into"
 					},
-					drop: (item: Item.Folder) => (_event: DragEvent) => {
-						console.log("DROP INTO", drag, item)
+					drop: (folder: Item.Folder) => (_event: DragEvent) => {
+						if (drag.item_being_dragged)
+							actions.move_items_into_folder({
+								folderId: folder.id,
+								itemIds: [drag.item_being_dragged.id],
+							})
 						stop_dragging()
 					},
 				},
@@ -64,7 +68,11 @@ export const OutlinerTile = tile({
 						drag.item_being_hovered_over = item
 					},
 					drop: (item: Item.Whatever) => (_event: DragEvent) => {
-						console.log("DROP BELOW", drag, item)
+						if (drag.item_being_dragged)
+							actions.move_items_below_another_item({
+								itemIds: [drag.item_being_dragged.id],
+								targetItemId: item.id,
+							})
 						stop_dragging()
 					},
 				},
