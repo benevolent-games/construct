@@ -1,7 +1,7 @@
 
 import {State} from "./state.js"
-import {Id, Item, ItemReport} from "./domains/outline/types.js"
 import {Action} from "./framework/action_namespace.js"
+import {Id, Item, ItemReport} from "./domains/outline/types.js"
 import {make_outline_tools} from "./domains/outline/tools.js"
 
 export const actions = Action.specs<State>()(({action}) => ({
