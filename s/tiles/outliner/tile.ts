@@ -70,7 +70,6 @@ export const OutlinerTile = tile({
 						drag.item_being_hovered_over = item
 					},
 					drop: (item: Item.Whatever) => (_event: DragEvent) => {
-						console.log("drop")
 						if (drag.item_being_dragged)
 							actions.move_items_below_another_item({
 								itemIds: [drag.item_being_dragged.id],
