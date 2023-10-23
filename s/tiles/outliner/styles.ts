@@ -102,6 +102,13 @@ li {
 		white-space: nowrap;
 	}
 
+	& .childcount {
+		opacity: 0.5;
+		font-size: 0.8em;
+		font-family: monospace;
+		margin-right: 1em;
+	}
+
 	& .id {
 		opacity: 0.5;
 		font-size: 0.6em;

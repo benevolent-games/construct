@@ -10,6 +10,7 @@ import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {Id, Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
+import {make_outline_tools} from "../../context/domains/outline/tools.js"
 import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
 import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
@@ -22,6 +23,7 @@ export const OutlinerTile = tile({
 		const outline = use.watch(() => use.context.state.outline)
 		const {actions} = use.context
 
+		const tools = make_outline_tools(outline)
 		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
 
 		const drag = use.flatstate({
@@ -157,7 +159,7 @@ export const OutlinerTile = tile({
 				`
 			}
 
-			function render_id() {
+			function render_id(onclick = () => {}) {
 				return html`
 					<div class=id>
 						${item.id.slice(0, 6)}
@@ -215,6 +217,11 @@ export const OutlinerTile = tile({
 						settings.opened = !settings.opened
 						use.rerender()
 					}
+					const number_of_children = tools.reports.reduce(
+						(previous, current) =>
+							previous + (current.parents.map(p => p.id)
+								.includes(item.id) ? 1 : 0), 0
+					)
 					return html`
 						${render_line_item(html`
 							${gripbox(html`
@@ -225,7 +232,8 @@ export const OutlinerTile = tile({
 								</button>
 								<div class=name @click=${toggle_opened}>${item.name}</div>
 							`)}
-							${render_id()}
+							<div class=childcount @click=${toggle_opened}>${number_of_children}</div>
+							${render_id(toggle_opened)}
 							<button class=newfolder @click=${click_to_create_new_folder(item)}>
 								${sprite_tabler_folder_plus}
 							</button>
