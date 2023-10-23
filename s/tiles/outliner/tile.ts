@@ -10,7 +10,6 @@ import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {Id, Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
-import {sprite_tabler_folder} from "../../sprites/groups/tabler/folder.js"
 import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
 import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
@@ -24,7 +23,53 @@ export const OutlinerTile = tile({
 		const {actions} = use.context
 
 		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
-		// const tools = make_outline_tools(outline)
+
+		const drag = use.flatstate({
+			item_being_dragged: undefined as undefined | Item.Whatever,
+			item_being_hovered_over: undefined as undefined | Item.Whatever,
+			mode: "below" as "below" | "into",
+		})
+
+		const dnd = use.prepare(() => {
+			const stop_dragging = () => {
+				drag.item_being_dragged = undefined
+				drag.item_being_hovered_over = undefined
+			}
+
+			return {
+				start: (item: Item.Whatever) => (_event: DragEvent) => {
+					drag.item_being_dragged = item
+				},
+				leave: () => (_event: DragEvent) => {
+					drag.item_being_hovered_over = undefined
+				},
+				end: () => (_event: DragEvent) => {
+					stop_dragging()
+				},
+				into: {
+					over: (item: Item.Whatever) => (event: DragEvent) => {
+						event.preventDefault()
+						drag.item_being_hovered_over = item
+						drag.mode = "into"
+					},
+					drop: (item: Item.Folder) => (_event: DragEvent) => {
+						console.log("DROP INTO", drag, item)
+						stop_dragging()
+					},
+				},
+				below: {
+					over: (item: Item.Whatever) => (event: DragEvent) => {
+						event.preventDefault()
+						drag.mode = "below"
+						drag.item_being_hovered_over = item
+					},
+					drop: (item: Item.Whatever) => (_event: DragEvent) => {
+						console.log("DROP BELOW", drag, item)
+						stop_dragging()
+					},
+				},
+			}
+		})
 
 		function get_local_folder_settings(id: Id) {
 			return localFolderSettings.guarantee(id, () => ({
@@ -55,12 +100,36 @@ export const OutlinerTile = tile({
 		}
 
 		function render_flat(item: Item.Whatever, parents: Item.Folder[]): TemplateResult {
+
 			function render_line_item(content: TemplateResult) {
 				const delete_this_item = parents.at(-1)
 					? () => actions.delete_items([item.id])
 					: undefined
 				return html`
-					<li data-kind="${item.kind}">
+					<li
+						data-id="${item.id}"
+						data-kind="${item.kind}"
+						@dragleave=${dnd.leave()}>
+
+						${drag.item_being_dragged ?html`
+							<div class=dropzone
+								?data-drag-hover="${item.id === drag.item_being_hovered_over?.id}"
+								data-drag-mode="${drag.mode}">
+								${item.kind === "folder" ? html`
+									<div
+										class=drop-into
+										@dragover=${dnd.into.over(item)}
+										@drop=${dnd.into.drop(item)}
+									></div>
+								` : undefined}
+								<div
+									class=drop-below
+									@dragover=${dnd.below.over(item)}
+									@drop=${dnd.below.drop(item)}>
+								</div>
+							</div>
+						` :undefined}
+
 						${render_gutters(parents)}
 						${content}
 						${delete_this_item
@@ -84,6 +153,17 @@ export const OutlinerTile = tile({
 				`
 			}
 
+			function draggable(content: TemplateResult) {
+				return html`
+					<div
+						draggable=true
+						@dragstart=${dnd.start(item)}
+						@dragend=${dnd.end()}>
+						${content}
+					</div>
+				`
+			}
+
 			function render_nonfolder_right_side() {
 				return html`
 					${render_id()}
@@ -97,15 +177,19 @@ export const OutlinerTile = tile({
 			switch (item.kind) {
 				case "instance":
 					return render_line_item(html`
-						<button class=icon>
-							${sprite_tabler_vector_triangle}
-						</button>
-						<div class=name>${item.name}</div>
+						${draggable(html`
+							<button class=icon>
+								${sprite_tabler_vector_triangle}
+							</button>
+							<div class=name>${item.name}</div>
+						`)}
 						${render_nonfolder_right_side()}
 					`)
 				case "light":
 					return render_line_item(html`
-						<div class=name>${item.name}</div>
+						${draggable(html`
+							<div class=name>${item.name}</div>
+						`)}
 						${render_nonfolder_right_side()}
 					`)
 				case "folder":
@@ -116,20 +200,18 @@ export const OutlinerTile = tile({
 					}
 					return html`
 						${render_line_item(html`
-							<button class=icon @click=${toggle_opened}>
-								${settings.opened
-									? sprite_tabler_folder_open
-									: sprite_tabler_folder_filled}
-							</button>
-
-							<div class=name @click=${toggle_opened}>${item.name}</div>
-
+							${draggable(html`
+								<button class=icon @click=${toggle_opened}>
+									${settings.opened
+										? sprite_tabler_folder_open
+										: sprite_tabler_folder_filled}
+								</button>
+								<div class=name @click=${toggle_opened}>${item.name}</div>
+							`)}
 							${render_id()}
-
 							<button class=newfolder @click=${click_to_create_new_folder(item)}>
 								${sprite_tabler_folder_plus}
 							</button>
-
 							<button class=visibility>
 								${sprite_tabler_eye}
 							</button>
