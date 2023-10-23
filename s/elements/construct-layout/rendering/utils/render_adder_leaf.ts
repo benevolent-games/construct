@@ -12,7 +12,6 @@ export function render_adder_leaf(
 		.filter(([,tile]) => tile !== tiles.AdderTile)
 		.map(([name, tile]) => html`
 			<button
-				class=based
 				@click=${() => layout.set_pane_active_leaf(
 					pane_path,
 					layout.add_leaf(
