@@ -61,6 +61,7 @@ li {
 		flex: 1 1 auto;
 		word-break: break-all;
 		line-height: var(--line-height);
+
 		text-overflow: ellipsis;
 		overflow: hidden;
 		white-space: nowrap;

@@ -18,11 +18,6 @@ ${standard_tile_styles}
 	padding-bottom: 2em;
 }
 
-h2 {
-	font-size: 1.1em;
-	opacity: 0.5;
-}
-
 .intro {
 	width: 100%;
 	text-align: center;
@@ -38,14 +33,18 @@ h3 {
 	display: flex;
 	flex-direction: column;
 	gap: 0.2em;
+
 	+ .glb {
 		margin-top: 2em;
 	}
 }
 
-:is(.glb-stats, .glb-props) {
+.glb-stats {
 	list-style: none;
 	user-select: none;
+
+	font-size: 0.6em;
+	opacity: 0.5;
 
 	display: flex;
 	flex-wrap: wrap;
@@ -55,16 +54,25 @@ h3 {
 	& li {
 		flex: 1 0 auto;
 		width: max-content;
+		padding: 0.5em;
+		color: #fff;
+		text-align: center;
+		border-radius: 0.2em;
+		background: #111;
+		border: 1px solid #fff4;
 	}
 }
 
-.glb-stats {
-	font-size: 0.6em;
-	opacity: 0.5;
-}
-
 .glb-props {
-	position: relative;
+	margin-top: 1em;
+
+	display: grid;
+	list-style: none;
+	grid-template-columns: repeat(auto-fit, minmax(2em, 4em));
+	justify-content: center;
+	gap: 0.5em;
+
+	& li { display: contents; }
 
 	& button {
 		font: inherit;
@@ -73,8 +81,6 @@ h3 {
 		justify-content: center;
 		align-items: center;
 		background: transparent;
-		width: 100%;
-		height: 100%;
 
 		position: relative;
 		z-index: 1;
@@ -84,17 +90,21 @@ h3 {
 
 		> img {
 			display: block;
-			width: 4rem;
-			height: 4rem;
+			width: 100%;
 			user-drag: none;
 			-webkit-user-drag: none;
 			border-radius: 0.4em;
 		}
 
 		> span {
-			font-size: 0.6em;
-			max-width: 6rem;
+			font-size: 0.5em;
+			width: 100%;
+			height: 2.4em;
+			line-height: 1.2;
 			word-break: break-all;
+
+			text-overflow: ellipsis;
+			overflow: hidden;
 		}
 
 		&:hover {
@@ -110,19 +120,6 @@ h3 {
 			transform: scale(1.2);
 		}
 	}
-}
-
-.glb-stats li,
-.glb-props button {
-	padding: 0.5em;
-	color: #fff;
-	text-align: center;
-	border-radius: 0.2em;
-}
-
-.glb-stats li {
-	background: #111;
-	border: 1px solid #fff4;
 }
 
 `
