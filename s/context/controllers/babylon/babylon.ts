@@ -12,6 +12,8 @@ import {TargetCamera} from "@babylonjs/core/Cameras/targetCamera.js"
 import {PBRMaterial} from "@babylonjs/core/Materials/PBR/pbrMaterial.js"
 import {HemisphericLight} from "@babylonjs/core/Lights/hemisphericLight.js"
 
+import {spawn_boxes} from "@benev/toolbox/x/demo/spawn_boxes.js"
+
 export class Babylon {
 	canvas = new OffscreenCanvas(160, 90)
 	engine = new Engine(this.canvas)
@@ -19,7 +21,7 @@ export class Babylon {
 
 	box: Mesh
 
-	constructor() {
+	constructor(renderLoop: Set<() => void>) {
 		const {scene} = this
 
 		const fallbackCamera = new TargetCamera(
@@ -28,8 +30,9 @@ export class Babylon {
 			scene,
 		)
 
-		scene.clearColor = new Color4(0, 0, 0, 0)
+		scene.clearColor = new Color4(24 / 255, 24 / 255, 24 / 255, 1)
 		scene.addCamera(fallbackCamera)
+		spawn_boxes(scene)
 
 		const box = MeshBuilder.CreateBox("box", {size: 1}, scene)
 		box.position = new Vector3(0, 3, 3)
@@ -39,11 +42,17 @@ export class Babylon {
 		material.metallic = 0.5
 		scene.addMesh(box)
 
-		const light = new HemisphericLight("hemi", new Vector3(-1.23, -0.789, -1.618), scene)
+		const light = new HemisphericLight("hemi", new Vector3(0.234, 1, 0.123), scene)
 		scene.addLight(light)
 
 		fallbackCamera.setTarget(box.position)
 		this.box = box
+
+		this.engine.runRenderLoop(() => {
+			for (const render of renderLoop)
+				render()
+			scene.render()
+		})
 	}
 }
 

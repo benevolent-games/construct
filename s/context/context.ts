@@ -8,6 +8,7 @@ import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
+import { Tactic } from "../tools/tactic/sketch.js"
 
 export class AppContext extends Context {
 	theme = theme
@@ -30,9 +31,27 @@ export class AppContext extends Context {
 		return this.#app.state
 	}
 
+	renderLoop = new Set<() => void>()
 	history = this.#historian.history
-	babylon = new Babylon()
+	babylon = new Babylon(this.renderLoop)
 	catalog = new Catalog(this.tower, this.babylon.scene)
+
+	tactic = new Tactic({
+		tower: this.tower,
+		bindings: {
+			buttons: {
+				select: "LMB",
+				forward: "KeyW",
+				backward: "KeyS",
+				leftward: "KeyA",
+				rightward: "KeyD",
+			},
+			vectors: {
+				look: "mouse",
+			},
+		},
+		devices: [new Tactic.Keyboard(window)],
+	})
 }
 
 export const context = new AppContext()

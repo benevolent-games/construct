@@ -44,3 +44,7 @@ html, body {
 	height: 100vh;
 }
 
+nub-context {
+	display: contents;
+}
+

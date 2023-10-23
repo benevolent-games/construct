@@ -131,13 +131,34 @@ export const styles = css`
 	}
 
 	> .adder {
-		display: flex;
-		flex-wrap: wrap;
-		gap: 0.5em;
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(4em, 6em));
+		justify-content: start;
 		align-content: start;
+		gap: 1em;
+
 		> button {
-			flex: 0 1 auto;
-			width: 12em;
+			opacity: 0.6;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			transition: all 100ms cubic-bezier(0.34, 1.56, 0.64, 1);
+			transform: scale(1.0);
+			color: #aaa;
+
+			&:hover {
+				opacity: 0.9;
+				transform: scale(1.2);
+			}
+
+			&:active {
+				opacity: 1;
+			}
+
+			> svg {
+				width: 2em;
+				height: 2em;
+			}
 		}
 	}
 }

@@ -42,7 +42,7 @@ export namespace Action {
 			app: StateTree<S>,
 			historian: Historian<S>,
 			specs: Sp,
-		) {
+		): Callers<Sp> {
 
 		let action_count = 1
 

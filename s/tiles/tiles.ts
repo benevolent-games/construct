@@ -10,12 +10,12 @@ import {InspectorTile} from "./inspector/tile.js"
 
 export const tiles = {
 	AdderTile: UnknownTile,
-	AboutTile,
-	CatalogTile,
-	HistoryTile,
-	OutlinerTile,
-	SettingsTile,
 	ViewportTile,
+	OutlinerTile,
+	CatalogTile,
 	InspectorTile,
+	HistoryTile,
+	SettingsTile,
+	AboutTile,
 }
 
