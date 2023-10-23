@@ -68,6 +68,7 @@ export const OutlinerTile = tile({
 						drag.item_being_hovered_over = item
 					},
 					drop: (item: Item.Whatever) => (_event: DragEvent) => {
+						console.log("drop")
 						if (drag.item_being_dragged)
 							actions.move_items_below_another_item({
 								itemIds: [drag.item_being_dragged.id],
@@ -164,9 +165,14 @@ export const OutlinerTile = tile({
 				`
 			}
 
-			function draggable(content: TemplateResult) {
-				return is_root ? content : html`
+			function gripbox(content: TemplateResult) {
+				return is_root ? html`
+					<div class=gripbox>
+						${content}
+					</div>
+				` : html`
 					<div
+						class=gripbox
 						draggable=true
 						@dragstart=${dnd.start(item)}
 						@dragend=${dnd.end()}>
@@ -188,17 +194,17 @@ export const OutlinerTile = tile({
 			switch (item.kind) {
 				case "instance":
 					return render_line_item(html`
-						${draggable(html`
-							<button class=icon>
+						${gripbox(html`
+							<div class=icon>
 								${sprite_tabler_vector_triangle}
-							</button>
+							</div>
 							<div class=name>${item.name}</div>
 						`)}
 						${render_nonfolder_right_side()}
 					`)
 				case "light":
 					return render_line_item(html`
-						${draggable(html`
+						${gripbox(html`
 							<div class=name>${item.name}</div>
 						`)}
 						${render_nonfolder_right_side()}
@@ -211,8 +217,8 @@ export const OutlinerTile = tile({
 					}
 					return html`
 						${render_line_item(html`
-							${draggable(html`
-								<button class=icon @click=${toggle_opened}>
+							${gripbox(html`
+								<button @click=${toggle_opened}>
 									${settings.opened
 										? sprite_tabler_folder_open
 										: sprite_tabler_folder_filled}

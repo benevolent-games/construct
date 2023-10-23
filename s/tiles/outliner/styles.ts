@@ -69,18 +69,27 @@ li {
 		border-left: 1px solid #fff2;
 	}
 
-	& button {
-		opacity: 0.5;
-		&:hover { opacity: 0.9; }
-		&:active { opacity: 1; }
+	& .gripbox {
+		flex: 1 1 auto;
+		display: flex;
+		gap: 0.2em;
+	}
+
+	& :is(button, .icon) {
+		flex: 0 0 auto;
+
+		&:is(button) {
+			opacity: 0.5;
+			&:hover { opacity: 0.9; }
+			&:active { opacity: 1; }
+			&.delete:hover { color: red; }
+		}
 
 		> svg {
 			display: block;
 			width: 1em;
 			height: 1em;
 		}
-
-		&.delete:hover { color: red; }
 	}
 
 	& .name {
@@ -102,10 +111,6 @@ li {
 	& .spacer {
 		width: 1em;
 		height: 1em;
-	}
-
-	& [draggable] {
-		display: contents;
 	}
 }
 
