@@ -77,9 +77,9 @@ li {
 
 	& :is(button, .icon) {
 		flex: 0 0 auto;
+		opacity: 0.5;
 
 		&:is(button) {
-			opacity: 0.5;
 			&:hover { opacity: 0.9; }
 			&:active { opacity: 1; }
 			&.delete:hover { color: red; }
