@@ -100,6 +100,7 @@ export const OutlinerTile = tile({
 		}
 
 		function render_flat(item: Item.Whatever, parents: Item.Folder[]): TemplateResult {
+			const is_root = item.id === outline.id
 
 			function render_line_item(content: TemplateResult) {
 				const delete_this_item = parents.at(-1)
@@ -122,11 +123,13 @@ export const OutlinerTile = tile({
 										@drop=${dnd.into.drop(item)}
 									></div>
 								` : undefined}
-								<div
-									class=drop-below
-									@dragover=${dnd.below.over(item)}
-									@drop=${dnd.below.drop(item)}>
-								</div>
+								${!is_root ? html`
+									<div
+										class=drop-below
+										@dragover=${dnd.below.over(item)}
+										@drop=${dnd.below.drop(item)}>
+									</div>
+								` : undefined}
 							</div>
 						` :undefined}
 
@@ -154,7 +157,7 @@ export const OutlinerTile = tile({
 			}
 
 			function draggable(content: TemplateResult) {
-				return html`
+				return is_root ? content : html`
 					<div
 						draggable=true
 						@dragstart=${dnd.start(item)}
