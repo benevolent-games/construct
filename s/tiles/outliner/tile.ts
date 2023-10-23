@@ -11,6 +11,7 @@ import {Id, Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
 import {sprite_tabler_folder} from "../../sprites/groups/tabler/folder.js"
+import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
 import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
 import {sprite_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-triangle.js"
@@ -116,7 +117,9 @@ export const OutlinerTile = tile({
 					return html`
 						${render_line_item(html`
 							<button class=icon @click=${toggle_opened}>
-								${settings.opened ?sprite_tabler_folder_filled :sprite_tabler_folder}
+								${settings.opened
+									? sprite_tabler_folder_open
+									: sprite_tabler_folder_filled}
 							</button>
 
 							<div class=name @click=${toggle_opened}>${item.name}</div>
