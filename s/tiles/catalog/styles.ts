@@ -8,9 +8,6 @@ ${standard_tile_styles}
 
 :host {
 	overflow-y: auto;
-}
-
-.container {
 	display: flex;
 	flex-direction: column;
 	gap: 0.1em;

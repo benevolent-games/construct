@@ -1,12 +1,13 @@
 
 import {html} from "lit"
+import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
+import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
-import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
+import {GlbSlot} from "../../context/state.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {context, obsidian} from "../../context/context.js"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 
@@ -16,35 +17,32 @@ export const CatalogTile = tile({
 	label: "catalog",
 	icon: sprite_book_open,
 	view: obsidian({name: "catalog", styles}, use => () => {
-		use.watch(() => context.state.outline.id)
+		const {context} = use
+		const {warehouse} = context
+		use.watch(() => context.state.slots)
 
-		return html`temporarily disabled`
+		const {manifest} = warehouse
 
-		// return html`
-		// 	<div class=container>
+		return html`
+			${manifest.length === 0 ? html`
+				<div class=intro>
+					<h1>asset catalog</h1>
+					<p>drag-and-drop a glb file</p>
+				</div>
+			` : undefined}
 
-		// 		${context.catalog.glbs.length === 0
-		// 			? html`
-		// 				<div class=intro>
-		// 					<h1>glb catalog</h1>
-		// 					<p>drag-and-drop a glb file</p>
-		// 				</div>
-		// 			`
-		// 			: undefined}
-
-		// 		${context.catalog.glbs.map(glb => html`
-		// 			<div class=glb>
-		// 				<h3>${glb.name}</h3>
-		// 				${render_glb_stats(glb)}
-		// 				${render_glb_props(glb)}
-		// 			</div>
-		// 		`)}
-		// 	</div>
-		// `
+			${manifest.map(({slot, glb}) => html`
+				<div class=glb>
+					<h3>${slot.name}</h3>
+					${render_glb_stats(glb)}
+					${render_glb_props(slot, glb)}
+				</div>
+			`)}
+		`
 	}),
 })
 
-function instance_into_world(glb: Glb, prop: GlbProp) {
+function instance_into_world(slot: GlbSlot, prop: GlbProp) {
 	return () => context.actions.add_items([{
 		folderId: context.state.outline.id,
 		item: {
@@ -52,7 +50,7 @@ function instance_into_world(glb: Glb, prop: GlbProp) {
 			kind: "instance",
 			selected: false,
 			name: prop.name,
-			glb: {hash: glb.hash, name: glb.name},
+			address: {slot: slot.id, prop: prop.name},
 		},
 	}])
 }
@@ -69,7 +67,7 @@ function render_glb_stats({size, container}: Glb) {
 	`
 }
 
-function render_glb_props(glb: Glb) {
+function render_glb_props(slot: GlbSlot, glb: Glb) {
 	const sorted = glb.props
 		.sort((a, b) => a.name.localeCompare(b.name))
 
@@ -83,7 +81,7 @@ function render_glb_props(glb: Glb) {
 		<ol class=glb-props>
 			${sorted.map(prop => html`
 				<li data-type="${proptype(prop)}">
-					<button @click=${instance_into_world(glb, prop)}>
+					<button @click=${instance_into_world(slot, prop)}>
 						<img src="${placeholder_asset_icon}" alt="" draggable="false"/>
 						<span>${prop.name}</span>
 					</button>

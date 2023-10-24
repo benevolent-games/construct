@@ -8,25 +8,28 @@ import {Tactic} from "../tools/tactic/sketch.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
-import {Catalog} from "./controllers/catalog/catalog.js"
+import {Shockdrop} from "./controllers/shockdrop/shockdrop.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
-import {Shockdrop} from "./controllers/shockdrop/shockdrop.js"
 
 export class AppContext extends Context {
 	theme = theme
 
-	#action_specs = actions
 	#app = this.watch.stateTree<State>(default_state())
+
+	get state() {
+		return this.#app.state
+	}
+
+	#action_specs = actions
+
 	#historian = new Historian(
 		this.watch,
 		this.#app,
 		this.#action_specs,
 	)
 
-	get state() {
-		return this.#app.state
-	}
+	history = this.#historian.history
 
 	actions = Action.callers(
 		this.#app,
@@ -35,15 +38,21 @@ export class AppContext extends Context {
 	)
 
 	renderLoop = new Set<() => void>()
-	history = this.#historian.history
+
 	babylon = new Babylon(this.renderLoop)
-	// catalog = new Catalog(this.tower, this.babylon.scene)
+
 	warehouse = new Warehouse(
 		this.tower,
 		this.watch,
 		this.#app,
 		this.babylon.scene,
 		this.actions,
+	)
+
+	instantiator = new Instantiator(
+		this.watch,
+		this.#app,
+		this.warehouse,
 	)
 
 	shockdrop = new Shockdrop({
@@ -54,13 +63,6 @@ export class AppContext extends Context {
 				this.warehouse.add_glb_file(file)
 		},
 	})
-
-	// instantiator = new Instantiator(
-	// 	this.watch,
-	// 	this.#app,
-	// 	this.babylon,
-	// 	// this.catalog,
-	// )
 
 	tactic = new Tactic({
 		tower: this.tower,

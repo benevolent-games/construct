@@ -2,8 +2,7 @@
 import {StateTree, WatchTower} from "@benev/slate"
 
 import {State} from "../../state.js"
-import {Babylon} from "../babylon/babylon.js"
-import {Catalog} from "../catalog/catalog.js"
+import {Warehouse} from "../warehouse/warehouse.js"
 import {Id, Item} from "../../domains/outline/types.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
@@ -12,14 +11,16 @@ export type Thing = {dispose: () => void}
 export class Instantiator {
 
 	constructor(
-			public watch: WatchTower,
-			public app: StateTree<State>,
-			public babylon: Babylon,
-			public catalog: Catalog,
+			watch: WatchTower,
+			private app: StateTree<State>,
+			private warehouse: Warehouse,
 		) {
 
 		watch.track(
-			() => app.state.outline,
+			() => [
+				app.state.outline,
+				app.state.slots,
+			],
 			() => this.reconsider(),
 		)
 	}
@@ -30,7 +31,7 @@ export class Instantiator {
 		console.log("add", item.name)
 		switch (item.kind) {
 			case "instance":
-				const {glb, prop} = this.catalog.search_prop(item)
+				const {glb, prop} = this.warehouse.trace_prop(item.address)
 				if (glb && prop) {
 					const instance = prop.top_lod.node.instantiateHierarchy()!
 					console.log("instantiated", instance)
@@ -51,6 +52,15 @@ export class Instantiator {
 		this.things.delete(id)
 	}
 
+	#delete_by_id(id: Id) {
+		console.log("delete by id", id)
+		const item = this.things.get(id)
+		if (item) {
+			item.dispose()
+			this.things.delete(id)
+		}
+	}
+
 	reconsider() {
 		console.log("reconsider")
 		const {things} = this
@@ -69,6 +79,14 @@ export class Instantiator {
 
 		for (const old_item of old_items)
 			this.#delete(old_item)
+
+		for (const item of items) {
+			if (item.kind === "instance") {
+				const {status} = this.warehouse.trace_prop(item.address)
+				if (status !== "available")
+					this.#delete_by_id(item.id)
+			}
+		}
 	}
 }
 

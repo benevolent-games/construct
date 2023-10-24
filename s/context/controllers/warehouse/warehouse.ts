@@ -4,8 +4,8 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {Signal, SignalTower, StateTree, WatchTower} from "@benev/slate"
 
 import {Actions} from "../../actions.js"
-import {GlbSlot, Hash, State} from "../../state.js"
 import {Id} from "../../domains/outline/types.js"
+import {GlbSlot, Hash, State} from "../../state.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
 import {parse_props} from "../catalog/parts/parse_props.js"
 import {wire_up_lods} from "../catalog/parts/wire_up_lods.js"
@@ -13,14 +13,14 @@ import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 import {Glb, GlbProp, PropAddress, PropTrace} from "../catalog/parts/types.js"
 
 export class Warehouse {
-	glbs: Signal<Glb[]>
+	readonly glbs: Signal<Glb[]>
 
 	constructor(
 			tower: SignalTower,
 			watch: WatchTower,
-			public app: StateTree<State>,
-			public scene: Scene,
-			public actions: Actions,
+			private app: StateTree<State>,
+			private scene: Scene,
+			private actions: Actions,
 		) {
 
 		this.glbs = tower.signal([])
@@ -34,15 +34,14 @@ export class Warehouse {
 		return this.glbs.value.find(g => g.hash === hash)
 	}
 
-	prune_orphaned_glbs() {
-		const {slots} = this.app.state
-		const orphans = this.glbs.value
-			.filter(glb => !slots.some(s => s.glb_hash === glb.hash))
-			.map(glb => glb.hash)
-		if (orphans.length > 0) {
-			this.glbs.value = this.glbs.value
-				.filter(glb => !orphans.includes(glb.hash))
-		}
+	get manifest() {
+		return this.app.state.slots
+			.filter(s => s.glb_hash)
+			.map(slot => ({
+				slot,
+				glb: this.get_glb(slot.glb_hash!)!,
+			}))
+			.filter(m => m.glb)
 	}
 
 	trace_prop(ref: PropAddress): PropTrace {
@@ -63,8 +62,19 @@ export class Warehouse {
 				!slot ? "missing-slot"
 				: !glb ? "missing-glb"
 				: !prop ? "missing-prop"
-				: "found"
+				: "available"
 			)
+		}
+	}
+
+	prune_orphaned_glbs() {
+		const {slots} = this.app.state
+		const orphans = this.glbs.value
+			.filter(glb => !slots.some(s => s.glb_hash === glb.hash))
+			.map(glb => glb.hash)
+		if (orphans.length > 0) {
+			this.glbs.value = this.glbs.value
+				.filter(glb => !orphans.includes(glb.hash))
 		}
 	}
 

@@ -1,8 +1,6 @@
 
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
-import {AssetContainer} from "@babylonjs/core/assetContainer.js"
-
 import {GlbProp, LODs, PropNode, lod_names} from "./types.js"
+import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 
 export function parse_props(container: AssetContainer): GlbProp[] {
 	const transforms = container.transformNodes
