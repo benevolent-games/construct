@@ -1,10 +1,33 @@
 
-import {State} from "./state.js"
+import {GlbSlot, Hash, State} from "./state.js"
 import {Action} from "./framework/action_namespace.js"
-import {Id, Item, ItemReport} from "./domains/outline/types.js"
 import {make_outline_tools} from "./domains/outline/tools.js"
+import {Id, Item, ItemReport} from "./domains/outline/types.js"
+
+export type Actions = Action.Callers<typeof actions>
 
 export const actions = Action.specs<State>()(({action}) => ({
+
+	add_slot: action((state, slot: GlbSlot) => {
+		state.slots.push(slot)
+	}),
+
+	delete_slot: action((state, id: Id) => {
+		state.slots.filter(s => s.id !== id)
+	}),
+
+	rename_slot: action((state, {id, name}: {id: Id, name: string}) => {
+		const slot = state.slots.find(s => s.id === id)!
+		slot.name = name
+	}),
+
+	set_slot_glb: action((state, {id, glb_hash}: {
+			id: Id,
+			glb_hash: Hash,
+		}) => {
+		const slot = state.slots.find(s => s.id === id)!
+		slot.glb_hash = glb_hash
+	}),
 
 	add_items: action((state, additions: {
 			item: Item.Whatever,

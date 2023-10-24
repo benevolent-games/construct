@@ -9,7 +9,8 @@ import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
-import { Instantiator } from "./controllers/instantiator/instantiator.js"
+import {Warehouse} from "./controllers/warehouse/warehouse.js"
+import {Instantiator} from "./controllers/instantiator/instantiator.js"
 
 export class AppContext extends Context {
 	theme = theme
@@ -22,26 +23,34 @@ export class AppContext extends Context {
 		this.#action_specs,
 	)
 
+	get state() {
+		return this.#app.state
+	}
+
 	actions = Action.callers(
 		this.#app,
 		this.#historian,
 		this.#action_specs,
 	)
 
-	get state() {
-		return this.#app.state
-	}
-
 	renderLoop = new Set<() => void>()
 	history = this.#historian.history
 	babylon = new Babylon(this.renderLoop)
-	catalog = new Catalog(this.tower, this.babylon.scene)
-	instantiator = new Instantiator(
+	// catalog = new Catalog(this.tower, this.babylon.scene)
+	warehouse = new Warehouse(
+		this.tower,
 		this.watch,
 		this.#app,
-		this.babylon,
-		this.catalog,
+		this.babylon.scene,
+		this.actions,
 	)
+
+	// instantiator = new Instantiator(
+	// 	this.watch,
+	// 	this.#app,
+	// 	this.babylon,
+	// 	// this.catalog,
+	// )
 
 	tactic = new Tactic({
 		tower: this.tower,

@@ -18,27 +18,29 @@ export const CatalogTile = tile({
 	view: obsidian({name: "catalog", styles}, use => () => {
 		use.watch(() => context.state.outline.id)
 
-		return html`
-			<div class=container>
+		return html`temporarily disabled`
 
-				${context.catalog.glbs.length === 0
-					? html`
-						<div class=intro>
-							<h1>glb catalog</h1>
-							<p>drag-and-drop a glb file</p>
-						</div>
-					`
-					: undefined}
+		// return html`
+		// 	<div class=container>
 
-				${context.catalog.glbs.map(glb => html`
-					<div class=glb>
-						<h3>${glb.name}</h3>
-						${render_glb_stats(glb)}
-						${render_glb_props(glb)}
-					</div>
-				`)}
-			</div>
-		`
+		// 		${context.catalog.glbs.length === 0
+		// 			? html`
+		// 				<div class=intro>
+		// 					<h1>glb catalog</h1>
+		// 					<p>drag-and-drop a glb file</p>
+		// 				</div>
+		// 			`
+		// 			: undefined}
+
+		// 		${context.catalog.glbs.map(glb => html`
+		// 			<div class=glb>
+		// 				<h3>${glb.name}</h3>
+		// 				${render_glb_stats(glb)}
+		// 				${render_glb_props(glb)}
+		// 			</div>
+		// 		`)}
+		// 	</div>
+		// `
 	}),
 })
 

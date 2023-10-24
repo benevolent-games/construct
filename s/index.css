@@ -23,6 +23,7 @@ html {
 	--construct-bravo: lime;
 	--construct-bg-a: #181818;
 	--construct-bg-b: #000;
+	--construct-bg-c: #333;
 
 	&[data-drop-highlight]::before {
 		display: block;

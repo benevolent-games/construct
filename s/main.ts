@@ -10,8 +10,13 @@ context.babylon.engine.runRenderLoop(() => {
 })
 
 drag_and_drop(document.documentElement, async list => {
-	for (const file of Array.from(list))
-		context.catalog.add_file(file)
+	for (const file of Array.from(list)) {
+		console.log("upload", file)
+		if (file.type.includes("gltf"))
+			context.warehouse.add_glb_file(file)
+		else
+			console.warn("file type must be 'gltf'")
+	}
 })
 
 register_to_dom({ConstructLayout})
