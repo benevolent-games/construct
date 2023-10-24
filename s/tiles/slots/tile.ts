@@ -11,6 +11,7 @@ import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {use_drag_and_drop} from "./parts/use_drag_and_drop.js"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {Glb} from "../../context/controllers/catalog/parts/types.js"
+import {Shockdrop} from "../../context/controllers/shockdrop/shockdrop.js"
 import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
 import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
@@ -27,12 +28,16 @@ export const SlotsTile = tile({
 				if (slotA !== slotB)
 					context.actions.swap_slots([slotA.id, slotB.id])
 			},
-			handle_drop_from_outside: (event, _slot) => {
-				console.log("drop from outside!", event)
+			handle_drop_from_outside: (event, slot) => {
+				const [file, ...files] = Array.from(event.dataTransfer!.files)
+				context.warehouse.add_glb_file(file, slot.id)
+				for (const file of files)
+					context.warehouse.add_glb_file(file)
 				event.preventDefault()
 				event.stopPropagation()
 				context.shockdrop.unhighlight()
 			},
+			predicate_for_drags_from_outside: Shockdrop.is_file_drag,
 		})
 
 		function render_id(id: Id) {
@@ -47,10 +52,7 @@ export const SlotsTile = tile({
 				: undefined
 
 			const is_picked_up = drag.payload === slot
-			const is_hovered_over = (
-				drag.payload &&
-				(!is_picked_up && drag.hover === slot)
-			)
+			const is_hovered_over = !is_picked_up && drag.hover === slot
 
 			const status = (glb && !is_picked_up)
 				? "assigned"
@@ -80,7 +82,7 @@ export const SlotsTile = tile({
 					<div
 						class=glb
 						data-status=${status}
-						draggable="true"
+						draggable="${(status === 'assigned') ? 'true' : 'false'}"
 						?data-drag-is-picked-up=${is_picked_up}
 						?data-drag-is-hovered-over=${is_hovered_over}
 						@dragstart=${drag.dragstart(slot)}

@@ -3,19 +3,25 @@ export type HandleFileDrop = (files: File[], event: DragEvent) => void
 
 export class Shockdrop {
 	static is_file_drag(event: DragEvent) {
-		return event.dataTransfer && event.dataTransfer.types.includes("Files")
+		return !!(
+			event.dataTransfer &&
+			event.dataTransfer.types.includes("Files")
+		)
 	}
 
 	element: HTMLElement
+	highlight_attribute: string
 	handle_file_drop: HandleFileDrop
 
 	constructor(params: {
-			element: HTMLElement,
-			handle_file_drop: (files: File[], event: DragEvent) => void,
+			element: HTMLElement
+			highlight_attribute: string
+			handle_file_drop: (files: File[], event: DragEvent) => void
 		}) {
 
 		this.element = params.element
 		this.handle_file_drop = params.handle_file_drop
+		this.highlight_attribute = params.highlight_attribute
 
 		for (const [eventName, handler] of Object.entries(this.dragEvents))
 			this.element.addEventListener(eventName as any, handler)
@@ -39,11 +45,11 @@ export class Shockdrop {
 
 	highlight(event: DragEvent) {
 		if (Shockdrop.is_file_drag(event))
-			this.element.setAttribute("data-drop-highlight", "")
+			this.element.setAttribute(this.highlight_attribute, "")
 	}
 
 	unhighlight() {
-		this.element.removeAttribute("data-drop-highlight")
+		this.element.removeAttribute(this.highlight_attribute)
 	}
 }
 

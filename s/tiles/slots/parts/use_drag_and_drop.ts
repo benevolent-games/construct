@@ -4,11 +4,13 @@ import {Use} from "@benev/slate"
 export function use_drag_and_drop<P, H>({
 		use,
 		handle_drop,
-		handle_drop_from_outside = () => {}
+		handle_drop_from_outside = () => {},
+		predicate_for_drags_from_outside = () => true,
 	}: {
 		use: Use<any>
 		handle_drop: (event: DragEvent, payload: P, hover: H) => void
 		handle_drop_from_outside?: (event: DragEvent, hover: H) => void
+		predicate_for_drags_from_outside?: (event: DragEvent) => boolean
 	}) {
 
 	const state = use.flatstate({
@@ -29,15 +31,17 @@ export function use_drag_and_drop<P, H>({
 		},
 		dragover: (hover: H) => (event: DragEvent) => {
 			event.preventDefault()
-			state.hover = hover
+			if (state.payload || predicate_for_drags_from_outside(event))
+				state.hover = hover
 		},
 		drop: (hover: H) => (event: DragEvent) => {
+			event.preventDefault()
 			const {payload} = state
 			state.payload = undefined
 			state.hover = undefined
 			if (payload)
 				handle_drop(event, payload, hover)
-			else
+			else if (predicate_for_drags_from_outside(event))
 				handle_drop_from_outside(event, hover)
 		},
 	}))

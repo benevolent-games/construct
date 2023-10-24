@@ -42,7 +42,6 @@ export class Warehouse {
 		if (orphans.length > 0) {
 			this.glbs.value = this.glbs.value
 				.filter(glb => !orphans.includes(glb.hash))
-			console.log("warehouse pruned orphan glbs", orphans)
 		}
 	}
 
@@ -70,6 +69,11 @@ export class Warehouse {
 	}
 
 	async add_glb_file(file: File, slot_id?: Id) {
+		if (!file.type.includes("gltf")) {
+			console.warn("file type must be 'gltf'", file)
+			return false
+		}
+
 		const hash = await quick_hash(file)
 		const already_exists = this.glbs.value.find(g => g.hash === hash)
 

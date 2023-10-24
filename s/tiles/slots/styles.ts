@@ -50,9 +50,7 @@ ${standard_tile_styles}
 .bar {
 	display: flex;
 	gap: 0.5em;
-	padding: 0 2em;
-
-	&.top { margin-bottom: 0.5em; }
+	padding: 0.2em 2em;
 
 	> .name {
 		flex: 1 1 auto;
@@ -74,17 +72,33 @@ ${standard_tile_styles}
 }
 
 .glb {
+	position: relative;
 	display: flex;
 	min-height: 8em;
 	border-radius: 1em;
 	user-select: none;
+	overflow: hidden;
 
 	&[data-drag-is-picked-up] {
 		outline: 2px solid yellow;
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			inset: 0;
+			background: color-mix(in srgb, var(--construct-alpha) 10%, transparent);
+		}
 	}
 
 	&[data-drag-is-hovered-over] {
 		outline: 2px solid lime;
+		&::after {
+			content: "";
+			display: block;
+			position: absolute;
+			inset: 0;
+			background: color-mix(in srgb, var(--construct-bravo) 5%, transparent);
+		}
 	}
 
 	&[data-status="empty"] {
@@ -179,7 +193,7 @@ button.delete {
 	margin-top: 2em;
 
 	> .new {
-		padding: 1em 2em;
+		padding: 0.5em 1em;
 	}
 }
 

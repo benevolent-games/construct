@@ -33,10 +33,10 @@ html {
 		inset: 0;
 		background: color-mix(
 			in srgb,
-			var(--construct-bravo) 5%,
+			var(--construct-bravo) 2%,
 			transparent
 		);
-		border: 0.5em dashed var(--construct-bravo);
+		border: 0.25em dashed var(--construct-bravo);
 		pointer-events: none;
 	}
 }

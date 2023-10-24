@@ -48,14 +48,10 @@ export class AppContext extends Context {
 
 	shockdrop = new Shockdrop({
 		element: document.documentElement,
-		handle_file_drop: list => {
-			for (const file of list) {
-				console.log("upload", file)
-				if (file.type.includes("gltf"))
-					this.warehouse.add_glb_file(file)
-				else
-					console.warn("file type must be 'gltf'")
-			}
+		highlight_attribute: "data-drop-highlight",
+		handle_file_drop: files => {
+			for (const file of files)
+				this.warehouse.add_glb_file(file)
 		},
 	})
 
