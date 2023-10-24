@@ -12,8 +12,8 @@ export const actions = Action.specs<State>()(({action}) => ({
 		state.slots.push(slot)
 	}),
 
-	delete_slot: action((state, id: Id) => {
-		state.slots.filter(s => s.id !== id)
+	delete_slot: action((state, {id}: {id: Id}) => {
+		state.slots = state.slots.filter(s => s.id !== id)
 	}),
 
 	rename_slot: action((state, {id, name}: {id: Id, name: string}) => {
@@ -23,7 +23,7 @@ export const actions = Action.specs<State>()(({action}) => ({
 
 	set_slot_glb: action((state, {id, glb_hash}: {
 			id: Id,
-			glb_hash: Hash,
+			glb_hash: Hash | undefined,
 		}) => {
 		const slot = state.slots.find(s => s.id === id)!
 		slot.glb_hash = glb_hash
