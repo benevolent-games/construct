@@ -29,6 +29,15 @@ export const actions = Action.specs<State>()(({action}) => ({
 		slot.glb_hash = glb_hash
 	}),
 
+	swap_slots: action((state, [a, b]: [Id, Id]) => {
+		const slotA = state.slots.find(s => s.id === a)!
+		const slotB = state.slots.find(s => s.id === b)!
+		const hashA = slotA.glb_hash
+		const hashB = slotB.glb_hash
+		slotA.glb_hash = hashB
+		slotB.glb_hash = hashA
+	}),
+
 	add_items: action((state, additions: {
 			item: Item.Whatever,
 			folderId: Id,

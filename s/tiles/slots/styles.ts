@@ -56,6 +56,14 @@ ${standard_tile_styles}
 	gap: 0.1em;
 	padding: 0.5em;
 	> small { align-self: end; }
+
+	&[data-drag-is-picked-up] {
+		outline: 2px solid yellow;
+	}
+
+	&[data-drag-is-hovered-over] {
+		outline: 2px solid lime;
+	}
 }
 
 .bar {
@@ -88,6 +96,8 @@ ${standard_tile_styles}
 	display: flex;
 	min-height: 8em;
 	border-radius: 1em;
+
+	user-select: none;
 
 	&[data-status="empty"] {
 		place-content: center;
