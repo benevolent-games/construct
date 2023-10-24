@@ -31,8 +31,13 @@ html {
 		content: "";
 		z-index: 10;
 		inset: 0;
-		background: #00aaff66;
-		border: 0.5em dashed white;
+		background: color-mix(
+			in srgb,
+			var(--construct-bravo) 5%,
+			transparent
+		);
+		border: 0.5em dashed var(--construct-bravo);
+		pointer-events: none;
 	}
 }
 

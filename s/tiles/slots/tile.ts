@@ -1,11 +1,11 @@
 
 import {html} from "lit"
-import {UseObsidian} from "@benev/slate"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
+import {dragonFileInterceptor, useDragon} from "./dragon/dragon.js"
 import {GlbSlot} from "../../context/state.js"
-import {AppContext, obsidian} from "../../context/context.js"
+import {obsidian} from "../../context/context.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {Id} from "../../context/domains/outline/types.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
@@ -14,59 +14,19 @@ import {Glb} from "../../context/controllers/catalog/parts/types.js"
 import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
 import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
-export function useDragon<P, H>(
-		use: UseObsidian<AppContext, HTMLElement>,
-		dropAction: (payload: P, dropzone: H) => void,
-	) {
-
-	const state = use.flatstate({
-		payload: undefined as undefined | P,
-		hover: undefined as undefined | H,
-	})
-
-	const handlers = use.prepare(() => ({
-		start: (payload: P) => () => {
-			state.payload = payload
-		},
-		end: () => () => {
-			state.payload = undefined
-			state.hover = undefined
-		},
-		leave: () => () => {
-			state.hover = undefined
-		},
-		over: (hover: H) => (event: DragEvent) => {
-			event.preventDefault()
-			state.hover = hover
-		},
-		drop: (hover: H) => () => {
-			const {payload} = state
-			state.payload = undefined
-			state.hover = undefined
-			if (payload)
-				dropAction(payload, hover)
-		},
-	}))
-
-	return {
-		...handlers,
-		payload: state.payload,
-		hover: state.hover,
-	}
-}
-
 export const SlotsTile = tile({
 	label: "slots",
 	icon: sprite_tabler_layout_list,
 	view: obsidian({name: "slots", styles}, use => () => {
 		const {context} = use
-
 		const slots = use.watch(() => context.state.slots)
 
 		const dragon = useDragon<GlbSlot, GlbSlot>(use, (slotA, slotB) => {
 			if (slotA !== slotB)
 				context.actions.swap_slots([slotA.id, slotB.id])
 		})
+
+		const fileDragon = dragonFileInterceptor(use, dragon)
 
 		function render_id(id: Id) {
 			return html`
@@ -80,7 +40,10 @@ export const SlotsTile = tile({
 				: undefined
 
 			const is_picked_up = dragon.payload === slot
-			const is_hovered_over = !is_picked_up && dragon.hover === slot
+			const is_hovered_over = (
+				dragon.payload &&
+				(!is_picked_up && dragon.hover === slot)
+			)
 
 			const status = (glb && !is_picked_up)
 				? "assigned"
@@ -113,10 +76,10 @@ export const SlotsTile = tile({
 						draggable="true"
 						?data-drag-is-picked-up=${is_picked_up}
 						?data-drag-is-hovered-over=${is_hovered_over}
-						@dragstart=${dragon.start(slot)}
-						@dragend=${dragon.end()}
+						@dragstart=${fileDragon.start(slot)}
+						@dragend=${fileDragon.end()}
+						@dragover=${fileDragon.over(slot)}
 						@dragleave=${dragon.leave()}
-						@dragover=${dragon.over(slot)}
 						@drop=${dragon.drop(slot)}
 						>
 						${status === "assigned"

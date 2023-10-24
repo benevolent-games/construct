@@ -19,7 +19,6 @@ export const styles = css`
 :host {
 	--resizer: var(--bg-b);
 	--taskbar: var(--bg-a);
-	--xxx-taskbar: color-mix(in srgb, var(--bg-a), var(--bg-b) 10%);
 
 	--tab: transparent;
 	--pane: var(--bg-a);
@@ -131,10 +130,10 @@ export const styles = css`
 	}
 
 	> .adder {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(4em, 6em));
+		display: flex;
 		justify-content: start;
 		align-content: start;
+		flex-wrap: wrap;
 		gap: 1em;
 
 		> button {
