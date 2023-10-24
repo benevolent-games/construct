@@ -11,6 +11,7 @@ import {Babylon} from "./controllers/babylon/babylon.js"
 import {Catalog} from "./controllers/catalog/catalog.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
+import {Shockdrop} from "./controllers/shockdrop/shockdrop.js"
 
 export class AppContext extends Context {
 	theme = theme
@@ -44,6 +45,19 @@ export class AppContext extends Context {
 		this.babylon.scene,
 		this.actions,
 	)
+
+	shockdrop = new Shockdrop({
+		element: document.documentElement,
+		handle_file_drop: list => {
+			for (const file of list) {
+				console.log("upload", file)
+				if (file.type.includes("gltf"))
+					this.warehouse.add_glb_file(file)
+				else
+					console.warn("file type must be 'gltf'")
+			}
+		},
+	})
 
 	// instantiator = new Instantiator(
 	// 	this.watch,

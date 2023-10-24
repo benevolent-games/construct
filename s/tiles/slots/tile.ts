@@ -3,12 +3,12 @@ import {html} from "lit"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
-import {dragonFileInterceptor, useDragon} from "./dragon/dragon.js"
 import {GlbSlot} from "../../context/state.js"
 import {obsidian} from "../../context/context.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {Id} from "../../context/domains/outline/types.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
+import {use_drag_and_drop} from "./parts/use_drag_and_drop.js"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {Glb} from "../../context/controllers/catalog/parts/types.js"
 import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
@@ -21,12 +21,19 @@ export const SlotsTile = tile({
 		const {context} = use
 		const slots = use.watch(() => context.state.slots)
 
-		const dragon = useDragon<GlbSlot, GlbSlot>(use, (slotA, slotB) => {
-			if (slotA !== slotB)
-				context.actions.swap_slots([slotA.id, slotB.id])
+		const drag = use_drag_and_drop<GlbSlot, GlbSlot>({
+			use,
+			handle_drop: (_, slotA, slotB) => {
+				if (slotA !== slotB)
+					context.actions.swap_slots([slotA.id, slotB.id])
+			},
+			handle_drop_from_outside: (event, _slot) => {
+				console.log("drop from outside!", event)
+				event.preventDefault()
+				event.stopPropagation()
+				context.shockdrop.unhighlight()
+			},
 		})
-
-		const fileDragon = dragonFileInterceptor(use, dragon)
 
 		function render_id(id: Id) {
 			return html`
@@ -39,10 +46,10 @@ export const SlotsTile = tile({
 				? context.warehouse.get_glb(slot.glb_hash)
 				: undefined
 
-			const is_picked_up = dragon.payload === slot
+			const is_picked_up = drag.payload === slot
 			const is_hovered_over = (
-				dragon.payload &&
-				(!is_picked_up && dragon.hover === slot)
+				drag.payload &&
+				(!is_picked_up && drag.hover === slot)
 			)
 
 			const status = (glb && !is_picked_up)
@@ -76,11 +83,11 @@ export const SlotsTile = tile({
 						draggable="true"
 						?data-drag-is-picked-up=${is_picked_up}
 						?data-drag-is-hovered-over=${is_hovered_over}
-						@dragstart=${fileDragon.start(slot)}
-						@dragend=${fileDragon.end()}
-						@dragover=${fileDragon.over(slot)}
-						@dragleave=${dragon.leave()}
-						@drop=${dragon.drop(slot)}
+						@dragstart=${drag.dragstart(slot)}
+						@dragend=${drag.dragend()}
+						@dragover=${drag.dragover(slot)}
+						@dragleave=${drag.dragleave()}
+						@drop=${drag.drop(slot)}
 						>
 						${status === "assigned"
 							? render_glb(slot, glb!)
