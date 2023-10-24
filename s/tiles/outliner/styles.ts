@@ -78,6 +78,9 @@ li {
 	& :is(button, .icon) {
 		flex: 0 0 auto;
 		opacity: 0.5;
+		display: flex;
+		place-content: center;
+		place-items: center;
 
 		&:is(button) {
 			&:hover { opacity: 0.9; }

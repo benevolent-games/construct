@@ -36,14 +36,15 @@ ${standard_tile_styles}
 	justify-content: center;
 	list-style: none;
 	padding: 1em;
-	gap: 1em;
+	gap: 0.5em;
 }
 
 .slot {
 	display: flex;
 	flex-direction: column;
 	gap: 0.1em;
-	padding: 0.5em;
+	> * { flex: 0 0 auto; }
+	> .glb { flex: 1 1 auto; }
 	> small { align-self: end; }
 }
 
@@ -74,7 +75,7 @@ ${standard_tile_styles}
 .glb {
 	position: relative;
 	display: flex;
-	min-height: 8em;
+	min-height: 5em;
 	border-radius: 1em;
 	user-select: none;
 	overflow: hidden;
@@ -142,7 +143,7 @@ ${standard_tile_styles}
 			flex-direction: column;
 			place-content: center;
 			place-items: center;
-			gap: 0.5em;
+			gap: 0.2em;
 			padding: 0.5em;
 
 			> .heading {
@@ -179,6 +180,11 @@ button.delete {
 		display: flex;
 		flex-direction: column;
 		text-align: center;
+
+		> span:nth-child(1) {
+			opacity: 0.8;
+			font-size: 0.8em;
+		}
 
 		> span:nth-child(2) {
 			opacity: 0.5;

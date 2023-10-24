@@ -24,20 +24,22 @@ export const CatalogTile = tile({
 		const {manifest} = warehouse
 
 		return html`
-			${manifest.length === 0 ? html`
-				<div class=intro>
-					<h1>asset catalog</h1>
-					<p>drag-and-drop a glb file</p>
-				</div>
-			` : undefined}
+			<div class="container">
+				${manifest.length === 0 ? html`
+					<div class=intro>
+						<h1>asset catalog</h1>
+						<p>drag-and-drop a glb file</p>
+					</div>
+				` : undefined}
 
-			${manifest.map(({slot, glb}) => html`
-				<div class=glb>
-					<h3>${slot.name}</h3>
-					${render_glb_stats(glb)}
-					${render_glb_props(slot, glb)}
-				</div>
-			`)}
+				${manifest.map(({slot, glb}) => html`
+					<div class=glb>
+						<h3>${slot.name}</h3>
+						${render_glb_stats(glb)}
+						${render_glb_props(slot, glb)}
+					</div>
+				`)}
+			</div>
 		`
 	}),
 })

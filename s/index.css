@@ -24,6 +24,7 @@ html {
 	--construct-bg-a: #181818;
 	--construct-bg-b: #000;
 	--construct-bg-c: #333;
+	--construct-taskbar-size: 1em;
 
 	&[data-drop-highlight]::before {
 		display: block;
