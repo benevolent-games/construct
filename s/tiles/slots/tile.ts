@@ -1,5 +1,6 @@
 
 import {html} from "lit"
+import {UseObsidian} from "@benev/slate"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
@@ -12,7 +13,6 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {Glb} from "../../context/controllers/catalog/parts/types.js"
 import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
 import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
-import { UseObsidian } from "@benev/slate"
 
 export function useDragon<P, H>(
 		use: UseObsidian<AppContext, HTMLElement>,
@@ -79,7 +79,10 @@ export const SlotsTile = tile({
 				? context.warehouse.get_glb(slot.glb_hash)
 				: undefined
 
-			const status = glb
+			const is_picked_up = dragon.payload === slot
+			const is_hovered_over = !is_picked_up && dragon.hover === slot
+
+			const status = (glb && !is_picked_up)
 				? "assigned"
 				: "empty"
 
@@ -92,18 +95,8 @@ export const SlotsTile = tile({
 				context.actions.delete_slot(slot)
 			}
 
-			const is_picked_up = dragon.payload === slot
-			const is_hovered_over = !is_picked_up && dragon.hover === slot
-
 			return html`
-				<li class=slot
-					data-id="${slot.id}"
-					?data-drag-is-picked-up=${is_picked_up}
-					?data-drag-is-hovered-over=${is_hovered_over}
-					@dragleave=${dragon.leave()}
-					@dragover=${dragon.over(slot)}
-					@drop=${dragon.drop(slot)}
-					>
+				<li class=slot data-id="${slot.id}">
 					<div class="top bar">
 						<input
 							class=name
@@ -118,11 +111,16 @@ export const SlotsTile = tile({
 						class=glb
 						data-status=${status}
 						draggable="true"
+						?data-drag-is-picked-up=${is_picked_up}
+						?data-drag-is-hovered-over=${is_hovered_over}
 						@dragstart=${dragon.start(slot)}
 						@dragend=${dragon.end()}
+						@dragleave=${dragon.leave()}
+						@dragover=${dragon.over(slot)}
+						@drop=${dragon.drop(slot)}
 						>
-						${glb
-							? render_glb(slot, glb)
+						${status === "assigned"
+							? render_glb(slot, glb!)
 							: html`<span>empty</span>`}
 					</div>
 					<div class="bottom bar">

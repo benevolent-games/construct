@@ -28,16 +28,6 @@ ${standard_tile_styles}
 			var(--construct-bg-c) 60%
 		)
 	);
-
-	--xxx-assigned-bg: color-mix(
-		in srgb,
-		var(--construct-bg-a) 50%,
-		var(--construct-bg-c)
-	);
-
-	--glb-bg: var(--construct-bg-c);
-
-	--grip-bg: color-mix(in srgb, var(--construct-alpha) 20%, var(--construct-bg-c));
 }
 
 .grid {
@@ -45,7 +35,6 @@ ${standard_tile_styles}
 	grid-template-columns: repeat(auto-fill, minmax(6em, 32em));
 	justify-content: center;
 	list-style: none;
-
 	padding: 1em;
 	gap: 1em;
 }
@@ -56,14 +45,6 @@ ${standard_tile_styles}
 	gap: 0.1em;
 	padding: 0.5em;
 	> small { align-self: end; }
-
-	&[data-drag-is-picked-up] {
-		outline: 2px solid yellow;
-	}
-
-	&[data-drag-is-hovered-over] {
-		outline: 2px solid lime;
-	}
 }
 
 .bar {
@@ -96,13 +77,20 @@ ${standard_tile_styles}
 	display: flex;
 	min-height: 8em;
 	border-radius: 1em;
-
 	user-select: none;
+
+	&[data-drag-is-picked-up] {
+		outline: 2px solid yellow;
+	}
+
+	&[data-drag-is-hovered-over] {
+		outline: 2px solid lime;
+	}
 
 	&[data-status="empty"] {
 		place-content: center;
 		background: var(--empty-bg);
-		box-shadow: inset 0.2em 0.5em 1em #000;
+		box-shadow: inset 0.2em 0.5em 1em #0006;
 		border-bottom: 1px solid #fff2;
 		align-items: center;
 		font-style: italic;
@@ -112,6 +100,7 @@ ${standard_tile_styles}
 	&[data-status="assigned"] {
 		background: var(--assigned-bg);
 		box-shadow: 0.2em 0.5em 1em #0004;
+		border-top: 1px solid #fff4;
 
 		.cap {
 			width: 2em;
