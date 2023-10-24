@@ -6,7 +6,10 @@ import {Warehouse} from "../warehouse/warehouse.js"
 import {Id, Item} from "../../domains/outline/types.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
-export type Thing = {dispose: () => void}
+export type Thing = {
+	glb_hash: Id
+	dispose: () => void
+}
 
 export class Instantiator {
 
@@ -36,7 +39,7 @@ export class Instantiator {
 					const instance = prop.top_lod.node.instantiateHierarchy()!
 					console.log("instantiated", instance)
 					const dispose = () => instance.dispose()
-					this.things.set(item.id, {dispose})
+					this.things.set(item.id, {dispose, glb_hash: glb.hash})
 				}
 				else console.error(`failed to create instance "${item.name}" ${item.id}`)
 				break
@@ -44,12 +47,6 @@ export class Instantiator {
 				console.log("todo: lights")
 				break
 		}
-	}
-
-	#delete([id, {dispose}]: [Id, Thing]) {
-		console.log("delete", id)
-		dispose()
-		this.things.delete(id)
 	}
 
 	#delete_by_id(id: Id) {
@@ -71,19 +68,28 @@ export class Instantiator {
 		const new_items = items
 			.filter(item => !things.has(item.id))
 
-		const old_items = [...things]
+		const old_item_ids = [...things]
 			.filter(([id]) => !items.some(i => i.id === id))
+			.map(([id]) => id)
 
 		for (const new_item of new_items)
 			this.#add(new_item)
 
-		for (const old_item of old_items)
-			this.#delete(old_item)
+		for (const old_id of old_item_ids)
+			this.#delete_by_id(old_id)
 
 		for (const item of items) {
 			if (item.kind === "instance") {
-				const {status} = this.warehouse.trace_prop(item.address)
-				if (status !== "available")
+				const {status, glb} = this.warehouse.trace_prop(item.address)
+				if (status === "available") {
+					const thing = this.things.get(item.id)!
+					if (thing.glb_hash !== glb.hash) {
+						console.log("prop replacement", item.id)
+						this.#delete_by_id(item.id)
+						this.#add(item)
+					}
+				}
+				else
 					this.#delete_by_id(item.id)
 			}
 		}

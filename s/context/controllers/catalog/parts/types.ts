@@ -32,12 +32,28 @@ export type PropAddress = {
 	prop: string
 }
 
-export type PropTrace = {
-	status: "missing-slot" | "missing-glb" | "missing-prop" | "available"
-	slot: GlbSlot | undefined
-	glb: Glb | undefined
-	prop: GlbProp | undefined
+export type PropTraceFailed = {
+	status: "missing-slot" | "missing-glb" | "missing-prop"
+	slot: undefined
+	glb: undefined
+	prop: undefined
 }
+
+export type PropTraceSuccess = {
+	status: "available"
+	slot: GlbSlot
+	glb: Glb
+	prop: GlbProp
+}
+
+export type PropTrace = PropTraceSuccess | PropTraceFailed
+
+// export type PropTrace = {
+// 	status: "missing-slot" | "missing-glb" | "missing-prop" | "available"
+// 	slot: GlbSlot | undefined
+// 	glb: Glb | undefined
+// 	prop: GlbProp | undefined
+// }
 
 export const lod_info = [
 	["incredible", 5],

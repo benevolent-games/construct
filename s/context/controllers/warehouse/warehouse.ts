@@ -64,7 +64,7 @@ export class Warehouse {
 				: !prop ? "missing-prop"
 				: "available"
 			)
-		}
+		} as PropTrace
 	}
 
 	prune_orphaned_glbs() {
