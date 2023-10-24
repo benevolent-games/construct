@@ -1,9 +1,18 @@
 
-import {Item} from "./domains/outline/types.js"
+import {Id, Item} from "./domains/outline/types.js"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
+
+export type Hash = string
+
+export interface GlbSlot {
+	id: Id
+	name: string
+	glb_hash: Hash | undefined
+}
 
 export interface State {
 	outline: Item.Folder
+	slots: GlbSlot[]
 }
 
 export const default_state = (): State => ({
@@ -14,5 +23,6 @@ export const default_state = (): State => ({
 		selected: false,
 		children: [],
 	},
+	slots: [],
 })
 

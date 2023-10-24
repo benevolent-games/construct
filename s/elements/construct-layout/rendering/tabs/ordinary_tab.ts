@@ -7,8 +7,6 @@ import {LayoutMeta} from "../utils/layout_meta.js"
 import {quartz} from "../../../../context/context.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
 
-const nil = () => {}
-
 const inside_x_button = (event: MouseEvent) => {
 	const target = event.target as Element
 	const tab = event.currentTarget as HTMLElement
@@ -16,7 +14,7 @@ const inside_x_button = (event: MouseEvent) => {
 	return event.target === x || x.contains(target)
 }
 
-export const OrdinaryTab = quartz(use => ({
+export const OrdinaryTab = quartz(_use => ({
 		meta, pane, leaf, pane_path, leaf_index,
 	}: {
 		meta: LayoutMeta

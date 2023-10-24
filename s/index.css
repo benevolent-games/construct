@@ -23,6 +23,8 @@ html {
 	--construct-bravo: lime;
 	--construct-bg-a: #181818;
 	--construct-bg-b: #000;
+	--construct-bg-c: #333;
+	--construct-taskbar-size: 1em;
 
 	&[data-drop-highlight]::before {
 		display: block;
@@ -30,8 +32,13 @@ html {
 		content: "";
 		z-index: 10;
 		inset: 0;
-		background: #00aaff66;
-		border: 0.5em dashed white;
+		background: color-mix(
+			in srgb,
+			var(--construct-bravo) 2%,
+			transparent
+		);
+		border: 0.25em dashed var(--construct-bravo);
+		pointer-events: none;
 	}
 }
 

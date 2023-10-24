@@ -10,6 +10,7 @@ import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {Id, Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
+import {make_outline_tools} from "../../context/domains/outline/tools.js"
 import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
 import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
@@ -22,6 +23,7 @@ export const OutlinerTile = tile({
 		const outline = use.watch(() => use.context.state.outline)
 		const {actions} = use.context
 
+		const tools = make_outline_tools(outline)
 		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
 
 		const drag = use.flatstate({
@@ -156,7 +158,7 @@ export const OutlinerTile = tile({
 				`
 			}
 
-			function render_id() {
+			function render_id(onclick = () => {}) {
 				return html`
 					<div class=id>
 						${item.id.slice(0, 6)}
@@ -164,9 +166,14 @@ export const OutlinerTile = tile({
 				`
 			}
 
-			function draggable(content: TemplateResult) {
-				return is_root ? content : html`
+			function gripbox(content: TemplateResult) {
+				return is_root ? html`
+					<div class=gripbox>
+						${content}
+					</div>
+				` : html`
 					<div
+						class=gripbox
 						draggable=true
 						@dragstart=${dnd.start(item)}
 						@dragend=${dnd.end()}>
@@ -188,17 +195,17 @@ export const OutlinerTile = tile({
 			switch (item.kind) {
 				case "instance":
 					return render_line_item(html`
-						${draggable(html`
-							<button class=icon>
+						${gripbox(html`
+							<div class=icon>
 								${sprite_tabler_vector_triangle}
-							</button>
+							</div>
 							<div class=name>${item.name}</div>
 						`)}
 						${render_nonfolder_right_side()}
 					`)
 				case "light":
 					return render_line_item(html`
-						${draggable(html`
+						${gripbox(html`
 							<div class=name>${item.name}</div>
 						`)}
 						${render_nonfolder_right_side()}
@@ -209,17 +216,23 @@ export const OutlinerTile = tile({
 						settings.opened = !settings.opened
 						use.rerender()
 					}
+					const number_of_children = tools.reports.reduce(
+						(previous, current) =>
+							previous + (current.parents.map(p => p.id)
+								.includes(item.id) ? 1 : 0), 0
+					)
 					return html`
 						${render_line_item(html`
-							${draggable(html`
-								<button class=icon @click=${toggle_opened}>
+							${gripbox(html`
+								<button @click=${toggle_opened}>
 									${settings.opened
 										? sprite_tabler_folder_open
 										: sprite_tabler_folder_filled}
 								</button>
 								<div class=name @click=${toggle_opened}>${item.name}</div>
 							`)}
-							${render_id()}
+							<div class=childcount @click=${toggle_opened}>${number_of_children}</div>
+							${render_id(toggle_opened)}
 							<button class=newfolder @click=${click_to_create_new_folder(item)}>
 								${sprite_tabler_folder_plus}
 							</button>

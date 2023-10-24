@@ -3,6 +3,9 @@ import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
+import {GlbSlot} from "../../../state.js"
+import {Id} from "../../../domains/outline/types.js"
+
 export type GlbRef = {
 	hash: string
 	name: string
@@ -24,18 +27,33 @@ export type GlbProp = {
 	collision: undefined | PropNode
 }
 
-export type PropRef = {
-	glb: GlbRef
-	name: string
+export type PropAddress = {
+	slot: Id
+	prop: string
 }
 
-export type PropStatus = "found" | "glb-missing" | "prop-missing"
-
-export type PropSearchReport = {
-	glb: Glb | undefined
-	prop: GlbProp | undefined
-	status: PropStatus
+export type PropTraceFailed = {
+	status: "missing-slot" | "missing-glb" | "missing-prop"
+	slot: undefined
+	glb: undefined
+	prop: undefined
 }
+
+export type PropTraceSuccess = {
+	status: "available"
+	slot: GlbSlot
+	glb: Glb
+	prop: GlbProp
+}
+
+export type PropTrace = PropTraceSuccess | PropTraceFailed
+
+// export type PropTrace = {
+// 	status: "missing-slot" | "missing-glb" | "missing-prop" | "available"
+// 	slot: GlbSlot | undefined
+// 	glb: Glb | undefined
+// 	prop: GlbProp | undefined
+// }
 
 export const lod_info = [
 	["incredible", 5],

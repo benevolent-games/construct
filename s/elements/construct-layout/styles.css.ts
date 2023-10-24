@@ -14,12 +14,12 @@ export const styles = css`
 	--bravo: var(--construct-bravo);
 	--bg-a: var(--construct-bg-a);
 	--bg-b: var(--construct-bg-b);
+	--taskbar-size: var(--construct-taskbar-size);
 }
 
 :host {
 	--resizer: var(--bg-b);
 	--taskbar: var(--bg-a);
-	--xxx-taskbar: color-mix(in srgb, var(--bg-a), var(--bg-b) 10%);
 
 	--tab: transparent;
 	--pane: var(--bg-a);
@@ -83,6 +83,7 @@ export const styles = css`
 	> .taskbar {
 		display: flex;
 		justify-content: end;
+		font-size: var(--taskbar-size);
 
 		> * {
 			flex: 0 0 auto;
@@ -131,10 +132,10 @@ export const styles = css`
 	}
 
 	> .adder {
-		display: grid;
-		grid-template-columns: repeat(auto-fit, minmax(4em, 6em));
+		display: flex;
 		justify-content: start;
 		align-content: start;
+		flex-wrap: wrap;
 		gap: 1em;
 
 		> button {
@@ -203,7 +204,7 @@ export const styles = css`
 		border-top: 0.1em solid transparent;
 
 		&[data-adder] {
-			padding: 0.2em 1em;
+			padding-right: 0.9em;
 			&:not(:hover):not([data-active]) {
 				opacity: 0.2;
 			}

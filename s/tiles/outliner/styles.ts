@@ -69,18 +69,30 @@ li {
 		border-left: 1px solid #fff2;
 	}
 
-	& button {
+	& .gripbox {
+		flex: 1 1 auto;
+		display: flex;
+		gap: 0.2em;
+	}
+
+	& :is(button, .icon) {
+		flex: 0 0 auto;
 		opacity: 0.5;
-		&:hover { opacity: 0.9; }
-		&:active { opacity: 1; }
+		display: flex;
+		place-content: center;
+		place-items: center;
+
+		&:is(button) {
+			&:hover { opacity: 0.9; }
+			&:active { opacity: 1; }
+			&.delete:hover { color: red; }
+		}
 
 		> svg {
 			display: block;
 			width: 1em;
 			height: 1em;
 		}
-
-		&.delete:hover { color: red; }
 	}
 
 	& .name {
@@ -93,6 +105,13 @@ li {
 		white-space: nowrap;
 	}
 
+	& .childcount {
+		opacity: 0.5;
+		font-size: 0.8em;
+		font-family: monospace;
+		margin-right: 1em;
+	}
+
 	& .id {
 		opacity: 0.5;
 		font-size: 0.6em;
@@ -102,10 +121,6 @@ li {
 	& .spacer {
 		width: 1em;
 		height: 1em;
-	}
-
-	& [draggable] {
-		display: contents;
 	}
 }
 

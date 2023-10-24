@@ -1,5 +1,5 @@
 
-import {GlbRef} from "../../controllers/catalog/parts/types.js"
+import {PropAddress} from "../../controllers/catalog/parts/types.js"
 
 export type Id = string
 
@@ -22,7 +22,7 @@ export namespace Item {
 	export interface Instance extends Base {
 		kind: "instance"
 		name: string
-		glb: GlbRef
+		address: PropAddress
 	}
 
 	export interface Light extends Base {

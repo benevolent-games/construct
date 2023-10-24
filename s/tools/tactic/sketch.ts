@@ -35,7 +35,6 @@ export class Keyboard extends Device {
 		super()
 
 		const handler = ({down}: {down: boolean}) => (event: KeyboardEvent) => {
-			event.preventDefault()
 			this.onInput.publish({
 				down,
 				kind: "button",
