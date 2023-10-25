@@ -47,12 +47,12 @@ li {
 		flex-direction: column;
 
 		&[data-drag-hover][data-drag-mode="into"] {
-			background: color-mix(in srgb, var(--construct-bravo) 50%, transparent 50%);
-			border: 2px solid var(--construct-bravo);
+			background: color-mix(in srgb, var(--bravo) 50%, transparent 50%);
+			border: 2px solid var(--bravo);
 		}
 
 		&[data-drag-hover][data-drag-mode="below"] {
-			border-bottom: 2px solid var(--construct-bravo);
+			border-bottom: 2px solid var(--bravo);
 		}
 
 		> * {

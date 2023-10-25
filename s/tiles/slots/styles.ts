@@ -11,21 +11,21 @@ ${standard_tile_styles}
 
 	--empty-bg: color-mix(
 		in srgb,
-		var(--construct-bg-a) 85%,
-		var(--construct-bg-b)
+		var(--bg-a) 85%,
+		var(--bg-b)
 	);
 
 	--assigned-bg: linear-gradient(
 		to bottom,
 		color-mix(
 			in srgb,
-			var(--construct-bg-a),
-			var(--construct-bg-c) 100%
+			var(--bg-a),
+			var(--bg-c) 100%
 		),
 		color-mix(
 			in srgb,
-			var(--construct-bg-a),
-			var(--construct-bg-c) 60%
+			var(--bg-a),
+			var(--bg-c) 60%
 		)
 	);
 }
@@ -87,7 +87,7 @@ ${standard_tile_styles}
 			display: block;
 			position: absolute;
 			inset: 0;
-			background: color-mix(in srgb, var(--construct-alpha) 10%, transparent);
+			background: color-mix(in srgb, var(--alpha) 10%, transparent);
 			pointer-events: none;
 		}
 	}
@@ -99,7 +99,7 @@ ${standard_tile_styles}
 			display: block;
 			position: absolute;
 			inset: 0;
-			background: color-mix(in srgb, var(--construct-bravo) 5%, transparent);
+			background: color-mix(in srgb, var(--bravo) 5%, transparent);
 			pointer-events: none;
 		}
 	}

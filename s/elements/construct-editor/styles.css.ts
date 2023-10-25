@@ -21,11 +21,11 @@ export const styles = css`
 	scrollbar-color: #333 #666;
 	scrollbar-width: auto;
 
-	--alpha: var(--construct-alpha);
-	--bravo: var(--construct-bravo);
-	--bg-a: var(--construct-bg-a);
-	--bg-b: var(--construct-bg-b);
-	--taskbar-size: var(--construct-taskbar-size);
+	--alpha: var(--alpha);
+	--bravo: var(--bravo);
+	--bg-a: var(--bg-a);
+	--bg-b: var(--bg-b);
+	--taskbar-size: var(--taskbar-size);
 }
 
 :host {
@@ -49,10 +49,10 @@ export const styles = css`
 		z-index: 10;
 		background: color-mix(
 			in srgb,
-			var(--construct-bravo) 2%,
+			var(--bravo) 2%,
 			transparent
 		);
-		border: 0.25em dashed var(--construct-bravo);
+		border: 0.25em dashed var(--bravo);
 		pointer-events: none;
 	}
 

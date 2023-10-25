@@ -17,11 +17,11 @@ construct-editor {
 	width: 100vw;
 	height: 100vh;
 
-	--construct-alpha: yellow;
-	--construct-bravo: lime;
-	--construct-bg-a: #181818;
-	--construct-bg-b: #000;
-	--construct-bg-c: #333;
-	--construct-taskbar-size: 1em;
+	--alpha: yellow;
+	--bravo: lime;
+	--bg-a: #181818;
+	--bg-b: #000;
+	--bg-c: #333;
+	--taskbar-size: 1em;
 }
 
