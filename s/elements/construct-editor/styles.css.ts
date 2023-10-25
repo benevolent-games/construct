@@ -10,6 +10,17 @@ export const styles = css`
 	width: 100%;
 	height: 100%;
 
+	font-family: sans-serif;
+	background: #111;
+	color: #fff8;
+
+	::-webkit-scrollbar { width: 10px; }
+	::-webkit-scrollbar-track { background: #333; border-radius: 1em; }
+	::-webkit-scrollbar-thumb { background: #666; border-radius: 1em; }
+	::-webkit-scrollbar-thumb:hover { background: #777; }
+	scrollbar-color: #333 #666;
+	scrollbar-width: auto;
+
 	--alpha: var(--construct-alpha);
 	--bravo: var(--construct-bravo);
 	--bg-a: var(--construct-bg-a);
@@ -20,7 +31,6 @@ export const styles = css`
 :host {
 	--resizer: var(--bg-b);
 	--taskbar: var(--bg-a);
-
 	--tab: transparent;
 	--pane: var(--bg-a);
 }
@@ -30,6 +40,21 @@ export const styles = css`
 	width: 100%;
 	height: 100%;
 	overflow: hidden;
+
+	&[data-dropzone-indicator]::before {
+		content: "";
+		display: block;
+		position: fixed;
+		inset: 0;
+		z-index: 10;
+		background: color-mix(
+			in srgb,
+			var(--construct-bravo) 2%,
+			transparent
+		);
+		border: 0.25em dashed var(--construct-bravo);
+		pointer-events: none;
+	}
 
 	> .cell {
 		flex-basis: 100%;

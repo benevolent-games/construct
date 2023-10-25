@@ -1,5 +1,5 @@
 
-import {Context, prepare_frontend} from "@benev/slate"
+import {Context, prepare_frontend, pub} from "@benev/slate"
 
 import {theme} from "./theme.js"
 import {actions} from "./actions.js"
@@ -8,7 +8,6 @@ import {Tactic} from "../tools/tactic/sketch.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
-import {Shockdrop} from "./controllers/shockdrop/shockdrop.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
 
@@ -55,14 +54,7 @@ export class AppContext extends Context {
 		this.warehouse,
 	)
 
-	shockdrop = new Shockdrop({
-		element: document.documentElement,
-		highlight_attribute: "data-drop-highlight",
-		handle_file_drop: files => {
-			for (const file of files)
-				this.warehouse.add_glb_file(file)
-		},
-	})
+	on_file_drop_already_handled_internally = pub<void>()
 
 	tactic = new Tactic({
 		tower: this.tower,

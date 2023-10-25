@@ -1,5 +1,6 @@
 
 import {html} from "lit"
+import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
 import {tile} from "../tile_parts.js"
@@ -8,10 +9,9 @@ import {obsidian} from "../../context/context.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {Id} from "../../context/domains/outline/types.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
-import {use_drag_and_drop} from "./parts/use_drag_and_drop.js"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {Glb} from "../../context/controllers/catalog/parts/types.js"
-import {Shockdrop} from "../../context/controllers/shockdrop/shockdrop.js"
+import {useDragAndDrop} from "../../tools/shockdrop/use_drag_and_drop.js"
+import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
 import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
@@ -22,22 +22,24 @@ export const SlotsTile = tile({
 		const {context} = use
 		const slots = use.watch(() => context.state.slots)
 
-		const drag = use_drag_and_drop<GlbSlot, GlbSlot>({
+		const drag = useDragAndDrop<GlbSlot, GlbSlot>({
 			use,
 			handle_drop: (_, slotA, slotB) => {
 				if (slotA !== slotB)
 					context.actions.swap_slots([slotA.id, slotB.id])
 			},
-			handle_drop_from_outside: (event, slot) => {
-				const [file, ...files] = Array.from(event.dataTransfer!.files)
-				context.warehouse.add_glb_file(file, slot.id)
-				for (const file of files)
-					context.warehouse.add_glb_file(file)
-				event.preventDefault()
-				event.stopPropagation()
-				context.shockdrop.unhighlight()
+			out_of_band: {
+				predicate: drag_has_files,
+				handle_drop: (event, slot) => {
+					const [file, ...files] = Array.from(event.dataTransfer!.files)
+					context.warehouse.add_glb_file(file, slot.id)
+					for (const file of files)
+						context.warehouse.add_glb_file(file)
+					event.preventDefault()
+					event.stopPropagation()
+					context.on_file_drop_already_handled_internally.publish()
+				},
 			},
-			predicate_for_drags_from_outside: Shockdrop.is_file_drag,
 		})
 
 		function render_id(id: Id) {
