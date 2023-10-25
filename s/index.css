@@ -46,12 +46,8 @@ html, body {
 	min-height: 100%;
 }
 
-.foundation {
+construct-editor {
 	width: 100vw;
 	height: 100vh;
-}
-
-nub-context {
-	display: contents;
 }
 

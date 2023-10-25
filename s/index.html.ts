@@ -10,11 +10,7 @@ export default template(async basic => {
 		title: "@benev/construct",
 		head: startup_scripts_with_dev_mode(path),
 		body: html`
-			<main class=foundation>
-				<nub-context>
-					<construct-layout></construct-layout>
-				</nub-context>
-			</main>
+			<construct-editor></construct-editor>
 		`,
 	})
 })

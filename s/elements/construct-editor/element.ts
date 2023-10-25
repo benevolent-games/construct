@@ -8,7 +8,7 @@ import {TabDragger} from "./parts/tab_dragger.js"
 import {make_layout_controller} from "./parts/make_layout_controller.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
 
-export const ConstructLayout = carbon({styles}, use => {
+export const ConstructEditor = carbon({styles}, use => {
 	const resizer = use.prepare(() => new Resizer(() => use.rerender()))
 	const layout = use.prepare(() => make_layout_controller(use))
 	const render_layout = use.prepare(() => make_layout_renderer({
