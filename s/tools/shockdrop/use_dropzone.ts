@@ -1,6 +1,6 @@
 
 import {Use} from "@benev/slate"
-import {dragleave_is_serious} from "./utils/dragleave_is_serious.js"
+import {dragleave_has_exited_current_target} from "./utils/dragleave_has_exited_current_target.js"
 
 export function useDropzone({
 		use,
@@ -21,7 +21,7 @@ export function useDropzone({
 				indicator.value = true
 		},
 		dragleave: (event: DragEvent) => {
-			if (dragleave_is_serious(event))
+			if (dragleave_has_exited_current_target(event))
 				indicator.value = false
 		},
 		drop: (event: DragEvent) => {
