@@ -31,26 +31,23 @@ export class Instantiator {
 	things = new Map<Id, Thing>()
 
 	#add(item: Item.Whatever) {
-		console.log("add", item.name)
 		switch (item.kind) {
 			case "instance":
 				const {glb, prop} = this.warehouse.trace_prop(item.address)
 				if (glb && prop) {
 					const instance = prop.top_lod.node.instantiateHierarchy()!
-					console.log("instantiated", instance)
 					const dispose = () => instance.dispose()
 					this.things.set(item.id, {dispose, glb_hash: glb.hash})
 				}
 				else console.error(`failed to create instance "${item.name}" ${item.id}`)
 				break
 			case "light":
-				console.log("todo: lights")
+				console.warn("todo: lights")
 				break
 		}
 	}
 
 	#delete_by_id(id: Id) {
-		console.log("delete by id", id)
 		const item = this.things.get(id)
 		if (item) {
 			item.dispose()
@@ -59,7 +56,6 @@ export class Instantiator {
 	}
 
 	reconsider() {
-		console.log("reconsider")
 		const {things} = this
 		const {outline} = this.app.state
 		const tools = make_outline_tools(outline)
@@ -84,7 +80,6 @@ export class Instantiator {
 				if (status === "available") {
 					const thing = this.things.get(item.id)!
 					if (thing.glb_hash !== glb.hash) {
-						console.log("prop replacement", item.id)
 						this.#delete_by_id(item.id)
 						this.#add(item)
 					}
