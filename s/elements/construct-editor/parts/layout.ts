@@ -1,10 +1,10 @@
 
-import {tiles} from "../../../tiles/tiles.js"
+import {panels} from "../../../panels/panels.js"
 
 export namespace Layout {
 	export type Kind = "cell" | "pane" | "leaf"
 
-	export type LeafName = keyof typeof tiles
+	export type LeafName = keyof typeof panels
 
 	export interface Base {
 		kind: Kind

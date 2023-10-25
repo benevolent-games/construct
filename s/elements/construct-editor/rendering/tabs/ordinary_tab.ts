@@ -2,7 +2,7 @@
 import { html } from "@benev/slate"
 
 import {Layout} from "../../parts/layout.js"
-import {tiles} from "../../../../tiles/tiles.js"
+import {panels} from "../../../../panels/panels.js"
 import {LayoutMeta} from "../utils/layout_meta.js"
 import {quartz} from "../../../../context/context.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
@@ -24,7 +24,7 @@ export const OrdinaryTab = quartz(_use => ({
 		leaf_index: number
 	}) => {
 
-	const {icon, label} = tiles[leaf.tab]
+	const {icon, label} = panels[leaf.tab]
 	const leaf_path = [...pane_path, leaf_index]
 	const active = pane.active_leaf_index === leaf_index
 	const show_drag_indicator = meta.dragger.is_indicated(leaf_path)

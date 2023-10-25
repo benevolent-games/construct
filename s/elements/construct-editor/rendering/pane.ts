@@ -51,7 +51,7 @@ export const render_pane = (meta: LayoutMeta) => (
 
 		${defined(node.active_leaf_index, {
 			yes: index => html`
-				<div class="leaf tile">
+				<div class="leaf panel">
 					${render_leaf(meta)(node.children[index], [...pane_path, index])}
 				</div>
 			`,
