@@ -1,5 +1,6 @@
 
 import {Use} from "@benev/slate"
+import {dragleave_is_serious} from "./utils/dragleave_is_serious.js"
 
 export function useDropzone({
 		use,
@@ -19,8 +20,9 @@ export function useDropzone({
 			if (predicate(event))
 				indicator.value = true
 		},
-		dragleave: (_: DragEvent) => {
-			indicator.value = false
+		dragleave: (event: DragEvent) => {
+			if (dragleave_is_serious(event))
+				indicator.value = false
 		},
 		drop: (event: DragEvent) => {
 			event.preventDefault()
@@ -32,8 +34,12 @@ export function useDropzone({
 
 	return {
 		...handlers,
-		reset_indicator: () => {},
-		get indicator() { return indicator.value },
+		reset_indicator: () => {
+			indicator.value = false
+		},
+		get indicator() {
+			return indicator.value
+		},
 	}
 }
 

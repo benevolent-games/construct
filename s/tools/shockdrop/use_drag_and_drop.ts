@@ -1,6 +1,6 @@
 
 import {Use} from "@benev/slate"
-import {this_dragleave_is_serious} from "./utils/this_dragleave_is_serious.js"
+import {dragleave_is_serious} from "./utils/dragleave_is_serious.js"
 
 export function useDragAndDrop<P, H>({
 		use,
@@ -36,7 +36,7 @@ export function useDragAndDrop<P, H>({
 		},
 
 		dragleave: () => (event: DragEvent) => {
-			if (this_dragleave_is_serious(event))
+			if (dragleave_is_serious(event))
 				state.hover = undefined
 		},
 
