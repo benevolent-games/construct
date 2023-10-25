@@ -33,7 +33,7 @@
 		"@babylonjs/loaders": "^6.25.0"
 	},
 	"devDependencies": {
-		"@benev/turtle": "^0.5.0",
+		"@benev/turtle": "^0.5.1",
 		"@gltf-transform/cli": "^3.7.4",
 		"@rollup/plugin-node-resolve": "^15.2.3",
 		"chokidar": "^3.5.3",
