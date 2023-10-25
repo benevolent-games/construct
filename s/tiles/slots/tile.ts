@@ -87,6 +87,7 @@ export const SlotsTile = tile({
 						?data-drag-is-hovered-over=${is_hovered_over}
 						@dragstart=${drag.dragstart(slot)}
 						@dragend=${drag.dragend()}
+						@dragenter=${drag.dragenter()}
 						@dragover=${drag.dragover(slot)}
 						@dragleave=${drag.dragleave()}
 						@drop=${drag.drop(slot)}

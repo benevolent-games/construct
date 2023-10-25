@@ -88,6 +88,7 @@ ${standard_tile_styles}
 			position: absolute;
 			inset: 0;
 			background: color-mix(in srgb, var(--construct-alpha) 10%, transparent);
+			pointer-events: none;
 		}
 	}
 
@@ -99,6 +100,7 @@ ${standard_tile_styles}
 			position: absolute;
 			inset: 0;
 			background: color-mix(in srgb, var(--construct-bravo) 5%, transparent);
+			pointer-events: none;
 		}
 	}
 

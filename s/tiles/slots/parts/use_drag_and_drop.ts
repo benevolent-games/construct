@@ -22,12 +22,14 @@ export function use_drag_and_drop<P, H>({
 		dragstart: (payload: P) => (_: DragEvent) => {
 			state.payload = payload
 		},
+		dragenter: () => (_: DragEvent) => {},
 		dragend: () => (_: DragEvent) => {
 			state.payload = undefined
 			state.hover = undefined
 		},
-		dragleave: () => (_: DragEvent) => {
-			state.hover = undefined
+		dragleave: () => (event: DragEvent) => {
+			if (this_dragleave_is_serious(event))
+				state.hover = undefined
 		},
 		dragover: (hover: H) => (event: DragEvent) => {
 			event.preventDefault()
@@ -51,5 +53,13 @@ export function use_drag_and_drop<P, H>({
 		get payload() { return state.payload },
 		get hover() { return state.hover },
 	}
+}
+
+function this_dragleave_is_serious(event: DragEvent) {
+	const rect = (event.currentTarget as any).getBoundingClientRect();
+	const withinX = event.clientX >= rect.left && event.clientX <= rect.right;
+	const withinY = event.clientY >= rect.top && event.clientY <= rect.bottom;
+	const inside = withinX && withinY
+	return !inside
 }
 
