@@ -3,7 +3,6 @@ import {UseCarbon, html, render} from "@benev/slate"
 
 import {leaf_slot} from "./leaf_slot.js"
 import {panels} from "../../../panels/panels.js"
-import {default_layout} from "./default_layout.js"
 import {AppContext} from "../../../context/context.js"
 import {LayoutController} from "./layout_controller.js"
 
@@ -11,7 +10,7 @@ export const make_layout_controller = (
 		use: UseCarbon<AppContext>,
 	) => (
 
-	new LayoutController(default_layout, {
+	new LayoutController({
 		on_change: () => use.rerender(),
 		on_leaf_added: leaf => {
 			const div = document.createElement("div")
@@ -19,7 +18,9 @@ export const make_layout_controller = (
 			div.setAttribute("slot", leaf_slot(leaf.id))
 
 			const {view} = panels[leaf.tab]
-			const content = html`${view([])}`
+			const content = html`${view([{
+				leaf_id: leaf.id,
+			}])}`
 
 			render(content, div)
 			use.element.appendChild(div)
