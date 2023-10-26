@@ -2,6 +2,7 @@
 import {pub} from "@benev/slate"
 import {Layout} from "../../../elements/construct-editor/parts/layout.js"
 import {LayoutController} from "../../../elements/construct-editor/parts/layout_controller.js"
+import { stock_layouts } from "../../../elements/construct-editor/parts/layouts.js"
 
 export class LayoutMachine {
 	on_change = pub<void>()
@@ -13,5 +14,9 @@ export class LayoutMachine {
 		on_leaf_added: this.on_leaf_added.publish,
 		on_leaf_deleted: this.on_leaf_deleted.publish,
 	})
+
+	reset_to_default() {
+		this.controller.load(stock_layouts.default())
+	}
 }
 

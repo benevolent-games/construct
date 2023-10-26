@@ -9,9 +9,16 @@ import {sprite_settings} from "../../sprites/groups/feather/settings.js"
 export const SettingsPanel = panel({
 	label: "settings",
 	icon: sprite_settings,
-	view: obsidian({name: "settings", styles}, () => ({}: PanelProps) => {
+	view: obsidian({name: "settings", styles}, use => ({}: PanelProps) => {
+
+		function reset_layout() {
+			use.context.layout.reset_to_default()
+		}
+
 		return html`
-			<h1>settings</h1>
+			<button class=based @click=${reset_layout}>
+				reset layout to default
+			</button>
 		`
 	}),
 })
