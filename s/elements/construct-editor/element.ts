@@ -4,17 +4,23 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.css.js"
 import {Resizer} from "./resize/resizer.js"
 import {carbon} from "../../context/context.js"
+import {use_layout} from "./parts/use_layout.js"
 import {TabDragger} from "./parts/tab_dragger.js"
 import {useDropzone} from "../../tools/shockdrop/use_dropzone.js"
 import {file_is_glb} from "../../tools/shockdrop/utils/file_is_glb.js"
 import {dropped_files} from "../../tools/shockdrop/utils/dropfiles.js"
 import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
-import { use_layout } from "./parts/use_layout.js"
 
 export const ConstructEditor = carbon({styles}, use => {
-	const layout = use_layout(use)
-	const resizer = use.prepare(() => new Resizer(() => use.rerender()))
+	const {layout} = use.context
+	use.watch(() => layout.root)
+
+	const {add_new_leaves, delete_old_leaves} = use_layout(use)
+	add_new_leaves()
+	delete_old_leaves()
+
+	const resizer = use.prepare(() => new Resizer(layout))
 	const render_layout = use.prepare(() => make_layout_renderer({
 		layout,
 		resizer,
@@ -49,7 +55,7 @@ export const ConstructEditor = carbon({styles}, use => {
 			@drop=${dropzone.drop}
 			>
 
-			${render_layout(layout.root, [])}
+			${render_layout(layout.root)}
 		</div>
 	`
 })

@@ -5,7 +5,7 @@ import {render_cell} from "../cell.js"
 import {render_pane} from "../pane.js"
 import {render_leaf} from "../leaf.js"
 import {LayoutMeta} from "./layout_meta.js"
-import {Layout} from "../../parts/layout.js"
+import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
 export function make_layout_renderer(
 		draft: Omit<LayoutMeta, "render_layout">,
@@ -19,11 +19,11 @@ export function make_layout_renderer(
 		leaf: render_leaf,
 	})
 
-	function render_layout(node: Layout.Node, path: number[]) {
+	function render_layout(node: Layout.Node) {
 		switch (node.kind) {
-			case "cell": return render.cell(node, path)
-			case "pane": return render.pane(node, path)
-			case "leaf": return render.leaf(node, path)
+			case "cell": return render.cell(node)
+			case "pane": return render.pane(node)
+			case "leaf": return render.leaf(node)
 			default: throw new Error(`unknown layout node kind`)
 		}
 	}

@@ -1,14 +1,13 @@
 
 import {html} from "lit"
 
-import {Layout} from "../parts/layout.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
 import {alternator} from "../parts/alternator.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
+import {Layout} from "../../../context/controllers/layout/parts/types.js"
 
 export const render_cell = (meta: LayoutMeta) => (
 		node: Layout.Cell,
-		path: number[],
 	) => html`
 
 	<div
@@ -18,7 +17,7 @@ export const render_cell = (meta: LayoutMeta) => (
 
 		${alternator(
 			node.children,
-			(child, index) => meta.render_layout(child, [...path, index]),
+			(child) => meta.render_layout(child),
 			(child, index) => html`
 				<div
 					class=resizer

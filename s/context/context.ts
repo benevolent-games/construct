@@ -1,6 +1,8 @@
 
 import {Context, prepare_frontend, pub} from "@benev/slate"
 
+import type {panels} from "../panels/panels.js"
+
 import {theme} from "./theme.js"
 import {actions} from "./actions.js"
 import {State, default_state} from "./state.js"
@@ -8,8 +10,9 @@ import {Tactic} from "../tools/tactic/sketch.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
-import {LayoutMachine} from "./controllers/layout/layout.js"
+import {Store, store} from "./controllers/store/store.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
+import {LayoutController} from "./controllers/layout/controller.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
 
 export class AppContext extends Context {
@@ -74,7 +77,9 @@ export class AppContext extends Context {
 		},
 	})
 
-	layout = new LayoutMachine()
+	store = store<Store>(localStorage)
+	layout = new LayoutController(this.watch, this.store)
+	panels: typeof panels = undefined as any
 }
 
 export const context = new AppContext()

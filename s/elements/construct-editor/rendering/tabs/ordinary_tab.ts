@@ -1,11 +1,10 @@
 
-import { html } from "@benev/slate"
+import {html} from "@benev/slate"
 
-import {Layout} from "../../parts/layout.js"
-import {panels} from "../../../../panels/panels.js"
 import {LayoutMeta} from "../utils/layout_meta.js"
 import {quartz} from "../../../../context/context.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
+import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
 const inside_x_button = (event: MouseEvent) => {
 	const target = event.target as Element
@@ -14,26 +13,28 @@ const inside_x_button = (event: MouseEvent) => {
 	return event.target === x || x.contains(target)
 }
 
-export const OrdinaryTab = quartz(_use => ({
-		meta, pane, leaf, pane_path, leaf_index,
+export const OrdinaryTab = quartz(use => ({
+		meta, pane, leaf, leafIndex,
 	}: {
 		meta: LayoutMeta
 		pane: Layout.Pane
 		leaf: Layout.Leaf
-		pane_path: number[]
-		leaf_index: number
+		leafIndex: number
 	}) => {
 
-	const {icon, label} = panels[leaf.tab]
-	const leaf_path = [...pane_path, leaf_index]
-	const active = pane.active_leaf_index === leaf_index
-	const show_drag_indicator = meta.dragger.is_indicated(leaf_path)
+	const {icon, label} = use.context.panels[leaf.panel]
+	const active = pane.active_leaf_index === leafIndex
+	const show_drag_indicator = meta.dragger.is_leaf_indicated(pane.id, leafIndex)
 
-	const close = () =>
-		meta.layout.delete_leaf(leaf_path)
+	const close = () => meta
+		.layout
+		.actions
+		.delete_leaf(leaf.id)
 
-	const activate = () =>
-		meta.layout.set_pane_active_leaf(pane_path, leaf_index)
+	const activate = () => meta
+		.layout
+		.actions
+		.set_pane_active_leaf(pane.id, leafIndex)
 
 	const click = (event: MouseEvent) => {
 		if (!active) {
@@ -58,7 +59,7 @@ export const OrdinaryTab = quartz(_use => ({
 				@click=${click}
 
 				draggable=true
-				@dragstart=${meta.dragger.tab.start(leaf_path)}
+				@dragstart=${meta.dragger.tab.start(leaf.id)}
 				>
 
 				<span class=icon>

@@ -1,66 +1,95 @@
 
-import {Layout} from "./layout.js"
 import {context} from "../../../context/context.js"
-import {LayoutController} from "./layout_controller.js"
-import {is_within, paths_are_the_same} from "./drag_utils.js"
+import {is_within} from "./drag_utils.js"
+import {Layout} from "../../../context/controllers/layout/parts/types.js"
+import {LayoutSeeker} from "../../../context/controllers/layout/parts/seeker.js"
+import {LayoutActions} from "../../../context/controllers/layout/parts/actions.js"
+import {LayoutController} from "../../../context/controllers/layout/controller.js"
 
 export type TabDragOperation = {
-	source_leaf_path: number[]
-	proposed_insertion_path: undefined | number[]
+	leafId: Layout.Id
+	proposed_destination: null | {
+		paneId: Layout.Id
+		leafIndex: number
+	}
 }
 
 export class TabDragger {
 	#operation = context.tower.signal<TabDragOperation | undefined>(undefined)
-	#layout: LayoutController
+	#seeker: LayoutSeeker
+	#actions: LayoutActions
 
 	constructor(layout: LayoutController) {
-		this.#layout = layout
+		this.#seeker = layout.seeker
+		this.#actions = layout.actions
 	}
 
-	is_indicated(path: number[]) {
+	is_leaf_indicated(paneId: Layout.Id, leafIndex: number) {
 		const operation = this.#operation.value
-		return (operation && operation.proposed_insertion_path)
-			? paths_are_the_same(path, operation.proposed_insertion_path)
-			: false
+		return (
+			operation &&
+			operation.proposed_destination &&
+			operation.proposed_destination.paneId === paneId &&
+			operation.proposed_destination.leafIndex === leafIndex
+		)
 	}
 
-	is_pane_indicated(path: number[]) {
+	is_pane_indicated(paneId: Layout.Id) {
 		const operation = this.#operation.value
-		return (operation && operation.proposed_insertion_path)
-			? paths_are_the_same(path, operation.proposed_insertion_path.slice(0, -1))
-			: false
+		return (
+			operation &&
+			operation.proposed_destination &&
+			operation.proposed_destination.paneId === paneId
+		)
 	}
 
 	tab = {
-		start: (source_leaf_path: number[]) =>  (_: DragEvent) => {
+		start: (leafId: Layout.Id) =>  (_: DragEvent) => {
 			this.#operation.value = {
-				source_leaf_path,
-				proposed_insertion_path: undefined,
+				leafId,
+				proposed_destination: null,
 			}
 		},
 	}
 
 	pane = {
-		enter: (pane: Layout.Pane, pane_path: number[]) => (event: DragEvent) => {
+		enter: (paneId: Layout.Id) => (event: DragEvent) => {
 			const operation = this.#operation.value
-			if (operation) {
-				const within_tab = is_within(event.target, `[data-tab-for-leaf]`)
-				this.#operation.value = {
-					source_leaf_path: operation.source_leaf_path,
-					proposed_insertion_path: within_tab
-						? this.#layout.find_leaf_by_id(
-							parseInt(within_tab.getAttribute("data-tab-for-leaf")!)
-						).path
-						: [...pane_path, pane.children.length],
+
+			if (!operation)
+				return
+
+			const [pane] = this.#seeker.find<Layout.Pane>(paneId)
+			const within_tab = is_within(event.target, `[data-tab-for-leaf]`)
+
+			this.#operation.value = within_tab
+				? (() => {
+					const leafId = within_tab.getAttribute("data-tab-for-leaf")!
+					const [leaf] = this
+						.#seeker
+						.find<Layout.Leaf>(leafId)
+					return {
+						leafId: operation.leafId,
+						proposed_destination: {
+							paneId: pane.id,
+							leafIndex: pane.children.indexOf(leaf),
+						},
+					}
+				})()
+				: {
+					leafId: operation.leafId,
+					proposed_destination: {
+						paneId: pane.id,
+						leafIndex: pane.children.length,
+					},
 				}
-			}
 		},
 		leave: () => (event: DragEvent) => {
 			const operation = this.#operation.value
 			if (operation && event.relatedTarget === null)
 				this.#operation.value = {
-					source_leaf_path: operation.source_leaf_path,
-					proposed_insertion_path: undefined,
+					leafId: operation.leafId,
+					proposed_destination: null,
 				}
 		},
 		over: () => (event: DragEvent) => {
@@ -71,12 +100,12 @@ export class TabDragger {
 		},
 		drop: () => (_: DragEvent) => {
 			const operation = this.#operation.value
-			if (operation && operation.proposed_insertion_path) {
-				this.#layout.move_leaf(
-					operation.source_leaf_path,
-					operation.proposed_insertion_path,
+			if (operation && operation.proposed_destination)
+				this.#actions.move_leaf(
+					operation.leafId,
+					operation.proposed_destination.paneId,
+					operation.proposed_destination.leafIndex,
 				)
-			}
 			this.#operation.value = undefined
 		},
 	}
