@@ -1,12 +1,11 @@
 
 import {Layout} from "./layout.js"
+import {stock_layouts} from "./layouts.js"
 import {IdCounter} from "../../../tools/id_counter.js"
 import {find_layout_node} from "./find_layout_node.js"
-import { stock_layouts } from "./layouts.js"
 
 export interface LayoutControllerOptions {
 	on_change: () => void
-	on_reset: (layout: LayoutController) => void
 	on_leaf_added: (leaf: Layout.Leaf) => void
 	on_leaf_deleted: (leaf: Layout.Leaf) => void
 }
@@ -49,7 +48,6 @@ export class LayoutController {
 	}
 
 	#reset() {
-		console.log("RESET!??")
 		this.load(stock_layouts.empty())
 	}
 

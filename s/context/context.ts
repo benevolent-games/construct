@@ -8,6 +8,7 @@ import {Tactic} from "../tools/tactic/sketch.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
+import {LayoutMachine} from "./controllers/layout/layout.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
 
@@ -72,6 +73,8 @@ export class AppContext extends Context {
 			},
 		},
 	})
+
+	layout = new LayoutMachine()
 }
 
 export const context = new AppContext()
