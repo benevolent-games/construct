@@ -14,6 +14,7 @@ ${standard_panel_styles}
 ol {
 	list-style: none;
 	user-select: none;
+	container-type: inline-size;
 }
 
 li {
@@ -21,10 +22,12 @@ li {
 	z-index: 0;
 	display: flex;
 	flex-direction: row;
+	justify-content: end;
 	align-items: center;
 	width: 100%;
 	gap: 0.2em;
 	padding: 0 0.5em;
+	overflow: hidden;
 
 	&:nth-child(odd) {
 		background: #88888808;
@@ -62,17 +65,26 @@ li {
 		}
 	}
 
-	& .gutter {
-		width: 0.5em;
-		margin-left: 0.5em;
-		height: var(--line-height);
-		border-left: 1px solid #fff2;
+	& .gutter-group {
+		flex: 0 0 auto;
+		display: flex;
+		justify-content: start;
+		overflow: hidden;
+
+		& .gutter {
+			flex: 0 0 auto;
+			width: 0.5em;
+			margin-left: 0.5em;
+			height: var(--line-height);
+			border-left: 1px solid #fff2;
+		}
 	}
 
 	& .gripbox {
 		flex: 1 1 auto;
 		display: flex;
 		gap: 0.2em;
+		overflow: hidden;
 	}
 
 	& :is(button, .icon) {
@@ -121,6 +133,21 @@ li {
 	& .spacer {
 		width: 1em;
 		height: 1em;
+	}
+}
+
+@container (width < 24em) {
+	[data-unnecessary] {
+		display: none;
+	}
+
+	li {
+		& .gutter-group {
+			& .gutter {
+				width: 0.1em;
+				margin-left: 0.1em;
+			}
+		}
 	}
 }
 

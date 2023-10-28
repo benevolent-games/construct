@@ -104,9 +104,13 @@ export const OutlinerPanel = panel({
 		}
 
 		function render_gutters(parents: Item.Folder[]) {
-			return parents.map(() => html`
-				<span class=gutter></span>
-			`)
+			return html`
+				<div class=gutter-group>
+					${parents.map(() => html`
+						<span class=gutter></span>
+					`)}
+				<div>
+			`
 		}
 
 		function render_flat(item: Item.Whatever, parents: Item.Folder[]): TemplateResult {
@@ -137,8 +141,8 @@ export const OutlinerPanel = panel({
 									<div
 										class=drop-below
 										@dragover=${dnd.below.over(item)}
-										@drop=${dnd.below.drop(item)}>
-									</div>
+										@drop=${dnd.below.drop(item)}
+									></div>
 								` : undefined}
 							</div>
 						` :undefined}
@@ -160,7 +164,7 @@ export const OutlinerPanel = panel({
 
 			function render_id(onclick = () => {}) {
 				return html`
-					<div class=id>
+					<div class=id data-unnecessary @click=${onclick}>
 						${item.id.slice(0, 6)}
 					</div>
 				`
@@ -231,7 +235,7 @@ export const OutlinerPanel = panel({
 								</button>
 								<div class=name @click=${toggle_opened}>${item.name}</div>
 							`)}
-							<div class=childcount @click=${toggle_opened}>${number_of_children}</div>
+							<div class=childcount data-unnecessary @click=${toggle_opened}>${number_of_children}</div>
 							${render_id(toggle_opened)}
 							<button class=newfolder @click=${click_to_create_new_folder(item)}>
 								${sprite_tabler_folder_plus}
