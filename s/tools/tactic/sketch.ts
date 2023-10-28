@@ -74,8 +74,8 @@ export class Tactic<B extends Bindings> {
 	readonly buttons: {[P in keyof B["buttons"]]: Report<Input.Button>}
 	readonly vectors: {[P in keyof B["vectors"]]: Report<Input.Vector>}
 
-	constructor({tower, bindings, devices = []}: {
-			tower: SignalTower
+	constructor({signals, bindings, devices = []}: {
+			signals: SignalTower
 			bindings: B
 			devices?: Device[]
 		}) {
@@ -84,7 +84,7 @@ export class Tactic<B extends Bindings> {
 		this.add(...devices)
 
 		const report = (): Report<any> => ({
-			input: tower.signal(undefined),
+			input: signals.signal(undefined),
 			on: pub(),
 		})
 

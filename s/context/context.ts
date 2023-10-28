@@ -45,7 +45,7 @@ export class AppContext extends Context {
 	babylon = new Babylon(this.renderLoop)
 
 	warehouse = new Warehouse(
-		this.tower,
+		this.signals,
 		this.watch,
 		this.#app,
 		this.babylon.scene,
@@ -61,7 +61,7 @@ export class AppContext extends Context {
 	on_file_drop_already_handled_internally = pub<void>()
 
 	tactic = new Tactic({
-		tower: this.tower,
+		signals: this.signals,
 		devices: [new Tactic.Keyboard(window)],
 		bindings: {
 			buttons: {

@@ -1,6 +1,6 @@
 
-import {context} from "../../../context/context.js"
 import {is_within} from "./drag_utils.js"
+import {context} from "../../../context/context.js"
 import {Layout} from "../../../context/controllers/layout/parts/types.js"
 import {LayoutSeeker} from "../../../context/controllers/layout/parts/seeker.js"
 import {LayoutActions} from "../../../context/controllers/layout/parts/actions.js"
@@ -15,7 +15,7 @@ export type TabDragOperation = {
 }
 
 export class TabDragger {
-	#operation = context.tower.signal<TabDragOperation | undefined>(undefined)
+	#operation = context.signals.signal<TabDragOperation | undefined>(undefined)
 	#seeker: LayoutSeeker
 	#actions: LayoutActions
 

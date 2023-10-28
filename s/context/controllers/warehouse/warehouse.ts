@@ -16,14 +16,14 @@ export class Warehouse {
 	readonly glbs: Signal<Glb[]>
 
 	constructor(
-			tower: SignalTower,
+			signals: SignalTower,
 			watch: WatchTower,
 			private app: StateTree<State>,
 			private scene: Scene,
 			private actions: Actions,
 		) {
 
-		this.glbs = tower.signal([])
+		this.glbs = signals.signal([])
 		watch.track(
 			() => app.state.slots,
 			() => this.prune_orphaned_glbs(),
