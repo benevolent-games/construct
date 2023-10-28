@@ -24,7 +24,7 @@ export const ConstructEditor = carbon({styles}, use => {
 	const render_layout = use.prepare(() => make_layout_renderer({
 		layout,
 		resizer,
-		dragger: new TabDragger(layout),
+		dragger: new TabDragger(use.context, layout),
 	}))
 
 	const dropzone = useDropzone({

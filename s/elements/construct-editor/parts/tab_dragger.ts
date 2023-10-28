@@ -1,6 +1,8 @@
 
+import {Signal} from "@benev/slate"
+
 import {is_within} from "./drag_utils.js"
-import {context} from "../../../context/context.js"
+import {Context} from "../../../context/context.js"
 import {Layout} from "../../../context/controllers/layout/parts/types.js"
 import {LayoutSeeker} from "../../../context/controllers/layout/parts/seeker.js"
 import {LayoutActions} from "../../../context/controllers/layout/parts/actions.js"
@@ -15,13 +17,14 @@ export type TabDragOperation = {
 }
 
 export class TabDragger {
-	#operation = context.signals.signal<TabDragOperation | undefined>(undefined)
+	#operation: Signal<TabDragOperation | undefined>
 	#seeker: LayoutSeeker
 	#actions: LayoutActions
 
-	constructor(layout: LayoutController) {
+	constructor(public context: Context, layout: LayoutController) {
 		this.#seeker = layout.seeker
 		this.#actions = layout.actions
+		this.#operation = this.context.signals.signal(undefined)
 	}
 
 	is_leaf_indicated(paneId: Layout.Id, leafIndex: number) {

@@ -5,9 +5,9 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
 import {GlbSlot} from "../../context/state.js"
+import {Context, obsidian} from "../../context/context.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
-import {context, obsidian} from "../../context/context.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
 
@@ -22,6 +22,10 @@ export const CatalogPanel = panel({
 		use.watch(() => context.state.slots)
 
 		const {manifest} = warehouse
+		const {
+			render_glb_stats,
+			render_glb_props,
+		} = helpers(use.context)
 
 		return html`
 			<div class="container">
@@ -44,52 +48,57 @@ export const CatalogPanel = panel({
 	}),
 })
 
-function instance_into_world(slot: GlbSlot, prop: GlbProp) {
-	return () => context.actions.add_items([{
-		folderId: context.state.outline.id,
-		item: {
-			id: generateId(),
-			kind: "instance",
-			selected: false,
-			name: prop.name,
-			address: {slot: slot.id, prop: prop.name},
-		},
-	}])
-}
+function helpers(context: Context) {
 
-function render_glb_stats({size, container}: Glb) {
-	return html`
-		<ul class=glb-stats>
-			<li>${human_bytes(size)}</li>
-			<li>${container.transformNodes.length} transforms</li>
-			<li>${container.meshes.length} meshes</li>
-			<li>${container.materials.length} materials</li>
-			<li>${container.textures.length} textures</li>
-		</ul>
-	`
-}
+	function instance_into_world(slot: GlbSlot, prop: GlbProp) {
+		return () => context.actions.add_items([{
+			folderId: context.state.outline.id,
+			item: {
+				id: generateId(),
+				kind: "instance",
+				selected: false,
+				name: prop.name,
+				address: {slot: slot.id, prop: prop.name},
+			},
+		}])
+	}
 
-function render_glb_props(slot: GlbSlot, glb: Glb) {
-	const sorted = glb.props
-		.sort((a, b) => a.name.localeCompare(b.name))
+	function render_glb_stats({size, container}: Glb) {
+		return html`
+			<ul class=glb-stats>
+				<li>${human_bytes(size)}</li>
+				<li>${container.transformNodes.length} transforms</li>
+				<li>${container.meshes.length} meshes</li>
+				<li>${container.materials.length} materials</li>
+				<li>${container.textures.length} textures</li>
+			</ul>
+		`
+	}
 
-	const proptype = (prop: GlbProp) => (
-		prop.top_lod.node instanceof Mesh
-			? "mesh"
-			: "transform"
-	)
+	function render_glb_props(slot: GlbSlot, glb: Glb) {
+		const sorted = glb.props
+			.sort((a, b) => a.name.localeCompare(b.name))
 
-	return html`
-		<ol class=glb-props>
-			${sorted.map(prop => html`
-				<li data-type="${proptype(prop)}">
-					<button @click=${instance_into_world(slot, prop)}>
-						<img src="${placeholder_asset_icon}" alt="" draggable="false"/>
-						<span>${prop.name}</span>
-					</button>
-				</li>
-			`)}
-		</ol>
-	`
+		const proptype = (prop: GlbProp) => (
+			prop.top_lod.node instanceof Mesh
+				? "mesh"
+				: "transform"
+		)
+
+		return html`
+			<ol class=glb-props>
+				${sorted.map(prop => html`
+					<li data-type="${proptype(prop)}">
+						<button @click=${instance_into_world(slot, prop)}>
+							<img src="${placeholder_asset_icon}" alt="" draggable="false"/>
+							<span>${prop.name}</span>
+						</button>
+					</li>
+				`)}
+			</ol>
+		`
+	}
+
+	return {render_glb_props, render_glb_stats}
 }
 

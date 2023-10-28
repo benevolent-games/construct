@@ -3,10 +3,10 @@ import {UseCarbon, html, render} from "@benev/slate"
 
 import {leaf_slot} from "./leaf_slot.js"
 import {panels} from "../../../panels/panels.js"
-import {AppContext} from "../../../context/context.js"
+import {Context} from "../../../context/context.js"
 import {Layout} from "../../../context/controllers/layout/parts/types.js"
 
-export const use_layout = (use: UseCarbon<AppContext>) => use.prepare(() => {
+export const use_layout = (use: UseCarbon<Context>) => use.prepare(() => {
 	const {seeker} = use.context.layout
 	const leafRegistry = new Set<Layout.Id>()
 	return {

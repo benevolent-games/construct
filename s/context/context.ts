@@ -1,5 +1,5 @@
 
-import {Context, prepare_frontend, pub} from "@benev/slate"
+import {Context as BaseContext, prepare_frontend, pub} from "@benev/slate"
 
 import type {panels} from "../panels/panels.js"
 
@@ -15,7 +15,7 @@ import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {LayoutController} from "./controllers/layout/controller.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
 
-export class AppContext extends Context {
+export class Context extends BaseContext {
 	theme = theme
 
 	#app = this.watch.stateTree<State>(default_state())
@@ -82,9 +82,13 @@ export class AppContext extends Context {
 	panels: typeof panels = undefined as any
 }
 
-export const context = new AppContext()
-
-export const {carbon, oxygen, obsidian, quartz} = (
-	prepare_frontend(context)
-)
+export const {
+	carbon,
+	oxygen,
+	obsidian,
+	quartz,
+	shell,
+	set_context,
+	register_to_dom,
+} = prepare_frontend<Context>()
 

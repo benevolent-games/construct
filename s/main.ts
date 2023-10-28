@@ -2,8 +2,11 @@
 import {register_to_dom} from "@benev/slate"
 
 import {panels} from "./panels/panels.js"
-import {context} from "./context/context.js"
+import {Context, set_context} from "./context/context.js"
 import {ConstructEditor} from "./elements/construct-editor/element.js"
+
+const context = new Context()
+;(window as any).context = context
 
 context.panels = panels
 
@@ -11,9 +14,9 @@ context.babylon.engine.runRenderLoop(() => {
 	context.babylon.scene.render()
 })
 
-register_to_dom({ConstructEditor})
+set_context(context)
 
-;(window as any).context = context
+register_to_dom({ConstructEditor})
 
 console.log("🎨")
 
