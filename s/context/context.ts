@@ -1,7 +1,7 @@
 
-import {Context as BaseContext, prepare_frontend, pub} from "@benev/slate"
+import {Context as BaseContext, pub} from "@benev/slate"
 
-import type {panels} from "../panels/panels.js"
+import type {panels as all_panels} from "../panels/panels.js"
 
 import {theme} from "./theme.js"
 import {actions} from "./actions.js"
@@ -79,16 +79,9 @@ export class Context extends BaseContext {
 
 	store = store<Store>(localStorage)
 	layout = new LayoutController(this.watch, this.store)
-	panels: typeof panels = undefined as any
-}
 
-export const {
-	carbon,
-	oxygen,
-	obsidian,
-	quartz,
-	shell,
-	set_context,
-	register_to_dom,
-} = prepare_frontend<Context>()
+	constructor(public panels: typeof all_panels) {
+		super()
+	}
+}
 

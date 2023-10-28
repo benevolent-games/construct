@@ -2,7 +2,7 @@
 import {html} from "@benev/slate"
 
 import {LayoutMeta} from "../utils/layout_meta.js"
-import {quartz} from "../../../../context/context.js"
+import {frontend} from "../../../../context/frontend.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
@@ -13,7 +13,7 @@ const inside_x_button = (event: MouseEvent) => {
 	return event.target === x || x.contains(target)
 }
 
-export const OrdinaryTab = quartz(use => ({
+export const OrdinaryTab = frontend.quartz(use => ({
 		meta, pane, leaf, leafIndex,
 	}: {
 		meta: LayoutMeta

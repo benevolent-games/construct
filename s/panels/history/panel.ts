@@ -2,7 +2,7 @@
 import {html} from "@benev/slate"
 
 import {styles} from "./styles.js"
-import {obsidian} from "../../context/context.js"
+import {frontend} from "../../context/frontend.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_time} from "../../tools/human_time.js"
 import {Action} from "../../context/framework/action_namespace.js"
@@ -13,7 +13,7 @@ import {sprite_fast_forward} from "../../sprites/groups/feather/fast-forward.js"
 export const HistoryPanel = panel({
 	label: "history",
 	icon: sprite_history,
-	view: obsidian({name: "history", styles}, use => ({}: PanelProps) => {
+	view: frontend.obsidian({name: "history", styles}, use => ({}: PanelProps) => {
 
 		const history = use.context.history
 		const {past, future} = use.watch(() => history.annals)
