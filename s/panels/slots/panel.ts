@@ -3,8 +3,8 @@ import {html} from "lit"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
+import {slate} from "../../context/slate.js"
 import {GlbSlot} from "../../context/state.js"
-import {frontend} from "../../context/frontend.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {Id} from "../../context/domains/outline/types.js"
@@ -18,7 +18,7 @@ import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vert
 export const SlotsPanel = panel({
 	label: "slots",
 	icon: sprite_tabler_layout_list,
-	view: frontend.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
+	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
 		const {context} = use
 		const slots = use.watch(() => context.state.slots)
 

@@ -3,7 +3,7 @@ import {html} from "@benev/slate"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 
 import {styles} from "./styles.js"
-import {frontend} from "../../context/frontend.js"
+import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {start_resizing} from "./parts/start_resizing.js"
 import {sprite_box} from "../../sprites/groups/feather/box.js"
@@ -11,7 +11,7 @@ import {sprite_box} from "../../sprites/groups/feather/box.js"
 export const ViewportPanel = panel({
 	label: "viewport",
 	icon: sprite_box,
-	view: frontend.obsidian({name: "viewport", styles}, use => ({}: PanelProps) => {
+	view: slate.obsidian({name: "viewport", styles}, use => ({}: PanelProps) => {
 		const {scene, engine} = use.context.babylon
 
 		const {canvas} = use.init(() => {

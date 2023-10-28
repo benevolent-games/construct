@@ -4,7 +4,7 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {styles} from "./styles.js"
 import {EzMap} from "../../tools/ezmap.js"
-import {frontend} from "../../context/frontend.js"
+import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
 import {Id, Item} from "../../context/domains/outline/types.js"
@@ -19,7 +19,7 @@ import {sprite_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-
 export const OutlinerPanel = panel({
 	label: "outliner",
 	icon: sprite_layers,
-	view: frontend.obsidian({name: "outliner", styles}, use => ({}: PanelProps) => {
+	view: slate.obsidian({name: "outliner", styles}, use => ({}: PanelProps) => {
 		const outline = use.watch(() => use.context.state.outline)
 		const {actions} = use.context
 

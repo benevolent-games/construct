@@ -2,11 +2,11 @@
 import {html} from "@benev/slate"
 
 import {LayoutMeta} from "../utils/layout_meta.js"
-import {frontend} from "../../../../context/frontend.js"
+import {slate} from "../../../../context/slate.js"
 import {sprite_plus} from "../../../../sprites/groups/feather/plus.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
-export const AdderTab = frontend.quartz(_ => ({meta, pane}: {
+export const AdderTab = slate.quartz(_ => ({meta, pane}: {
 		meta: LayoutMeta
 		pane: Layout.Pane
 	}) => {
