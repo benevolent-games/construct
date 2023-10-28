@@ -48,13 +48,6 @@ export type PropTraceSuccess = {
 
 export type PropTrace = PropTraceSuccess | PropTraceFailed
 
-// export type PropTrace = {
-// 	status: "missing-slot" | "missing-glb" | "missing-prop" | "available"
-// 	slot: GlbSlot | undefined
-// 	glb: Glb | undefined
-// 	prop: GlbProp | undefined
-// }
-
 export const lod_info = [
 	["incredible", 5],
 	["nice", 10],
