@@ -14,13 +14,6 @@ export const styles = css`
 	background: #111;
 	color: #fff8;
 
-	::-webkit-scrollbar { width: 10px; }
-	::-webkit-scrollbar-track { background: #333; border-radius: 1em; }
-	::-webkit-scrollbar-thumb { background: #666; border-radius: 1em; }
-	::-webkit-scrollbar-thumb:hover { background: #777; }
-	scrollbar-color: #333 #666;
-	scrollbar-width: auto;
-
 	--alpha: var(--alpha);
 	--bravo: var(--bravo);
 	--bg-a: var(--bg-a);
