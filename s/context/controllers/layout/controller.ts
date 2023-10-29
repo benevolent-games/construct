@@ -7,6 +7,8 @@ import {LayoutSeeker} from "./parts/seeker.js"
 import {prepare_layout_actions} from "./parts/actions.js"
 import {stock_layouts} from "./parts/utils/stock_layouts.js"
 
+export const save_delay = 300
+
 export class LayoutController {
 	#tree: StateTree<Layout.Cell>
 	actions: ReturnType<typeof prepare_layout_actions>
@@ -23,7 +25,7 @@ export class LayoutController {
 
 		watch.track(
 			() => this.root,
-			() => this.#debounced_save,
+			() => this.#debounced_save(),
 		)
 	}
 
@@ -52,6 +54,9 @@ export class LayoutController {
 		}
 	}
 
-	#debounced_save = debounce(1000, () => this.#save_to_store())
+	#debounced_save = debounce(
+		save_delay,
+		() => this.#save_to_store(),
+	)
 }
 
