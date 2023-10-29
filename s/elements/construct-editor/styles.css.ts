@@ -157,10 +157,10 @@ export const styles = css`
 	}
 
 	> .adder {
-		display: flex;
+		display: grid;
+		grid-template-columns: repeat(auto-fill, minmax(2em, 4em));
 		justify-content: start;
 		align-content: start;
-		flex-wrap: wrap;
 		gap: 1em;
 
 		> button {
@@ -168,17 +168,20 @@ export const styles = css`
 			display: flex;
 			flex-direction: column;
 			align-items: center;
-			transition: all 100ms cubic-bezier(0.34, 1.56, 0.64, 1);
+			transition:
+				transform 100ms cubic-bezier(0.34, 1.56, 0.64, 1),
+				color 200ms linear;
 			transform: scale(1.0);
-			color: #aaa;
 
 			&:hover {
 				opacity: 0.9;
-				transform: scale(1.2);
+				transform: scale(1.1);
+				color: var(--alpha);
 			}
 
 			&:active {
 				opacity: 1;
+				color: var(--bravo);
 			}
 
 			> svg {
