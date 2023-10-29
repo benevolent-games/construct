@@ -6,15 +6,14 @@ import type {panels as all_panels} from "../panels/panels.js"
 import {theme} from "./theme.js"
 import {actions} from "./actions.js"
 import {State, default_state} from "./state.js"
-import {Tactic} from "../tools/tactic/sketch.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Store, store} from "./controllers/store/store.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
+import {InputController} from "./controllers/input/controller.js"
 import {LayoutController} from "./controllers/layout/controller.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
-import { InputController } from "./controllers/input/controller.js"
 
 export class Context extends BaseContext {
 	theme = theme
