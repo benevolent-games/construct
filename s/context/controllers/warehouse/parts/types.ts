@@ -4,7 +4,7 @@ import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
 import {GlbSlot} from "../../../state.js"
-import {Id} from "../../../domains/outline/types.js"
+import {Item} from "../../../domains/outline/types.js"
 
 export type Glb = {
 	hash: string
@@ -23,7 +23,7 @@ export type GlbProp = {
 }
 
 export type PropAddress = {
-	slot: Id
+	slot: Item.Id
 	prop: string
 }
 

@@ -1,8 +1,8 @@
 
 import {GlbSlot, Hash, State} from "./state.js"
 import {Action} from "./framework/action_namespace.js"
+import {Item, ItemReport} from "./domains/outline/types.js"
 import {make_outline_tools} from "./domains/outline/tools.js"
-import {Id, Item, ItemReport} from "./domains/outline/types.js"
 
 export type Actions = Action.Callers<typeof actions>
 
@@ -12,24 +12,24 @@ export const actions = Action.specs<State>()(({action}) => ({
 		state.slots.push(slot)
 	}),
 
-	delete_slot: action((state, {id}: {id: Id}) => {
+	delete_slot: action((state, {id}: {id: Item.Id}) => {
 		state.slots = state.slots.filter(s => s.id !== id)
 	}),
 
-	rename_slot: action((state, {id, name}: {id: Id, name: string}) => {
+	rename_slot: action((state, {id, name}: {id: Item.Id, name: string}) => {
 		const slot = state.slots.find(s => s.id === id)!
 		slot.name = name
 	}),
 
 	set_slot_glb: action((state, {id, glb_hash}: {
-			id: Id,
+			id: Item.Id,
 			glb_hash: Hash | undefined,
 		}) => {
 		const slot = state.slots.find(s => s.id === id)!
 		slot.glb_hash = glb_hash
 	}),
 
-	swap_slots: action((state, [a, b]: [Id, Id]) => {
+	swap_slots: action((state, [a, b]: [Item.Id, Item.Id]) => {
 		const slotA = state.slots.find(s => s.id === a)!
 		const slotB = state.slots.find(s => s.id === b)!
 		const hashA = slotA.glb_hash
@@ -40,7 +40,7 @@ export const actions = Action.specs<State>()(({action}) => ({
 
 	add_items: action((state, additions: {
 			item: Item.Whatever,
-			folderId: Id,
+			folderId: Item.Id,
 		}[]) => {
 		const tools = make_outline_tools(state.outline)
 		for (const {folderId, item} of additions) {
@@ -49,7 +49,7 @@ export const actions = Action.specs<State>()(({action}) => ({
 		}
 	}),
 
-	delete_items: action((state, ids: Id[]) => {
+	delete_items: action((state, ids: Item.Id[]) => {
 		const tools = make_outline_tools(state.outline)
 		const reports = tools.reports.filter(report => ids.includes(report.item.id))
 		for (const {item, parent} of reports)
@@ -59,8 +59,8 @@ export const actions = Action.specs<State>()(({action}) => ({
 	}),
 
 	move_items_into_folder: action((state, {folderId, itemIds}: {
-			folderId: Id,
-			itemIds: Id[],
+			folderId: Item.Id,
+			itemIds: Item.Id[],
 		}) => {
 
 		const tools = make_outline_tools(state.outline)
@@ -108,8 +108,8 @@ export const actions = Action.specs<State>()(({action}) => ({
 	}),
 
 	move_items_below_another_item: action((state, {targetItemId, itemIds}: {
-			targetItemId: Id,
-			itemIds: Id[],
+			targetItemId: Item.Id,
+			itemIds: Item.Id[],
 		}) => {
 
 		const tools = make_outline_tools(state.outline)

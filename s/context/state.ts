@@ -1,11 +1,11 @@
 
-import {Id, Item} from "./domains/outline/types.js"
+import {Item} from "./domains/outline/types.js"
 import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 export type Hash = string
 
 export interface GlbSlot {
-	id: Id
+	id: Item.Id
 	name: string
 	glb_hash: Hash | undefined
 }

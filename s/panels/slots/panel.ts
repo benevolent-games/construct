@@ -7,8 +7,8 @@ import {slate} from "../../context/slate.js"
 import {GlbSlot} from "../../context/state.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
-import {Id} from "../../context/domains/outline/types.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
+import {Item} from "../../context/domains/outline/types.js"
 import {Glb} from "../../context/controllers/warehouse/parts/types.js"
 import {useDragAndDrop} from "../../tools/shockdrop/use_drag_and_drop.js"
 import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
@@ -42,7 +42,7 @@ export const SlotsPanel = panel({
 			},
 		})
 
-		function render_id(id: Id) {
+		function render_id(id: Item.Id) {
 			return html`
 				<small class=id>${id.slice(0, 8)}</small>
 			`

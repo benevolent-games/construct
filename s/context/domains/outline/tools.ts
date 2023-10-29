@@ -1,6 +1,6 @@
 
 import {State} from "../../state.js"
-import {Id, Item, ItemReport} from "./types.js"
+import {Item, ItemReport} from "./types.js"
 
 export type OutlineState = State["outline"]
 
@@ -43,13 +43,13 @@ export function make_outline_tools(outline: OutlineState) {
 		instances,
 		lights,
 		selected,
-		getItem(id: Id) {
+		getItem(id: Item.Id) {
 			const item = items.find(item => item.id === id)
 			if (!item)
 				throw new Error(`item not found ${id}`)
 			return item
 		},
-		getFolder(id: Id) {
+		getFolder(id: Item.Id) {
 			const folder = folders.find(folder => folder.id === id)
 			if (!folder)
 				throw new Error(`folder not found ${id}`)

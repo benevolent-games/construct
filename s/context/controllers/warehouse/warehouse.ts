@@ -4,7 +4,7 @@ import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 import {Signal, SignalTower, StateTree, WatchTower} from "@benev/slate"
 
 import {Actions} from "../../actions.js"
-import {Id} from "../../domains/outline/types.js"
+import {Item} from "../../domains/outline/types.js"
 import {GlbSlot, Hash, State} from "../../state.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
 import {parse_props} from "./parts/parse_props.js"
@@ -78,7 +78,7 @@ export class Warehouse {
 		}
 	}
 
-	async add_glb_file(file: File, slot_id?: Id) {
+	async add_glb_file(file: File, slot_id?: Item.Id) {
 		const hash = await quick_hash(file)
 		const already_exists = this.glbs.value.find(g => g.hash === hash)
 

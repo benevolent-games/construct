@@ -3,11 +3,11 @@ import {StateTree, WatchTower} from "@benev/slate"
 
 import {State} from "../../state.js"
 import {Warehouse} from "../warehouse/warehouse.js"
-import {Id, Item} from "../../domains/outline/types.js"
+import {Item} from "../../domains/outline/types.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
 export type Thing = {
-	glb_hash: Id
+	glb_hash: Item.Id
 	dispose: () => void
 }
 
@@ -28,7 +28,7 @@ export class Instantiator {
 		)
 	}
 
-	things = new Map<Id, Thing>()
+	things = new Map<Item.Id, Thing>()
 
 	#add(item: Item.Whatever) {
 		switch (item.kind) {
@@ -47,7 +47,7 @@ export class Instantiator {
 		}
 	}
 
-	#delete_by_id(id: Id) {
+	#delete_by_id(id: Item.Id) {
 		const item = this.things.get(id)
 		if (item) {
 			item.dispose()

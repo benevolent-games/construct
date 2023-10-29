@@ -1,9 +1,8 @@
 
 import {PropAddress} from "../../controllers/warehouse/parts/types.js"
 
-export type Id = string
-
 export namespace Item {
+	export type Id = string
 	export type Kind = "folder" | "instance" | "light"
 
 	export interface Base {

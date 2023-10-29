@@ -7,7 +7,7 @@ import {EzMap} from "../../tools/ezmap.js"
 import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
-import {Id, Item} from "../../context/domains/outline/types.js"
+import {Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
 import {make_outline_tools} from "../../context/domains/outline/tools.js"
@@ -24,7 +24,7 @@ export const OutlinerPanel = panel({
 		const {actions} = use.context
 
 		const tools = make_outline_tools(outline)
-		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
+		const localFolderSettings = use.prepare(() => new EzMap<Item.Id, {opened: boolean}>())
 
 		const drag = use.flatstate({
 			item_being_dragged: undefined as undefined | Item.Whatever,
@@ -81,7 +81,7 @@ export const OutlinerPanel = panel({
 			}
 		})
 
-		function get_local_folder_settings(id: Id) {
+		function get_local_folder_settings(id: Item.Id) {
 			return localFolderSettings.guarantee(id, () => ({
 				opened: true,
 			}))
