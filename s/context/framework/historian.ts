@@ -63,7 +63,7 @@ export class Historian<S> {
 		this.#annals.transmute(annals => {
 			const action = annals.future.pop()
 			if (action) {
-				const spec = this.specs[action.purpose]
+				const spec = Action.find(this.specs, action.purpose) as Action.Spec<S, any>
 
 				if (!spec)
 					throw new Error(`unknown action "${action.purpose}"`)

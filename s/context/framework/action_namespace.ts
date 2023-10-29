@@ -5,19 +5,25 @@ import {StateTree, ob} from "@benev/slate"
 export namespace Action {
 	export interface Base<P = any> {
 		id: number
-		purpose: string
+		purpose: string[]
 		payload: P
 		time: number
 	}
 
 	export type Spec<S, P> = (state: S, payload: P) => S
 	export type GetPayload<Sp extends Spec<any, {}>> = Parameters<Sp>[1]
-	export type Specs<S = any> = {[key: string]: Spec<S, any>}
+
+	export type Specs<S = any> = {
+		[key: string]: Spec<S, any> | Specs<S>
+	}
 
 	export type Callers<Sp extends Specs> = {
-		[K in keyof Sp]: (
-			(payload: GetPayload<Sp[K]>) => void
-		)
+		[K in keyof Sp]:
+			Sp[K] extends Spec<any, any>
+				? (payload: GetPayload<Sp[K]>) => void
+				: Sp[K] extends Callers<any>
+					? Callers<Sp[K]>
+					: never
 	}
 
 	export class Helper<S> {
@@ -34,7 +40,7 @@ export namespace Action {
 	}
 
 	export const specs = <S>() => (
-		<Specs extends Action.Specs>(fun: (helper: Helper<S>) => Specs) =>
+		<Sp extends Action.Specs<S>>(fun: (helper: Helper<S>) => Sp) =>
 			fun(new Helper())
 	)
 
@@ -46,21 +52,41 @@ export namespace Action {
 
 		let action_count = 1
 
-		return ob.map(specs, (spec, purpose) => (payload: any) => {
-			const action = {
-				id: action_count++,
-				purpose: purpose as string,
-				payload,
-				time: Date.now(),
-			} satisfies Action.Base
+		function recurse(specs: Specs<S>, purpose: string[]): any {
+			return ob.map(specs, (spec, name) => (
 
-			app.transmute(state => {
-				historian.save_snapshot()
-				return spec(state, payload)
-			})
+				(typeof spec === "function")
+					? (payload: any) => {
+						const action = {
+							id: action_count++,
+							purpose: [...purpose, name as string],
+							payload,
+							time: Date.now(),
+						} satisfies Action.Base
 
-			historian.proceed(action)
-		})
+						app.transmute(state => {
+							historian.save_snapshot()
+							return spec(state, payload)
+						})
+
+						historian.proceed(action)
+					}
+
+					: recurse(spec, [...purpose, name as string])
+			))
+		}
+
+		return recurse(specs, [])
+	}
+
+	export function find<T>(obj: any, purpose: string[]): T | undefined {
+		let current: any = obj
+		for (const key of purpose) {
+			if (current[key] === undefined)
+				return undefined
+			current = current[key]
+		}
+		return current as T
 	}
 }
 
