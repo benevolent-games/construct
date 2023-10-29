@@ -26,8 +26,8 @@ export const HistoryPanel = panel({
 		function render_action(timeline: "future" | "past") {
 			return (action: Action.Base) => html`
 				<li data-id="${action.id}" data-timeline="${timeline}">
-					<span class=id>#${action.id.toString().padStart(5, "0")}</span>
 					<span class=purpose>${action.purpose}</span>
+					<span class=id>#${action.id}</span>
 					<span class=time>${human_time(Date.now() - action.time)} ago</span>
 				</li>
 			`

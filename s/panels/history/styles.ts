@@ -33,9 +33,11 @@ ${standard_panel_styles}
 }
 
 .chronicles {
+	font-size: 0.8em;
+
 	display: flex;
 	flex-direction: column;
-	gap: 1px;
+	gap: 2px;
 
 	list-style: none;
 	width: max-content;
@@ -45,6 +47,11 @@ ${standard_panel_styles}
 	margin-top: 0.5em;
 
 	> li {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 0.3em;
+
 		background: #8881;
 		padding: 0.1em 0.5em;
 
@@ -63,7 +70,7 @@ ${standard_panel_styles}
 		}
 
 		> :is(.id, .time) {
-			font-size: 0.7em;
+			font-size: 0.8em;
 			opacity: 0.5;
 			font-style: italic;
 		}
