@@ -10,7 +10,7 @@ import {Context} from "../../context/context.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
-import {GlbProp, Glb} from "../../context/controllers/catalog/parts/types.js"
+import {GlbProp, Glb} from "../../context/controllers/warehouse/parts/types.js"
 
 const placeholder_asset_icon = "https://i.imgur.com/LtadIlN.webp"
 

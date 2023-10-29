@@ -1,5 +1,5 @@
 
-import {PropAddress} from "../../controllers/catalog/parts/types.js"
+import {PropAddress} from "../../controllers/warehouse/parts/types.js"
 
 export type Id = string
 

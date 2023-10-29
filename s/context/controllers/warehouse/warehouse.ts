@@ -7,10 +7,10 @@ import {Actions} from "../../actions.js"
 import {Id} from "../../domains/outline/types.js"
 import {GlbSlot, Hash, State} from "../../state.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
-import {parse_props} from "../catalog/parts/parse_props.js"
-import {wire_up_lods} from "../catalog/parts/wire_up_lods.js"
+import {parse_props} from "./parts/parse_props.js"
+import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
-import {Glb, GlbProp, PropAddress, PropTrace} from "../catalog/parts/types.js"
+import {Glb, GlbProp, PropAddress, PropTrace} from "./parts/types.js"
 
 export class Warehouse {
 	readonly glbs: Signal<Glb[]>
