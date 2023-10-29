@@ -9,6 +9,7 @@ export namespace Item {
 		kind: Kind
 		id: Id
 		selected: boolean
+		visible: boolean
 		name: string
 	}
 

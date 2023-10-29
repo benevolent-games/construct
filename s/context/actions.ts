@@ -58,6 +58,26 @@ export const actions = Action.specs<State>()(({action}) => ({
 			)
 	}),
 
+	item_selection: action((state, {itemIds, selected}: {itemIds: Item.Id[], selected: boolean}) => {
+		const tools = make_outline_tools(state.outline)
+		const items = tools.items.filter(item => itemIds.includes(item.id))
+		for (const item of items)
+			item.selected = selected
+	}),
+
+	clear_selection: action<void>(state => {
+		const tools = make_outline_tools(state.outline)
+		for (const item of tools.items)
+			item.selected = false
+	}),
+
+	item_visibility: action((state, {itemIds, visible}: {itemIds: Item.Id[], visible: boolean}) => {
+		const tools = make_outline_tools(state.outline)
+		const items = [state.outline, ...tools.items].filter(item => itemIds.includes(item.id))
+		for (const item of items)
+			item.visible = visible
+	}),
+
 	move_items_into_folder: action((state, {folderId, itemIds}: {
 			folderId: Item.Id,
 			itemIds: Item.Id[],

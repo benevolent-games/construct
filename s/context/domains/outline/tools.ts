@@ -43,6 +43,16 @@ export function make_outline_tools(outline: OutlineState) {
 		instances,
 		lights,
 		selected,
+		isApparent(id: Item.Id) {
+			const isRoot = id === outline.id
+			if (isRoot) {
+				return outline.visible
+			}
+			else {
+				const {item, parents} = reports.find(({item}) => item.id === id)!
+				return item.visible && parents.every(parent => parent.visible)
+			}
+		},
 		getItem(id: Item.Id) {
 			const item = items.find(item => item.id === id)
 			if (!item)

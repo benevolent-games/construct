@@ -20,6 +20,7 @@ export const default_state = (): State => ({
 		id: generateId(),
 		name: "root",
 		kind: "folder",
+		visible: true,
 		selected: false,
 		children: [],
 	},

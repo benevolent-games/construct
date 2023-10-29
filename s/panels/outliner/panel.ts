@@ -11,6 +11,7 @@ import {Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
 import {make_outline_tools} from "../../context/domains/outline/tools.js"
+import {sprite_tabler_eye_closed} from "../../sprites/groups/tabler/eye-closed.js"
 import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
 import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
@@ -97,6 +98,7 @@ export const OutlinerPanel = panel({
 						id: new_id,
 						name: `folder`,
 						selected: false,
+						visible: true,
 						children: [],
 					},
 				}])
@@ -120,10 +122,14 @@ export const OutlinerPanel = panel({
 				const delete_this_item = parents.at(-1)
 					? () => actions.delete_items([item.id])
 					: undefined
+
 				return html`
 					<li
 						data-id="${item.id}"
 						data-kind="${item.kind}"
+						?data-visible="${item.visible}"
+						?data-not-apparent="${!tools.isApparent(item.id)}"
+						?data-selected="${item.selected}"
 						@dragleave=${dnd.leave()}>
 
 						${drag.item_being_dragged ?html`
@@ -170,6 +176,26 @@ export const OutlinerPanel = panel({
 				`
 			}
 
+			function toggle_visibility() {
+				actions.item_visibility({
+					itemIds: [item.id],
+					visible: !item.visible,
+				})
+			}
+
+			function render_visibility() {
+				return html`
+					<button
+						class=visibility
+						?data-visible="${item.visible}"
+						@click="${toggle_visibility}">
+							${item.visible
+								? sprite_tabler_eye
+								: sprite_tabler_eye_closed}
+					</button>
+				`
+			}
+
 			function gripbox(content: TemplateResult) {
 				return is_root ? html`
 					<div class=gripbox>
@@ -190,20 +216,26 @@ export const OutlinerPanel = panel({
 				return html`
 					${render_id()}
 					<div class=spacer></div>
-					<button class=visibility>
-						${sprite_tabler_eye}
-					</button>
+					${render_visibility()}
 				`
+			}
+
+			function toggleSelection() {
+				if (!is_root)
+					actions.item_selection({
+						itemIds: [item.id],
+						selected: !item.selected,
+					})
 			}
 
 			switch (item.kind) {
 				case "instance":
 					return render_line_item(html`
 						${gripbox(html`
-							<div class=icon>
+							<div class=icon @click="${toggleSelection}">
 								${sprite_tabler_vector_triangle}
 							</div>
-							<div class=name>${item.name}</div>
+							<div class=name @click="${toggleSelection}">${item.name}</div>
 						`)}
 						${render_nonfolder_right_side()}
 					`)
@@ -216,15 +248,18 @@ export const OutlinerPanel = panel({
 					`)
 				case "folder":
 					const settings = get_local_folder_settings(item.id)
+
 					const toggle_opened = () => {
 						settings.opened = !settings.opened
 						use.rerender()
 					}
+
 					const number_of_children = tools.reports.reduce(
 						(previous, current) =>
 							previous + (current.parents.map(p => p.id)
 								.includes(item.id) ? 1 : 0), 0
 					)
+
 					return html`
 						${render_line_item(html`
 							${gripbox(html`
@@ -233,17 +268,31 @@ export const OutlinerPanel = panel({
 										? sprite_tabler_folder_open
 										: sprite_tabler_folder_filled}
 								</button>
-								<div class=name @click=${toggle_opened}>${item.name}</div>
+								<div
+									class=name
+									@click=${toggleSelection}>
+										${item.name}
+								</div>
 							`)}
-							<div class=childcount data-unnecessary @click=${toggle_opened}>${number_of_children}</div>
+
+							<div
+								class=childcount
+								data-unnecessary
+								@click=${toggleSelection}>
+									${number_of_children}
+							</div>
+
 							${render_id(toggle_opened)}
-							<button class=newfolder @click=${click_to_create_new_folder(item)}>
-								${sprite_tabler_folder_plus}
+
+							<button
+								class=newfolder
+								@click=${click_to_create_new_folder(item)}>
+									${sprite_tabler_folder_plus}
 							</button>
-							<button class=visibility>
-								${sprite_tabler_eye}
-							</button>
+
+							${render_visibility()}
 						`)}
+
 						${settings.opened
 							? item.children.map(child => render_flat(child, [...parents, item]))
 							: undefined}
@@ -251,8 +300,13 @@ export const OutlinerPanel = panel({
 			}
 		}
 
+		function clearSelection(event: MouseEvent) {
+			if (tools.selected.length > 0 && event.target === event.currentTarget)
+				actions.clear_selection()
+		}
+
 		return html`
-			<ol>
+			<ol @click="${clearSelection}">
 				${render_flat(outline, [])}
 			</ol>
 		`

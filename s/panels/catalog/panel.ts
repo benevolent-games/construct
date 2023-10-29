@@ -58,6 +58,7 @@ function helpers(context: Context) {
 				id: generateId(),
 				kind: "instance",
 				selected: false,
+				visible: true,
 				name: prop.name,
 				address: {slot: slot.id, prop: prop.name},
 			},

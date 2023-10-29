@@ -12,6 +12,8 @@ ${standard_panel_styles}
 }
 
 ol {
+	width: 100%;
+	min-height: 100%;
 	list-style: none;
 	user-select: none;
 	container-type: inline-size;
@@ -35,6 +37,24 @@ li {
 
 	&:hover {
 		background: #8881;
+	}
+
+	&[data-not-apparent] {
+		opacity: 0.3;
+	}
+
+	&[data-selected]::before {
+		content: "";
+		display: block;
+		position: absolute;
+		inset: 0;
+		pointer-events: none;
+		background: color-mix(in srgb, var(--alpha) 10%, transparent);
+		border: 1px solid color-mix(in srgb, var(--alpha) 30%, transparent);
+	}
+
+	&[data-selected] + [data-selected]::before {
+		border-top: 0;
 	}
 
 	> * {
