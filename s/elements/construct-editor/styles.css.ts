@@ -94,6 +94,12 @@ export const styles = css`
 	background: var(--taskbar);
 	position: relative;
 
+	border: 1px solid transparent;
+
+	&[data-is-focal] {
+		border-color: color-mix(in srgb, var(--alpha) 10%, transparent);
+	}
+
 	&[data-drag]::after {
 		content: "";
 		display: block;

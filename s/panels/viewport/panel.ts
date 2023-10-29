@@ -11,7 +11,8 @@ import {sprite_box} from "../../sprites/groups/feather/box.js"
 export const ViewportPanel = panel({
 	label: "viewport",
 	icon: sprite_box,
-	view: slate.obsidian({name: "viewport", styles}, use => ({}: PanelProps) => {
+	view: slate.obsidian({name: "viewport", styles}, use => ({leafId}: PanelProps) => {
+		const {input} = use.context
 		const {scene, engine} = use.context.babylon
 
 		const {canvas} = use.init(() => {
@@ -21,13 +22,15 @@ export const ViewportPanel = panel({
 			const {camera} = fly
 
 			function simulate() {
-				const {forward, backward, leftward, rightward} = use.context.tactic.buttons
-				fly.add_move([
-					(rightward.input.value?.down ? 1 : 0)
-						- (leftward.input.value?.down ? 1 : 0),
-					(forward.input.value?.down ? 1 : 0)
-						- (backward.input.value?.down ? 1 : 0),
-				])
+				if (input.is_leaf_focal(leafId)) {
+					const {forward, backward, leftward, rightward} = input.tactic.buttons
+					fly.add_move([
+						(rightward.input.value?.down ? 1 : 0)
+							- (leftward.input.value?.down ? 1 : 0),
+						(forward.input.value?.down ? 1 : 0)
+							- (backward.input.value?.down ? 1 : 0),
+					])
+				}
 			}
 
 			use.context.renderLoop.add(simulate)

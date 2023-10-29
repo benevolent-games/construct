@@ -1,13 +1,13 @@
 
-import {UseCarbon, html, render} from "@benev/slate"
+import {html, render} from "@benev/slate"
 
 import {leaf_slot} from "./leaf_slot.js"
+import {slate} from "../../../context/slate.js"
 import {panels} from "../../../panels/panels.js"
-import {Context} from "../../../context/context.js"
 import {Layout} from "../../../context/controllers/layout/parts/types.js"
 
-export const use_layout = (use: UseCarbon<Context>) => use.prepare(() => {
-	const {seeker} = use.context.layout
+export const leaf_management = ({element}: {element: HTMLElement}) => () => {
+	const {seeker} = slate.context.layout
 	const leafRegistry = new Set<Layout.Id>()
 	return {
 
@@ -25,7 +25,7 @@ export const use_layout = (use: UseCarbon<Context>) => use.prepare(() => {
 				const content = html`${view([{leafId: leaf.id}])}`
 
 				render(content, div)
-				use.element.appendChild(div)
+				element.appendChild(div)
 
 				leafRegistry.add(leaf.id)
 			}
@@ -37,8 +37,7 @@ export const use_layout = (use: UseCarbon<Context>) => use.prepare(() => {
 				.filter(id => !allLeaves.some(leaf => leaf.id === id))
 
 			for (const id of oldLeaves) {
-				const div = use
-					.element
+				const div = element
 					.querySelector<HTMLElement>(`[data-id="${id}"]`)
 
 				if (div)
@@ -48,5 +47,5 @@ export const use_layout = (use: UseCarbon<Context>) => use.prepare(() => {
 			}
 		},
 	}
-})
+}
 

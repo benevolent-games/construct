@@ -14,6 +14,7 @@ import {Store, store} from "./controllers/store/store.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {LayoutController} from "./controllers/layout/controller.js"
 import {Instantiator} from "./controllers/instantiator/instantiator.js"
+import { InputController } from "./controllers/input/controller.js"
 
 export class Context extends BaseContext {
 	theme = theme
@@ -60,24 +61,8 @@ export class Context extends BaseContext {
 
 	on_file_drop_already_handled_internally = pub<void>()
 
-	tactic = new Tactic({
-		signals: this.signals,
-		devices: [new Tactic.Keyboard(window)],
-		bindings: {
-			buttons: {
-				select: "LMB",
-				forward: "KeyW",
-				backward: "KeyS",
-				leftward: "KeyA",
-				rightward: "KeyD",
-			},
-			vectors: {
-				look: "mouse",
-			},
-		},
-	})
-
 	store = store<Store>(localStorage)
+	input = new InputController(this.signals)
 	layout = new LayoutController(this.watch, this.store)
 
 	constructor(public panels: typeof all_panels) {

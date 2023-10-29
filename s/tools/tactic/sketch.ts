@@ -55,6 +55,18 @@ export class Keyboard extends Device {
 	}
 }
 
+export class Keyboard2 extends Device {
+	#handler = ({down}: {down: boolean}) => (event: KeyboardEvent) => {
+		this.onInput.publish({
+			down,
+			kind: "button",
+			code: event.code,
+		})
+	}
+	keydown = this.#handler({down: true})
+	keyup = this.#handler({down: false})
+}
+
 export interface Bindings {
 	buttons: {[key: string]: string}
 	vectors: {[key: string]: string}
@@ -67,6 +79,7 @@ export type Report<I extends Input.Whatever> = {
 
 export class Tactic<B extends Bindings> {
 	static Keyboard = Keyboard
+	static Keyboard2 = Keyboard2
 
 	#devices = new Map<Device, () => void>()
 

@@ -3,9 +3,9 @@ import {html} from "@benev/slate"
 
 import {styles} from "./styles.css.js"
 import {Resizer} from "./resize/resizer.js"
-import {use_layout} from "./parts/use_layout.js"
-import {TabDragger} from "./parts/tab_dragger.js"
 import {slate} from "../../context/slate.js"
+import {TabDragger} from "./parts/tab_dragger.js"
+import {leaf_management} from "./parts/leaf_management.js"
 import {useDropzone} from "../../tools/shockdrop/use_dropzone.js"
 import {file_is_glb} from "../../tools/shockdrop/utils/file_is_glb.js"
 import {dropped_files} from "../../tools/shockdrop/utils/dropfiles.js"
@@ -16,11 +16,12 @@ export const ConstructEditor = slate.carbon({styles}, use => {
 	const {layout} = use.context
 	use.watch(() => layout.root)
 
-	const {add_new_leaves, delete_old_leaves} = use_layout(use)
-	add_new_leaves()
-	delete_old_leaves()
+	const leaves = use.prepare(leaf_management(use))
+	leaves.add_new_leaves()
+	leaves.delete_old_leaves()
 
 	const resizer = use.prepare(() => new Resizer(layout))
+
 	const render_layout = use.prepare(() => make_layout_renderer({
 		layout,
 		resizer,
