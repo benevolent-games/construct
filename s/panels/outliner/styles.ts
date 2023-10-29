@@ -77,6 +77,7 @@ li {
 			margin-left: 0.5em;
 			height: var(--line-height);
 			border-left: 1px solid #fff2;
+			transition: all 200ms linear;
 		}
 	}
 
