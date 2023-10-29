@@ -6,11 +6,6 @@ import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 import {GlbSlot} from "../../../state.js"
 import {Id} from "../../../domains/outline/types.js"
 
-export type GlbRef = {
-	hash: string
-	name: string
-}
-
 export type Glb = {
 	hash: string
 	name: string
