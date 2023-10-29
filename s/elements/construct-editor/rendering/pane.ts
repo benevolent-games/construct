@@ -25,6 +25,7 @@ export const render_pane = (meta: LayoutMeta) => (
 		: null
 
 	const isFocal = pane.id === input.focal.value?.paneId
+	const isPointerLocked = activeLeaf && input.is_leaf_pointer_locked(activeLeaf.id)
 
 	const focalize = () => {
 		input.focal.value = {
@@ -39,6 +40,7 @@ export const render_pane = (meta: LayoutMeta) => (
 			style="${sizing_styles(pane.size)}"
 
 			?data-is-focal="${isFocal}"
+			?data-is-pointer-locked="${isPointerLocked}"
 			@pointerover="${focalize}"
 
 			?data-drag=${meta.dragger.is_pane_indicated(pane.id)}

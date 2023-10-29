@@ -100,6 +100,10 @@ export const styles = css`
 		border-color: color-mix(in srgb, var(--alpha) 10%, transparent);
 	}
 
+	&[data-is-pointer-locked] {
+		border-color: color-mix(in srgb, var(--bravo) 50%, transparent);
+	}
+
 	&[data-drag]::after {
 		content: "";
 		display: block;

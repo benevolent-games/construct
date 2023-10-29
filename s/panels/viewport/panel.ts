@@ -48,8 +48,16 @@ export const ViewportPanel = panel({
 			}]
 		})
 
+		function lock(event: MouseEvent) {
+			const container = event.currentTarget as HTMLElement
+			container.requestPointerLock()
+			input.pointerLock.value = {leafId}
+		}
+
 		return html`
-			${canvas}
+			<div class=container @click="${lock}">
+				${canvas}
+			</div>
 		`
 	}),
 })
