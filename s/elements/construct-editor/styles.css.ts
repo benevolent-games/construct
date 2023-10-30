@@ -90,11 +90,11 @@ export const styles = css`
 	border: 1px solid transparent;
 
 	&[data-is-focal] {
-		border-color: color-mix(in srgb, var(--alpha) 10%, transparent);
+		border-color: color-mix(in srgb, var(--alpha) 15%, transparent);
 	}
 
 	&[data-is-pointer-locked] {
-		border-color: color-mix(in srgb, var(--bravo) 50%, transparent);
+		border-color: color-mix(in srgb, var(--alpha) 80%, transparent);
 	}
 
 	&[data-drag]::after {
@@ -184,7 +184,6 @@ export const styles = css`
 
 			&:active {
 				opacity: 1;
-				color: var(--bravo);
 			}
 
 			> svg {
