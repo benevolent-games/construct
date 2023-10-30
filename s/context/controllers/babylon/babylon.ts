@@ -1,6 +1,8 @@
 
 import "@babylonjs/loaders/glTF/index.js"
 import "@babylonjs/core/Engines/index.js"
+import "@babylonjs/core/Culling/ray.js"
+import "@babylonjs/core/Rendering/edgesRenderer.js"
 
 import {Scene} from "@babylonjs/core/scene.js"
 import {Mesh} from "@babylonjs/core/Meshes/mesh.js"

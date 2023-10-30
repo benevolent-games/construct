@@ -1,5 +1,10 @@
 
 import {StateTree, WatchTower} from "@benev/slate"
+import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
+import {Color4} from "@babylonjs/core/Maths/math.color.js"
+import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
+import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
+import {InstancedMesh} from "@babylonjs/core/Meshes/instancedMesh.js"
 
 import {State} from "../../state.js"
 import {Warehouse} from "../warehouse/warehouse.js"
@@ -30,14 +35,20 @@ export class Instantiator {
 
 	things = new Map<Item.Id, Thing>()
 
+	instances = new Map<Item.Id, {
+		node: TransformNode,
+		selected: boolean,
+	}>()
+
 	#add(item: Item.Whatever) {
 		switch (item.kind) {
 			case "instance":
 				const {glb, prop} = this.warehouse.trace_prop(item.address)
 				if (glb && prop) {
-					const instance = prop.top_lod.node.instantiateHierarchy()!
-					const dispose = () => instance.dispose()
+					const node = prop.top_lod.node.instantiateHierarchy()!
+					const dispose = () => node.dispose()
 					this.things.set(item.id, {dispose, glb_hash: glb.hash})
+					this.instances.set(item.id, {node, selected: false})
 				}
 				else console.error(`failed to create instance "${item.name}" ${item.id}`)
 				break
@@ -52,6 +63,7 @@ export class Instantiator {
 		if (item) {
 			item.dispose()
 			this.things.delete(id)
+			this.instances.delete(id)
 		}
 	}
 
@@ -88,6 +100,36 @@ export class Instantiator {
 					this.#delete_by_id(item.id)
 			}
 		}
+
+		this.evaluate_selections()
 	}
+
+	evaluate_selections() {
+		const tools = make_outline_tools(this.app.state.outline)
+		for (const [id, instance] of this.instances) {
+			const item = tools.getItem(id) as Item.Instance
+			if (instance.selected !== item.selected) {
+				instance.selected = item.selected
+				for (const mesh of get_actual_meshes(instance.node)) {
+					if (item.selected) {
+						mesh.enableEdgesRendering()
+						mesh.edgesWidth = 8
+						mesh.edgesColor = new Color4(1, 1, 0, 1)
+					}
+					else {
+						mesh.disableEdgesRendering()
+					}
+				}
+			}
+		}
+	}
+}
+
+//////////
+
+function get_actual_meshes(node: TransformNode | Mesh | InstancedMesh) {
+	return node instanceof AbstractMesh
+		? [node, ...node.getChildMeshes()]
+		: node.getChildMeshes()
 }
 

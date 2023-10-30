@@ -13,7 +13,7 @@ import {Store, store} from "./controllers/store/store.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
 import {InputController} from "./controllers/input/controller.js"
 import {LayoutController} from "./controllers/layout/controller.js"
-import {Instantiator} from "./controllers/instantiator/instantiator.js"
+import {Instantiator} from "./controllers/instantiator/controller.js"
 
 export class Context extends BaseContext {
 	theme = theme
