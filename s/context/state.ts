@@ -7,7 +7,7 @@ export type Hash = string
 export interface GlbSlot {
 	id: Item.Id
 	name: string
-	glb_hash: Hash | undefined
+	glb_hash: Hash | null
 }
 
 export interface State {

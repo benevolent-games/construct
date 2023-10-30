@@ -26,7 +26,7 @@ export const SlotsPanel = panel({
 			use,
 			handle_drop: (_, slotA, slotB) => {
 				if (slotA !== slotB)
-					context.actions.slots.swap([slotA.id, slotB.id])
+					context.actions.slots.swap(slotA.id, slotB.id)
 			},
 			out_of_band: {
 				predicate: drag_has_files,
@@ -51,7 +51,7 @@ export const SlotsPanel = panel({
 		function render_slot(slot: GlbSlot) {
 			const glb = slot.glb_hash
 				? context.warehouse.get_glb(slot.glb_hash)
-				: undefined
+				: null
 
 			const is_picked_up = drag.payload === slot
 			const is_hovered_over = !is_picked_up && drag.hover === slot
@@ -62,11 +62,11 @@ export const SlotsPanel = panel({
 
 			function handle_name_change(event: InputEvent) {
 				const input = event.target as HTMLInputElement
-				context.actions.slots.rename({id: slot.id, name: input.value})
+				context.actions.slots.rename(slot.id, input.value)
 			}
 
 			function delete_slot() {
-				context.actions.slots.delete(slot)
+				context.actions.slots.delete(slot.id)
 			}
 
 			return html`
@@ -107,7 +107,7 @@ export const SlotsPanel = panel({
 
 		function render_glb(slot: GlbSlot, glb: Glb) {
 			function delete_glb() {
-				context.actions.slots.set_glb({id: slot.id, glb_hash: undefined})
+				context.actions.slots.assign_glb(slot.id, null)
 			}
 			return html`
 				<div class="cap grip">
@@ -152,7 +152,7 @@ export const SlotsPanel = panel({
 		function create() {
 			context.actions.slots.add({
 				id: generateId(),
-				glb_hash: undefined,
+				glb_hash: null,
 				name: "slot",
 			})
 		}

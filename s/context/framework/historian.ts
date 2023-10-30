@@ -70,7 +70,7 @@ export class Historian<S> {
 
 				this.app.transmute(state => {
 					record_snapshot(annals, state)
-					return spec(state, action.payload)
+					return spec(state)(...action.params)
 				})
 
 				annals.past.push(action)

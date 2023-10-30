@@ -106,19 +106,14 @@ export class Warehouse {
 
 		this.glbs.value = [...this.glbs.value, glb]
 
-		if (slot_id) {
-			this.actions.slots.set_glb({
-				id: slot_id,
-				glb_hash: hash,
-			})
-		}
-		else {
+		if (slot_id)
+			this.actions.slots.assign_glb(slot_id, hash)
+		else
 			this.actions.slots.add({
 				id: generateId(),
 				glb_hash: hash,
 				name: convert_file_name_to_slot_name(file.name),
 			})
-		}
 
 		return true
 	}

@@ -3,15 +3,15 @@ import {Historian} from "./historian.js"
 import {StateTree, ob} from "@benev/slate"
 
 export namespace Action {
-	export interface Base<P = any> {
+	export interface Base<P extends any[] = any[]> {
 		id: number
 		purpose: string[]
-		payload: P
+		params: P
 		time: number
 	}
 
-	export type Spec<S, P> = (state: S, payload: P) => S
-	export type GetPayload<Sp extends Spec<any, {}>> = Parameters<Sp>[1]
+	export type Spec<S, P extends any[]> = (state: S) => (...params: P) => S
+	export type GetParams<Sp extends Spec<any, any[]>> = Parameters<ReturnType<Sp>>
 
 	export type Specs<S = any> = {
 		[key: string]: Spec<S, any> | Specs<S>
@@ -20,17 +20,17 @@ export namespace Action {
 	export type Callers<Sp extends Specs> = {
 		[K in keyof Sp]:
 			Sp[K] extends Spec<any, any>
-				? (payload: GetPayload<Sp[K]>) => void
+				? (...params: GetParams<Sp[K]>) => void
 				: Sp[K] extends Specs<any>
 					? Callers<Sp[K]>
 					: never
 	}
 
 	export class Helper<S> {
-		action = <P>(
-				fun: (state: S, payload: P) => void
-			) => ((state, payload) => {
-			fun(state, payload)
+		action = <P extends any[]>(
+				fun: (state: S) => (...params: P) => void
+			) => ((state: S) => (...params: P) => {
+			fun(state)(...params)
 			return state
 		}) as Action.Spec<S, P>
 
@@ -56,17 +56,17 @@ export namespace Action {
 			return ob.map(specs, (spec, name) => (
 
 				(typeof spec === "function")
-					? (payload: any) => {
+					? (...params: any[]) => {
 						const action = {
 							id: action_count++,
 							purpose: [...purpose, name as string],
-							payload,
+							params,
 							time: Date.now(),
 						} satisfies Action.Base
 
 						app.transmute(state => {
 							historian.save_snapshot()
-							return spec(state, payload)
+							return spec(state)(...params)
 						})
 
 						historian.proceed(action)

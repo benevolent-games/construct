@@ -120,7 +120,7 @@ export const OutlinerPanel = panel({
 
 			function render_line_item(content: TemplateResult) {
 				const delete_this_item = parents.at(-1)
-					? () => actions.items.delete([item.id])
+					? () => actions.items.delete(item.id)
 					: undefined
 
 				return html`
@@ -177,10 +177,10 @@ export const OutlinerPanel = panel({
 			}
 
 			function toggle_visibility() {
-				actions.items.visibility({
-					itemIds: [item.id],
-					visible: !item.visible,
-				})
+				if (item.visible)
+					actions.items.hide(item.id)
+				else
+					actions.items.show(item.id)
 			}
 
 			function render_visibility() {
@@ -221,11 +221,13 @@ export const OutlinerPanel = panel({
 			}
 
 			function toggleSelection() {
-				if (!is_root)
-					actions.items.select({
-						itemIds: [item.id],
-						selected: !item.selected,
-					})
+				if (is_root)
+					return
+
+				if (item.selected)
+					actions.items.deselect(item.id)
+				else
+					actions.items.select(item.id)
 			}
 
 			switch (item.kind) {

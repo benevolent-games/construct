@@ -4,28 +4,28 @@ import {GlbSlot, Hash, State} from "../../state.js"
 import {Action} from "../../framework/action_namespace.js"
 
 export const slots = Action.specs<State>()(({action}) => ({
-	add: action((state, slot: GlbSlot) => {
+	add: action(state => (slot: GlbSlot) => {
 		state.slots.push(slot)
 	}),
 
-	delete: action((state, {id}: {id: Item.Id}) => {
+	delete: action(state => (id: Item.Id) => {
 		state.slots = state.slots.filter(s => s.id !== id)
 	}),
 
-	rename: action((state, {id, name}: {id: Item.Id, name: string}) => {
+	rename: action(state => (id: Item.Id, name: string) => {
 		const slot = state.slots.find(s => s.id === id)!
 		slot.name = name
 	}),
 
-	set_glb: action((state, {id, glb_hash}: {
+	assign_glb: action(state => (
 			id: Item.Id,
-			glb_hash: Hash | undefined,
-		}) => {
+			glb_hash: Hash | null,
+		) => {
 		const slot = state.slots.find(s => s.id === id)!
 		slot.glb_hash = glb_hash
 	}),
 
-	swap: action((state, [a, b]: [Item.Id, Item.Id]) => {
+	swap: action(state => (a: Item.Id, b: Item.Id) => {
 		const slotA = state.slots.find(s => s.id === a)!
 		const slotB = state.slots.find(s => s.id === b)!
 		const hashA = slotA.glb_hash
