@@ -1,8 +1,8 @@
 
+import {Id} from "../../../tools/fresh_id.js"
 import {PropAddress} from "../../controllers/warehouse/parts/types.js"
 
 export namespace Item {
-	export type Id = string
 	export type Kind = "folder" | "instance" | "light"
 
 	export interface Base {

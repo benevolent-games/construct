@@ -7,12 +7,13 @@ import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 import {InstancedMesh} from "@babylonjs/core/Meshes/instancedMesh.js"
 
 import {State} from "../../state.js"
+import {Id} from "../../../tools/fresh_id.js"
 import {Warehouse} from "../warehouse/warehouse.js"
 import {Item} from "../../domains/outline/types.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
 export type Thing = {
-	glb_hash: Item.Id
+	glb_hash: Id
 	dispose: () => void
 }
 
@@ -33,9 +34,9 @@ export class Instantiator {
 		)
 	}
 
-	things = new Map<Item.Id, Thing>()
+	things = new Map<Id, Thing>()
 
-	instances = new Map<Item.Id, {
+	instances = new Map<Id, {
 		node: TransformNode,
 		selected: boolean,
 	}>()
@@ -58,7 +59,7 @@ export class Instantiator {
 		}
 	}
 
-	#delete_by_id(id: Item.Id) {
+	#delete_by_id(id: Id) {
 		const item = this.things.get(id)
 		if (item) {
 			item.dispose()

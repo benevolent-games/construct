@@ -1,8 +1,8 @@
 
+import {Id} from "../../../../tools/fresh_id.js"
 import {panels} from "../../../../panels/panels.js"
 
 export namespace Layout {
-	export type Id = string
 	export type Kind = "cell" | "pane" | "leaf"
 	export type PanelName = keyof typeof panels
 

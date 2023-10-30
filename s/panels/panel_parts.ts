@@ -1,10 +1,11 @@
 
 import {SVGTemplateResult} from "@benev/slate"
 import {ObsidianView} from "@benev/slate/x/shiny/parts/types.js"
-import {Layout} from "../context/controllers/layout/parts/types.js"
+
+import {Id} from "../tools/fresh_id.js"
 
 export interface PanelProps {
-	leafId: Layout.Id
+	leafId: Id
 }
 
 export interface PanelSpec {

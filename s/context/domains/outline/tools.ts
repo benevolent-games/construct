@@ -1,6 +1,7 @@
 
 import {State} from "../../state.js"
 import {Item, ItemReport} from "./types.js"
+import {Id} from "../../../tools/fresh_id.js"
 
 export type OutlineState = State["outline"]
 
@@ -43,7 +44,7 @@ export function make_outline_tools(outline: OutlineState) {
 		instances,
 		lights,
 		selected,
-		isApparent(id: Item.Id) {
+		isApparent(id: Id) {
 			const isRoot = id === outline.id
 			if (isRoot) {
 				return outline.visible
@@ -53,13 +54,13 @@ export function make_outline_tools(outline: OutlineState) {
 				return item.visible && parents.every(parent => parent.visible)
 			}
 		},
-		getItem(id: Item.Id) {
+		getItem(id: Id) {
 			const item = items.find(item => item.id === id)
 			if (!item)
 				throw new Error(`item not found ${id}`)
 			return item
 		},
-		getFolder(id: Item.Id) {
+		getFolder(id: Id) {
 			const folder = folders.find(folder => folder.id === id)
 			if (!folder)
 				throw new Error(`folder not found ${id}`)

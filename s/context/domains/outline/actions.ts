@@ -1,5 +1,6 @@
 
 import {State} from "../../state.js"
+import {Id} from "../../../tools/fresh_id.js"
 import {make_outline_tools} from "./tools.js"
 import {Item, ItemReport} from "../outline/types.js"
 import {Action} from "../../framework/action_namespace.js"
@@ -7,7 +8,7 @@ import {Action} from "../../framework/action_namespace.js"
 export const items = Action.specs<State>()(({action}) => ({
 	add: action(state => (additions: {
 			item: Item.Whatever,
-			folderId: Item.Id,
+			folderId: Id,
 		}[]) => {
 		const tools = make_outline_tools(state.outline)
 		for (const {folderId, item} of additions) {
@@ -16,7 +17,7 @@ export const items = Action.specs<State>()(({action}) => ({
 		}
 	}),
 
-	delete: action(state => (...ids: Item.Id[]) => {
+	delete: action(state => (...ids: Id[]) => {
 		const tools = make_outline_tools(state.outline)
 		const reports = tools.reports.filter(report => ids.includes(report.item.id))
 		for (const {item, parent} of reports)
@@ -25,14 +26,14 @@ export const items = Action.specs<State>()(({action}) => ({
 			)
 	}),
 
-	select: action(state => (...ids: Item.Id[]) => {
+	select: action(state => (...ids: Id[]) => {
 		const tools = make_outline_tools(state.outline)
 		const items = tools.items.filter(item => ids.includes(item.id))
 		for (const item of items)
 			item.selected = true
 	}),
 
-	deselect: action(state => (...ids: Item.Id[]) => {
+	deselect: action(state => (...ids: Id[]) => {
 		const tools = make_outline_tools(state.outline)
 		const items = tools.items.filter(item => ids.includes(item.id))
 		for (const item of items)
@@ -45,14 +46,14 @@ export const items = Action.specs<State>()(({action}) => ({
 			item.selected = false
 	}),
 
-	show: action(state => (...ids: Item.Id[]) => {
+	show: action(state => (...ids: Id[]) => {
 		const tools = make_outline_tools(state.outline)
 		const items = [state.outline, ...tools.items].filter(item => ids.includes(item.id))
 		for (const item of items)
 			item.visible = true
 	}),
 
-	hide: action(state => (...ids: Item.Id[]) => {
+	hide: action(state => (...ids: Id[]) => {
 		const tools = make_outline_tools(state.outline)
 		const items = [state.outline, ...tools.items].filter(item => ids.includes(item.id))
 		for (const item of items)
@@ -60,8 +61,8 @@ export const items = Action.specs<State>()(({action}) => ({
 	}),
 
 	move_into_folder: action(state => ({folderId, itemIds}: {
-			folderId: Item.Id,
-			itemIds: Item.Id[],
+			folderId: Id,
+			itemIds: Id[],
 		}) => {
 
 		const tools = make_outline_tools(state.outline)
@@ -109,8 +110,8 @@ export const items = Action.specs<State>()(({action}) => ({
 	}),
 
 	move_below_another_item: action(state => ({targetItemId, itemIds}: {
-			targetItemId: Item.Id,
-			itemIds: Item.Id[],
+			targetItemId: Id,
+			itemIds: Id[],
 		}) => {
 
 		const tools = make_outline_tools(state.outline)

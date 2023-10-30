@@ -1,5 +1,6 @@
 
 import {Layout} from "./types.js"
+import {Id} from "../../../../tools/fresh_id.js"
 
 export class LayoutSeeker {
 	constructor(private getRoot: () => Layout.Cell) {}
@@ -20,7 +21,7 @@ export class LayoutSeeker {
 		}
 	}
 
-	find<N extends Layout.Node>(id: Layout.Id) {
+	find<N extends Layout.Node>(id: Id) {
 		for (const result of this.list())
 			if (result[0].id === id)
 				return result as Layout.Report<N>

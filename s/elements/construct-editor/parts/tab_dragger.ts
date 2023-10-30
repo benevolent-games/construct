@@ -2,6 +2,7 @@
 import {Signal} from "@benev/slate"
 
 import {is_within} from "./drag_utils.js"
+import {Id} from "../../../tools/fresh_id.js"
 import {Context} from "../../../context/context.js"
 import {Layout} from "../../../context/controllers/layout/parts/types.js"
 import {LayoutSeeker} from "../../../context/controllers/layout/parts/seeker.js"
@@ -9,9 +10,9 @@ import {LayoutActions} from "../../../context/controllers/layout/parts/actions.j
 import {LayoutController} from "../../../context/controllers/layout/controller.js"
 
 export type TabDragOperation = {
-	leafId: Layout.Id
+	leafId: Id
 	proposed_destination: null | {
-		paneId: Layout.Id
+		paneId: Id
 		leafIndex: number
 	}
 }
@@ -27,7 +28,7 @@ export class TabDragger {
 		this.#operation = this.context.signals.signal(undefined)
 	}
 
-	is_leaf_indicated(paneId: Layout.Id, leafIndex: number) {
+	is_leaf_indicated(paneId: Id, leafIndex: number) {
 		const operation = this.#operation.value
 		return (
 			operation &&
@@ -37,7 +38,7 @@ export class TabDragger {
 		)
 	}
 
-	is_pane_indicated(paneId: Layout.Id) {
+	is_pane_indicated(paneId: Id) {
 		const operation = this.#operation.value
 		return (
 			operation &&
@@ -47,7 +48,7 @@ export class TabDragger {
 	}
 
 	tab = {
-		start: (leafId: Layout.Id) =>  (_: DragEvent) => {
+		start: (leafId: Id) =>  (_: DragEvent) => {
 			this.#operation.value = {
 				leafId,
 				proposed_destination: null,
@@ -56,7 +57,7 @@ export class TabDragger {
 	}
 
 	pane = {
-		enter: (paneId: Layout.Id) => (event: DragEvent) => {
+		enter: (paneId: Id) => (event: DragEvent) => {
 			const operation = this.#operation.value
 
 			if (!operation)

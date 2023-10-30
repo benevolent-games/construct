@@ -1,15 +1,14 @@
 
 import {Scene} from "@babylonjs/core/scene.js"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
+import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 import {Signal, SignalTower, StateTree, WatchTower} from "@benev/slate"
 
 import {Actions} from "../../actions.js"
-import {Item} from "../../domains/outline/types.js"
 import {GlbSlot, Hash, State} from "../../state.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
+import {Id, freshId} from "../../../tools/fresh_id.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
-import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 import {Glb, GlbProp, PropAddress, PropTrace} from "./parts/types.js"
 
 export class Warehouse {
@@ -78,7 +77,7 @@ export class Warehouse {
 		}
 	}
 
-	async add_glb_file(file: File, slot_id?: Item.Id) {
+	async add_glb_file(file: File, slot_id?: Id) {
 		const hash = await quick_hash(file)
 		const already_exists = this.glbs.value.find(g => g.hash === hash)
 
@@ -110,7 +109,7 @@ export class Warehouse {
 			this.actions.slots.assign_glb(slot_id, hash)
 		else
 			this.actions.slots.add({
-				id: generateId(),
+				id: freshId(),
 				glb_hash: hash,
 				name: convert_file_name_to_slot_name(file.name),
 			})

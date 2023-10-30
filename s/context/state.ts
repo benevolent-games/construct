@@ -1,11 +1,11 @@
 
+import {Id, freshId} from "../tools/fresh_id.js"
 import {Item} from "./domains/outline/types.js"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 export type Hash = string
 
 export interface GlbSlot {
-	id: Item.Id
+	id: Id
 	name: string
 	glb_hash: Hash | null
 }
@@ -17,7 +17,7 @@ export interface State {
 
 export const default_state = (): State => ({
 	outline: {
-		id: generateId(),
+		id: freshId(),
 		name: "root",
 		kind: "folder",
 		visible: true,

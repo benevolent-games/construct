@@ -1,19 +1,19 @@
 
 import {html} from "lit"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
+
+import {sprite_x} from "../../sprites/groups/feather/x.js"
+import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
+import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {GlbSlot} from "../../context/state.js"
+import {Id, freshId} from "../../tools/fresh_id.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
-import {sprite_x} from "../../sprites/groups/feather/x.js"
-import {Item} from "../../context/domains/outline/types.js"
 import {Glb} from "../../context/controllers/warehouse/parts/types.js"
 import {useDragAndDrop} from "../../tools/shockdrop/use_drag_and_drop.js"
 import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
-import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
-import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
 export const SlotsPanel = panel({
 	label: "slots",
@@ -42,7 +42,7 @@ export const SlotsPanel = panel({
 			},
 		})
 
-		function render_id(id: Item.Id) {
+		function render_id(id: Id) {
 			return html`
 				<small class=id>${id.slice(0, 8)}</small>
 			`
@@ -151,7 +151,7 @@ export const SlotsPanel = panel({
 
 		function create() {
 			context.actions.slots.add({
-				id: generateId(),
+				id: freshId(),
 				glb_hash: null,
 				name: "slot",
 			})

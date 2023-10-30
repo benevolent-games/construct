@@ -2,13 +2,13 @@
 import {html, render} from "@benev/slate"
 
 import {leaf_slot} from "./leaf_slot.js"
+import {Id} from "../../../tools/fresh_id.js"
 import {slate} from "../../../context/slate.js"
 import {panels} from "../../../panels/panels.js"
-import {Layout} from "../../../context/controllers/layout/parts/types.js"
 
 export const leaf_management = ({element}: {element: HTMLElement}) => () => {
 	const {seeker} = slate.context.layout
-	const leafRegistry = new Set<Layout.Id>()
+	const leafRegistry = new Set<Id>()
 	return {
 
 		add_new_leaves() {

@@ -1,21 +1,22 @@
 
 import {TemplateResult, html} from "@benev/slate"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
-import {styles} from "./styles.js"
-import {EzMap} from "../../tools/ezmap.js"
-import {slate} from "../../context/slate.js"
-import {PanelProps, panel} from "../panel_parts.js"
 import {sprite_x} from "../../sprites/groups/feather/x.js"
-import {Item} from "../../context/domains/outline/types.js"
 import {sprite_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
-import {make_outline_tools} from "../../context/domains/outline/tools.js"
 import {sprite_tabler_eye_closed} from "../../sprites/groups/tabler/eye-closed.js"
 import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
 import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
 import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
 import {sprite_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-triangle.js"
+
+import {styles} from "./styles.js"
+import {EzMap} from "../../tools/ezmap.js"
+import {slate} from "../../context/slate.js"
+import {Id, freshId} from "../../tools/fresh_id.js"
+import {PanelProps, panel} from "../panel_parts.js"
+import {Item} from "../../context/domains/outline/types.js"
+import {make_outline_tools} from "../../context/domains/outline/tools.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",
@@ -25,7 +26,7 @@ export const OutlinerPanel = panel({
 		const {actions} = use.context
 
 		const tools = make_outline_tools(outline)
-		const localFolderSettings = use.prepare(() => new EzMap<Item.Id, {opened: boolean}>())
+		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
 
 		const drag = use.flatstate({
 			item_being_dragged: undefined as undefined | Item.Whatever,
@@ -82,7 +83,7 @@ export const OutlinerPanel = panel({
 			}
 		})
 
-		function get_local_folder_settings(id: Item.Id) {
+		function get_local_folder_settings(id: Id) {
 			return localFolderSettings.guarantee(id, () => ({
 				opened: true,
 			}))
@@ -90,7 +91,7 @@ export const OutlinerPanel = panel({
 
 		function click_to_create_new_folder(parent: Item.Folder) {
 			return () => {
-				const new_id = generateId()
+				const new_id = freshId()
 				actions.items.add([{
 					folderId: parent.id,
 					item: {
@@ -111,7 +112,7 @@ export const OutlinerPanel = panel({
 					${parents.map(() => html`
 						<span class=gutter></span>
 					`)}
-				<div>
+				</div>
 			`
 		}
 

@@ -1,7 +1,7 @@
 
-import {Layout} from "../../../context/controllers/layout/parts/types.js"
+import {Id} from "../../../tools/fresh_id.js"
 
-export function leaf_slot(id: Layout.Id) {
+export function leaf_slot(id: Id) {
 	return `leaf-${id}`
 }
 

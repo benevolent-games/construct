@@ -1,10 +1,10 @@
 
 import {StateTree} from "@benev/slate"
-import {generateId} from "@benev/toolbox/x/utils/generate-id.js"
 
 import {Layout} from "./types.js"
 import {LayoutSeeker} from "./seeker.js"
 import {stock_layouts} from "./utils/stock_layouts.js"
+import {Id, freshId} from "../../../../tools/fresh_id.js"
 import {clear_size_of_last_child, ensure_active_index_is_in_safe_range, get_active_leaf, maintain_which_leaf_is_active, movement_is_forward, movement_is_within_same_pane, same_place} from "./utils/helpers.js"
 
 export type LayoutActions = ReturnType<typeof prepare_layout_actions>
@@ -34,7 +34,7 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 	}
 
 	return {
-		split_pane: action(seeker => (id: Layout.Id, vertical: boolean) => {
+		split_pane: action(seeker => (id: Id, vertical: boolean) => {
 			const [pane, parent_cell, pane_index] = seeker.find<Layout.Pane>(id)
 			const previous_size = pane.size
 
@@ -58,7 +58,7 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 				}
 
 				const new_pane: Layout.Pane = {
-					id: generateId(),
+					id: freshId(),
 					kind: "pane",
 					children: [],
 					active_leaf_index: null,
@@ -70,12 +70,12 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 			else {
 				pane.size = 50
 				const new_cell: Layout.Cell = {
-					id: generateId(),
+					id: freshId(),
 					kind: "cell",
 					size: previous_size,
 					vertical,
 					children: [pane, {
-						id: generateId(),
+						id: freshId(),
 						kind: "pane",
 						size: null,
 						children: [],
@@ -86,7 +86,7 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 			}
 		}),
 
-		delete_pane: action((seeker, setRoot) => (id: Layout.Id) => {
+		delete_pane: action((seeker, setRoot) => (id: Id) => {
 			const [,parent_cell, pane_index] = seeker.find<Layout.Pane>(id)
 			const [,grandparent_cell, parent_cell_index] = seeker.find<Layout.Cell>(parent_cell.id)
 
@@ -110,15 +110,15 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 			}
 		}),
 
-		delete_leaf: action(seeker => (id: Layout.Id) => {
+		delete_leaf: action(seeker => (id: Id) => {
 			const [,parent_pane, leaf_index] = seeker.find<Layout.Leaf>(id)
 			parent_pane.children.splice(leaf_index, 1)
 			ensure_active_index_is_in_safe_range(parent_pane)
 		}),
 
 		move_leaf: action(seeker => (
-				leafId: Layout.Id,
-				paneId: Layout.Id,
+				leafId: Id,
+				paneId: Id,
 				destination_index: number,
 			) => {
 
@@ -162,25 +162,25 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 		}),
 
 		add_leaf: action(seeker => (
-				paneId: Layout.Id,
+				paneId: Id,
 				panel: Layout.PanelName,
 			) => {
 			const [pane] = seeker.find<Layout.Pane>(paneId)
-			const id = generateId()
+			const id = freshId()
 			const leaf: Layout.Leaf = {id, kind: "leaf", panel}
 			pane.children.push(leaf)
 			return [leaf, pane.children.indexOf(leaf)] as [Layout.Leaf, number]
 		}),
 
 		set_pane_active_leaf: action(seeker => (
-				paneId: Layout.Id,
+				paneId: Id,
 				active_leaf_index: number | null
 			) => {
 			const [pane] = seeker.find<Layout.Pane>(paneId)
 			pane.active_leaf_index = active_leaf_index
 		}),
 
-		resize: action(seeker => (id: Layout.Id, size: number | null) => {
+		resize: action(seeker => (id: Id, size: number | null) => {
 			const [node] = seeker.find<Layout.Cell | Layout.Pane>(id)
 			node.size = size
 		}),
