@@ -1,5 +1,5 @@
 
-import {Signal, SignalTower} from "@benev/slate"
+import {Flat, Signal, SignalTower} from "@benev/slate"
 
 import {Layout} from "../layout/parts/types.js"
 import {Tactic} from "../../../tools/tactic/sketch.js"
@@ -28,6 +28,7 @@ export class InputController {
 
 	constructor(
 			public signals: SignalTower,
+			public flat: Flat,
 		) {
 
 		this.focal = signals.signal(null)
@@ -41,7 +42,7 @@ export class InputController {
 		window.addEventListener("pointerlockerror", clearPointerLock)
 
 		this.tactic = new Tactic({
-			signals: this.signals,
+			flat,
 			devices: [new Tactic.Keyboard(window)],
 			bindings: default_editor_bindings(),
 		})

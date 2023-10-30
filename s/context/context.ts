@@ -61,7 +61,7 @@ export class Context extends BaseContext {
 	on_file_drop_already_handled_internally = pub<void>()
 
 	store = store<Store>(localStorage)
-	input = new InputController(this.signals)
+	input = new InputController(this.signals, this.flat)
 	layout = new LayoutController(this.watch, this.store)
 
 	constructor(public panels: typeof all_panels) {

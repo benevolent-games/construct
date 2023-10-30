@@ -1,5 +1,6 @@
 
 import {html} from "@benev/slate"
+import {v2} from "@benev/toolbox/x/utils/v2.js"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 
 import {styles} from "./styles.js"
@@ -17,6 +18,7 @@ export const ViewportPanel = panel({
 
 		const {canvas} = use.init(() => {
 			const canvas = document.createElement("canvas")
+			const axis = (a: boolean, b: boolean) => ((a ?1 :0) - (b ?1 :0))
 
 			const fly = make_fly_camera({scene, position: [0, 0, -50]})
 			const {camera} = fly
@@ -24,12 +26,17 @@ export const ViewportPanel = panel({
 			function simulate() {
 				if (input.is_leaf_focal(leafId)) {
 					const {forward, backward, leftward, rightward} = input.tactic.buttons
+					const {up, down, left, right} = input.tactic.buttons
+
 					fly.add_move([
-						(rightward.input.value?.down ? 1 : 0)
-							- (leftward.input.value?.down ? 1 : 0),
-						(forward.input.value?.down ? 1 : 0)
-							- (backward.input.value?.down ? 1 : 0),
+						axis(rightward, leftward),
+						axis(forward, backward),
 					])
+
+					fly.add_look(v2.multiplyBy([
+						axis(right, left),
+						axis(up, down),
+					], 0.05))
 				}
 			}
 

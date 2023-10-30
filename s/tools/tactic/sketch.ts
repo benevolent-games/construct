@@ -1,5 +1,6 @@
 
-import {Pub, Signal, SignalTower, pub} from "@benev/slate"
+import {V2} from "@benev/toolbox/x/utils/v2.js"
+import {Flat, Pub, Signal, SignalTower, ob, pub} from "@benev/slate"
 
 export namespace Input {
 	export type Kind = "button" | "vector"
@@ -17,8 +18,7 @@ export namespace Input {
 	export interface Vector extends Base {
 		kind: "vector"
 		channel: string
-		x: number
-		y: number
+		vector: V2
 	}
 
 	export type Whatever = Button | Vector
@@ -71,11 +71,15 @@ export class Tactic<B extends Bindings> {
 	#devices = new Map<Device, () => void>()
 
 	bindings: B
-	readonly buttons: {[P in keyof B["buttons"]]: Report<Input.Button>}
-	readonly vectors: {[P in keyof B["vectors"]]: Report<Input.Vector>}
+	readonly buttons: Record<keyof B["buttons"], boolean>
+	readonly vectors: Record<keyof B["vectors"], V2>
+	on: {
+		buttons: Record<keyof B["buttons"], Pub<Input.Button>>
+		vectors: Record<keyof B["vectors"], Pub<Input.Vector>>
+	}
 
-	constructor({signals, bindings, devices = []}: {
-			signals: SignalTower
+	constructor({flat, bindings, devices = []}: {
+			flat: Flat
 			bindings: B
 			devices?: Device[]
 		}) {
@@ -83,18 +87,13 @@ export class Tactic<B extends Bindings> {
 		this.bindings = bindings
 		this.add(...devices)
 
-		const report = (): Report<any> => ({
-			input: signals.signal(undefined),
-			on: pub(),
-		})
+		this.buttons = flat.state(ob.map(bindings.buttons, () => false)) as any
+		this.vectors = flat.state(ob.map(bindings.vectors, () => [0, 0])) as any
 
-		this.buttons = Object.fromEntries(
-			Object.entries(bindings.buttons).map(([key]) => [key, report()])
-		) as any
-
-		this.vectors = Object.fromEntries(
-			Object.entries(bindings.vectors).map(([key]) => [key, report()])
-		) as any
+		this.on = {
+			buttons: ob.map(bindings.buttons, () => pub()) as any,
+			vectors: ob.map(bindings.buttons, () => pub()) as any,
+		}
 	}
 
 	readonly input = (input: Input.Whatever) => {
@@ -102,18 +101,16 @@ export class Tactic<B extends Bindings> {
 			case "button":
 				for (const [key, value] of Object.entries(this.bindings.buttons)) {
 					if (value === input.code) {
-						const report = this.buttons[key]
-						report.input.value = input
-						report.on.publish(input)
+						this.buttons[key as any] = input.down
+						this.on.buttons[key as any].publish(input)
 					}
 				}
 				break
 			case "vector":
 				for (const [key, value] of Object.entries(this.bindings.vectors)) {
 					if (value === input.channel) {
-						const report = this.vectors[key]
-						report.input.value = input
-						report.on.publish(input)
+						this.vectors[key as any] = input.vector
+						this.on.vectors[key as any].publish(input)
 					}
 				}
 				break
