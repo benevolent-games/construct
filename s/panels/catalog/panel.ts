@@ -50,9 +50,8 @@ export const CatalogPanel = panel({
 })
 
 function helpers(context: Context) {
-
 	function instance_into_world(slot: GlbSlot, prop: GlbProp) {
-		return () => context.actions.add_items([{
+		return () => context.actions.items.add([{
 			folderId: context.state.outline.id,
 			item: {
 				id: generateId(),

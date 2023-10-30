@@ -57,7 +57,7 @@ export const OutlinerPanel = panel({
 					},
 					drop: (folder: Item.Folder) => (_event: DragEvent) => {
 						if (drag.item_being_dragged)
-							actions.move_items_into_folder({
+							actions.items.move_into_folder({
 								folderId: folder.id,
 								itemIds: [drag.item_being_dragged.id],
 							})
@@ -72,7 +72,7 @@ export const OutlinerPanel = panel({
 					},
 					drop: (item: Item.Whatever) => (_event: DragEvent) => {
 						if (drag.item_being_dragged)
-							actions.move_items_below_another_item({
+							actions.items.move_below_another_item({
 								itemIds: [drag.item_being_dragged.id],
 								targetItemId: item.id,
 							})
@@ -91,7 +91,7 @@ export const OutlinerPanel = panel({
 		function click_to_create_new_folder(parent: Item.Folder) {
 			return () => {
 				const new_id = generateId()
-				actions.add_items([{
+				actions.items.add([{
 					folderId: parent.id,
 					item: {
 						kind: "folder",
@@ -120,7 +120,7 @@ export const OutlinerPanel = panel({
 
 			function render_line_item(content: TemplateResult) {
 				const delete_this_item = parents.at(-1)
-					? () => actions.delete_items([item.id])
+					? () => actions.items.delete([item.id])
 					: undefined
 
 				return html`
@@ -177,7 +177,7 @@ export const OutlinerPanel = panel({
 			}
 
 			function toggle_visibility() {
-				actions.item_visibility({
+				actions.items.visibility({
 					itemIds: [item.id],
 					visible: !item.visible,
 				})
@@ -222,7 +222,7 @@ export const OutlinerPanel = panel({
 
 			function toggleSelection() {
 				if (!is_root)
-					actions.item_selection({
+					actions.items.select({
 						itemIds: [item.id],
 						selected: !item.selected,
 					})
@@ -302,7 +302,7 @@ export const OutlinerPanel = panel({
 
 		function clearSelection(event: MouseEvent) {
 			if (tools.selected.length > 0 && event.target === event.currentTarget)
-				actions.clear_selection()
+				actions.items.clear_selection()
 		}
 
 		return html`

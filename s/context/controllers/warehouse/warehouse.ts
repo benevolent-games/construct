@@ -6,9 +6,9 @@ import {Signal, SignalTower, StateTree, WatchTower} from "@benev/slate"
 import {Actions} from "../../actions.js"
 import {Item} from "../../domains/outline/types.js"
 import {GlbSlot, Hash, State} from "../../state.js"
-import {quick_hash} from "../../../tools/quick_hash.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
+import {quick_hash} from "../../../tools/quick_hash.js"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 import {Glb, GlbProp, PropAddress, PropTrace} from "./parts/types.js"
 
@@ -107,13 +107,13 @@ export class Warehouse {
 		this.glbs.value = [...this.glbs.value, glb]
 
 		if (slot_id) {
-			this.actions.set_slot_glb({
+			this.actions.slots.set_glb({
 				id: slot_id,
 				glb_hash: hash,
 			})
 		}
 		else {
-			this.actions.add_slot({
+			this.actions.slots.add({
 				id: generateId(),
 				glb_hash: hash,
 				name: convert_file_name_to_slot_name(file.name),

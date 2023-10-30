@@ -21,7 +21,7 @@ export namespace Action {
 		[K in keyof Sp]:
 			Sp[K] extends Spec<any, any>
 				? (payload: GetPayload<Sp[K]>) => void
-				: Sp[K] extends Callers<any>
+				: Sp[K] extends Specs<any>
 					? Callers<Sp[K]>
 					: never
 	}

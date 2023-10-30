@@ -26,7 +26,7 @@ export const SlotsPanel = panel({
 			use,
 			handle_drop: (_, slotA, slotB) => {
 				if (slotA !== slotB)
-					context.actions.swap_slots([slotA.id, slotB.id])
+					context.actions.slots.swap([slotA.id, slotB.id])
 			},
 			out_of_band: {
 				predicate: drag_has_files,
@@ -62,11 +62,11 @@ export const SlotsPanel = panel({
 
 			function handle_name_change(event: InputEvent) {
 				const input = event.target as HTMLInputElement
-				context.actions.rename_slot({id: slot.id, name: input.value})
+				context.actions.slots.rename({id: slot.id, name: input.value})
 			}
 
 			function delete_slot() {
-				context.actions.delete_slot(slot)
+				context.actions.slots.delete(slot)
 			}
 
 			return html`
@@ -107,7 +107,7 @@ export const SlotsPanel = panel({
 
 		function render_glb(slot: GlbSlot, glb: Glb) {
 			function delete_glb() {
-				context.actions.set_slot_glb({id: slot.id, glb_hash: undefined})
+				context.actions.slots.set_glb({id: slot.id, glb_hash: undefined})
 			}
 			return html`
 				<div class="cap grip">
@@ -150,7 +150,7 @@ export const SlotsPanel = panel({
 		}
 
 		function create() {
-			context.actions.add_slot({
+			context.actions.slots.add({
 				id: generateId(),
 				glb_hash: undefined,
 				name: "slot",
