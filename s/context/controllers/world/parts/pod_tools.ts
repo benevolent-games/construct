@@ -28,7 +28,9 @@ export function make_pod_tools(
 				dispose: () => node.dispose(),
 			})
 		}
-		else console.error(`failed to create instance "${item.name}" ${item.id}`)
+		else {
+			console.warn(`prop missing for item "${item.name}" ${item.id}`)
+		}
 	}
 
 	function add_light_pod(_item: Item.Light) {

@@ -66,6 +66,7 @@ export class World {
 	#handle_glb_changes_by_swapping_props(sources: Pod.SourceItem[]) {
 		sources
 			.filter(item => item.kind === "instance")
+			.filter(item => this.#pods.has(item.id))
 			.forEach(source => {
 				const item = source as Item.Instance
 				const {status, glb} = this.warehouse.trace_prop(item.address)
@@ -78,6 +79,7 @@ export class World {
 
 	#represent_selections_with_visual_indicators(sources: Pod.SourceItem[]) {
 		sources
+			.filter(item => this.#pods.has(item.id))
 			.map(item => ({item, pod: this.#pods.get(item.id)!}))
 			.filter(({item, pod}) => pod.selected !== item.selected)
 			.forEach(this.#podTools.update_selection_indicators)
