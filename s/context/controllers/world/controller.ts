@@ -1,5 +1,6 @@
 
 import {StateTree, WatchTower} from "@benev/slate"
+import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 import {State} from "../../state.js"
 import {Pod} from "./parts/pod_types.js"
@@ -30,6 +31,12 @@ export class World {
 		)
 	}
 
+	find_id_for_mesh(mesh: AbstractMesh) {
+		for (const [id, pod] of this.#pods)
+			if (pod.kind === "instance" && pod.meshes.includes(mesh))
+				return id
+	}
+
 	synchronize() {
 		const sources = this.#get_source_items()
 		this.#add_and_remove_pods_based_on_items(sources)
@@ -52,7 +59,7 @@ export class World {
 			.forEach(this.#podTools.add_pod_for_item)
 
 		Array.from(this.#pods.keys())
-			.filter(id => sources.some(item => item.id === id))
+			.filter(id => !sources.some(item => item.id === id))
 			.forEach(this.#podTools.delete_pod_by_id)
 	}
 

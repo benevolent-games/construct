@@ -20,9 +20,9 @@ export function make_pod_tools(
 			const meshes = get_actual_meshes(node)
 			pods.set(item.id, {
 				kind: "instance",
+				meshes,
 				id: item.id,
 				glb_hash: glb.hash,
-				meshes,
 				apparent: false,
 				selected: false,
 				dispose: () => node.dispose(),
@@ -35,6 +35,7 @@ export function make_pod_tools(
 		console.warn("todo: lights")
 	}
 
+	////////
 	////////
 	////////
 
