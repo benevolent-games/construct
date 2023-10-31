@@ -11,9 +11,9 @@ import {Action} from "./framework/action_namespace.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Store, store} from "./controllers/store/store.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
+import {Puppeteer} from "./controllers/puppeteer/controller.js"
 import {InputController} from "./controllers/input/controller.js"
 import {LayoutController} from "./controllers/layout/controller.js"
-import {Instantiator} from "./controllers/instantiator/controller.js"
 
 export class Context extends BaseContext {
 	theme = theme
@@ -52,7 +52,7 @@ export class Context extends BaseContext {
 		this.actions,
 	)
 
-	instantiator = new Instantiator(
+	puppeteer = new Puppeteer(
 		this.watch,
 		this.#app,
 		this.warehouse,
