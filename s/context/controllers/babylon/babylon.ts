@@ -20,10 +20,11 @@ export class Babylon {
 	canvas = new OffscreenCanvas(160, 90)
 	engine = new Engine(this.canvas)
 	scene = new Scene(this.engine)
+	renderLoop = new Set<() => void>()
 
 	box: Mesh
 
-	constructor(renderLoop: Set<() => void>) {
+	constructor() {
 		const {scene} = this
 
 		const fallbackCamera = new TargetCamera(
@@ -51,7 +52,7 @@ export class Babylon {
 		this.box = box
 
 		this.engine.runRenderLoop(() => {
-			for (const render of renderLoop)
+			for (const render of this.renderLoop)
 				render()
 			scene.render()
 		})

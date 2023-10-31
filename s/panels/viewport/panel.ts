@@ -14,12 +14,11 @@ export const ViewportPanel = panel({
 	view: slate.obsidian({name: "viewport", styles},
 		use => ({leafId}: PanelProps) => {
 
-		const {babylon, renderLoop, input} = use.context
+		const {babylon, input} = use.context
 
 		const {canvas, camera} = use.init(canvas_and_flycam(
 			leafId,
 			babylon,
-			renderLoop,
 			input,
 		))
 

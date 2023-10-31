@@ -10,7 +10,6 @@ import {InputController} from "../../../context/controllers/input/controller.js"
 export const canvas_and_flycam = (
 		leafId: Id,
 		babylon: Babylon,
-		renderLoop: Set<() => void>,
 		input: InputController,
 	) => () => {
 
@@ -39,13 +38,13 @@ export const canvas_and_flycam = (
 		}
 	}
 
-	renderLoop.add(simulate)
+	babylon.renderLoop.add(simulate)
 	scene.addCamera(camera)
 	const stop_resizing = start_resizing(canvas)
 	const view = engine.registerView(canvas, camera)
 
 	const dispose = () => {
-		renderLoop.delete(simulate)
+		babylon.renderLoop.delete(simulate)
 		fly.dispose()
 
 		engine.unRegisterView(canvas)

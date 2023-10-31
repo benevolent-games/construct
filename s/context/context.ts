@@ -40,9 +40,7 @@ export class Context extends BaseContext {
 		this.#action_specs,
 	)
 
-	renderLoop = new Set<() => void>()
-
-	babylon = new Babylon(this.renderLoop)
+	babylon = new Babylon()
 
 	warehouse = new Warehouse(
 		this.signals,
