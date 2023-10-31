@@ -19,7 +19,7 @@ export const ViewportPanel = panel({
 	icon: sprite_box,
 	view: slate.obsidian({name: "viewport", styles}, use => ({leafId}: PanelProps) => {
 		const {scene, engine} = use.context.babylon
-		const {input, actions, puppeteer} = use.context
+		const {input, actions, world} = use.context
 
 		const {canvas, camera} = use.init(() => {
 			const canvas = document.createElement("canvas")
@@ -108,7 +108,7 @@ export const ViewportPanel = panel({
 					const pick = scene.pickWithRay(ray)
 
 					if (pick && pick.hit && pick.pickedMesh) {
-						const id = puppeteer.find_id_for_mesh(pick.pickedMesh)
+						const id = world.find_id_for_mesh(pick.pickedMesh)
 						if (id) {
 							const tools = make_outline_tools(use.context.state.outline)
 							if (tools.isSelected(id))

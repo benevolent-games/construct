@@ -8,10 +8,10 @@ import {actions} from "./actions.js"
 import {State, default_state} from "./state.js"
 import {Historian} from "./framework/historian.js"
 import {Action} from "./framework/action_namespace.js"
+import {World} from "./controllers/world/controller.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Store, store} from "./controllers/store/store.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
-import {Puppeteer} from "./controllers/puppeteer/controller.js"
 import {InputController} from "./controllers/input/controller.js"
 import {LayoutController} from "./controllers/layout/controller.js"
 
@@ -52,7 +52,7 @@ export class Context extends BaseContext {
 		this.actions,
 	)
 
-	puppeteer = new Puppeteer(
+	world = new World(
 		this.watch,
 		this.#app,
 		this.warehouse,

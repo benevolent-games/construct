@@ -9,7 +9,7 @@ import {Item} from "../../domains/outline/types.js"
 import {make_pod_tools} from "./parts/pod_tools.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
-export class Puppeteer {
+export class World {
 	#pods = new Map<Id, Pod.Whatever>()
 	#podTools: ReturnType<typeof make_pod_tools>
 
