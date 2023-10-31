@@ -1,8 +1,8 @@
 
 import {State} from "../../state.js"
+import {Item} from "../outline/types.js"
 import {Id} from "../../../tools/fresh_id.js"
 import {make_outline_tools} from "./tools.js"
-import {Item, ItemReport} from "../outline/types.js"
 import {Action} from "../../framework/action_namespace.js"
 
 export const items = Action.specs<State>()(({action}) => ({
@@ -77,17 +77,17 @@ export const items = Action.specs<State>()(({action}) => ({
 			.map(f => f.id)
 
 		const include_only_requested_items = (
-			(report: ItemReport) => itemIds.includes(report.item.id)
+			(report: Item.Report) => itemIds.includes(report.item.id)
 		)
 
 		const omit_items_whose_parents_are_already_selected = (
-			(report: ItemReport) => !report.parents.some(
+			(report: Item.Report) => !report.parents.some(
 				parent => ids_of_folders_being_moved.includes(parent.id)
 			)
 		)
 
 		const do_not_move_a_folder_into_itself = (
-			(report: ItemReport) => (
+			(report: Item.Report) => (
 				report.item.id !== destinationFolder.id &&
 				!destinationParentIds.includes(report.item.id)
 			)
@@ -124,17 +124,17 @@ export const items = Action.specs<State>()(({action}) => ({
 			.map(f => f.id)
 
 		const include_only_requested_items = (
-			(report: ItemReport) => itemIds.includes(report.item.id)
+			(report: Item.Report) => itemIds.includes(report.item.id)
 		)
 
 		const omit_items_whose_parents_are_already_selected = (
-			(report: ItemReport) => !report.parents.some(
+			(report: Item.Report) => !report.parents.some(
 				parent => ids_of_folders_being_moved.includes(parent.id)
 			)
 		)
 
 		const do_not_move_a_folder_into_itself = (
-			(report: ItemReport) => !destinationParentIds.includes(report.item.id)
+			(report: Item.Report) => !destinationParentIds.includes(report.item.id)
 		)
 
 		const reports_for_items_being_moved = tools.reports

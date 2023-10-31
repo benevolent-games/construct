@@ -5,12 +5,15 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {GlbSlot} from "../../context/state.js"
+import {v3} from "@benev/toolbox/x/utils/v3.js"
+import {freshId} from "../../tools/fresh_id.js"
 import {Context} from "../../context/context.js"
+import {quat} from "@benev/toolbox/x/utils/quat.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 import {GlbProp, Glb} from "../../context/controllers/warehouse/parts/types.js"
-import { freshId } from "../../tools/fresh_id.js"
+import { init_spatial } from "../../context/domains/outline/spatial.js"
 
 const placeholder_asset_icon = "https://i.imgur.com/LtadIlN.webp"
 
@@ -60,6 +63,7 @@ function helpers(context: Context) {
 				visible: true,
 				name: prop.name,
 				address: {slot: slot.id, prop: prop.name},
+				spatial: init_spatial(),
 			},
 		}])
 	}

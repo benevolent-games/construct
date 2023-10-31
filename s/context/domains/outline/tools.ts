@@ -1,12 +1,12 @@
 
+import {Item} from "./types.js"
 import {State} from "../../state.js"
-import {Item, ItemReport} from "./types.js"
 import {Id} from "../../../tools/fresh_id.js"
 
 export type OutlineState = State["outline"]
 
 export function make_outline_tools(outline: OutlineState) {
-	const reports: ItemReport[] = []
+	const reports: Item.Report[] = []
 
 	function recurse(
 			item: Item.Whatever,

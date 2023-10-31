@@ -63,6 +63,8 @@ export class World {
 			.forEach(this.#podTools.delete_pod_by_id)
 	}
 
+	#sync_positions_and_orientations() {}
+
 	#handle_glb_changes_by_swapping_props(sources: Pod.SourceItem[]) {
 		sources
 			.filter(item => item.kind === "instance")

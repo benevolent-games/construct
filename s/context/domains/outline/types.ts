@@ -1,5 +1,6 @@
 
-import {Id} from "../../../tools/fresh_id.js"
+import {Spatial} from "./spatial.js"
+import {Id, freshId} from "../../../tools/fresh_id.js"
 import {PropAddress} from "../../controllers/warehouse/parts/types.js"
 
 export namespace Item {
@@ -8,9 +9,9 @@ export namespace Item {
 	export interface Base {
 		kind: Kind
 		id: Id
+		name: string
 		selected: boolean
 		visible: boolean
-		name: string
 	}
 
 	export interface Folder extends Base {
@@ -23,19 +24,24 @@ export namespace Item {
 		kind: "instance"
 		name: string
 		address: PropAddress
+		spatial: Spatial
 	}
 
 	export interface Light extends Base {
 		kind: "light"
 		name: string
+		spatial: Spatial
 	}
 
 	export type Whatever = Folder | Instance | Light
-}
 
-export type ItemReport = {
-	item: Item.Whatever
-	parent: Item.Folder
-	parents: Item.Folder[]
+	////////
+	////////
+
+	export type Report = {
+		item: Item.Whatever
+		parent: Item.Folder
+		parents: Item.Folder[]
+	}
 }
 
