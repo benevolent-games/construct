@@ -94,9 +94,13 @@ export const SlotsPanel = panel({
 						@dragleave=${drag.dragleave()}
 						@drop=${drag.drop(slot)}
 						>
+
 						${status === "assigned"
 							? render_glb(slot, glb!)
-							: html`<span>empty</span>`}
+							: slot.glb_hash
+								? html`<span>missing glb ${slot.glb_hash.slice(0, 8)}</span>`
+								: html`<span>empty</span>`}
+
 					</div>
 					<div class="bottom bar">
 						${render_id(slot.id)}

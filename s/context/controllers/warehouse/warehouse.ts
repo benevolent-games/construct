@@ -4,8 +4,8 @@ import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 import {Signal, SignalTower, StateTree, WatchTower} from "@benev/slate"
 
 import {Actions} from "../../actions.js"
-import {GlbSlot, Hash, State} from "../../state.js"
 import {parse_props} from "./parts/parse_props.js"
+import {GlbSlot, Hash, State} from "../../state.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {Id, freshId} from "../../../tools/fresh_id.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
@@ -45,13 +45,18 @@ export class Warehouse {
 
 	trace_prop(ref: PropAddress): PropTrace {
 		const {slots} = this.app.state
-		let slot: GlbSlot | undefined
-		let glb: Glb | undefined
-		let prop: GlbProp | undefined
 
-		;(slot = slots.find(s => s.id === ref.slot))
-			&& (glb = this.glbs.value.find(g => g.hash === slot!.glb_hash))
-			&& (prop = glb.props.find(p => p.name === ref.prop))
+		let slot: GlbSlot | undefined = (
+			slots.find(s => s.id === ref.slot)
+		)
+
+		let glb: Glb | undefined = (
+			this.glbs.value.find(g => g.hash === slot!.glb_hash)
+		)
+
+		let prop: GlbProp | undefined = (
+			glb?.props.find(p => p.name === ref.prop)
+		)
 
 		return {
 			slot,
