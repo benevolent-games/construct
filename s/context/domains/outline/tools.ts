@@ -44,6 +44,9 @@ export function make_outline_tools(outline: OutlineState) {
 		instances,
 		lights,
 		selected,
+		isSelected(id: Id) {
+			return selected.some(item => item.id === id)
+		},
 		isApparent(id: Id) {
 			const isRoot = id === outline.id
 			if (isRoot) {

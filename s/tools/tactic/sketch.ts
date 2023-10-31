@@ -1,6 +1,6 @@
 
 import {V2} from "@benev/toolbox/x/utils/v2.js"
-import {Flat, Pub, Signal, SignalTower, ob, pub} from "@benev/slate"
+import {Flat, Pub, ob, pub} from "@benev/slate"
 
 export namespace Input {
 	export type Kind = "button" | "vector"
@@ -24,8 +24,9 @@ export namespace Input {
 	export type Whatever = Button | Vector
 }
 
-export class Device {
+export abstract class Device {
 	onInput = pub<Input.Whatever>()
+	abstract dispose: () => void
 }
 
 export class Keyboard extends Device {
@@ -55,24 +56,95 @@ export class Keyboard extends Device {
 	}
 }
 
+export class PointerButtons extends Device {
+	static determine_mouse_button(event: MouseEvent) {
+		switch (event.button) {
+			case 0: return "LMB"
+			case 1: return "MMB"
+			case 2: return "RMB"
+			default: return `MB${event.button + 1}`
+		}
+	}
+
+	dispose: () => void
+
+	constructor(target: EventTarget) {
+		super()
+
+		const handler = ({down}: {down: boolean}) => (event: PointerEvent) => {
+			this.onInput.publish({
+				down,
+				kind: "button",
+				code: PointerButtons.determine_mouse_button(event),
+			})
+		}
+
+		const pointerdown = handler({down: true})
+		const pointerup = handler({down: false})
+
+		target.addEventListener("pointerdown", pointerdown as any)
+		target.addEventListener("pointerup", pointerup as any)
+
+		this.dispose = () => {
+			target.removeEventListener("keydown", pointerdown as any)
+			target.removeEventListener("keyup", pointerup as any)
+		}
+	}
+}
+
+export class PointerMovements extends Device {
+	dispose: () => void
+	movement: V2 = [0, 0]
+	coordinates: V2 = [0, 0]
+
+	constructor(target: EventTarget, channel: string) {
+		super()
+
+		const listener = (event: PointerEvent) => {
+			this.coordinates = [
+				event.clientX,
+				event.clientY,
+			]
+
+			const movement: V2 = [
+				event.movementX,
+				event.movementY,
+			]
+
+			this.movement = movement
+
+			this.onInput.publish({
+				kind: "vector",
+				vector: movement,
+				channel,
+			})
+		}
+
+		target.addEventListener("pointermove", listener as any)
+
+		this.dispose = () => {
+			target.removeEventListener("pointermove", listener as any)
+		}
+	}
+}
+
 export interface Bindings {
 	buttons: {[key: string]: string}
 	vectors: {[key: string]: string}
 }
 
-export type Report<I extends Input.Whatever> = {
-	input: Signal<I | undefined>
-	on: Pub<I>
-}
-
 export class Tactic<B extends Bindings> {
 	static Keyboard = Keyboard
+	static PointerButtons = PointerButtons
+	static PointerMovements = PointerMovements
 
 	#devices = new Map<Device, () => void>()
 
 	bindings: B
+
 	readonly buttons: Record<keyof B["buttons"], boolean>
 	readonly vectors: Record<keyof B["vectors"], V2>
+
 	on: {
 		buttons: Record<keyof B["buttons"], Pub<Input.Button>>
 		vectors: Record<keyof B["vectors"], Pub<Input.Vector>>
@@ -92,7 +164,7 @@ export class Tactic<B extends Bindings> {
 
 		this.on = {
 			buttons: ob.map(bindings.buttons, () => pub()) as any,
-			vectors: ob.map(bindings.buttons, () => pub()) as any,
+			vectors: ob.map(bindings.vectors, () => pub()) as any,
 		}
 	}
 

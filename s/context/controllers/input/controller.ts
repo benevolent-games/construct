@@ -17,6 +17,9 @@ export class InputController {
 	}>
 
 	tactic: Tactic<EditorBindings>
+	keyboard = new Tactic.Keyboard(window)
+	pointerButtons = new Tactic.PointerButtons(window)
+	pointerMovements = new Tactic.PointerMovements(window, "mouse")
 
 	is_leaf_focal(leafId: Id) {
 		return (leafId === this.focal.value?.leafId)
@@ -43,8 +46,12 @@ export class InputController {
 
 		this.tactic = new Tactic({
 			flat,
-			devices: [new Tactic.Keyboard(window)],
 			bindings: default_editor_bindings(),
+			devices: [
+				this.keyboard,
+				this.pointerButtons,
+				this.pointerMovements,
+			],
 		})
 	}
 }

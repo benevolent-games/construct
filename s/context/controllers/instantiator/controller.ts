@@ -41,15 +41,30 @@ export class Instantiator {
 		selected: boolean,
 	}>()
 
+	#meshes = new Map<AbstractMesh, Id>()
+
 	#add(item: Item.Whatever) {
 		switch (item.kind) {
 			case "instance":
 				const {glb, prop} = this.warehouse.trace_prop(item.address)
 				if (glb && prop) {
 					const node = prop.top_lod.node.instantiateHierarchy()!
-					const dispose = () => node.dispose()
-					this.things.set(item.id, {dispose, glb_hash: glb.hash})
+
 					this.instances.set(item.id, {node, selected: false})
+					const meshes = get_actual_meshes(node)
+
+					for (const mesh of meshes)
+						this.#meshes.set(mesh, item.id)
+
+					const dispose = () => {
+						node.dispose()
+						this.instances.delete(item.id)
+						this.things.delete(item.id)
+						for (const mesh of meshes)
+							this.#meshes.delete(mesh)
+					}
+
+					this.things.set(item.id, {dispose, glb_hash: glb.hash})
 				}
 				else console.error(`failed to create instance "${item.name}" ${item.id}`)
 				break
@@ -61,11 +76,12 @@ export class Instantiator {
 
 	#delete_by_id(id: Id) {
 		const item = this.things.get(id)
-		if (item) {
+		if (item)
 			item.dispose()
-			this.things.delete(id)
-			this.instances.delete(id)
-		}
+	}
+
+	find_id_for_mesh(mesh: AbstractMesh): Id | undefined {
+		return this.#meshes.get(mesh)
 	}
 
 	reconsider() {
