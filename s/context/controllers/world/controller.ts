@@ -1,5 +1,6 @@
 
-import {StateTree, WatchTower} from "@benev/slate"
+import {Quaternion} from "@babylonjs/core/Maths/math.js"
+import {StateTree, WatchTower, deepEqual} from "@benev/slate"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 import {State} from "../../state.js"
@@ -42,6 +43,7 @@ export class World {
 		this.#add_and_remove_pods_based_on_items(sources)
 		this.#handle_glb_changes_by_swapping_props(sources)
 		this.#represent_selections_with_visual_indicators(sources)
+		this.#sync_spatial_positions_and_such(sources)
 	}
 
 	#get_source_items(): Pod.SourceItem[] {
@@ -63,7 +65,35 @@ export class World {
 			.forEach(this.#podTools.delete_pod_by_id)
 	}
 
-	#sync_positions_and_orientations() {}
+	#sync_spatial_positions_and_such(sources: Pod.SourceItem[]) {
+		sources
+			.filter(item => !!item.spatial && this.#pods.has(item.id))
+			.map(item => ({item, pod: this.#pods.get(item.id)!}))
+			.forEach(({item, pod}) => {
+				switch (pod.kind) {
+
+					case "instance":
+						const {node} = pod
+
+						if (node.position.equalsToFloats(...item.spatial.position))
+							node.position.set(...item.spatial.position)
+
+						if (node.scaling.equalsToFloats(...item.spatial.scale))
+							node.scaling.set(...item.spatial.scale)
+
+						node.rotationQuaternion = (node.rotationQuaternion)
+							? deepEqual(node.rotationQuaternion.asArray(), item.spatial.rotation)
+								? node.rotationQuaternion
+								: node.rotationQuaternion.set(...item.spatial.rotation)
+							: new Quaternion(...item.spatial.rotation)
+
+						break
+					case "light":
+						console.warn("todo: light spatial sync")
+						break
+				}
+			})
+	}
 
 	#handle_glb_changes_by_swapping_props(sources: Pod.SourceItem[]) {
 		sources

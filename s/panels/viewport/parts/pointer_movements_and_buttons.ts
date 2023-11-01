@@ -13,7 +13,7 @@ export const pointer_movements_and_buttons = (
 		camera: Camera,
 	) => () => {
 
-	const {babylon, input, world, actions, state} = context
+	const {babylon, input, world, actions} = context
 
 	let canvasCoordinates: V2 | null = null
 
@@ -37,8 +37,9 @@ export const pointer_movements_and_buttons = (
 			if (pick && pick.hit && pick.pickedMesh) {
 				const id = world.find_id_for_mesh(pick.pickedMesh)
 				if (id) {
-					const tools = make_outline_tools(state.outline)
-					if (tools.isSelected(id))
+					const tools = make_outline_tools(context.state.outline)
+					const item = tools.getItem(id)
+					if (item.selected)
 						actions.items.deselect(id)
 					else
 						actions.items.select(id)

@@ -4,6 +4,7 @@ import {Item} from "../outline/types.js"
 import {Id} from "../../../tools/fresh_id.js"
 import {make_outline_tools} from "./tools.js"
 import {Action} from "../../framework/action_namespace.js"
+import { V3 } from "@benev/toolbox/x/utils/v3.js"
 
 export const items = Action.specs<State>()(({action}) => ({
 	add: action(state => (additions: {
@@ -58,6 +59,14 @@ export const items = Action.specs<State>()(({action}) => ({
 		const items = [state.outline, ...tools.items].filter(item => ids.includes(item.id))
 		for (const item of items)
 			item.visible = false
+	}),
+
+	set_position: action(state => (...directives: {id: Id, position: V3}[]) => {
+		const tools = make_outline_tools(state.outline)
+		for (const {id, position} of directives) {
+			const item = tools.getItem(id) as Item.Instance | Item.Light
+			item.spatial.position = position
+		}
 	}),
 
 	move_into_folder: action(state => ({folderId, itemIds}: {

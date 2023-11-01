@@ -1,6 +1,6 @@
 
 import {Spatial} from "./spatial.js"
-import {Id, freshId} from "../../../tools/fresh_id.js"
+import {Id} from "../../../tools/fresh_id.js"
 import {PropAddress} from "../../controllers/warehouse/parts/types.js"
 
 export namespace Item {
