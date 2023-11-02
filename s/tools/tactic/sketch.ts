@@ -97,6 +97,8 @@ export class PointerMovements extends Device {
 	movement: V2 = [0, 0]
 	coordinates: V2 = [0, 0]
 
+	onInput = pub<Input.Vector>()
+
 	constructor(target: EventTarget, channel: string) {
 		super()
 
