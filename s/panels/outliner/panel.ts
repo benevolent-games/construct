@@ -21,9 +21,11 @@ import {make_outline_tools} from "../../context/domains/outline/tools.js"
 export const OutlinerPanel = panel({
 	label: "outliner",
 	icon: sprite_layers,
-	view: slate.obsidian({name: "outliner", styles}, use => ({}: PanelProps) => {
-		const outline = use.watch(() => use.context.state.outline)
-		const {actions} = use.context
+	view: slate.obsidian({name: "outliner", styles},
+		use => ({}: PanelProps) => {
+
+		const {tree} = use.context
+		const outline = use.watch(() => tree.state.outline)
 
 		const tools = make_outline_tools(outline)
 		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
@@ -58,7 +60,7 @@ export const OutlinerPanel = panel({
 					},
 					drop: (folder: Item.Folder) => (_event: DragEvent) => {
 						if (drag.item_being_dragged)
-							actions.items.move_into_folder({
+							tree.actions.items.move_into_folder({
 								folderId: folder.id,
 								itemIds: [drag.item_being_dragged.id],
 							})
@@ -73,7 +75,7 @@ export const OutlinerPanel = panel({
 					},
 					drop: (item: Item.Whatever) => (_event: DragEvent) => {
 						if (drag.item_being_dragged)
-							actions.items.move_below_another_item({
+							tree.actions.items.move_below_another_item({
 								itemIds: [drag.item_being_dragged.id],
 								targetItemId: item.id,
 							})
@@ -92,7 +94,7 @@ export const OutlinerPanel = panel({
 		function click_to_create_new_folder(parent: Item.Folder) {
 			return () => {
 				const new_id = freshId()
-				actions.items.add([{
+				tree.actions.items.add([{
 					folderId: parent.id,
 					item: {
 						kind: "folder",
@@ -121,7 +123,7 @@ export const OutlinerPanel = panel({
 
 			function render_line_item(content: TemplateResult) {
 				const delete_this_item = parents.at(-1)
-					? () => actions.items.delete(item.id)
+					? () => tree.actions.items.delete(item.id)
 					: undefined
 
 				return html`
@@ -179,9 +181,9 @@ export const OutlinerPanel = panel({
 
 			function toggle_visibility() {
 				if (item.visible)
-					actions.items.hide(item.id)
+					tree.actions.items.hide(item.id)
 				else
-					actions.items.show(item.id)
+					tree.actions.items.show(item.id)
 			}
 
 			function render_visibility() {
@@ -226,9 +228,9 @@ export const OutlinerPanel = panel({
 					return
 
 				if (item.selected)
-					actions.items.deselect(item.id)
+					tree.actions.items.deselect(item.id)
 				else
-					actions.items.select(item.id)
+					tree.actions.items.select(item.id)
 			}
 
 			switch (item.kind) {
@@ -305,7 +307,7 @@ export const OutlinerPanel = panel({
 
 		function clearSelection(event: MouseEvent) {
 			if (tools.selected.length > 0 && event.target === event.currentTarget)
-				actions.items.clear_selection()
+				tree.actions.items.clear_selection()
 		}
 
 		return html`

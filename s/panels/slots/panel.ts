@@ -19,25 +19,25 @@ export const SlotsPanel = panel({
 	label: "slots",
 	icon: sprite_tabler_layout_list,
 	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
-		const {context} = use
-		const slots = use.watch(() => context.state.slots)
+		const {tree, warehouse} = use.context
+		const slots = use.watch(() => tree.state.slots)
 
 		const drag = useDragAndDrop<GlbSlot, GlbSlot>({
 			use,
 			handle_drop: (_, slotA, slotB) => {
 				if (slotA !== slotB)
-					context.actions.slots.swap(slotA.id, slotB.id)
+					tree.actions.slots.swap(slotA.id, slotB.id)
 			},
 			out_of_band: {
 				predicate: drag_has_files,
 				handle_drop: (event, slot) => {
 					const [file, ...files] = Array.from(event.dataTransfer!.files)
-					context.warehouse.add_glb_file(file, slot.id)
+					warehouse.add_glb_file(file, slot.id)
 					for (const file of files)
-						context.warehouse.add_glb_file(file)
+						warehouse.add_glb_file(file)
 					event.preventDefault()
 					event.stopPropagation()
-					context.on_file_drop_already_handled_internally.publish()
+					use.context.on_file_drop_already_handled_internally.publish()
 				},
 			},
 		})
@@ -50,7 +50,7 @@ export const SlotsPanel = panel({
 
 		function render_slot(slot: GlbSlot) {
 			const glb = slot.glb_hash
-				? context.warehouse.get_glb(slot.glb_hash)
+				? warehouse.get_glb(slot.glb_hash)
 				: null
 
 			const is_picked_up = drag.payload === slot
@@ -62,11 +62,11 @@ export const SlotsPanel = panel({
 
 			function handle_name_change(event: InputEvent) {
 				const input = event.target as HTMLInputElement
-				context.actions.slots.rename(slot.id, input.value)
+				tree.actions.slots.rename(slot.id, input.value)
 			}
 
 			function delete_slot() {
-				context.actions.slots.delete(slot.id)
+				tree.actions.slots.delete(slot.id)
 			}
 
 			return html`
@@ -111,7 +111,7 @@ export const SlotsPanel = panel({
 
 		function render_glb(slot: GlbSlot, glb: Glb) {
 			function delete_glb() {
-				context.actions.slots.assign_glb(slot.id, null)
+				tree.actions.slots.assign_glb(slot.id, null)
 			}
 			return html`
 				<div class="cap grip">
@@ -154,7 +154,7 @@ export const SlotsPanel = panel({
 		}
 
 		function create() {
-			context.actions.slots.add({
+			tree.actions.slots.add({
 				id: freshId(),
 				glb_hash: null,
 				name: "slot",

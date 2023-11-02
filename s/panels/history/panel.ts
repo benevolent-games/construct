@@ -15,7 +15,7 @@ export const HistoryPanel = panel({
 	icon: sprite_history,
 	view: slate.obsidian({name: "history", styles}, use => ({}: PanelProps) => {
 
-		const history = use.context.history
+		const {history} = use.context.tree
 		const {past, future} = use.watch(() => history.annals)
 
 		use.setup(() => {

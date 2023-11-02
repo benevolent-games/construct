@@ -1,10 +1,10 @@
 
+import {WatchTower, deepEqual} from "@benev/slate"
 import {Quaternion} from "@babylonjs/core/Maths/math.js"
-import {StateTree, WatchTower, deepEqual} from "@benev/slate"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
-import {State} from "../../state.js"
 import {Pod} from "./parts/pod_types.js"
+import {Tree} from "../tree/controller.js"
 import {Id} from "../../../tools/fresh_id.js"
 import {Warehouse} from "../warehouse/warehouse.js"
 import {Item} from "../../domains/outline/types.js"
@@ -17,7 +17,7 @@ export class World {
 
 	constructor(
 			watch: WatchTower,
-			private app: StateTree<State>,
+			private tree: Tree,
 			private warehouse: Warehouse,
 		) {
 
@@ -27,7 +27,7 @@ export class World {
 		)
 
 		watch.track(
-			() => app.state,
+			() => tree.state,
 			() => this.synchronize(),
 		)
 	}
@@ -47,7 +47,7 @@ export class World {
 	}
 
 	#get_source_items(): Pod.SourceItem[] {
-		const {outline} = this.app.state
+		const {outline} = this.tree.state
 		const outlineTools = make_outline_tools(outline)
 		return [
 			...outlineTools.instances,

@@ -5,15 +5,13 @@ import {Mesh} from "@babylonjs/core/Meshes/mesh.js"
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {GlbSlot} from "../../context/state.js"
-import {v3} from "@benev/toolbox/x/utils/v3.js"
 import {freshId} from "../../tools/fresh_id.js"
-import {Context} from "../../context/context.js"
-import {quat} from "@benev/toolbox/x/utils/quat.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
+import {Tree} from "../../context/controllers/tree/controller.js"
+import {init_spatial} from "../../context/domains/outline/spatial.js"
 import {sprite_book_open} from "../../sprites/groups/feather/book-open.js"
 import {GlbProp, Glb} from "../../context/controllers/warehouse/parts/types.js"
-import { init_spatial } from "../../context/domains/outline/spatial.js"
 
 const placeholder_asset_icon = "https://i.imgur.com/LtadIlN.webp"
 
@@ -21,15 +19,14 @@ export const CatalogPanel = panel({
 	label: "catalog",
 	icon: sprite_book_open,
 	view: slate.obsidian({name: "catalog", styles}, use => ({}: PanelProps) => {
-		const {context} = use
-		const {warehouse} = context
-		use.watch(() => context.state.slots)
+		const {tree, warehouse} = use.context
+		use.watch(() => tree.state.slots)
 
 		const {manifest} = warehouse
 		const {
 			render_glb_stats,
 			render_glb_props,
-		} = helpers(use.context)
+		} = helpers(tree)
 
 		return html`
 			<div class="container">
@@ -52,10 +49,10 @@ export const CatalogPanel = panel({
 	}),
 })
 
-function helpers(context: Context) {
+function helpers(tree: Tree) {
 	function instance_into_world(slot: GlbSlot, prop: GlbProp) {
-		return () => context.actions.items.add([{
-			folderId: context.state.outline.id,
+		return () => tree.actions.items.add([{
+			folderId: tree.state.outline.id,
 			item: {
 				id: freshId(),
 				kind: "instance",

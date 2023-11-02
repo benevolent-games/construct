@@ -4,63 +4,58 @@ import {Context as BaseContext, pub} from "@benev/slate"
 import type {panels as all_panels} from "../panels/panels.js"
 
 import {theme} from "./theme.js"
-import {actions} from "./actions.js"
-import {State, default_state} from "./state.js"
-import {Historian} from "./framework/historian.js"
-import {Action} from "./framework/action_namespace.js"
+import {store} from "./controllers/store/store.js"
+import {Tree} from "./controllers/tree/controller.js"
 import {World} from "./controllers/world/controller.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
-import {Store, store} from "./controllers/store/store.js"
+import {Gesture} from "./controllers/gesture/controller.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
-import {InputController} from "./controllers/input/controller.js"
 import {LayoutController} from "./controllers/layout/controller.js"
 
 export class Context extends BaseContext {
 	theme = theme
 
-	#app = this.watch.stateTree<State>(default_state())
-
-	get state() {
-		return this.#app.state
-	}
-
-	#action_specs = actions
-
-	#historian = new Historian(
+	/** editor state tree */
+	tree = new Tree(
 		this.watch,
-		this.#app,
-		this.#action_specs,
 	)
 
-	history = this.#historian.history
-
-	actions = Action.callers(
-		this.#app,
-		this.#historian,
-		this.#action_specs,
-	)
-
+	/** babylonjs engine setup */
 	babylon = new Babylon()
 
+	/** glb files and props */
 	warehouse = new Warehouse(
 		this.signals,
 		this.watch,
-		this.#app,
+		this.tree,
 		this.babylon.scene,
-		this.actions,
+		this.tree.actions,
 	)
 
+	/** synchronize the babylon scene to the state */
 	world = new World(
 		this.watch,
-		this.#app,
+		this.tree,
 		this.warehouse,
 	)
 
-	on_file_drop_already_handled_internally = pub<void>()
+	/** editor app persistence */
+	store = store(localStorage)
 
-	store = store<Store>(localStorage)
-	input = new InputController(this.signals, this.flat)
-	layout = new LayoutController(this.watch, this.store)
+	/** user input, pointer lock, and focalization */
+	gesture = new Gesture(
+		this.signals,
+		this.flat,
+	)
+
+	/** layout state, actions, and helpers */
+	layout = new LayoutController(
+		this.watch,
+		this.store,
+	)
+
+	/** for dropzones to communicate to each other */
+	on_file_drop_already_handled_internally = pub<void>()
 
 	constructor(public panels: typeof all_panels) {
 		super()

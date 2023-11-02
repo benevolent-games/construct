@@ -18,17 +18,17 @@ export const render_pane = (meta: LayoutMeta) => (
 		pane: Layout.Pane,
 	) => {
 
-	const {input} = slate.context
+	const {gesture} = slate.context
 
 	const activeLeaf = (pane.active_leaf_index !== null)
 		? pane.children[pane.active_leaf_index]!
 		: null
 
-	const isFocal = pane.id === input.focal.value?.paneId
-	const isPointerLocked = activeLeaf && input.is_leaf_pointer_locked(activeLeaf.id)
+	const isFocal = pane.id === gesture.focal.value?.paneId
+	const isPointerLocked = activeLeaf && gesture.is_leaf_pointer_locked(activeLeaf.id)
 
 	const focalize = () => {
-		input.focal.value = {
+		gesture.focal.value = {
 			paneId: pane.id,
 			leafId: activeLeaf && activeLeaf.id,
 		}

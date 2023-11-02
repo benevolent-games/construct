@@ -21,8 +21,8 @@ export class SelectingObjects extends Initiator {
 
 		super()
 
-		this.dispose = context.input.tactic.on.buttons.select(input => {
-			const {world, state, actions} = context
+		this.dispose = context.gesture.tactic.on.buttons.select(input => {
+			const {world, tree} = context
 
 			const user_is_engaging_select_process = (
 				input.down &&
@@ -43,16 +43,16 @@ export class SelectingObjects extends Initiator {
 			if (pick && pick.hit && pick.pickedMesh) {
 				const id = world.find_id_for_mesh(pick.pickedMesh)
 				if (id) {
-					const tools = make_outline_tools(state.outline)
+					const tools = make_outline_tools(tree.state.outline)
 					const item = tools.getItem(id)
 					if (item.selected)
-						actions.items.deselect(id)
+						tree.actions.items.deselect(id)
 					else
-						actions.items.select(id)
+						tree.actions.items.select(id)
 				}
 			}
 			else
-				actions.items.clear_selection()
+				tree.actions.items.clear_selection()
 		})
 	}
 }

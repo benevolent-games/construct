@@ -5,7 +5,11 @@ import {Id} from "../../../tools/fresh_id.js"
 import {Tactic} from "../../../tools/tactic/sketch.js"
 import {EditorBindings, default_editor_bindings} from "./default_editor_bindings.js"
 
-export class InputController {
+export class Gesture {
+	tactic: Tactic<EditorBindings>
+	keyboard = new Tactic.Keyboard(window)
+	pointerButtons = new Tactic.PointerButtons(window)
+	pointerMovements = new Tactic.PointerMovements(window, "mouse")
 
 	focal: Signal<null | {
 		leafId: Id | null
@@ -15,11 +19,6 @@ export class InputController {
 	pointerLock: Signal<null | {
 		leafId: Id
 	}>
-
-	tactic: Tactic<EditorBindings>
-	keyboard = new Tactic.Keyboard(window)
-	pointerButtons = new Tactic.PointerButtons(window)
-	pointerMovements = new Tactic.PointerMovements(window, "mouse")
 
 	is_leaf_focal(leafId: Id) {
 		return (leafId === this.focal.value?.leafId)
@@ -37,11 +36,15 @@ export class InputController {
 		this.focal = signals.signal(null)
 		this.pointerLock = signals.signal(null)
 
-		const clearPointerLock = () => { this.pointerLock.value = null }
+		const clearPointerLock = () => {
+			this.pointerLock.value = null
+		}
+
 		window.addEventListener("pointerlockchange", () => {
 			if (!document.pointerLockElement)
 				clearPointerLock()
 		})
+
 		window.addEventListener("pointerlockerror", clearPointerLock)
 
 		this.tactic = new Tactic({

@@ -1,11 +1,12 @@
 
 import {Scene} from "@babylonjs/core/scene.js"
+import {Signal, SignalTower, WatchTower} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
-import {Signal, SignalTower, StateTree, WatchTower} from "@benev/slate"
 
 import {Actions} from "../../actions.js"
+import {Tree} from "../tree/controller.js"
+import {GlbSlot, Hash} from "../../state.js"
 import {parse_props} from "./parts/parse_props.js"
-import {GlbSlot, Hash, State} from "../../state.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {Id, freshId} from "../../../tools/fresh_id.js"
 import {quick_hash} from "../../../tools/quick_hash.js"
@@ -17,14 +18,15 @@ export class Warehouse {
 	constructor(
 			signals: SignalTower,
 			watch: WatchTower,
-			private app: StateTree<State>,
+			private tree: Tree,
 			private scene: Scene,
 			private actions: Actions,
 		) {
 
 		this.glbs = signals.signal([])
+
 		watch.track(
-			() => app.state.slots,
+			() => tree.state.slots,
 			() => this.prune_orphaned_glbs(),
 		)
 	}
@@ -34,7 +36,7 @@ export class Warehouse {
 	}
 
 	get manifest() {
-		return this.app.state.slots
+		return this.tree.state.slots
 			.filter(s => s.glb_hash)
 			.map(slot => ({
 				slot,
@@ -44,7 +46,7 @@ export class Warehouse {
 	}
 
 	trace_prop(ref: PropAddress): PropTrace {
-		const {slots} = this.app.state
+		const {slots} = this.tree.state
 
 		let slot: GlbSlot | undefined = (
 			slots.find(s => s.id === ref.slot)
@@ -72,7 +74,7 @@ export class Warehouse {
 	}
 
 	prune_orphaned_glbs() {
-		const {slots} = this.app.state
+		const {slots} = this.tree.state
 		const orphans = this.glbs.value
 			.filter(glb => !slots.some(s => s.glb_hash === glb.hash))
 			.map(glb => glb.hash)

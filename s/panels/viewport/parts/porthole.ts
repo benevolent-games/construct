@@ -6,7 +6,7 @@ import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.j
 
 import {Id} from "../../../tools/fresh_id.js"
 import {Babylon} from "../../../context/controllers/babylon/babylon.js"
-import {InputController} from "../../../context/controllers/input/controller.js"
+import {Gesture} from "../../../context/controllers/gesture/controller.js"
 
 export class Porthole extends Initiator {
 	canvas: HTMLCanvasElement
@@ -20,7 +20,7 @@ export class Porthole extends Initiator {
 	constructor(
 			public leafId: Id,
 			public babylon: Babylon,
-			public input: InputController,
+			public input: Gesture,
 		) {
 
 		super()

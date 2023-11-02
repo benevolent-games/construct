@@ -16,18 +16,18 @@ export const ViewportPanel = panel({
 	view: slate.obsidian({name: "viewport", styles},
 		use => ({leafId}: PanelProps) => {
 
-		const {babylon, input} = use.context
+		const {babylon, gesture} = use.context
 
 		const porthole = use.init(initiate(Porthole)(
 			leafId,
 			babylon,
-			input,
+			gesture,
 		))
 
 		use.setup(() => start_resizing(porthole.canvas))
 
 		const pointerTracker = use.init(initiate(PointerTracker)(
-			use.context.input.pointerMovements,
+			use.context.gesture.pointerMovements,
 			porthole.canvas,
 		))
 
@@ -43,7 +43,7 @@ export const ViewportPanel = panel({
 			if (!document.pointerLockElement) {
 				const container = event.currentTarget as HTMLElement
 				container.requestPointerLock()
-				input.pointerLock.value = {leafId}
+				gesture.pointerLock.value = {leafId}
 			}
 		}
 
