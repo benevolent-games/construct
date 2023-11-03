@@ -4,6 +4,8 @@ export type EditorBindings = ReturnType<typeof default_editor_bindings>
 export const default_editor_bindings = () => ({
 	buttons: {
 		select: "LMB",
+		flycam: "RMB",
+		grab: "KeyG",
 
 		forward: "KeyW",
 		backward: "KeyS",
@@ -14,8 +16,6 @@ export const default_editor_bindings = () => ({
 		down: "KeyK",
 		left: "KeyJ",
 		right: "KeyL",
-
-		grab: "KeyG",
 	},
 	vectors: {
 		look: "mouse",

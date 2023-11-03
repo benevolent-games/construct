@@ -59,6 +59,8 @@ export class Context extends BaseContext {
 	mover = new Mover(
 		this.signals,
 		this.tree,
+		this.world,
+		this.gesture,
 	)
 
 	/** for dropzones to communicate to each other */

@@ -20,7 +20,7 @@ export class Porthole extends Initiator {
 	constructor(
 			public leafId: Id,
 			public babylon: Babylon,
-			public input: Gesture,
+			public gesture: Gesture,
 		) {
 
 		super()
@@ -42,16 +42,16 @@ export class Porthole extends Initiator {
 	}
 
 	#simulate = () => {
-		const {input, leafId, fly} = this
+		const {gesture, leafId, fly} = this
+		const this_leaf_is_not_focal = gesture.focal.value?.leafId !== leafId
 
-		if (!input.is_leaf_focal(leafId))
+		if (this_leaf_is_not_focal)
 			return
 
-		const {forward, backward, leftward, rightward} =
-			input.tactic.buttons
-
-		const {up, down, left, right} =
-			input.tactic.buttons
+		const {
+			forward, backward, leftward, rightward,
+			up, down, left, right,
+		} = gesture.buttons
 
 		fly.add_move([
 			axis(rightward, leftward),

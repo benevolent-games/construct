@@ -45,9 +45,14 @@ export const ConstructEditor = slate.carbon({styles}, use => {
 		dropzone.reset_indicator()
 	}))
 
+	function prevent(event: Event) {
+		event.preventDefault()
+	}
+
 	return html`
 		<div
 			class=layout
+			@contextmenu=${prevent}
 			@pointermove=${resizer.track_mouse_movement}
 			@pointerup=${resizer.end}
 			?data-dropzone-indicator=${dropzone.indicator}

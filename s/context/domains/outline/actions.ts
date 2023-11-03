@@ -5,6 +5,7 @@ import {Id} from "../../../tools/fresh_id.js"
 import {make_outline_tools} from "./tools.js"
 import {Action} from "../../framework/action_namespace.js"
 import { V3 } from "@benev/toolbox/x/utils/v3.js"
+import { Spatial } from "./spatial.js"
 
 export const items = Action.specs<State>()(({action}) => ({
 	add: action(state => (additions: {
@@ -61,12 +62,11 @@ export const items = Action.specs<State>()(({action}) => ({
 			item.visible = false
 	}),
 
-	set_position: action(state => (...directives: {id: Id, position: V3}[]) => {
+	set_spatial: action(state => (...directives: {id: Id, spatial: Spatial}[]) => {
 		const tools = make_outline_tools(state.outline)
-		for (const {id, position} of directives) {
-			console.log("SET_POSITION", {id, position})
+		for (const {id, spatial} of directives) {
 			const item = tools.getItem(id) as Item.Instance | Item.Light
-			item.spatial.position = position
+			item.spatial = spatial
 		}
 	}),
 

@@ -6,8 +6,8 @@ import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {Pod} from "./parts/pod_types.js"
 import {Tree} from "../tree/controller.js"
 import {Id} from "../../../tools/fresh_id.js"
-import {Warehouse} from "../warehouse/warehouse.js"
 import {Item} from "../../domains/outline/types.js"
+import {Warehouse} from "../warehouse/warehouse.js"
 import {make_pod_tools} from "./parts/pod_tools.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
@@ -30,6 +30,10 @@ export class World {
 			() => tree.state,
 			() => this.synchronize(),
 		)
+	}
+
+	get_pod(id: Id) {
+		return this.#pods.get(id)!
 	}
 
 	find_id_for_mesh(mesh: AbstractMesh) {

@@ -25,7 +25,9 @@ export const render_pane = (meta: LayoutMeta) => (
 		: null
 
 	const isFocal = pane.id === gesture.focal.value?.paneId
-	const isPointerLocked = activeLeaf && gesture.is_leaf_pointer_locked(activeLeaf.id)
+
+	const isPointerLocked = activeLeaf
+		&& gesture.pointerLock.value?.leafId === activeLeaf.id
 
 	const focalize = () => {
 		gesture.focal.value = {
