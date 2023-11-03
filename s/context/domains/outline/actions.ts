@@ -64,6 +64,7 @@ export const items = Action.specs<State>()(({action}) => ({
 	set_position: action(state => (...directives: {id: Id, position: V3}[]) => {
 		const tools = make_outline_tools(state.outline)
 		for (const {id, position} of directives) {
+			console.log("SET_POSITION", {id, position})
 			const item = tools.getItem(id) as Item.Instance | Item.Light
 			item.spatial.position = position
 		}

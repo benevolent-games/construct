@@ -16,7 +16,7 @@ export const ViewportPanel = panel({
 	view: slate.obsidian({name: "viewport", styles},
 		use => ({leafId}: PanelProps) => {
 
-		const {babylon, gesture} = use.context
+		const {babylon, gesture, mover} = use.context
 
 		const porthole = use.init(initiate(Porthole)(
 			leafId,
@@ -38,6 +38,11 @@ export const ViewportPanel = panel({
 			porthole.camera,
 			pointerTracker,
 		))
+
+		use.setup(() => gesture.tactic.on.buttons.grab(input => {
+			if (input.down)
+				mover.toggleGrab()
+		}))
 
 		function lock(event: MouseEvent) {
 			if (!document.pointerLockElement) {

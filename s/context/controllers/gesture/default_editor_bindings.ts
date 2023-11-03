@@ -14,6 +14,8 @@ export const default_editor_bindings = () => ({
 		down: "KeyK",
 		left: "KeyJ",
 		right: "KeyL",
+
+		grab: "KeyG",
 	},
 	vectors: {
 		look: "mouse",

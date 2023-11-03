@@ -6,6 +6,7 @@ import type {panels as all_panels} from "../panels/panels.js"
 import {theme} from "./theme.js"
 import {store} from "./controllers/store/store.js"
 import {Tree} from "./controllers/tree/controller.js"
+import {Mover} from "./controllers/mover/controller.js"
 import {World} from "./controllers/world/controller.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
 import {Gesture} from "./controllers/gesture/controller.js"
@@ -52,6 +53,12 @@ export class Context extends BaseContext {
 	layout = new LayoutController(
 		this.watch,
 		this.store,
+	)
+
+	/** system for grabbing, rotating, scaling things */
+	mover = new Mover(
+		this.signals,
+		this.tree,
 	)
 
 	/** for dropzones to communicate to each other */
