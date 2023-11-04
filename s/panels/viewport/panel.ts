@@ -1,6 +1,8 @@
 
 import {html, initiate} from "@benev/slate"
 
+import {sprite_akar_point} from "../../sprites/groups/akar/point.js"
+
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {Porthole} from "./parts/porthole.js"
@@ -46,9 +48,14 @@ export const ViewportPanel = panel({
 			porthole,
 		))
 
+		const is_pointer_locked = (
+			gesture.pointerLock.value?.leafId === leafId
+		)
+
 		return html`
-			<div class=container>
+			<div class=container ?data-pointer-locked=${is_pointer_locked}>
 				${porthole.canvas}
+				${sprite_akar_point}
 			</div>
 		`
 	}),
