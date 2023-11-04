@@ -32,8 +32,8 @@ export class Gesture extends Tactic<EditorBindings> {
 				this.disengage_pointer_lock()
 		}
 
-		window.addEventListener("pointerlockchange", stopPointerLock)
-		window.addEventListener("pointerlockerror", stopPointerLock)
+		document.addEventListener("pointerlockchange", stopPointerLock)
+		document.addEventListener("pointerlockerror", stopPointerLock)
 
 		this.add(
 			this.keyboard,
