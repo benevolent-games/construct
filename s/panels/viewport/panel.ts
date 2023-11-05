@@ -5,13 +5,13 @@ import {sprite_akar_point} from "../../sprites/groups/akar/point.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
-import {Porthole} from "./parts/porthole.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {start_resizing} from "./parts/start_resizing.js"
 import {PointerTracker} from "./parts/pointer_tracker.js"
 import {selecting_objects} from "./parts/selecting_objects.js"
 import {sprite_box} from "../../sprites/groups/feather/box.js"
 import {fly_mode_manipulations} from "./parts/fly_mode_manipulations.js"
+import {Porthole} from "../../context/controllers/world/porthole/porthole.js"
 
 export const ViewportPanel = panel({
 	label: "viewport",

@@ -1,5 +1,6 @@
 
 import {SignalTower, WatchTower} from "@benev/slate"
+import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh"
 
 import {Id} from "../../../tools/fresh_id"
 import {Tree} from "../tree/controller.js"
@@ -10,7 +11,6 @@ import {Item} from "../../domains/outline/types.js"
 import {AnyUnit, UnitSource} from "./units/parts/types.js"
 import {make_unit_tools} from "./units/parts/unit_tools.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
-import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh"
 
 export class World {
 	#units = new Map<Id, AnyUnit>

@@ -1,8 +1,8 @@
 
-import {Porthole} from "./porthole.js"
 import {Id} from "../../../tools/fresh_id.js"
 import {Mover} from "../../../context/controllers/mover/controller.js"
 import {Gesture} from "../../../context/controllers/gesture/controller.js"
+import {Porthole} from "../../../context/controllers/world/porthole/porthole.js"
 
 export const fly_mode_manipulations = (
 		leafId: Id,
