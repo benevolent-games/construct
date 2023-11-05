@@ -5,8 +5,8 @@ import {EngineView} from "@babylonjs/core/Engines/Extensions/engine.views.js"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 
 import {Id} from "../../../tools/fresh_id.js"
-import {Babylon} from "../../../context/controllers/babylon/babylon.js"
 import {Gesture} from "../../../context/controllers/gesture/controller.js"
+import { Babylon } from "../../../context/controllers/world/babylon/babylon.js"
 
 export class Porthole extends Initiator {
 	canvas: HTMLCanvasElement
