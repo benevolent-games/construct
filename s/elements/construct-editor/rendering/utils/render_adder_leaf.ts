@@ -1,8 +1,8 @@
 
 import {html} from "lit"
 import {LayoutMeta} from "./layout_meta.js"
-import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 import {panels} from "../../../../panels/panels.js"
+import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
 export function render_adder_leaf(
 		{layout}: LayoutMeta,
@@ -10,7 +10,6 @@ export function render_adder_leaf(
 	) {
 
 	return html`${Object.entries(panels)
-		.filter(([,panel]) => panel !== panels.AdderPanel)
 		.map(([name, panel]) => html`
 			<button
 				@click=${() => {

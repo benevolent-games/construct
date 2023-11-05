@@ -7,11 +7,11 @@ import {sprite_split_column} from "../../../sprites/groups/akar/panel-split-colu
 
 import {render_tabs} from "./tabs.js"
 import {render_leaf} from "./leaf.js"
-import {slate} from "../../../context/slate.js"
 import {defined} from "../../../tools/defined.js"
 import {LayoutMeta} from "./utils/layout_meta.js"
 import {sizing_styles} from "../parts/sizing_styles.js"
 import {render_adder_leaf} from "./utils/render_adder_leaf.js"
+import {miniSlate as slate} from "../../../context/mini_slate.js"
 import {Layout} from "../../../context/controllers/layout/parts/types.js"
 
 export const render_pane = (meta: LayoutMeta) => (

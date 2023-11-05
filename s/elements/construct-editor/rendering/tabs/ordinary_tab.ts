@@ -2,8 +2,8 @@
 import {html} from "@benev/slate"
 
 import {LayoutMeta} from "../utils/layout_meta.js"
-import {slate} from "../../../../context/slate.js"
 import {sprite_x} from "../../../../sprites/groups/feather/x.js"
+import {miniSlate as slate} from "../../../../context/mini_slate.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
 const inside_x_button = (event: MouseEvent) => {

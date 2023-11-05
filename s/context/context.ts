@@ -1,20 +1,15 @@
 
-import {Context as BaseContext, pub} from "@benev/slate"
-
 import type {panels as all_panels} from "../panels/panels.js"
 
-import {theme} from "./theme.js"
-import {store} from "./controllers/store/store.js"
+import {MiniContext} from "./mini_context.js"
 import {Tree} from "./controllers/tree/controller.js"
 import {Mover} from "./controllers/mover/controller.js"
 import {World} from "./controllers/world/controller.js"
 import {Babylon} from "./controllers/babylon/babylon.js"
-import {Gesture} from "./controllers/gesture/controller.js"
 import {Warehouse} from "./controllers/warehouse/warehouse.js"
-import {LayoutController} from "./controllers/layout/controller.js"
+import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 
-export class Context extends BaseContext {
-	theme = theme
+export class Context extends MiniContext {
 
 	/** editor state tree */
 	tree = new Tree(
@@ -40,21 +35,6 @@ export class Context extends BaseContext {
 		this.warehouse,
 	)
 
-	/** editor app persistence */
-	store = store(localStorage)
-
-	/** user input, pointer lock, and focalization */
-	gesture = new Gesture(
-		this.signals,
-		this.flat,
-	)
-
-	/** layout state, actions, and helpers */
-	layout = new LayoutController(
-		this.watch,
-		this.store,
-	)
-
 	/** system for grabbing, rotating, scaling things */
 	mover = new Mover(
 		this.signals,
@@ -63,11 +43,16 @@ export class Context extends BaseContext {
 		this.gesture,
 	)
 
-	/** for dropzones to communicate to each other */
-	on_file_drop_already_handled_internally = pub<void>()
-
 	constructor(public panels: typeof all_panels) {
-		super()
+		super(panels)
+		this.drops.on_file_drop(files => {
+			for (const file of files) {
+				if (file_is_glb(file))
+					this.warehouse.add_glb_file(file)
+				else
+					console.warn("unrecognized filetype", file.name)
+			}
+		})
 	}
 }
 

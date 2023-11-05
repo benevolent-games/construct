@@ -37,7 +37,7 @@ export const SlotsPanel = panel({
 						warehouse.add_glb_file(file)
 					event.preventDefault()
 					event.stopPropagation()
-					use.context.on_file_drop_already_handled_internally.publish()
+					use.context.drops.on_file_drop_already_handled_internally.publish()
 				},
 			},
 		})
