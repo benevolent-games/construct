@@ -1,56 +1,71 @@
 
-import {WatchTower, deepEqual} from "@benev/slate"
-import {Quaternion} from "@babylonjs/core/Maths/math.js"
-import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
+import {SignalTower, WatchTower} from "@benev/slate"
 
-import {Pod} from "./parts/pod_types.js"
+import {Id} from "../../../tools/fresh_id"
 import {Tree} from "../tree/controller.js"
-import {Id} from "../../../tools/fresh_id.js"
+import {Babylon} from "./babylon/babylon.js"
+import {InstanceUnit} from "./units/instance.js"
+import {Warehouse} from "./warehouse/warehouse.js"
 import {Item} from "../../domains/outline/types.js"
-import {Warehouse} from "../warehouse/warehouse.js"
-import {make_pod_tools} from "./parts/pod_tools.js"
+import {AnyUnit, UnitSource} from "./units/parts/types.js"
+import {make_unit_tools} from "./units/parts/unit_tools.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
+import { AbstractMesh } from "@babylonjs/core/Meshes/abstractMesh"
 
 export class World {
-	#pods = new Map<Id, Pod.Whatever>()
-	#podTools: ReturnType<typeof make_pod_tools>
+	#units = new Map<Id, AnyUnit>
+	#unitTools: ReturnType<typeof make_unit_tools>
+
+	babylon = new Babylon()
+	warehouse: Warehouse
 
 	constructor(
+			signals: SignalTower,
 			watch: WatchTower,
 			private tree: Tree,
-			private warehouse: Warehouse,
 		) {
 
-		this.#podTools = make_pod_tools(
-			this.#pods,
-			warehouse,
+		this.warehouse = new Warehouse(
+			signals,
+			watch,
+			tree,
+			this.babylon.scene,
+		)
+
+		this.#unitTools = make_unit_tools(
+			this.#units,
+			this.warehouse,
 		)
 
 		watch.track(
 			() => tree.state,
-			() => this.synchronize(),
+			() => this.#synchronize(),
 		)
 	}
 
-	get_pod(id: Id) {
-		return this.#pods.get(id)!
+	get_unit<U extends AnyUnit>(id: Id) {
+		const unit = this.#units.get(id)
+		if (unit)
+			return unit as U
+		else
+			throw new Error(`unit not found ${id}`)
 	}
 
 	find_id_for_mesh(mesh: AbstractMesh) {
-		for (const [id, pod] of this.#pods)
-			if (pod.kind === "instance" && pod.meshes.includes(mesh))
+		for (const [id, unit] of this.#units) {
+			if (unit instanceof InstanceUnit && unit.hasMesh(mesh))
 				return id
+		}
 	}
 
-	synchronize() {
+	#synchronize() {
 		const sources = this.#get_source_items()
 		this.#add_and_remove_pods_based_on_items(sources)
 		this.#handle_glb_changes_by_swapping_props(sources)
-		this.#represent_selections_with_visual_indicators(sources)
 		this.#sync_spatial_positions_and_such(sources)
 	}
 
-	#get_source_items(): Pod.SourceItem[] {
+	#get_source_items(): UnitSource[] {
 		const {outline} = this.tree.state
 		const outlineTools = make_outline_tools(outline)
 		return [
@@ -59,66 +74,44 @@ export class World {
 		]
 	}
 
-	#add_and_remove_pods_based_on_items(sources: Pod.SourceItem[]) {
+	#add_and_remove_pods_based_on_items(sources: UnitSource[]) {
 		sources
-			.filter(item => !this.#pods.has(item.id))
-			.forEach(this.#podTools.add_pod_for_item)
+			.filter(item => !this.#units.has(item.id))
+			.forEach(this.#unitTools.add_for_item)
 
-		Array.from(this.#pods.keys())
+		Array.from(this.#units.keys())
 			.filter(id => !sources.some(item => item.id === id))
-			.forEach(this.#podTools.delete_pod_by_id)
+			.forEach(this.#unitTools.delete_by_id)
 	}
 
-	#sync_spatial_positions_and_such(sources: Pod.SourceItem[]) {
-		sources
-			.filter(item => !!item.spatial && this.#pods.has(item.id))
-			.map(item => ({item, pod: this.#pods.get(item.id)!}))
-			.forEach(({item, pod}) => {
-				switch (pod.kind) {
-
-					case "instance":
-						const {node} = pod
-
-						if (node.position.equalsToFloats(...item.spatial.position))
-							node.position.set(...item.spatial.position)
-
-						if (node.scaling.equalsToFloats(...item.spatial.scale))
-							node.scaling.set(...item.spatial.scale)
-
-						node.rotationQuaternion = (node.rotationQuaternion)
-							? deepEqual(node.rotationQuaternion.asArray(), item.spatial.rotation)
-								? node.rotationQuaternion
-								: node.rotationQuaternion.set(...item.spatial.rotation)
-							: new Quaternion(...item.spatial.rotation)
-
-						break
-					case "light":
-						console.warn("todo: light spatial sync")
-						break
-				}
-			})
-	}
-
-	#handle_glb_changes_by_swapping_props(sources: Pod.SourceItem[]) {
+	#handle_glb_changes_by_swapping_props(sources: UnitSource[]) {
 		sources
 			.filter(item => item.kind === "instance")
-			.filter(item => this.#pods.has(item.id))
+			.filter(item => this.#units.has(item.id))
 			.forEach(source => {
 				const item = source as Item.Instance
-				const {status, glb} = this.warehouse.trace_prop(item.address)
+				const {status} = this.warehouse.trace_prop(item.address)
 				if (status === "available")
-					this.#podTools.update_prop_if_glb_changed(item, glb)
+					this.#unitTools.update_prop_if_glb_changed(item)
 				else
-					this.#podTools.delete_pod_by_id(item.id)
+					this.#unitTools.delete_by_id(item.id)
 			})
 	}
 
-	#represent_selections_with_visual_indicators(sources: Pod.SourceItem[]) {
+	#sync_spatial_positions_and_such(sources: UnitSource[]) {
 		sources
-			.filter(item => this.#pods.has(item.id))
-			.map(item => ({item, pod: this.#pods.get(item.id)!}))
-			.filter(({item, pod}) => pod.selected !== item.selected)
-			.forEach(this.#podTools.update_selection_indicators)
+			.filter(item => !!item.spatial && this.#units.has(item.id))
+			.map(item => ({item, unit: this.#units.get(item.id)!}))
+			.forEach(({item, unit}) => {
+				unit.selected = item.selected
+				unit.hidden = !item.visible
+
+				if (unit instanceof InstanceUnit) {
+					unit.position = item.spatial.position
+					unit.scale = item.spatial.scale
+					unit.rotation = item.spatial.rotation
+				}
+			})
 	}
 }
 

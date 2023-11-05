@@ -3,8 +3,8 @@ import {AssetContainer} from "@babylonjs/core/assetContainer.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
-import {GlbSlot} from "../../../state.js"
-import {Id} from "../../../../tools/fresh_id.js"
+import {GlbSlot} from "../../../../state.js"
+import {Id} from "../../../../../tools/fresh_id.js"
 
 export type Glb = {
 	hash: string

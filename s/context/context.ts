@@ -3,10 +3,8 @@ import type {panels as all_panels} from "../panels/panels.js"
 
 import {MiniContext} from "./mini_context.js"
 import {Tree} from "./controllers/tree/controller.js"
-import {Mover} from "./controllers/mover/controller.js"
 import {World} from "./controllers/world/controller.js"
-import {Babylon} from "./controllers/babylon/babylon.js"
-import {Warehouse} from "./controllers/warehouse/warehouse.js"
+import {Mover} from "./controllers/mover/controller.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 
 export class Context extends MiniContext {
@@ -16,23 +14,11 @@ export class Context extends MiniContext {
 		this.watch,
 	)
 
-	/** babylonjs engine setup */
-	babylon = new Babylon()
-
-	/** glb files and props */
-	warehouse = new Warehouse(
+	/** the 3d babylon world and glbs */
+	world = new World(
 		this.signals,
 		this.watch,
 		this.tree,
-		this.babylon.scene,
-		this.tree.actions,
-	)
-
-	/** synchronize the babylon scene to the state */
-	world = new World(
-		this.watch,
-		this.tree,
-		this.warehouse,
 	)
 
 	/** system for grabbing, rotating, scaling things */
@@ -48,7 +34,7 @@ export class Context extends MiniContext {
 		this.drops.on_file_drop(files => {
 			for (const file of files) {
 				if (file_is_glb(file))
-					this.warehouse.add_glb_file(file)
+					this.world.warehouse.add_glb_file(file)
 				else
 					console.warn("unrecognized filetype", file.name)
 			}

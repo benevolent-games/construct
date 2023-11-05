@@ -19,7 +19,7 @@ export const ViewportPanel = panel({
 	view: slate.obsidian({name: "viewport", styles},
 		use => ({leafId}: PanelProps) => {
 
-		const {babylon, gesture, mover} = use.context
+		const {gesture, mover, world: {babylon}} = use.context
 
 		const porthole = use.init(initiate(Porthole)(
 			leafId,

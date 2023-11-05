@@ -11,15 +11,15 @@ import {GlbSlot} from "../../context/state.js"
 import {Id, freshId} from "../../tools/fresh_id.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
-import {Glb} from "../../context/controllers/warehouse/parts/types.js"
 import {useDragAndDrop} from "../../tools/shockdrop/use_drag_and_drop.js"
+import {Glb} from "../../context/controllers/world/warehouse/parts/types.js"
 import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 
 export const SlotsPanel = panel({
 	label: "slots",
 	icon: sprite_tabler_layout_list,
 	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
-		const {tree, warehouse} = use.context
+		const {tree, world: {warehouse}} = use.context
 		const slots = use.watch(() => tree.state.slots)
 
 		const drag = useDragAndDrop<GlbSlot, GlbSlot>({

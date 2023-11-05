@@ -3,13 +3,12 @@ import {Scene} from "@babylonjs/core/scene.js"
 import {Signal, SignalTower, WatchTower} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
-import {Actions} from "../../actions.js"
-import {Tree} from "../tree/controller.js"
-import {GlbSlot, Hash} from "../../state.js"
+import {Tree} from "../../tree/controller.js"
+import {GlbSlot, Hash} from "../../../state.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
-import {Id, freshId} from "../../../tools/fresh_id.js"
-import {quick_hash} from "../../../tools/quick_hash.js"
+import {Id, freshId} from "../../../../tools/fresh_id.js"
+import {quick_hash} from "../../../../tools/quick_hash.js"
 import {Glb, GlbProp, PropAddress, PropTrace} from "./parts/types.js"
 
 export class Warehouse {
@@ -20,7 +19,6 @@ export class Warehouse {
 			watch: WatchTower,
 			private tree: Tree,
 			private scene: Scene,
-			private actions: Actions,
 		) {
 
 		this.glbs = signals.signal([])
@@ -85,6 +83,7 @@ export class Warehouse {
 	}
 
 	async add_glb_file(file: File, slot_id?: Id) {
+		const {actions} = this.tree
 		const hash = await quick_hash(file)
 		const already_exists = this.glbs.value.find(g => g.hash === hash)
 
@@ -113,9 +112,9 @@ export class Warehouse {
 		this.glbs.value = [...this.glbs.value, glb]
 
 		if (slot_id)
-			this.actions.slots.assign_glb(slot_id, hash)
+			actions.slots.assign_glb(slot_id, hash)
 		else
-			this.actions.slots.add({
+			actions.slots.add({
 				id: freshId(),
 				glb_hash: hash,
 				name: convert_file_name_to_slot_name(file.name),

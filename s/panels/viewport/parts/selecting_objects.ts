@@ -14,7 +14,8 @@ export const selecting_objects = (
 	) => () => {
 
 	return context.gesture.on.buttons.select(input => {
-		const {babylon, world, tree} = context
+		const {world, tree} = context
+		const {babylon} = world
 
 		const user_is_engaging_select_process = (
 			input.down &&

@@ -1,14 +1,12 @@
 
-import {v3} from "@benev/toolbox/x/utils/v3.js"
 import {Signal, SignalTower} from "@benev/slate"
 import {Camera} from "@babylonjs/core/Cameras/camera.js"
-import {Quat, quat} from "@benev/toolbox/x/utils/quat.js"
 
 import {Tree} from "../tree/controller.js"
 import {World} from "../world/controller.js"
 import {Id} from "../../../tools/fresh_id.js"
-import {Pod} from "../world/parts/pod_types.js"
 import {Gesture} from "../gesture/controller.js"
+import {InstanceUnit} from "../world/units/instance.js"
 import {Spatial} from "../../domains/outline/spatial.js"
 import {make_outline_tools} from "../../domains/outline/tools.js"
 
@@ -43,11 +41,11 @@ export class Mover {
 		const subjects = tools
 			.selected
 			.filter(item => item.kind === "instance")
-			.map(item => ({item, pod: world.get_pod(item.id) as Pod.Instance}))
+			.map(item => ({item, unit: world.get_unit<InstanceUnit>(item.id)}))
 
 		if (subjects.length > 0) {
-			for (const {pod} of subjects)
-				pod.node.setParent(camera)
+			for (const {unit} of subjects)
+				unit.setParent(camera)
 
 			const nevermind = this.gesture.on_pointer_lock_disengaged.once(() => {
 				this.#ungrab()
@@ -56,18 +54,16 @@ export class Mover {
 			function cleanup() {
 				nevermind()
 
-				for (const {pod} of subjects)
-					pod.node.setParent(null)
+				for (const {unit} of subjects)
+					unit.setParent(null)
 
 				tree.actions.items.set_spatial(...subjects.map(
-					({item, pod}) => ({
+					({item, unit}) => ({
 						id: item.id,
 						spatial: {
-							scale: [1, 1, 1],
-							position: v3.fromBabylon(pod.node.getAbsolutePosition()),
-							rotation: pod.node.rotationQuaternion
-								? quat.fromBabylon(pod.node.rotationQuaternion)
-								: [0, 0, 0, 1] as Quat,
+							scale: unit.scale,
+							position: unit.position,
+							rotation: unit.rotation,
 						} satisfies Spatial,
 					})
 				))

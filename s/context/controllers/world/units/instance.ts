@@ -1,14 +1,15 @@
 
+import {Node} from "@babylonjs/core/node.js"
 import {V3, v3} from "@benev/toolbox/x/utils/v3.js"
 import {Quat, quat} from "@benev/toolbox/x/utils/quat.js"
 import {Color4} from "@babylonjs/core/Maths/math.color.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
-import {UnitBase} from "./base.js"
+import {BaseUnit} from "./base.js"
 import {Id} from "../../../../tools/fresh_id.js"
 
-export class UnitInstance extends UnitBase {
+export class InstanceUnit extends BaseUnit {
 	#node: TransformNode
 	#meshes: AbstractMesh[]
 
@@ -64,6 +65,16 @@ export class UnitInstance extends UnitBase {
 				mesh.disableEdgesRendering()
 			}
 		}
+	}
+
+	// TODO questionable architecture requires
+	// babylon interaction outside world
+	setParent(node: Node | null) {
+		this.#node.setParent(node)
+	}
+
+	hasMesh(mesh: AbstractMesh) {
+		return this.#meshes.includes(mesh)
 	}
 
 	cleanup() {
