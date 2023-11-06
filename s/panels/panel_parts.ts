@@ -1,8 +1,6 @@
 
-import {SVGTemplateResult} from "@benev/slate"
-import {ObsidianView} from "@benev/slate/x/shiny/parts/types.js"
-
 import {Id} from "../tools/fresh_id.js"
+import {SVGTemplateResult, ObsidianView} from "@benev/slate"
 
 export interface PanelProps {
 	leafId: Id
