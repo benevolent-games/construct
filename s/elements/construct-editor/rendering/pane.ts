@@ -1,9 +1,9 @@
 
 import {html} from "lit"
 
-import {icon_feather_x} from "../../../sprites/groups/feather/x.js"
-import {icon_akar_panel_split_row} from "../../../sprites/groups/akar/panel-split-row.js"
-import {icon_akar_panel_split_column} from "../../../sprites/groups/akar/panel-split-column.js"
+import {icon_feather_x} from "../../../icons/groups/feather/x.js"
+import {icon_akar_panel_split_row} from "../../../icons/groups/akar/panel-split-row.js"
+import {icon_akar_panel_split_column} from "../../../icons/groups/akar/panel-split-column.js"
 
 import {render_tabs} from "./tabs.js"
 import {render_leaf} from "./leaf.js"

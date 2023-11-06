@@ -1,9 +1,9 @@
 
 import {html} from "lit"
 
-import {icon_feather_x} from "../../sprites/groups/feather/x.js"
-import {icon_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
-import {icon_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
+import {icon_feather_x} from "../../icons/groups/feather/x.js"
+import {icon_tabler_layout_list} from "../../icons/groups/tabler/layout-list.js"
+import {icon_tabler_grip_vertical} from "../../icons/groups/tabler/grip-vertical.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"

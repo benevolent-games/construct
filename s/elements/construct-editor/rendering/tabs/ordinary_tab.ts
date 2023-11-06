@@ -2,7 +2,7 @@
 import {html} from "@benev/slate"
 
 import {LayoutMeta} from "../utils/layout_meta.js"
-import {icon_feather_x} from "../../../../sprites/groups/feather/x.js"
+import {icon_feather_x} from "../../../../icons/groups/feather/x.js"
 import {miniSlate as slate} from "../../../../context/mini_slate.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 

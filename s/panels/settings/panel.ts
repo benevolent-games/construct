@@ -4,7 +4,7 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
-import {icon_feather_settings} from "../../sprites/groups/feather/settings.js"
+import {icon_feather_settings} from "../../icons/groups/feather/settings.js"
 
 export const SettingsPanel = panel({
 	label: "settings",

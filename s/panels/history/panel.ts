@@ -6,9 +6,9 @@ import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_time} from "../../tools/human_time.js"
 import {Action} from "../../context/framework/action_namespace.js"
-import {icon_akar_history} from "../../sprites/groups/akar/history.js"
-import {icon_feather_rewind} from "../../sprites/groups/feather/rewind.js"
-import {icon_feather_fast_forward} from "../../sprites/groups/feather/fast-forward.js"
+import {icon_akar_history} from "../../icons/groups/akar/history.js"
+import {icon_feather_rewind} from "../../icons/groups/feather/rewind.js"
+import {icon_feather_fast_forward} from "../../icons/groups/feather/fast-forward.js"
 
 export const HistoryPanel = panel({
 	label: "history",

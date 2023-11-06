@@ -10,7 +10,7 @@ import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
 import {Tree} from "../../context/controllers/tree/controller.js"
 import {init_spatial} from "../../context/domains/outline/spatial.js"
-import {icon_feather_book_open} from "../../sprites/groups/feather/book-open.js"
+import {icon_feather_book_open} from "../../icons/groups/feather/book-open.js"
 import {Glb, GlbProp} from "../../context/controllers/world/warehouse/parts/types.js"
 
 const placeholder_asset_icon = "https://i.imgur.com/LtadIlN.webp"

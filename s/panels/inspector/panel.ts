@@ -4,7 +4,7 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
-import {icon_feather_sliders} from "../../sprites/groups/feather/sliders.js"
+import {icon_feather_sliders} from "../../icons/groups/feather/sliders.js"
 
 export const InspectorPanel = panel({
 	label: "inspector",

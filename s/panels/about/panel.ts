@@ -4,8 +4,8 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
-import {icon_benev_b} from "../../sprites/groups/benev/b.js"
-import {icon_feather_info} from "../../sprites/groups/feather/info.js"
+import {icon_benev_b} from "../../icons/groups/benev/b.js"
+import {icon_feather_info} from "../../icons/groups/feather/info.js"
 
 export const AboutPanel = panel({
 	label: "about",

@@ -1,14 +1,14 @@
 
 import {TemplateResult, html} from "@benev/slate"
 
-import {icon_feather_x} from "../../sprites/groups/feather/x.js"
-import {icon_feather_layers} from "../../sprites/groups/feather/layers.js"
-import {icon_tabler_eye} from "../../sprites/groups/tabler/eye.js"
-import {icon_tabler_eye_closed} from "../../sprites/groups/tabler/eye-closed.js"
-import {icon_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
-import {icon_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
-import {icon_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
-import {icon_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-triangle.js"
+import {icon_feather_x} from "../../icons/groups/feather/x.js"
+import {icon_feather_layers} from "../../icons/groups/feather/layers.js"
+import {icon_tabler_eye} from "../../icons/groups/tabler/eye.js"
+import {icon_tabler_eye_closed} from "../../icons/groups/tabler/eye-closed.js"
+import {icon_tabler_folder_open} from "../../icons/groups/tabler/folder-open.js"
+import {icon_tabler_folder_plus} from "../../icons/groups/tabler/folder-plus.js"
+import {icon_tabler_folder_filled} from "../../icons/groups/tabler/folder-filled.js"
+import {icon_tabler_vector_triangle} from "../../icons/groups/tabler/vector-triangle.js"
 
 import {styles} from "./styles.js"
 import {EzMap} from "../../tools/ezmap.js"
