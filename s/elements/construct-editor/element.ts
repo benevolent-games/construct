@@ -24,6 +24,7 @@ export const ConstructEditor = slate.carbon({styles}, use => {
 	const render_layout = use.prepare(() => make_layout_renderer({
 		layout,
 		resizer,
+		panels: use.context.panels,
 		dragger: new TabDragger(use.context, layout),
 	}))
 

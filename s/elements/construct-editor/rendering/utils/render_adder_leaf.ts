@@ -1,11 +1,10 @@
 
 import {html} from "lit"
 import {LayoutMeta} from "./layout_meta.js"
-import {panels} from "../../../../panels/panels.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
 export function render_adder_leaf(
-		{layout}: LayoutMeta,
+		{layout, panels}: LayoutMeta,
 		pane: Layout.Pane,
 	) {
 
