@@ -4,16 +4,15 @@ import {html, initiator} from "@benev/slate"
 import {icon_akar_point} from "../../icons/groups/akar/point.js"
 
 import {styles} from "./styles.js"
-import {axis} from "./parts/axis.js"
 import {slate} from "../../context/slate.js"
-import {v2} from "@benev/toolbox/x/utils/v2.js"
-import {LookVector} from "./parts/look_vector.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {PointerTracker} from "./parts/pointer_tracker.js"
 import {selecting_objects} from "./parts/selecting_objects.js"
 import {icon_feather_box} from "../../icons/groups/feather/box.js"
+import {look_vector_wired_for_inputs} from "./parts/look_vector.js"
 import {canvas_with_resizing} from "./parts/canvas_with_resizing.js"
 import {fly_mode_manipulations} from "./parts/fly_mode_manipulations.js"
+import {user_controls_fly_camera} from "./parts/user_controls_fly_camera.js"
 
 export const ViewportPanel = panel({
 	label: "viewport",
@@ -43,45 +42,15 @@ export const ViewportPanel = panel({
 			pointerTracker,
 		))
 
-		const lookVector = use.init(() => {
-			let lookVector = new LookVector({
-				sensitivity: 1 / 1000,
-				invertX: false,
-				invertY: false,
-			})
-			return [
-				lookVector,
-				gesture.on.vectors.look(
-					input => lookVector.accumulate(input.vector)
-				),
-			]
-		})
+		const lookVector = use.init(look_vector_wired_for_inputs(gesture))
 
-		use.setup(() => world.onRender(() => {
-			const this_leaf_is_not_focal = gesture.focal.value?.leafId !== leafId
-			const this_leaf_is_pointer_locked = gesture.pointerLock.value?.leafId === leafId
-
-			if (this_leaf_is_not_focal)
-				return
-
-			const {
-				forward, backward, leftward, rightward,
-				up, down, left, right,
-			} = gesture.buttons
-
-			porthole.add_move([
-				axis(rightward, leftward),
-				axis(forward, backward),
-			])
-
-			porthole.add_look(v2.multiplyBy([
-				axis(right, left),
-				axis(up, down),
-			], 0.05))
-
-			if (this_leaf_is_pointer_locked)
-				porthole.add_look(lookVector.grab_and_reset())
-		}))
+		use.setup(user_controls_fly_camera(
+			leafId,
+			world,
+			gesture,
+			porthole,
+			lookVector,
+		))
 
 		use.setup(fly_mode_manipulations(
 			leafId,
