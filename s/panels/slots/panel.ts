@@ -1,7 +1,7 @@
 
 import {html} from "lit"
 
-import {sprite_x} from "../../sprites/groups/feather/x.js"
+import {sprite_feather_x} from "../../sprites/groups/feather/x.js"
 import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
 import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
@@ -78,7 +78,7 @@ export const SlotsPanel = panel({
 							.value="${slot.name}"
 							@change=${handle_name_change}/>
 						<button class=delete @click=${delete_slot}>
-							${sprite_x}
+							${sprite_feather_x}
 						</button>
 					</div>
 					<div
@@ -147,7 +147,7 @@ export const SlotsPanel = panel({
 				</div>
 				<div class="cap deleter">
 					<button class=delete @click=${delete_glb}>
-						${sprite_x}
+						${sprite_feather_x}
 					</button>
 				</div>
 			`

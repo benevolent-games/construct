@@ -4,11 +4,11 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
-import {sprite_settings} from "../../sprites/groups/feather/settings.js"
+import {sprite_feather_settings} from "../../sprites/groups/feather/settings.js"
 
 export const SettingsPanel = panel({
 	label: "settings",
-	icon: sprite_settings,
+	icon: sprite_feather_settings,
 	view: slate.obsidian({name: "settings", styles}, use => ({}: PanelProps) => {
 
 		function reset_layout() {

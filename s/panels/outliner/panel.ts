@@ -1,8 +1,8 @@
 
 import {TemplateResult, html} from "@benev/slate"
 
-import {sprite_x} from "../../sprites/groups/feather/x.js"
-import {sprite_layers} from "../../sprites/groups/feather/layers.js"
+import {sprite_feather_x} from "../../sprites/groups/feather/x.js"
+import {sprite_feather_layers} from "../../sprites/groups/feather/layers.js"
 import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
 import {sprite_tabler_eye_closed} from "../../sprites/groups/tabler/eye-closed.js"
 import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
@@ -20,7 +20,7 @@ import {make_outline_tools} from "../../context/domains/outline/tools.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",
-	icon: sprite_layers,
+	icon: sprite_feather_layers,
 	view: slate.obsidian({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
@@ -161,7 +161,7 @@ export const OutlinerPanel = panel({
 						${delete_this_item
 							? html`
 								<button class=delete @click=${delete_this_item}>
-									${sprite_x}
+									${sprite_feather_x}
 								</button>
 							`
 							: html`

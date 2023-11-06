@@ -1,7 +1,7 @@
 
 import {SVGTemplateResult, svg} from "lit"
-import {id} from "./utils/svg_constants.js"
-import {process_svg_into_instantiable_blob_url} from "./utils/process_svg.js"
+// import {id} from "./utils/svg_constants.js"
+// import {process_svg_into_instantiable_blob_url} from "./utils/process_svg.js"
 
 export {svg}
 
