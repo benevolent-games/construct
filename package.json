@@ -1,6 +1,6 @@
 {
 	"name": "@benev/construct",
-	"version": "0.0.0-x.4",
+	"version": "0.0.0-x.5",
 	"description": "game map editing suite for babylon",
 	"license": "MIT",
 	"author": "Chase Moskal <chasemoskal@gmail.com>",
