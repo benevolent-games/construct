@@ -1,10 +1,8 @@
 
 import {Id} from "../../../../tools/fresh_id.js"
-import {panels} from "../../../../panels/panels.js"
 
 export namespace Layout {
 	export type Kind = "cell" | "pane" | "leaf"
-	export type PanelName = keyof typeof panels
 
 	export interface Base {
 		kind: Kind
@@ -13,7 +11,7 @@ export namespace Layout {
 	export interface Leaf {
 		id: Id
 		kind: "leaf"
-		panel: PanelName
+		panel: string
 	}
 
 	export interface Pane {

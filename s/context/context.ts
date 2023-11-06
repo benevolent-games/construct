@@ -1,11 +1,13 @@
 
 import type {panels as all_panels} from "../panels/panels.js"
 
-import {MiniContext} from "./mini_context.js"
+import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {Tree} from "./controllers/tree/controller.js"
 import {World} from "./controllers/world/controller.js"
 import {Mover} from "./controllers/mover/controller.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
+
+export interface ContextOptions extends MiniContextOptions {}
 
 export class Context extends MiniContext {
 
@@ -29,8 +31,9 @@ export class Context extends MiniContext {
 		this.gesture,
 	)
 
-	constructor(public panels: typeof all_panels) {
-		super(panels)
+	constructor(options: ContextOptions) {
+		super(options)
+
 		this.drops.on_file_drop(files => {
 			for (const file of files) {
 				if (file_is_glb(file))

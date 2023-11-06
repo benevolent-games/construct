@@ -21,7 +21,12 @@ export const leaf_management = ({element}: {element: HTMLElement}) => () => {
 				div.setAttribute("data-id", leaf.id.toString())
 				div.setAttribute("slot", leaf_slot(leaf.id))
 
-				const {view} = panels[leaf.panel]
+				const key = leaf.panel as any as keyof typeof panels
+
+				if (!(key in panels))
+					throw new Error(`unknown panel "${leaf.panel}"`)
+
+				const {view} = panels[key]
 				const content = html`${view([{leafId: leaf.id}])}`
 
 				render(content, div)

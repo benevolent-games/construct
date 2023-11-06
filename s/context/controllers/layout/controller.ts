@@ -5,7 +5,7 @@ import {Store} from "../store/store.js"
 import {Layout} from "./parts/types.js"
 import {LayoutSeeker} from "./parts/seeker.js"
 import {prepare_layout_actions} from "./parts/actions.js"
-import {stock_layouts} from "./parts/utils/stock_layouts.js"
+import {StockLayouts} from "./parts/utils/stock_layouts.js"
 
 export const save_delay = 300
 
@@ -16,12 +16,13 @@ export class LayoutController {
 	constructor(
 			public watch: WatchTower,
 			public store: Store,
+			public stock_layouts: StockLayouts,
 		) {
 
-		this.#tree = watch.stateTree<Layout.Cell>(stock_layouts.empty())
+		this.#tree = watch.stateTree<Layout.Cell>(stock_layouts.default())
 		this.#load_from_store()
 
-		this.actions = prepare_layout_actions(this.#tree)
+		this.actions = prepare_layout_actions(this.#tree, stock_layouts)
 
 		watch.track(
 			() => this.root,
@@ -38,7 +39,7 @@ export class LayoutController {
 	}
 
 	reset_to_default() {
-		this.#tree.transmute(() => stock_layouts.empty())
+		this.#tree.transmute(() => this.stock_layouts.default())
 	}
 
 	#load_from_store() {

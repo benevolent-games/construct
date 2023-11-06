@@ -3,13 +3,16 @@ import {StateTree} from "@benev/slate"
 
 import {Layout} from "./types.js"
 import {LayoutSeeker} from "./seeker.js"
-import {stock_layouts} from "./utils/stock_layouts.js"
+import {StockLayouts} from "./utils/stock_layouts.js"
 import {Id, freshId} from "../../../../tools/fresh_id.js"
 import {clear_size_of_last_child, ensure_active_index_is_in_safe_range, get_active_leaf, maintain_which_leaf_is_active, movement_is_forward, movement_is_within_same_pane, same_place} from "./utils/helpers.js"
 
 export type LayoutActions = ReturnType<typeof prepare_layout_actions>
 
-export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
+export function prepare_layout_actions(
+		tree: StateTree<Layout.Cell>,
+		stock_layouts: StockLayouts,
+	) {
 
 	function action<P extends any[], R>(
 			fun: (
@@ -163,7 +166,7 @@ export function prepare_layout_actions(tree: StateTree<Layout.Cell>) {
 
 		add_leaf: action(seeker => (
 				paneId: Id,
-				panel: Layout.PanelName,
+				panel: string,
 			) => {
 			const [pane] = seeker.find<Layout.Pane>(paneId)
 			const id = freshId()

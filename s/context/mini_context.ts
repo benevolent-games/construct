@@ -6,6 +6,12 @@ import {store} from "./controllers/store/store.js"
 import {PanelSpec} from "../panels/panel_parts.js"
 import {Gesture} from "./controllers/gesture/controller.js"
 import {LayoutController} from "./controllers/layout/controller.js"
+import {StockLayouts} from "./controllers/layout/parts/utils/stock_layouts.js"
+
+export interface MiniContextOptions {
+	panels: Pojo<PanelSpec>,
+	layouts: StockLayouts,
+}
 
 export class MiniContext extends SlateContext {
 	theme = theme
@@ -13,11 +19,11 @@ export class MiniContext extends SlateContext {
 	/** editor app persistence */
 	store = store(localStorage)
 
+	/** panels available to the user */
+	panels: Pojo<PanelSpec>
+
 	/** layout state, actions, and helpers */
-	layout = new LayoutController(
-		this.watch,
-		this.store,
-	)
+	layout: LayoutController
 
 	/** user input, pointer lock, and focalization */
 	gesture = new Gesture(
@@ -35,8 +41,17 @@ export class MiniContext extends SlateContext {
 		on_file_drop_already_handled_internally: pub<void>(),
 	}
 
-	constructor(public panels: Pojo<PanelSpec>) {
+	constructor({panels, layouts}: MiniContextOptions) {
+
 		super()
+
+		this.panels = panels
+
+		this.layout = new LayoutController(
+			this.watch,
+			this.store,
+			layouts,
+		)
 	}
 }
 
