@@ -1,7 +1,7 @@
 
 export * from "./context/mini_slate.js"
 export * from "./context/mini_context.js"
-export * from "./context/controllers/layout/empty_layout.js"
+export * from "./context/controllers/layout/single_panel_layout.js"
 export * from "./elements/construct-editor/element.js"
 
 export * from "./panels/panel_parts.js"

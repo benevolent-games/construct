@@ -2,7 +2,7 @@
 export * from "./context/slate.js"
 export * from "./panels/panels.js"
 export * from "./context/context.js"
-export * from "./context/controllers/layout/empty_layout.js"
+export * from "./context/controllers/layout/single_panel_layout.js"
 export * from "./context/controllers/layout/game_editor_layouts.js"
 export * from "./elements/construct-editor/element.js"
 

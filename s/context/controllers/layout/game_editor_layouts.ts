@@ -1,11 +1,9 @@
 
-import {empty_layout} from "./empty_layout.js"
 import {StockLayouts} from "./parts/utils/stock_layouts.js"
-
-const plain = empty_layout("AboutPanel")
+import {single_panel_layout} from "./single_panel_layout.js"
 
 export const game_editor_layouts = {
-	empty: plain,
-	default: plain,
+	empty: single_panel_layout("AboutPanel"),
+	default: single_panel_layout("AboutPanel"),
 } satisfies StockLayouts
 

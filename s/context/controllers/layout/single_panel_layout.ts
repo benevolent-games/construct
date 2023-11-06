@@ -2,7 +2,7 @@
 import {Layout} from "./parts/types.js"
 import {freshId} from "../../../tools/fresh_id.js"
 
-export function empty_layout(startingPanel: string) {
+export function single_panel_layout(startingPanel: string) {
 	return (): Layout.Cell => ({
 		id: freshId(),
 		kind: "cell",
