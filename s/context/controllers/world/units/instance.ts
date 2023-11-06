@@ -6,6 +6,7 @@ import {Color4} from "@babylonjs/core/Maths/math.color.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
 
+import {magic} from "../magic.js"
 import {BaseUnit} from "./base.js"
 import {Id} from "../../../../tools/fresh_id.js"
 
@@ -67,14 +68,13 @@ export class InstanceUnit extends BaseUnit {
 		}
 	}
 
-	// TODO questionable architecture requires
-	// babylon interaction outside world
-	setParent(node: Node | null) {
-		this.#node.setParent(node)
-	}
-
-	hasMesh(mesh: AbstractMesh) {
-		return this.#meshes.includes(mesh)
+	;[magic] = {
+		setParent: (node: Node | null) => {
+			this.#node.setParent(node)
+		},
+		hasMesh: (mesh: AbstractMesh) => {
+			return this.#meshes.includes(mesh)
+		},
 	}
 
 	cleanup() {

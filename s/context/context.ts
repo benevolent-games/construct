@@ -1,10 +1,7 @@
 
-import type {panels as all_panels} from "../panels/panels.js"
-
-import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {Tree} from "./controllers/tree/controller.js"
 import {World} from "./controllers/world/controller.js"
-import {Mover} from "./controllers/mover/controller.js"
+import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 
 export interface ContextOptions extends MiniContextOptions {}
@@ -21,14 +18,6 @@ export class Context extends MiniContext {
 		this.signals,
 		this.watch,
 		this.tree,
-	)
-
-	/** system for grabbing, rotating, scaling things */
-	mover = new Mover(
-		this.signals,
-		this.tree,
-		this.world,
-		this.gesture,
 	)
 
 	constructor(options: ContextOptions) {

@@ -1,112 +1,79 @@
 
-import {Initiator} from "@benev/slate"
-import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
-import {EngineView} from "@babylonjs/core/Engines/Extensions/engine.views.js"
+import {V2} from "@benev/toolbox/x/utils/v2.js"
+import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
+
+import {magic} from "../magic.js"
+import {Id} from "../../../../tools/fresh_id.js"
+import {CleanInitiator} from "./parts/clean_initiator.js"
+import {ray_for_picking_on_canvas} from "./parts/ray_for_picking_on_canvas.js"
+import {Babylon} from "../../../../context/controllers/world/babylon/babylon.js"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 
-import {Id} from "../../../../tools/fresh_id.js"
-import {Gesture} from "../../../../context/controllers/gesture/controller.js"
-import {Babylon} from "../../../../context/controllers/world/babylon/babylon.js"
-
-export class Porthole extends Initiator {
-	canvas: HTMLCanvasElement
-	view: EngineView
-	fly: ReturnType<typeof make_fly_camera>
-	disposers = new Set<() => void>()
-
-	#look = (() => {
-		let look = v2.zero()
-		const sensitivity = 0.001
-		const invert: V2 = [1, -1]
-
-		function add(more: V2) {
-			look = v2.add(look, more)
-		}
-
-		function grab() {
-			const vector = look
-			look = v2.zero()
-			return v2.multiplyBy(
-				v2.multiply(vector, invert),
-				sensitivity,
-			)
-		}
-
-		return {add, grab}
-	})()
-
-	get camera() {
-		return this.fly.camera
-	}
+export class Porthole extends CleanInitiator {
+	#babylon: Babylon
+	#fly: ReturnType<typeof make_fly_camera>
+	#find_id_for_mesh: (mesh: AbstractMesh) => (Id | undefined)
 
 	constructor(
-			public leafId: Id,
-			public babylon: Babylon,
-			public gesture: Gesture,
+			public readonly leafId: Id,
+			public readonly canvas: HTMLCanvasElement,
+			babylon: Babylon,
+			find_id_for_mesh: (mesh: AbstractMesh) => (Id | undefined),
 		) {
 
 		super()
+		this.#babylon = babylon
+		this.#find_id_for_mesh = find_id_for_mesh
 
-		this.canvas = document.createElement("canvas")
-
-		const disposeLook = gesture.on.vectors.look(input => {
-			this.#look.add(input.vector)
-		})
-
-		this.fly = make_fly_camera({
+		this.#fly = make_fly_camera({
 			scene: babylon.scene,
 			position: [0, 0, -50],
 		})
 
-		babylon.renderLoop.add(this.#simulate)
-		babylon.scene.addCamera(this.fly.camera)
+		babylon.scene.addCamera(this.#fly.camera)
 
-		this.view = babylon.engine.registerView(
-			this.canvas,
-			this.fly.camera,
+		babylon.engine.registerView(
+			canvas,
+			this.#fly.camera,
 		)
 
-		this.disposers
-			.add(disposeLook)
-			.add(this.fly.dispose)
-			.add(() => babylon.renderLoop.delete(this.#simulate))
-			.add(() => this.babylon.engine.unRegisterView(this.canvas))
+		this.cleanup(() => this.#fly.dispose)
+		this.cleanup(() => babylon.engine.unRegisterView(canvas))
 	}
 
-	#simulate = () => {
-		const {gesture, leafId, fly} = this
-		const this_leaf_is_not_focal = gesture.focal.value?.leafId !== leafId
-		const this_leaf_is_pointer_locked = gesture.pointerLock.value?.leafId === leafId
-
-		if (this_leaf_is_not_focal)
-			return
-
-		const {
-			forward, backward, leftward, rightward,
-			up, down, left, right,
-		} = gesture.buttons
-
-		fly.add_move([
-			axis(rightward, leftward),
-			axis(forward, backward),
-		])
-
-		fly.add_look(v2.multiplyBy([
-			axis(right, left),
-			axis(up, down),
-		], 0.05))
-
-		if (this_leaf_is_pointer_locked)
-			fly.add_look(this.#look.grab())
+	;[magic] = {
+		get_camera: () => {
+			return this.#fly.camera
+		},
 	}
 
-	dispose() {
-		for (const dispose of this.disposers)
-			dispose()
+	add_look(vector: V2) {
+		this.#fly.add_look(vector)
 	}
-}
 
-function axis(a: boolean, b: boolean) {
-	return ((a ?1 :0) - (b ?1 :0))
+	add_move(vector: V2) {
+		this.#fly.add_move(vector)
+	}
+
+	add_move_vertical(y: number) {
+		this.#fly.add_move_vertical(y)
+	}
+
+	pick_on_canvas(coordinates: V2): Id | null {
+		const pick = this.#babylon.scene.pickWithRay(
+			ray_for_picking_on_canvas(
+				this.#fly.camera,
+				this.canvas,
+				coordinates,
+			)
+		)
+
+		return (
+			pick &&
+			pick.hit &&
+			pick.pickedMesh &&
+			this.#find_id_for_mesh(pick.pickedMesh)
+		) || null
+	}
 }
 

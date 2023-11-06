@@ -9,7 +9,9 @@ export function start_resizing(canvas: HTMLCanvasElement) {
 			canvas.height = rect.height
 		})
 	)
+
 	observer.observe(canvas)
+
 	return () => observer.disconnect()
 }
 

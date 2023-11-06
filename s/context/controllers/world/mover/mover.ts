@@ -1,14 +1,14 @@
 
 import {Signal, SignalTower} from "@benev/slate"
-import {Camera} from "@babylonjs/core/Cameras/camera.js"
 
-import {Tree} from "../tree/controller.js"
-import {World} from "../world/controller.js"
-import {Id} from "../../../tools/fresh_id.js"
-import {Gesture} from "../gesture/controller.js"
-import {InstanceUnit} from "../world/units/instance.js"
-import {Spatial} from "../../domains/outline/spatial.js"
-import {make_outline_tools} from "../../domains/outline/tools.js"
+import {magic} from "../magic.js"
+import {Tree} from "../../tree/controller.js"
+import {AnyUnit} from "../units/parts/types.js"
+import {Porthole} from "../porthole/porthole.js"
+import {Id} from "../../../../tools/fresh_id.js"
+import {InstanceUnit} from "../../world/units/instance.js"
+import {Spatial} from "../../../domains/outline/spatial.js"
+import {make_outline_tools} from "../../../domains/outline/tools.js"
 
 export type Grabbed = {
 	itemIds: Id[]
@@ -21,41 +21,34 @@ export class Mover {
 	constructor(
 			signals: SignalTower,
 			private tree: Tree,
-			private world: World,
-			private gesture: Gesture,
+			private get_unit: (id: Id) => AnyUnit
 		) {
 
 		this.grabbed = signals.signal(null)
 	}
 
-	toggleGrab(camera: Camera) {
+	toggleGrab(porthole: Porthole) {
 		if (this.grabbed.value)
-			this.#ungrab()
+			this.ungrab()
 		else
-			this.#grab(camera)
+			this.#grab(porthole)
 	}
 
-	#grab(camera: Camera) {
-		const {tree, world} = this
+	#grab(porthole: Porthole) {
+		const {tree} = this
 		const tools = make_outline_tools(tree.state.outline)
 		const subjects = tools
 			.selected
 			.filter(item => item.kind === "instance")
-			.map(item => ({item, unit: world.get_unit<InstanceUnit>(item.id)}))
+			.map(item => ({item, unit: this.get_unit(item.id) as InstanceUnit}))
 
 		if (subjects.length > 0) {
 			for (const {unit} of subjects)
-				unit.setParent(camera)
-
-			const nevermind = this.gesture.on_pointer_lock_disengaged.once(() => {
-				this.#ungrab()
-			})
+				unit[magic].setParent(porthole[magic].get_camera())
 
 			function cleanup() {
-				nevermind()
-
 				for (const {unit} of subjects)
-					unit.setParent(null)
+					unit[magic].setParent(null)
 
 				tree.actions.items.set_spatial(...subjects.map(
 					({item, unit}) => ({
@@ -78,7 +71,7 @@ export class Mover {
 			this.grabbed.value = null
 	}
 
-	#ungrab() {
+	ungrab() {
 		const {grabbed} = this
 		if (grabbed.value) {
 			grabbed.value.cleanup()

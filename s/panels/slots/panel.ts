@@ -60,6 +60,10 @@ export const SlotsPanel = panel({
 				? "assigned"
 				: "empty"
 
+			const draggable = status === "assigned"
+				? "true" // intentionally strings
+				: "false"
+
 			function handle_name_change(event: InputEvent) {
 				const input = event.target as HTMLInputElement
 				tree.actions.slots.rename(slot.id, input.value)
@@ -84,7 +88,7 @@ export const SlotsPanel = panel({
 					<div
 						class=glb
 						data-status=${status}
-						draggable="${(status === 'assigned') ? 'true' : 'false'}"
+						draggable="${draggable}"
 						?data-drag-is-picked-up=${is_picked_up}
 						?data-drag-is-hovered-over=${is_hovered_over}
 						@dragstart=${drag.dragstart(slot)}

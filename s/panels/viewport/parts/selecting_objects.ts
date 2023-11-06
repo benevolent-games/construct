@@ -1,22 +1,20 @@
 
-import {Camera} from "@babylonjs/core/Cameras/camera.js"
+import {setupFn} from "@benev/slate"
 
-import {Context} from "../../../context/context.js"
 import {PointerTracker} from "./pointer_tracker.js"
-import {ray_for_picking_on_canvas} from "./ray_for_picking_on_canvas.js"
+import {Tree} from "../../../context/controllers/tree/controller.js"
+import {Gesture} from "../../../context/controllers/gesture/controller.js"
 import {make_outline_tools} from "../../../context/domains/outline/tools.js"
+import {Porthole} from "../../../context/controllers/world/porthole/porthole.js"
 
 export const selecting_objects = (
-		context: Context,
-		canvas: HTMLCanvasElement,
-		camera: Camera,
+		tree: Tree,
+		gesture: Gesture,
+		porthole: Porthole,
 		pointerTracker: PointerTracker,
-	) => () => {
+	) => setupFn(() => {
 
-	return context.gesture.on.buttons.select(input => {
-		const {world, tree} = context
-		const {babylon} = world
-
+	return gesture.on.buttons.select(input => {
 		const user_is_engaging_select_process = (
 			input.down &&
 			pointerTracker.canvasCoordinates
@@ -25,27 +23,21 @@ export const selecting_objects = (
 		if (!user_is_engaging_select_process)
 			return
 
-		const pick = babylon.scene.pickWithRay(
-			ray_for_picking_on_canvas(
-				camera,
-				canvas,
-				pointerTracker.canvasCoordinates!,
-			)
-		)
+		if (!pointerTracker.canvasCoordinates)
+			return
 
-		if (pick && pick.hit && pick.pickedMesh) {
-			const id = world.find_id_for_mesh(pick.pickedMesh)
-			if (id) {
-				const tools = make_outline_tools(tree.state.outline)
-				const item = tools.getItem(id)
-				if (item.selected)
-					tree.actions.items.deselect(id)
-				else
-					tree.actions.items.select(id)
-			}
+		const id = porthole.pick_on_canvas(pointerTracker.canvasCoordinates)
+
+		if (id) {
+			const tools = make_outline_tools(tree.state.outline)
+			const item = tools.getItem(id)
+			if (item.selected)
+				tree.actions.items.deselect(id)
+			else
+				tree.actions.items.select(id)
 		}
 		else
 			tree.actions.items.clear_selection()
 	})
-}
+})
 

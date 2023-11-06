@@ -14,15 +14,16 @@ import {TargetCamera} from "@babylonjs/core/Cameras/targetCamera.js"
 import {PBRMaterial} from "@babylonjs/core/Materials/PBR/pbrMaterial.js"
 import {HemisphericLight} from "@babylonjs/core/Lights/hemisphericLight.js"
 
+import {pub} from "@benev/slate"
 import {spawn_boxes} from "@benev/toolbox/x/demo/spawn_boxes.js"
 
 export class Babylon {
 	canvas = new OffscreenCanvas(160, 90)
 	engine = new Engine(this.canvas)
 	scene = new Scene(this.engine)
-	renderLoop = new Set<() => void>()
 
 	box: Mesh
+	onRender = pub<void>()
 
 	constructor() {
 		const {scene} = this
@@ -52,8 +53,7 @@ export class Babylon {
 		this.box = box
 
 		this.engine.runRenderLoop(() => {
-			for (const render of this.renderLoop)
-				render()
+			this.onRender.publish()
 			scene.render()
 		})
 	}

@@ -1,6 +1,8 @@
 
+import {setupFn} from "@benev/slate"
+
 import {Id} from "../../../tools/fresh_id.js"
-import {Mover} from "../../../context/controllers/mover/controller.js"
+import {Mover} from "../../../context/controllers/world/mover/mover.js"
 import {Gesture} from "../../../context/controllers/gesture/controller.js"
 import {Porthole} from "../../../context/controllers/world/porthole/porthole.js"
 
@@ -9,16 +11,16 @@ export const fly_mode_manipulations = (
 		gesture: Gesture,
 		mover: Mover,
 		porthole: Porthole,
-	) => () => {
+		canvas: HTMLCanvasElement,
+	) => setupFn(() => {
 
 	const is_focal = () => gesture.focal.value?.leafId === leafId
 	const is_pointer_locked = () => gesture.pointerLock.value?.leafId === leafId
 
 	const disposers = [
-
 		gesture.on.buttons.grab(input => {
 			if (input.down && is_focal() && is_pointer_locked())
-				mover.toggleGrab(porthole.camera)
+				mover.toggleGrab(porthole)
 		}),
 
 		gesture.on.buttons.flycam(input => {
@@ -28,12 +30,16 @@ export const fly_mode_manipulations = (
 				else
 					gesture.engage_pointer_lock({
 						leafId,
-						element: porthole.canvas,
+						element: canvas,
 					})
 			}
+		}),
+
+		gesture.on_pointer_lock_disengaged(() => {
+			mover.ungrab()
 		}),
 	]
 
 	return () => disposers.forEach(d => d())
-}
+})
 
