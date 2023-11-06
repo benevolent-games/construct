@@ -17,7 +17,7 @@ export {svg}
 // 	`
 // }
 
-export function sprite(template: SVGTemplateResult) {
+export function icon(template: SVGTemplateResult) {
 	return template
 }
 

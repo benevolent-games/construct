@@ -1,14 +1,14 @@
 
 import {TemplateResult, html} from "@benev/slate"
 
-import {sprite_feather_x} from "../../sprites/groups/feather/x.js"
-import {sprite_feather_layers} from "../../sprites/groups/feather/layers.js"
-import {sprite_tabler_eye} from "../../sprites/groups/tabler/eye.js"
-import {sprite_tabler_eye_closed} from "../../sprites/groups/tabler/eye-closed.js"
-import {sprite_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
-import {sprite_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
-import {sprite_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
-import {sprite_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-triangle.js"
+import {icon_feather_x} from "../../sprites/groups/feather/x.js"
+import {icon_feather_layers} from "../../sprites/groups/feather/layers.js"
+import {icon_tabler_eye} from "../../sprites/groups/tabler/eye.js"
+import {icon_tabler_eye_closed} from "../../sprites/groups/tabler/eye-closed.js"
+import {icon_tabler_folder_open} from "../../sprites/groups/tabler/folder-open.js"
+import {icon_tabler_folder_plus} from "../../sprites/groups/tabler/folder-plus.js"
+import {icon_tabler_folder_filled} from "../../sprites/groups/tabler/folder-filled.js"
+import {icon_tabler_vector_triangle} from "../../sprites/groups/tabler/vector-triangle.js"
 
 import {styles} from "./styles.js"
 import {EzMap} from "../../tools/ezmap.js"
@@ -20,7 +20,7 @@ import {make_outline_tools} from "../../context/domains/outline/tools.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",
-	icon: sprite_feather_layers,
+	icon: icon_feather_layers,
 	view: slate.obsidian({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
@@ -161,7 +161,7 @@ export const OutlinerPanel = panel({
 						${delete_this_item
 							? html`
 								<button class=delete @click=${delete_this_item}>
-									${sprite_feather_x}
+									${icon_feather_x}
 								</button>
 							`
 							: html`
@@ -193,8 +193,8 @@ export const OutlinerPanel = panel({
 						?data-visible="${item.visible}"
 						@click="${toggle_visibility}">
 							${item.visible
-								? sprite_tabler_eye
-								: sprite_tabler_eye_closed}
+								? icon_tabler_eye
+								: icon_tabler_eye_closed}
 					</button>
 				`
 			}
@@ -238,7 +238,7 @@ export const OutlinerPanel = panel({
 					return render_line_item(html`
 						${gripbox(html`
 							<div class=icon @click="${toggleSelection}">
-								${sprite_tabler_vector_triangle}
+								${icon_tabler_vector_triangle}
 							</div>
 							<div class=name @click="${toggleSelection}">${item.name}</div>
 						`)}
@@ -270,8 +270,8 @@ export const OutlinerPanel = panel({
 							${gripbox(html`
 								<button @click=${toggle_opened}>
 									${settings.opened
-										? sprite_tabler_folder_open
-										: sprite_tabler_folder_filled}
+										? icon_tabler_folder_open
+										: icon_tabler_folder_filled}
 								</button>
 								<div
 									class=name
@@ -292,7 +292,7 @@ export const OutlinerPanel = panel({
 							<button
 								class=newfolder
 								@click=${click_to_create_new_folder(item)}>
-									${sprite_tabler_folder_plus}
+									${icon_tabler_folder_plus}
 							</button>
 
 							${render_visibility()}

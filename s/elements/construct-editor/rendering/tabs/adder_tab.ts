@@ -3,7 +3,7 @@ import {html} from "@benev/slate"
 
 import {LayoutMeta} from "../utils/layout_meta.js"
 import {miniSlate as slate} from "../../../../context/mini_slate.js"
-import {sprite_feather_plus} from "../../../../sprites/groups/feather/plus.js"
+import {icon_feather_plus} from "../../../../sprites/groups/feather/plus.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
 export const AdderTab = slate.quartz(_ => ({meta, pane}: {
@@ -34,7 +34,7 @@ export const AdderTab = slate.quartz(_ => ({meta, pane}: {
 				>
 
 				<span class=icon>
-					${sprite_feather_plus}
+					${icon_feather_plus}
 				</span>
 
 			</button>

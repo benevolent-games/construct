@@ -6,13 +6,13 @@ import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_time} from "../../tools/human_time.js"
 import {Action} from "../../context/framework/action_namespace.js"
-import {sprite_akar_history} from "../../sprites/groups/akar/history.js"
-import {sprite_feather_rewind} from "../../sprites/groups/feather/rewind.js"
-import {sprite_feather_fast_forward} from "../../sprites/groups/feather/fast-forward.js"
+import {icon_akar_history} from "../../sprites/groups/akar/history.js"
+import {icon_feather_rewind} from "../../sprites/groups/feather/rewind.js"
+import {icon_feather_fast_forward} from "../../sprites/groups/feather/fast-forward.js"
 
 export const HistoryPanel = panel({
 	label: "history",
-	icon: sprite_akar_history,
+	icon: icon_akar_history,
 	view: slate.obsidian({name: "history", styles}, use => ({}: PanelProps) => {
 
 		const {history} = use.context.tree
@@ -36,12 +36,12 @@ export const HistoryPanel = panel({
 		return html`
 			<div class=buttons>
 				<button class=based @click=${() => history.undo()}>
-					${sprite_feather_rewind}
+					${icon_feather_rewind}
 					<span>undo</span>
 				</button>
 				<button class=based @click=${() => history.redo()}>
 					<span>redo</span>
-					${sprite_feather_fast_forward}
+					${icon_feather_fast_forward}
 				</button>
 			</div>
 			<ol class=chronicles>

@@ -1,7 +1,7 @@
 
 import {html, initiate} from "@benev/slate"
 
-import {sprite_akar_point} from "../../sprites/groups/akar/point.js"
+import {icon_akar_point} from "../../sprites/groups/akar/point.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
@@ -9,13 +9,13 @@ import {PanelProps, panel} from "../panel_parts.js"
 import {start_resizing} from "./parts/start_resizing.js"
 import {PointerTracker} from "./parts/pointer_tracker.js"
 import {selecting_objects} from "./parts/selecting_objects.js"
-import {sprite_feather_box} from "../../sprites/groups/feather/box.js"
+import {icon_feather_box} from "../../sprites/groups/feather/box.js"
 import {fly_mode_manipulations} from "./parts/fly_mode_manipulations.js"
 import {Porthole} from "../../context/controllers/world/porthole/porthole.js"
 
 export const ViewportPanel = panel({
 	label: "viewport",
-	icon: sprite_feather_box,
+	icon: icon_feather_box,
 	view: slate.obsidian({name: "viewport", styles},
 		use => ({leafId}: PanelProps) => {
 
@@ -55,7 +55,7 @@ export const ViewportPanel = panel({
 		return html`
 			<div class=container ?data-pointer-locked=${is_pointer_locked}>
 				${porthole.canvas}
-				${sprite_akar_point}
+				${icon_akar_point}
 			</div>
 		`
 	}),

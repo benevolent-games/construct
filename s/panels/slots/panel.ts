@@ -1,9 +1,9 @@
 
 import {html} from "lit"
 
-import {sprite_feather_x} from "../../sprites/groups/feather/x.js"
-import {sprite_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
-import {sprite_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
+import {icon_feather_x} from "../../sprites/groups/feather/x.js"
+import {icon_tabler_layout_list} from "../../sprites/groups/tabler/layout-list.js"
+import {icon_tabler_grip_vertical} from "../../sprites/groups/tabler/grip-vertical.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
@@ -17,7 +17,7 @@ import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 
 export const SlotsPanel = panel({
 	label: "slots",
-	icon: sprite_tabler_layout_list,
+	icon: icon_tabler_layout_list,
 	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
 		const {tree, world: {warehouse}} = use.context
 		const slots = use.watch(() => tree.state.slots)
@@ -78,7 +78,7 @@ export const SlotsPanel = panel({
 							.value="${slot.name}"
 							@change=${handle_name_change}/>
 						<button class=delete @click=${delete_slot}>
-							${sprite_feather_x}
+							${icon_feather_x}
 						</button>
 					</div>
 					<div
@@ -115,7 +115,7 @@ export const SlotsPanel = panel({
 			}
 			return html`
 				<div class="cap grip">
-					${sprite_tabler_grip_vertical}
+					${icon_tabler_grip_vertical}
 				</div>
 				<div class=plate>
 					<div class=heading>
@@ -147,7 +147,7 @@ export const SlotsPanel = panel({
 				</div>
 				<div class="cap deleter">
 					<button class=delete @click=${delete_glb}>
-						${sprite_feather_x}
+						${icon_feather_x}
 					</button>
 				</div>
 			`

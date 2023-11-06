@@ -2,7 +2,7 @@
 import {html} from "@benev/slate"
 
 import {LayoutMeta} from "../utils/layout_meta.js"
-import {sprite_feather_x} from "../../../../sprites/groups/feather/x.js"
+import {icon_feather_x} from "../../../../sprites/groups/feather/x.js"
 import {miniSlate as slate} from "../../../../context/mini_slate.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
@@ -68,7 +68,7 @@ export const OrdinaryTab = slate.quartz(use => ({
 
 				<span class=x ?data-available=${active}>
 					${active
-						? sprite_feather_x
+						? icon_feather_x
 						: undefined}
 				</span>
 			</button>
