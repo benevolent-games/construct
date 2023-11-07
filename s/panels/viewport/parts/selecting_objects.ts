@@ -14,7 +14,7 @@ export const selecting_objects = (
 		pointerTracker: PointerTracker,
 	) => setupFn(() => {
 
-	return gesture.on.buttons.select(input => {
+	return gesture.on.selectable.buttons.select(input => {
 		const user_is_engaging_select_process = (
 			input.down &&
 			pointerTracker.canvasCoordinates

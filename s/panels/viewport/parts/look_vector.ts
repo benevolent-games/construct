@@ -1,5 +1,5 @@
 
-import {InitReturn, initFn} from "@benev/slate"
+import {initFn} from "@benev/slate"
 import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
 import {Gesture} from "../../../context/controllers/gesture/controller"
 
@@ -46,7 +46,7 @@ export const look_vector_wired_for_inputs = (
 
 	return [
 		lookVector,
-		gesture.on.vectors.look(
+		gesture.on.fps.vectors.look(
 			input => lookVector.accumulate(input.vector)
 		),
 	]

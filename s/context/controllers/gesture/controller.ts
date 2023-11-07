@@ -1,14 +1,14 @@
 
 import {Flat, Signal, SignalTower, pub} from "@benev/slate"
 
-import {Tactic} from "../../../tools/tactic/sketch.js"
+import {Impulse} from "../../../tools/impulse/impulse.js"
 import {Focalization, PointerLock} from "./parts/types.js"
-import {EditorBindings, default_editor_bindings} from "./default_editor_bindings.js"
+import {EditorBinds, editor_binds} from "./editor_binds.js"
 
-export class Gesture extends Tactic<EditorBindings> {
-	keyboard = new Tactic.Keyboard(window)
-	pointerButtons = new Tactic.PointerButtons(window)
-	pointerMovements = new Tactic.PointerMovements(window, "mouse")
+export class Gesture extends Impulse<EditorBinds> {
+	keyboard = new Impulse.Keyboard(window)
+	pointerButtons = new Impulse.PointerButtons(window)
+	pointerMovements = new Impulse.PointerMovements(window, "mouse")
 
 	focal: Signal<null | Focalization>
 	pointerLock: Signal<null | PointerLock>
@@ -21,8 +21,17 @@ export class Gesture extends Tactic<EditorBindings> {
 
 		super({
 			flat,
-			bindings: default_editor_bindings(),
+			binds: editor_binds(),
 		})
+
+		// TODO mode handling
+		this.modes
+			.enable("always")
+			.enable("fps")
+			.enable("plain")
+			.enable("flycam")
+			.enable("selectable")
+			.enable("operation")
 
 		this.focal = signals.signal(null)
 		this.pointerLock = signals.signal(null)

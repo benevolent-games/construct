@@ -26,7 +26,7 @@ export const user_controls_fly_camera = (
 	const {
 		forward, backward, leftward, rightward,
 		up, down, left, right,
-	} = gesture.buttons
+	} = gesture.report.fps.buttons
 
 	porthole.add_move([
 		axis(rightward, leftward),

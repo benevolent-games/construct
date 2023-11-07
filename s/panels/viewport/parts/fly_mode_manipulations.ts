@@ -18,12 +18,12 @@ export const fly_mode_manipulations = (
 	const is_pointer_locked = () => gesture.pointerLock.value?.leafId === leafId
 
 	const disposers = [
-		gesture.on.buttons.grab(input => {
+		gesture.on.flycam.buttons.grab(input => {
 			if (input.down && is_focal() && is_pointer_locked())
 				mover.toggleGrab(porthole)
 		}),
 
-		gesture.on.buttons.flycam(input => {
+		gesture.on.plain.buttons.enter_flycam(input => {
 			if (input.down && is_focal()) {
 				if (gesture.pointerLock.value || document.pointerLockElement)
 					gesture.disengage_pointer_lock()
