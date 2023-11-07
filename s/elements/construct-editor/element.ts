@@ -12,10 +12,16 @@ import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
 
 export const ConstructEditor = slate.carbon({styles}, use => {
-	const {layout} = use.context
+	const {layout, panels} = use.context
+
 	use.watch(() => layout.root)
 
-	const leaves = use.prepare(leaf_management(use))
+	const leaves = use.prepare(leaf_management({
+		panels,
+		element: use.element,
+		seeker: layout.seeker,
+	}))
+
 	leaves.add_new_leaves()
 	leaves.delete_old_leaves()
 

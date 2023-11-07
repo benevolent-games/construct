@@ -1,14 +1,21 @@
 
-import {html, render} from "@benev/slate"
+import {Pojo, html, render} from "@benev/slate"
 
 import {leaf_slot} from "./leaf_slot.js"
 import {Id} from "../../../tools/fresh_id.js"
-import {panels} from "../../../panels/panels.js"
-import {miniSlate as slate} from "../../../context/mini_slate.js"
+import {PanelSpec} from "../../../panels/panel_parts.js"
+import {LayoutSeeker} from "../../../context/controllers/layout/parts/seeker.js"
 
-export const leaf_management = ({element}: {element: HTMLElement}) => () => {
-	const {seeker} = slate.context.layout
+export const leaf_management = ({
+		element, seeker, panels,
+	}: {
+		element: HTMLElement
+		seeker: LayoutSeeker
+		panels: Pojo<PanelSpec>
+	}) => () => {
+
 	const leafRegistry = new Set<Id>()
+
 	return {
 
 		add_new_leaves() {
