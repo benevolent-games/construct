@@ -55,8 +55,9 @@ export const ViewportPanel = panel({
 		use.setup(fly_mode_manipulations(
 			leafId,
 			gesture,
-			world.mover,
-			porthole,
+			flowchart,
+			// world.mover,
+			// porthole,
 			canvas,
 		))
 

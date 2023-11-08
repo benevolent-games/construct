@@ -1,34 +1,56 @@
 
+import {Signal, SignalTower} from "@benev/slate"
+
 export class Modes<M extends keyof any> {
-	#modes = new Set<M>()
+	#set = new Set<M>()
+	#signal: Signal<M[]>
+
+	constructor(signals: SignalTower) {
+		this.#signal = signals.signal([])
+	}
+
+	#updateSignal() {
+		this.#signal.value = [...this.#set]
+	}
+
+	#pokeSignal() {
+		void this.#signal.value
+	}
 
 	;[Symbol.iterator]() {
-		return this.#modes.values()
+		this.#pokeSignal()
+		return this.#signal.value.values()
 	}
 
 	isEnabled(mode: M) {
-		return this.#modes.has(mode)
+		this.#pokeSignal()
+		return this.#set.has(mode)
 	}
 
 	enable(...modes: M[]) {
 		for (const mode of modes)
-			this.#modes.add(mode)
+			this.#set.add(mode)
+		this.#updateSignal()
 		return this
 	}
 
 	disable(...modes: M[]) {
 		for (const mode of modes)
-			this.#modes.delete(mode)
+			this.#set.delete(mode)
+		this.#updateSignal()
 		return this
 	}
 
 	wipe() {
-		this.#modes.clear()
+		this.#set.clear()
+		this.#updateSignal()
 		return this
 	}
 
 	set(...modes: M[]) {
-		return this.wipe().enable(...modes)
+		this.wipe().enable(...modes)
+		this.#updateSignal()
+		return this
 	}
 }
 

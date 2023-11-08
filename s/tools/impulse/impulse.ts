@@ -1,6 +1,6 @@
 
-import {Flat, Pub, ob, pub} from "@benev/slate"
 import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
+import {Flat, Pub, SignalTower, ob, pub} from "@benev/slate"
 
 import {Input} from "./input.js"
 import {Device} from "./device.js"
@@ -19,7 +19,7 @@ export class Impulse<B extends Binds> {
 	#devices = new Map<Device, () => void>()
 
 	binds: B
-	readonly modes = new Modes<Mode<B>>()
+	readonly modes: Modes<Mode<B>>
 
 	readonly report: {
 		[M in keyof B]: {
@@ -35,12 +35,14 @@ export class Impulse<B extends Binds> {
 		}
 	}
 
-	constructor({flat, binds, devices = []}: {
+	constructor({flat, signals, binds, devices = []}: {
 			flat: Flat
+			signals: SignalTower,
 			binds: B
 			devices?: Device[]
 		}) {
 
+		this.modes = new Modes<Mode<B>>(signals)
 		this.binds = binds
 		this.add(...devices)
 

@@ -21,6 +21,7 @@ export class Gesture extends Impulse<EditorBinds> {
 
 		super({
 			flat,
+			signals,
 			binds: editor_binds(),
 		})
 

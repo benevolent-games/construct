@@ -51,6 +51,10 @@ button.based {
 		border-color: color-mix(in srgb, currentColor, transparent 60%);
 		background: color-mix(in srgb, currentColor, transparent 85%);
 	}
+
+	&[disabled] {
+		opacity: 0.2;
+	}
 }
 
 `

@@ -18,6 +18,19 @@ export const HistoryPanel = panel({
 		const {history} = use.context.tree
 		const {past, future} = use.watch(() => history.annals)
 
+		const modeEnabled = use.context.gesture.modes.isEnabled("history")
+		const {enabled, undo, redo} = modeEnabled
+			? {
+				enabled: true,
+				undo: () => history.undo(),
+				redo: () => history.redo(),
+			}
+			: {
+				enabled: false,
+				undo: () => {},
+				redo: () => {},
+			}
+
 		use.setup(() => {
 			const interval = setInterval(() => use.rerender(), 1000)
 			return () => clearInterval(interval)
@@ -35,11 +48,11 @@ export const HistoryPanel = panel({
 
 		return html`
 			<div class=buttons>
-				<button class=based @click=${() => history.undo()}>
+				<button class=based ?disabled=${!enabled} @click=${undo}>
 					${icon_feather_rewind}
 					<span>undo</span>
 				</button>
-				<button class=based @click=${() => history.redo()}>
+				<button class=based ?disabled=${!enabled} @click=${redo}>
 					<span>redo</span>
 					${icon_feather_fast_forward}
 				</button>

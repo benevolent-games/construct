@@ -2,7 +2,7 @@
 import {Signal} from "@benev/slate"
 
 import {flows} from "./flows.js"
-import {AnyFlow, FlowByName, FlowHandlers, FlowName, FlowOptions} from "./parts/types.js"
+import {AnyFlow, FlowByName, FlowClassByName, FlowHandlers, FlowName, FlowOptions, MoreParams} from "./parts/types.js"
 
 export class Flowchart {
 	#flow: Signal<AnyFlow>
@@ -11,17 +11,27 @@ export class Flowchart {
 		return this.#flow.value
 	}
 
+	get flowName() {
+		const [name] = Object.entries(flows)
+			.find(([,FlowClass]) => this.#flow.value instanceof FlowClass)!
+		return name
+	}
+
 	constructor(private options: FlowOptions) {
 		this.#flow = options.signals.signal(null as any)
 		this.assign("NormalFlow")
 	}
 
-	assign<N extends FlowName>(name: N) {
-		const FlowClass = flows[name]
-		const instance = new FlowClass(this.options)
+	assign<N extends FlowName>(name: N, ...more: MoreParams<FlowClassByName<N>>) {
+		const FlowClass = flows[name] as any
+		const instance = new FlowClass(this.options, ...more)
 		this.options.gesture.modes.set(...instance.modes)
 		this.#flow.value = instance
 		return instance as FlowByName<N>
+	}
+
+	isActive<N extends FlowName>(name: N) {
+		return this.flow instanceof flows[name]
 	}
 
 	handle<N extends FlowName, R>(
@@ -33,7 +43,7 @@ export class Flowchart {
 			return fn(this.flow as any)
 	}
 
-	handlers<R = void>(handlers: Partial<FlowHandlers<R>>) {
+	handlers(handlers: Partial<FlowHandlers>) {
 		for (const [name, handler] of Object.entries(handlers)) {
 			const FlowClass = flows[name as FlowName]
 			if (this.flow instanceof FlowClass)
@@ -41,7 +51,7 @@ export class Flowchart {
 		}
 	}
 
-	handle_all_flows<R = void>(handlers: FlowHandlers<R>) {
+	handle_all_flows(handlers: FlowHandlers) {
 		for (const [name, handler] of Object.entries(handlers)) {
 			const SituationClass = flows[name as FlowName]
 			if (this.flow instanceof SituationClass)
