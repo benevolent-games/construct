@@ -1,6 +1,7 @@
 
 import {Tree} from "./controllers/tree/controller.js"
 import {World} from "./controllers/world/controller.js"
+import {Flowchart} from "./controllers/flowchart/controller.js"
 import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 
@@ -19,6 +20,14 @@ export class Context extends MiniContext {
 		this.watch,
 		this.tree,
 	)
+
+	/** manage mutually-exclusive editor modes */
+	flowchart = new Flowchart({
+		tree: this.tree,
+		world: this.world,
+		gesture: this.gesture,
+		signals: this.signals,
+	})
 
 	constructor(options: ContextOptions) {
 		super(options)

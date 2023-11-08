@@ -2,9 +2,8 @@
 import {Pojo} from "@benev/slate"
 import {Input} from "./input.js"
 
-export type Mode<B extends Binds> = keyof B
-
 export type Binds = {[mode: string]: ModeBinds}
+export type Mode<B extends Binds> = keyof B
 
 export type ModeBinds = {
 	buttons: ButtonBinds

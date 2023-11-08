@@ -1,7 +1,10 @@
 
-import {binds} from "../../../tools/impulse/binds.js"
+import {Modes} from "../../../tools/impulse/parts/modes.js"
+import {Mode, binds} from "../../../tools/impulse/binds.js"
 
 export type EditorBinds = ReturnType<typeof editor_binds>
+export type EditorMode = Mode<EditorBinds>
+export type EditorModes = Modes<EditorMode>
 
 export const editor_binds = () => binds(({
 		mode, buttons, b, modless, ctrl, shift,

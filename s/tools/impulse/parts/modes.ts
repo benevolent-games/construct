@@ -1,14 +1,12 @@
 
-import {Mode} from "../binds.js"
-
-export class Modes<M extends Mode<any>> {
+export class Modes<M extends keyof any> {
 	#modes = new Set<M>()
 
 	;[Symbol.iterator]() {
 		return this.#modes.values()
 	}
 
-	enabled(mode: M) {
+	isEnabled(mode: M) {
 		return this.#modes.has(mode)
 	}
 
@@ -27,6 +25,10 @@ export class Modes<M extends Mode<any>> {
 	wipe() {
 		this.#modes.clear()
 		return this
+	}
+
+	set(...modes: M[]) {
+		return this.wipe().enable(...modes)
 	}
 }
 

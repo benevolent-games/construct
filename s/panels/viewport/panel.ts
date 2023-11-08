@@ -20,7 +20,7 @@ export const ViewportPanel = panel({
 	view: slate.obsidian({name: "viewport", styles},
 		use => ({leafId}: PanelProps) => {
 
-		const {tree, gesture, world} = use.context
+		const {flowchart, gesture, world} = use.context
 
 		const canvas = use.init(canvas_with_resizing)
 
@@ -36,7 +36,7 @@ export const ViewportPanel = panel({
 		)
 
 		use.setup(selecting_objects(
-			tree,
+			flowchart,
 			gesture,
 			porthole,
 			pointerTracker,
