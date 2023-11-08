@@ -24,15 +24,6 @@ export class Gesture extends Impulse<EditorBinds> {
 			binds: editor_binds(),
 		})
 
-		// TODO mode handling
-		this.modes
-			.enable("always")
-			.enable("fps")
-			.enable("plain")
-			.enable("flycam")
-			.enable("selectable")
-			.enable("operation")
-
 		this.focal = signals.signal(null)
 		this.pointerLock = signals.signal(null)
 

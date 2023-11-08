@@ -7,14 +7,6 @@ export const editor_binds = () => binds(({
 		mode, buttons, b, modless, ctrl, shift,
 	}) => ({
 
-	always: mode({
-		vectors: {},
-		buttons: {
-			undo: buttons(b("KeyZ", ctrl)),
-			redo: buttons(b("KeyZ", ctrl, shift)),
-		},
-	}),
-
 	plain: mode({
 		vectors: {},
 		buttons: {
@@ -47,6 +39,14 @@ export const editor_binds = () => binds(({
 		},
 	}),
 
+	history: mode({
+		vectors: {},
+		buttons: {
+			undo: buttons(b("KeyZ", ctrl)),
+			redo: buttons(b("KeyZ", ctrl, shift)),
+		},
+	}),
+
 	selectable: mode({
 		vectors: {},
 		buttons: {
@@ -59,6 +59,13 @@ export const editor_binds = () => binds(({
 		buttons: {
 			exit_flycam: buttons(b("RMB")),
 			grab: buttons(b("KeyF")),
+		},
+	}),
+
+	flycam_grabbed: mode({
+		vectors: {},
+		buttons: {
+			exit_flycam: buttons(b("RMB")),
 			trackball: buttons(b("KeyR")),
 			scale: buttons(b("KeyV")),
 		},
