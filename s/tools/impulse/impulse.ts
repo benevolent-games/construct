@@ -1,6 +1,6 @@
 
 import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
-import {Flat, Pub, SignalTower, ob, pub} from "@benev/slate"
+import {Pub, flat, ob, pub, signals} from "@benev/slate"
 
 import {Input} from "./input.js"
 import {Device} from "./device.js"
@@ -35,14 +35,12 @@ export class Impulse<B extends Binds> {
 		}
 	}
 
-	constructor({flat, signals, binds, devices = []}: {
-			flat: Flat
-			signals: SignalTower,
+	constructor({binds, devices = []}: {
 			binds: B
 			devices?: Device[]
 		}) {
 
-		this.modes = new Modes<Mode<B>>(signals)
+		this.modes = new Modes<Mode<B>>()
 		this.binds = binds
 		this.add(...devices)
 

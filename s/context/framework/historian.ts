@@ -1,5 +1,5 @@
 
-import {StateTree, WatchTower} from "@benev/slate"
+import {StateTree, watch} from "@benev/slate"
 
 import {Annals} from "./utils/annals.js"
 import {Action} from "./action_namespace.js"
@@ -18,7 +18,6 @@ export class Historian<S> {
 	})()
 
 	constructor(
-			public watch: WatchTower,
 			public app: StateTree<S>,
 			public specs: Action.Specs<S>,
 		) {

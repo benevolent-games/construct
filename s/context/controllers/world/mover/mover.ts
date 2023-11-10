@@ -1,5 +1,5 @@
 
-import {Signal, SignalTower} from "@benev/slate"
+import {Signal, signals} from "@benev/slate"
 
 import {magic} from "../magic.js"
 import {Tree} from "../../tree/controller.js"
@@ -19,7 +19,6 @@ export class Mover {
 	grabbed: Signal<Grabbed | null>
 
 	constructor(
-			signals: SignalTower,
 			private tree: Tree,
 			private get_unit: (id: Id) => AnyUnit
 		) {

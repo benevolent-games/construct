@@ -1,5 +1,5 @@
 
-import {StateTree, WatchTower, debounce} from "@benev/slate"
+import {StateTree, debounce, watch} from "@benev/slate"
 
 import {Store} from "../store/store.js"
 import {Layout} from "./parts/types.js"
@@ -14,7 +14,6 @@ export class LayoutController {
 	actions: ReturnType<typeof prepare_layout_actions>
 
 	constructor(
-			public watch: WatchTower,
 			public store: Store,
 			public stock_layouts: StockLayouts,
 		) {

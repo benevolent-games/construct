@@ -1,5 +1,5 @@
 
-import {StateTree, WatchTower} from "@benev/slate"
+import {StateTree, watch} from "@benev/slate"
 
 import {actions} from "../../actions.js"
 import {State, default_state} from "../../state.js"
@@ -14,10 +14,9 @@ export class Tree {
 	get state() { return this.#app.state }
 	get history() { return this.#historian.history }
 
-	constructor(watch: WatchTower) {
+	constructor() {
 		this.#app = watch.stateTree(default_state())
 		this.#historian = new Historian(
-			watch,
 			this.#app,
 			actions,
 		)

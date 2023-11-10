@@ -1,6 +1,4 @@
 
-import {SignalTower} from "@benev/slate"
-
 import {flows} from "../flows.js"
 import {Tree} from "../../tree/controller.js"
 import {World} from "../../world/controller.js"
@@ -8,7 +6,6 @@ import {Gesture} from "../../gesture/controller.js"
 import {EditorMode} from "../../gesture/editor_binds.js"
 
 export type FlowOptions = {
-	signals: SignalTower,
 	tree: Tree
 	gesture: Gesture
 	world: World

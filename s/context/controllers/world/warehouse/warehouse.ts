@@ -1,6 +1,6 @@
 
 import {Scene} from "@babylonjs/core/scene.js"
-import {Signal, SignalTower, WatchTower} from "@benev/slate"
+import {Signal, signals, watch} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
 import {Tree} from "../../tree/controller.js"
@@ -15,8 +15,6 @@ export class Warehouse {
 	readonly glbs: Signal<Glb[]>
 
 	constructor(
-			signals: SignalTower,
-			watch: WatchTower,
 			private tree: Tree,
 			private scene: Scene,
 		) {

@@ -1,6 +1,6 @@
 
-import {Id, freshId} from "../tools/fresh_id.js"
 import {Item} from "./domains/outline/types.js"
+import {Id, freshId} from "../tools/fresh_id.js"
 
 export type Hash = string
 

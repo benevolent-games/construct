@@ -1,5 +1,5 @@
 
-import {Signal} from "@benev/slate"
+import {Signal, signals} from "@benev/slate"
 
 import {is_within} from "./drag_utils.js"
 import {Id} from "../../../tools/fresh_id.js"
@@ -25,7 +25,7 @@ export class TabDragger {
 	constructor(public context: MiniContext, layout: LayoutController) {
 		this.#seeker = layout.seeker
 		this.#actions = layout.actions
-		this.#operation = this.context.signals.signal(undefined)
+		this.#operation = signals.signal(undefined)
 	}
 
 	is_leaf_indicated(paneId: Id, leafIndex: number) {

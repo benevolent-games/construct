@@ -1,5 +1,5 @@
 
-import {SignalTower, WatchTower} from "@benev/slate"
+import {watch} from "@benev/slate"
 
 import {magic} from "./magic.js"
 import {Units} from "./units/units.js"
@@ -18,25 +18,13 @@ export class World {
 	warehouse: Warehouse
 	mover: Mover
 
-	constructor(
-			signals: SignalTower,
-			watch: WatchTower,
-			tree: Tree,
-		) {
+	constructor(tree: Tree) {
 
-		this.warehouse = new Warehouse(
-			signals,
-			watch,
-			tree,
-			this.#babylon.scene,
-		)
+		this.warehouse = new Warehouse(tree, this.#babylon.scene)
 
-		this.#units = new Units(
-			this.warehouse,
-		)
+		this.#units = new Units(this.warehouse)
 
 		this.mover = new Mover(
-			signals,
 			tree,
 			id => this.#units.get_unit(id),
 		)

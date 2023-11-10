@@ -10,23 +10,16 @@ export interface ContextOptions extends MiniContextOptions {}
 export class Context extends MiniContext {
 
 	/** editor state tree */
-	tree = new Tree(
-		this.watch,
-	)
+	tree = new Tree()
 
 	/** the 3d babylon world and glbs */
-	world = new World(
-		this.signals,
-		this.watch,
-		this.tree,
-	)
+	world = new World(this.tree)
 
 	/** manage mutually-exclusive editor modes */
 	flowchart = new Flowchart({
 		tree: this.tree,
 		world: this.world,
 		gesture: this.gesture,
-		signals: this.signals,
 	})
 
 	constructor(options: ContextOptions) {

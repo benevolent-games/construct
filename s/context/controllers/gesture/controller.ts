@@ -1,5 +1,5 @@
 
-import {Flat, Signal, SignalTower, pub} from "@benev/slate"
+import {Signal, pub, signals} from "@benev/slate"
 
 import {Impulse} from "../../../tools/impulse/impulse.js"
 import {Focalization, PointerLock} from "./parts/types.js"
@@ -14,14 +14,9 @@ export class Gesture extends Impulse<EditorBinds> {
 	pointerLock: Signal<null | PointerLock>
 	on_pointer_lock_disengaged = pub<void>()
 
-	constructor(
-			public signals: SignalTower,
-			public flat: Flat,
-		) {
+	constructor() {
 
 		super({
-			flat,
-			signals,
 			binds: editor_binds(),
 		})
 

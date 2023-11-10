@@ -26,10 +26,7 @@ export class MiniContext extends SlateContext {
 	layout: LayoutController
 
 	/** user input, pointer lock, and focalization */
-	gesture = new Gesture(
-		this.signals,
-		this.flat,
-	)
+	gesture = new Gesture()
 
 	/** drop events */
 	drops = {
@@ -48,7 +45,6 @@ export class MiniContext extends SlateContext {
 		this.panels = panels
 
 		this.layout = new LayoutController(
-			this.watch,
 			this.store,
 			layouts,
 		)

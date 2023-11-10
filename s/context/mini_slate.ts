@@ -1,9 +1,10 @@
 
+import {Slate} from "@benev/slate"
+
 import {slate} from "./slate.js"
-import {SlateFor} from "@benev/slate"
 import {MiniContext} from "./mini_context.js"
 
-export type MiniSlate = SlateFor<MiniContext>
+export type MiniSlate = Slate<MiniContext>
 
 export const miniSlate = slate as MiniSlate
 
