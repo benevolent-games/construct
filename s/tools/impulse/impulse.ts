@@ -1,10 +1,10 @@
 
 import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
-import {Pub, flat, ob, pub, signals} from "@benev/slate"
+import {Pub, flat, ob, pub} from "@benev/slate"
 
 import {Input} from "./input.js"
 import {Device} from "./device.js"
-import {Modes} from "./parts/modes.js"
+import {Modes} from "./modes.js"
 import {Binds, Mode} from "./binds.js"
 import {Keyboard} from "./devices/keyboard.js"
 import {PointerButtons} from "./devices/pointer_buttons.js"

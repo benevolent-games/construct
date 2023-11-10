@@ -1,5 +1,5 @@
 
-import {Modes} from "../../../tools/impulse/parts/modes.js"
+import {Modes} from "../../../tools/impulse/modes.js"
 import {Mode, binds} from "../../../tools/impulse/binds.js"
 
 export type EditorBinds = ReturnType<typeof editor_binds>

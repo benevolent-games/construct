@@ -16,6 +16,7 @@ export * from "./tools/impulse/binds.js"
 export * from "./tools/impulse/device.js"
 export * from "./tools/impulse/impulse.js"
 export * from "./tools/impulse/input.js"
+export * from "./tools/impulse/modes.js"
 
 export * from "./tools/shockdrop/utils/drag_has_files.js"
 export * from "./tools/shockdrop/utils/dragleave_has_exited_current_target.js"
