@@ -21,14 +21,14 @@ export function shock_drag_and_drop<Grabbed, Hovering>({
 		hovering: undefined as undefined | Hovering,
 	})
 
-	const dragger = {
+	const dragzone = {
 		draggable: () => "true",
 		dragstart: (grabbed: Grabbed) => (_: DragEvent) => {
 			state.grabbed = grabbed
 		},
 	}
 
-	const dropper = {
+	const dropzone = {
 		dragenter: () => (_: DragEvent) => {},
 
 		dragend: () => (_: DragEvent) => {
@@ -60,8 +60,8 @@ export function shock_drag_and_drop<Grabbed, Hovering>({
 	}
 
 	return {
-		dragger,
-		dropper,
+		dragzone,
+		dropzone,
 		get grabbed() { return state.grabbed },
 		get hovering() { return state.hovering },
 	}

@@ -71,12 +71,12 @@ export const SlotsPanel = panel({
 						?data-drag-is-picked-up=${is_picked_up}
 						?data-drag-is-hovered-over=${is_hovered_over}
 						draggable="${draggable}"
-						@dragstart=${dnd.dragger.dragstart(slot)}
-						@dragend=${dnd.dropper.dragend()}
-						@dragenter=${dnd.dropper.dragenter()}
-						@dragleave=${dnd.dropper.dragleave()}
-						@dragover=${dnd.dropper.dragover(slot)}
-						@drop=${dnd.dropper.drop(slot)}
+						@dragstart=${dnd.dragzone.dragstart(slot)}
+						@dragend=${dnd.dropzone.dragend()}
+						@dragenter=${dnd.dropzone.dragenter()}
+						@dragleave=${dnd.dropzone.dragleave()}
+						@dragover=${dnd.dropzone.dragover(slot)}
+						@drop=${dnd.dropzone.drop(slot)}
 						>
 
 						${status === "assigned"
