@@ -47,7 +47,7 @@ export class Modes<M extends keyof any> {
 		return this
 	}
 
-	set(...modes: M[]) {
+	assign(...modes: M[]) {
 		this.wipe().enable(...modes)
 		this.#updateSignal()
 		return this

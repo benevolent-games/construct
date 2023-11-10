@@ -25,7 +25,7 @@ export class Flowchart {
 	assign<N extends FlowName>(name: N, ...more: MoreParams<FlowClassByName<N>>) {
 		const FlowClass = flows[name] as any
 		const instance = new FlowClass(this.options, ...more)
-		this.options.gesture.modes.set(...instance.modes)
+		this.options.gesture.modes.assign(...instance.modes)
 		this.#flow.value = instance
 		return instance as FlowByName<N>
 	}
