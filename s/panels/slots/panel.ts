@@ -11,36 +11,16 @@ import {GlbSlot} from "../../context/state.js"
 import {Id, freshId} from "../../tools/fresh_id.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
-import {useDragAndDrop} from "../../tools/shockdrop/use_drag_and_drop.js"
 import {Glb} from "../../context/controllers/world/warehouse/parts/types.js"
-import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 
 export const SlotsPanel = panel({
 	label: "slots",
 	icon: icon_tabler_layout_list,
 	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
-		const {tree, world: {warehouse}} = use.context
+		const {tree, drops, world: {warehouse}} = use.context
 		const slots = use.watch(() => tree.state.slots)
 
-		const drag = useDragAndDrop<GlbSlot, GlbSlot>({
-			use,
-			handle_drop: (_, slotA, slotB) => {
-				if (slotA !== slotB)
-					tree.actions.slots.swap(slotA.id, slotB.id)
-			},
-			out_of_band: {
-				predicate: drag_has_files,
-				handle_drop: (event, slot) => {
-					const [file, ...files] = Array.from(event.dataTransfer!.files)
-					warehouse.add_glb_file(file, slot.id)
-					for (const file of files)
-						warehouse.add_glb_file(file)
-					event.preventDefault()
-					event.stopPropagation()
-					use.context.drops.on_file_drop_already_handled_internally.publish()
-				},
-			},
-		})
+		const dnd = drops.dnd_slots
 
 		function render_id(id: Id) {
 			return html`
@@ -53,8 +33,8 @@ export const SlotsPanel = panel({
 				? warehouse.get_glb(slot.glb_hash)
 				: null
 
-			const is_picked_up = drag.payload === slot
-			const is_hovered_over = !is_picked_up && drag.hover === slot
+			const is_picked_up = dnd.grabbed?.id === slot.id
+			const is_hovered_over = !is_picked_up && dnd.hovering?.id === slot.id
 
 			const status = (glb && !is_picked_up)
 				? "assigned"
@@ -88,15 +68,15 @@ export const SlotsPanel = panel({
 					<div
 						class=glb
 						data-status=${status}
-						draggable="${draggable}"
 						?data-drag-is-picked-up=${is_picked_up}
 						?data-drag-is-hovered-over=${is_hovered_over}
-						@dragstart=${drag.dragstart(slot)}
-						@dragend=${drag.dragend()}
-						@dragenter=${drag.dragenter()}
-						@dragover=${drag.dragover(slot)}
-						@dragleave=${drag.dragleave()}
-						@drop=${drag.drop(slot)}
+						draggable="${draggable}"
+						@dragstart=${dnd.dragger.dragstart(slot)}
+						@dragend=${dnd.dropper.dragend()}
+						@dragenter=${dnd.dropper.dragenter()}
+						@dragleave=${dnd.dropper.dragleave()}
+						@dragover=${dnd.dropper.dragover(slot)}
+						@drop=${dnd.dropper.drop(slot)}
 						>
 
 						${status === "assigned"

@@ -4,6 +4,7 @@ import {World} from "./controllers/world/controller.js"
 import {Flowchart} from "./controllers/flowchart/controller.js"
 import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
+import {DropCoordinator} from "./controllers/drop_coordinator/controller.js"
 
 export interface ContextOptions extends MiniContextOptions {}
 
@@ -21,6 +22,9 @@ export class Context extends MiniContext {
 		world: this.world,
 		gesture: this.gesture,
 	})
+
+	/** manages inter-panel drag-and-drop operations */
+	drops = new DropCoordinator(this.tree, this.world.warehouse)
 
 	constructor(options: ContextOptions) {
 		super(options)

@@ -6,8 +6,8 @@ import {Resizer} from "./resize/resizer.js"
 import {TabDragger} from "./parts/tab_dragger.js"
 import {leaf_management} from "./parts/leaf_management.js"
 import {miniSlate as slate} from "../../context/mini_slate.js"
-import {useDropzone} from "../../tools/shockdrop/use_dropzone.js"
-import {dropped_files} from "../../tools/shockdrop/utils/dropfiles.js"
+import {shock_dropzone} from "../../tools/shockdrop/dropzone.js"
+import {dropped_files} from "../../tools/shockdrop/utils/dropped_files.js"
 import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
 
@@ -34,17 +34,20 @@ export const ConstructEditor = slate.carbon({styles}, use => {
 		dragger: new TabDragger(use.context, layout),
 	}))
 
-	const dropzone = useDropzone({
-		use,
+	const dropzone = use.prepare(() => shock_dropzone({
 		predicate: drag_has_files,
 		handle_drop: event => {
 			use.context.drops.on_file_drop.publish(dropped_files(event))
 		},
-	})
-
-	use.setup(() => use.context.drops.on_file_drop_already_handled_internally(() => {
-		dropzone.reset_indicator()
 	}))
+
+	use.setup(() => use
+		.context
+		.drops
+		.on_file_drop_already_handled_internally(
+			() => dropzone.reset_indicator()
+		)
+	)
 
 	function prevent(event: Event) {
 		event.preventDefault()
