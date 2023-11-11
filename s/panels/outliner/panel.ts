@@ -2,8 +2,8 @@
 import {TemplateResult, html} from "@benev/slate"
 
 import {icon_feather_x} from "../../icons/groups/feather/x.js"
-import {icon_feather_layers} from "../../icons/groups/feather/layers.js"
 import {icon_tabler_eye} from "../../icons/groups/tabler/eye.js"
+import {icon_feather_layers} from "../../icons/groups/feather/layers.js"
 import {icon_tabler_eye_closed} from "../../icons/groups/tabler/eye-closed.js"
 import {icon_tabler_folder_open} from "../../icons/groups/tabler/folder-open.js"
 import {icon_tabler_folder_plus} from "../../icons/groups/tabler/folder-plus.js"
@@ -15,6 +15,7 @@ import {EzMap} from "../../tools/ezmap.js"
 import {slate} from "../../context/slate.js"
 import {Id, freshId} from "../../tools/fresh_id.js"
 import {PanelProps, panel} from "../panel_parts.js"
+import {shock_drag_and_drop} from "../../common.js"
 import {Item} from "../../context/domains/outline/types.js"
 import {make_outline_tools} from "../../context/domains/outline/tools.js"
 
@@ -30,60 +31,26 @@ export const OutlinerPanel = panel({
 		const tools = make_outline_tools(outline)
 		const localFolderSettings = use.prepare(() => new EzMap<Id, {opened: boolean}>())
 
-		const drag = use.flatstate({
-			item_being_dragged: undefined as undefined | Item.Whatever,
-			item_being_hovered_over: undefined as undefined | Item.Whatever,
-			mode: "below" as "below" | "into",
-		})
+		type Grabbed = {itemId: Id}
+		type HoveringInto = {mode: "into", folderId: Id}
+		type HoveringBelow = {mode: "below", itemId: Id}
+		type Hovering = HoveringInto | HoveringBelow
 
-		const dnd = use.prepare(() => {
-			const stop_dragging = () => {
-				drag.item_being_dragged = undefined
-				drag.item_being_hovered_over = undefined
-			}
-
-			return {
-				start: (item: Item.Whatever) => (_event: DragEvent) => {
-					drag.item_being_dragged = item
-				},
-				leave: () => (_event: DragEvent) => {
-					drag.item_being_hovered_over = undefined
-				},
-				end: () => (_event: DragEvent) => {
-					stop_dragging()
-				},
-				into: {
-					over: (item: Item.Whatever) => (event: DragEvent) => {
-						event.preventDefault()
-						drag.item_being_hovered_over = item
-						drag.mode = "into"
-					},
-					drop: (folder: Item.Folder) => (_event: DragEvent) => {
-						if (drag.item_being_dragged)
-							tree.actions.items.move_into_folder({
-								folderId: folder.id,
-								itemIds: [drag.item_being_dragged.id],
-							})
-						stop_dragging()
-					},
-				},
-				below: {
-					over: (item: Item.Whatever) => (event: DragEvent) => {
-						event.preventDefault()
-						drag.mode = "below"
-						drag.item_being_hovered_over = item
-					},
-					drop: (item: Item.Whatever) => (_event: DragEvent) => {
-						if (drag.item_being_dragged)
-							tree.actions.items.move_below_another_item({
-								itemIds: [drag.item_being_dragged.id],
-								targetItemId: item.id,
-							})
-						stop_dragging()
-					},
-				},
-			}
-		})
+		const dnd = use.prepare(() => shock_drag_and_drop<Grabbed, Hovering>({
+			handle_drop: (_event, grabbed, hovering) => {
+				const itemId = grabbed!.itemId
+				if (hovering.mode === "into")
+					tree.actions.items.move_into_folder({
+						itemIds: [itemId],
+						folderId: hovering.folderId,
+					})
+				else
+					tree.actions.items.move_below_another_item({
+						itemIds: [itemId],
+						targetItemId: hovering.itemId,
+					})
+			},
+		}))
 
 		function get_local_folder_settings(id: Id) {
 			return localFolderSettings.guarantee(id, () => ({
@@ -118,6 +85,18 @@ export const OutlinerPanel = panel({
 			`
 		}
 
+		// const augmented = {
+		// 	into: {
+		// 		dragover: (mode: DragHoverMode) => (hovering: Hovering) => (event: DragEvent) => {
+		// 			hovering.mode = mode
+		// 			dnd.dropzone.dragover(hovering)(event)
+		// 		},
+		// 		drop: (mode: DragHoverMode) => (hovering: Hovering) => (event: DragEvent) => {
+		// 			if (hovering)
+		// 		},
+		// 	},
+		// }
+
 		function render_flat(item: Item.Whatever, parents: Item.Folder[]): TemplateResult {
 			const is_root = item.id === outline.id
 
@@ -126,6 +105,16 @@ export const OutlinerPanel = panel({
 					? () => tree.actions.items.delete(item.id)
 					: undefined
 
+				const itemId = item.id
+				const hovering_into: Hovering = {mode: "into", folderId: item.id}
+				const hovering_below: Hovering = {itemId, mode: "below"}
+
+				const is_hovering_over = (dnd.hovering && (
+					dnd.hovering.mode === "into"
+						? dnd.hovering.folderId === itemId
+						: dnd.hovering.itemId === itemId
+				))
+
 				return html`
 					<li
 						data-id="${item.id}"
@@ -133,24 +122,24 @@ export const OutlinerPanel = panel({
 						?data-visible="${item.visible}"
 						?data-not-apparent="${!tools.isApparent(item.id)}"
 						?data-selected="${item.selected}"
-						@dragleave=${dnd.leave()}>
+						@dragleave=${dnd.dropzone.dragleave()}>
 
-						${drag.item_being_dragged ?html`
+						${dnd.grabbed ?html`
 							<div class=dropzone
-								?data-drag-hover="${item.id === drag.item_being_hovered_over?.id}"
-								data-drag-mode="${drag.mode}">
+								?data-drag-hover="${is_hovering_over}"
+								data-drag-mode="${dnd.hovering?.mode}">
 								${item.kind === "folder" ? html`
 									<div
 										class=drop-into
-										@dragover=${dnd.into.over(item)}
-										@drop=${dnd.into.drop(item)}
+										@dragover=${dnd.dropzone.dragover(hovering_into)}
+										@drop=${dnd.dropzone.drop(hovering_into)}
 									></div>
 								` : undefined}
 								${!is_root ? html`
 									<div
 										class=drop-below
-										@dragover=${dnd.below.over(item)}
-										@drop=${dnd.below.drop(item)}
+										@dragover=${dnd.dropzone.dragover(hovering_below)}
+										@drop=${dnd.dropzone.drop(hovering_below)}
 									></div>
 								` : undefined}
 							</div>
@@ -208,8 +197,8 @@ export const OutlinerPanel = panel({
 					<div
 						class=gripbox
 						draggable=true
-						@dragstart=${dnd.start(item)}
-						@dragend=${dnd.end()}>
+						@dragstart=${dnd.dragzone.dragstart({itemId: item.id})}
+						@dragend=${dnd.dragzone.dragend()}>
 						${content}
 					</div>
 				`

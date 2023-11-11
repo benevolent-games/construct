@@ -23,18 +23,20 @@ export function shock_drag_and_drop<Grabbed, Hovering>({
 
 	const dragzone = {
 		draggable: () => "true",
+
 		dragstart: (grabbed: Grabbed) => (_: DragEvent) => {
 			state.grabbed = grabbed
 		},
-	}
-
-	const dropzone = {
-		dragenter: () => (_: DragEvent) => {},
 
 		dragend: () => (_: DragEvent) => {
 			state.grabbed = undefined
 			state.hovering = undefined
 		},
+
+	}
+
+	const dropzone = {
+		dragenter: () => (_: DragEvent) => {},
 
 		dragleave: () => (event: DragEvent) => {
 			if (dragleave_has_exited_current_target(event))
