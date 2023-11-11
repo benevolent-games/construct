@@ -1,5 +1,5 @@
 
-import {V2} from "@benev/toolbox/x/utils/v2.js"
+import type {V2} from "@benev/toolbox/x/utils/v2.js"
 
 export function coordinates_in_rect(
 		coordinates: V2,

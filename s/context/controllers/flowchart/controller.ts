@@ -1,5 +1,5 @@
 
-import {Signal, signals} from "@benev/slate"
+import {Signal, signal} from "@benev/slate"
 
 import {flows} from "./flows.js"
 import {AnyFlow, FlowByName, FlowClassByName, FlowHandlers, FlowName, FlowOptions, MoreParams} from "./parts/types.js"
@@ -18,7 +18,7 @@ export class Flowchart {
 	}
 
 	constructor(private options: FlowOptions) {
-		this.#flow = signals.signal(null as any)
+		this.#flow = signal(null as any)
 		this.assign("NormalFlow")
 	}
 

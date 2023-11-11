@@ -1,5 +1,5 @@
 
-import {Signal, signals} from "@benev/slate"
+import {Signal, signal} from "@benev/slate"
 
 import {magic} from "../magic.js"
 import {Tree} from "../../tree/controller.js"
@@ -23,7 +23,7 @@ export class Mover {
 			private get_unit: (id: Id) => AnyUnit
 		) {
 
-		this.grabbed = signals.signal(null)
+		this.grabbed = signal(null)
 	}
 
 	toggleGrab(porthole: Porthole) {

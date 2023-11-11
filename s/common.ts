@@ -6,9 +6,6 @@ export * from "./panels/panel_parts.js"
 export * from "./panels/placeholder_panel_styles.js"
 export * from "./panels/standard_panel_styles.js"
 
-export * from "./tools/fresh_id.js"
-export * from "./tools/quick_hash.js"
-
 export * from "./tools/impulse/devices/keyboard.js"
 export * from "./tools/impulse/devices/pointer_buttons.js"
 export * from "./tools/impulse/devices/pointer_movements.js"
@@ -24,4 +21,9 @@ export * from "./tools/shockdrop/utils/dropped_files.js"
 export * from "./tools/shockdrop/utils/file_is_glb.js"
 export * from "./tools/shockdrop/drag_drop.js"
 export * from "./tools/shockdrop/drop.js"
+
+export * from "./tools/coordinates_in_rect.js"
+export * from "./tools/fresh_id.js"
+export * from "./tools/json_storage_proxy.js"
+export * from "./tools/quick_hash.js"
 

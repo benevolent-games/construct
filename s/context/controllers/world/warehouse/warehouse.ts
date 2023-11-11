@@ -1,6 +1,6 @@
 
 import {Scene} from "@babylonjs/core/scene.js"
-import {Signal, signals, watch} from "@benev/slate"
+import {Signal, signal, watch} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
 import {Tree} from "../../tree/controller.js"
@@ -19,7 +19,7 @@ export class Warehouse {
 			private scene: Scene,
 		) {
 
-		this.glbs = signals.signal([])
+		this.glbs = signal([])
 
 		watch.track(
 			() => tree.state.slots,

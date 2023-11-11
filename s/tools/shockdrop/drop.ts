@@ -1,10 +1,10 @@
 
-import {signals} from "@benev/slate"
+import {signal} from "@benev/slate"
 import {dragleave_has_exited_current_target} from "./utils/dragleave_has_exited_current_target.js"
 
 export class ShockDrop {
 	#params: Params
-	#indicator = signals.signal(false)
+	#indicator = signal(false)
 
 	constructor(params: Params) {
 		this.#params = params

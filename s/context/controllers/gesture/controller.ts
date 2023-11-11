@@ -1,5 +1,5 @@
 
-import {Signal, pub, signals} from "@benev/slate"
+import {Signal, pub, signal} from "@benev/slate"
 
 import {Impulse} from "../../../tools/impulse/impulse.js"
 import {Focalization, PointerLock} from "./parts/types.js"
@@ -20,8 +20,8 @@ export class Gesture extends Impulse<EditorBinds> {
 			binds: editor_binds(),
 		})
 
-		this.focal = signals.signal(null)
-		this.pointerLock = signals.signal(null)
+		this.focal = signal(null)
+		this.pointerLock = signal(null)
 
 		const stopPointerLock = () => {
 			if (!document.pointerLockElement)

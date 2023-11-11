@@ -1,12 +1,12 @@
 
-import {Signal, signals} from "@benev/slate"
+import {Signal, signal} from "@benev/slate"
 
 export class Modes<M extends keyof any> {
 	#set = new Set<M>()
 	#signal: Signal<M[]>
 
 	constructor() {
-		this.#signal = signals.signal([])
+		this.#signal = signal([])
 	}
 
 	#updateSignal() {
