@@ -4,6 +4,7 @@ import {State} from "../../state.js"
 import {Id} from "../../../tools/fresh_id.js"
 
 export type OutlineState = State["outline"]
+export type OutlineTools = ReturnType<typeof make_outline_tools>
 
 export function make_outline_tools(outline: OutlineState) {
 	const reports: Item.Report[] = []

@@ -1,15 +1,18 @@
 
 import {GlbSlot} from "../../state.js"
 import {Tree} from "../tree/controller.js"
+import {OutlinerDrops} from "./parts/outliner_drops.js"
 import {MiniDropCoordinator} from "./mini_controller.js"
 import {Warehouse} from "../world/warehouse/warehouse.js"
 import {shock_drag_and_drop} from "../../../tools/shockdrop/drag_and_drop.js"
 import {drag_has_files} from "../../../tools/shockdrop/utils/drag_has_files.js"
 
 export class DropCoordinator extends MiniDropCoordinator {
+	outliner: OutlinerDrops
 
 	constructor(public tree: Tree, public warehouse: Warehouse) {
 		super()
+		this.outliner = new OutlinerDrops(this.tree)
 	}
 
 	dnd_slots = shock_drag_and_drop<GlbSlot, GlbSlot>({
@@ -30,5 +33,6 @@ export class DropCoordinator extends MiniDropCoordinator {
 			},
 		},
 	})
+
 }
 

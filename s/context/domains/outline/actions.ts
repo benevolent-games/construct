@@ -1,11 +1,10 @@
 
 import {State} from "../../state.js"
+import {Spatial} from "./spatial.js"
 import {Item} from "../outline/types.js"
 import {Id} from "../../../tools/fresh_id.js"
 import {make_outline_tools} from "./tools.js"
 import {Action} from "../../framework/action_namespace.js"
-import { V3 } from "@benev/toolbox/x/utils/v3.js"
-import { Spatial } from "./spatial.js"
 
 export const items = Action.specs<State>()(({action}) => ({
 	add: action(state => (additions: {
