@@ -41,3 +41,4 @@ type Params = {
 	predicate: (event: DragEvent) => boolean
 	handle_drop: (event: DragEvent) => void
 }
+

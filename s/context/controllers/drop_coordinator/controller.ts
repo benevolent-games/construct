@@ -29,7 +29,7 @@ export class DropCoordinator extends MiniDropCoordinator {
 					this.warehouse.add_glb_file(file)
 				event.preventDefault()
 				event.stopPropagation()
-				this.on_file_drop_already_handled_internally.publish()
+				this.editor.reset_indicator()
 			},
 		},
 	})

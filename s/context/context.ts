@@ -23,7 +23,7 @@ export class Context extends MiniContext {
 		gesture: this.gesture,
 	})
 
-	/** manages inter-panel drag-and-drop operations */
+	/** manages all drag-and-drop operations */
 	drops = new DropCoordinator(this.tree, this.world.warehouse)
 
 	constructor(options: ContextOptions) {

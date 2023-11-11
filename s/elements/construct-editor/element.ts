@@ -4,15 +4,13 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.css.js"
 import {Resizer} from "./resize/resizer.js"
 import {TabDragger} from "./parts/tab_dragger.js"
-import {ShockDrop} from "../../tools/shockdrop/drop.js"
 import {leaf_management} from "./parts/leaf_management.js"
 import {miniSlate as slate} from "../../context/mini_slate.js"
-import {dropped_files} from "../../tools/shockdrop/utils/dropped_files.js"
-import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
 
 export const ConstructEditor = slate.carbon({styles}, use => {
-	const {layout, panels} = use.context
+	const {layout, panels, drops} = use.context
+	const dropzone = drops.editor
 
 	use.watch(() => layout.root)
 
@@ -34,29 +32,10 @@ export const ConstructEditor = slate.carbon({styles}, use => {
 		dragger: new TabDragger(use.context, layout),
 	}))
 
-	const dropzone = use.prepare(() => new ShockDrop({
-		predicate: drag_has_files,
-		handle_drop: event => {
-			use.context.drops.on_file_drop.publish(dropped_files(event))
-		},
-	}))
-
-	use.setup(() => use
-		.context
-		.drops
-		.on_file_drop_already_handled_internally(
-			() => dropzone.reset_indicator()
-		)
-	)
-
-	function prevent(event: Event) {
-		event.preventDefault()
-	}
-
 	return html`
 		<div
 			class=layout
-			@contextmenu=${prevent}
+			@contextmenu=${(e: Event) => e.preventDefault()}
 			@pointermove=${resizer.track_mouse_movement}
 			@pointerup=${resizer.end}
 			?data-dropzone-indicator=${dropzone.indicator}
