@@ -4,9 +4,9 @@ import {html} from "@benev/slate"
 import {styles} from "./styles.css.js"
 import {Resizer} from "./resize/resizer.js"
 import {TabDragger} from "./parts/tab_dragger.js"
+import {ShockDrop} from "../../tools/shockdrop/drop.js"
 import {leaf_management} from "./parts/leaf_management.js"
 import {miniSlate as slate} from "../../context/mini_slate.js"
-import {shock_dropzone} from "../../tools/shockdrop/dropzone.js"
 import {dropped_files} from "../../tools/shockdrop/utils/dropped_files.js"
 import {drag_has_files} from "../../tools/shockdrop/utils/drag_has_files.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
@@ -34,7 +34,7 @@ export const ConstructEditor = slate.carbon({styles}, use => {
 		dragger: new TabDragger(use.context, layout),
 	}))
 
-	const dropzone = use.prepare(() => shock_dropzone({
+	const dropzone = use.prepare(() => new ShockDrop({
 		predicate: drag_has_files,
 		handle_drop: event => {
 			use.context.drops.on_file_drop.publish(dropped_files(event))

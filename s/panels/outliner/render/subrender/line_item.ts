@@ -1,5 +1,6 @@
 
 import {TemplateResult, html} from "@benev/slate"
+
 import {ItemMeta} from "../../utils/metas.js"
 import {delete_item} from "../../behaviors/delete_item.js"
 import {icon_feather_x} from "../../../../icons/groups/feather/x.js"

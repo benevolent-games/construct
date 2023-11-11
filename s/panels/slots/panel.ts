@@ -19,8 +19,7 @@ export const SlotsPanel = panel({
 	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
 		const {tree, drops, world: {warehouse}} = use.context
 		const slots = use.watch(() => tree.state.slots)
-
-		const dnd = drops.dnd_slots
+		const dnd = drops.slots
 
 		function render_id(id: Id) {
 			return html`

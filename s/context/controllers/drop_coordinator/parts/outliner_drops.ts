@@ -1,7 +1,7 @@
 
 import {Tree} from "../../tree/controller.js"
 import {Id} from "../../../../tools/fresh_id.js"
-import {shock_drag_and_drop} from "../../../../tools/shockdrop/drag_and_drop.js"
+import {ShockDragDrop} from "../../../../tools/shockdrop/drag_drop.js"
 
 type Grabbed = {itemId: Id}
 type HoveringInto = {mode: "into", folderId: Id}
@@ -11,7 +11,7 @@ type Hovering = HoveringInto | HoveringBelow
 export class OutlinerDrops {
 	constructor(private tree: Tree) {}
 
-	dnd = shock_drag_and_drop<Grabbed, Hovering>({
+	dnd = new ShockDragDrop<Grabbed, Hovering>({
 		handle_drop: (_event, grabbed, hovering) => {
 			const itemId = grabbed!.itemId
 			if (hovering.mode === "into")
