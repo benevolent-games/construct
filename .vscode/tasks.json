@@ -9,6 +9,18 @@
 			"problemMatcher": ["$tsc"],
 			"group": {
 				"kind": "build",
+				"isDefault": false
+			}
+		},
+		{
+			"label": "typescript build",
+			"detail": "run typescript compiler",
+			"type": "shell",
+			"command": "npx",
+			"args": ["tsc"],
+			"problemMatcher": ["$tsc"],
+			"group": {
+				"kind": "build",
 				"isDefault": true
 			}
 		},
