@@ -75,17 +75,29 @@ li {
 			height: 100%;
 		}
 
+		--drag-bg: color-mix(in srgb, var(--bravo) 30%, transparent);
+
 		&[data-drag-hover][data-drag-mode="above"] {
 			border-top: 2px solid var(--bravo);
+			background: linear-gradient(
+				to bottom,
+				var(--drag-bg),
+				transparent
+			);
 		}
 
 		&[data-drag-hover][data-drag-mode="into"] {
-			background: color-mix(in srgb, var(--bravo) 10%, transparent);
 			border: 2px solid var(--bravo);
+			background: var(--drag-bg);
 		}
 
 		&[data-drag-hover][data-drag-mode="below"] {
 			border-bottom: 2px solid var(--bravo);
+			background: linear-gradient(
+				to bottom,
+				transparent,
+				var(--drag-bg)
+			);
 		}
 	}
 
