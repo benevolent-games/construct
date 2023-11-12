@@ -76,7 +76,7 @@ li {
 		}
 
 		&[data-drag-hover][data-drag-mode="above"] {
-			border-top: 2px solid red;
+			border-top: 2px solid var(--bravo);
 		}
 
 		&[data-drag-hover][data-drag-mode="into"] {
