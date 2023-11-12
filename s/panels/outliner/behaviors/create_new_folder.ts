@@ -3,9 +3,9 @@ import {ItemMeta} from "../utils/metas.js"
 import {freshId} from "../../../tools/fresh_id.js"
 import {Item} from "../../../context/domains/outline/types.js"
 
-export function create_new_folder({tree}: ItemMeta, parent: Item.Folder) {
+export function create_new_folder({edcore}: ItemMeta, parent: Item.Folder) {
 	const new_id = freshId()
-	tree.actions.outline.add([{
+	edcore.actions.outline.add([{
 		folderId: parent.id,
 		item: {
 			kind: "folder",

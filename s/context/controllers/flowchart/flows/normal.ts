@@ -10,16 +10,16 @@ export class NormalFlow extends Flow {
 	)
 
 	user_clicked_to_select_item_in_viewport(id: Id | null) {
-		const {tree, outline} = this.options
+		const {edcore, outline} = this.options
 
 		if (id) {
 			if (outline.isSelected(id))
-				tree.actions.outline.deselect(id)
+				edcore.actions.outline.deselect(id)
 			else
-				tree.actions.outline.select(id)
+				edcore.actions.outline.select(id)
 		}
 		else
-			tree.actions.outline.clear_selection()
+			edcore.actions.outline.clear_selection()
 	}
 }
 

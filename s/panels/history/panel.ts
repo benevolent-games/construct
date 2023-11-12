@@ -6,16 +6,16 @@ import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_time} from "../../tools/human_time.js"
 import {icon_akar_history} from "../../icons/groups/akar/history.js"
-import {HistoryAction} from "../../context/framework/history_action.js"
 import {icon_feather_rewind} from "../../icons/groups/feather/rewind.js"
 import {icon_feather_fast_forward} from "../../icons/groups/feather/fast-forward.js"
+import { ActionRecord } from "../../context/framework/utils/action_record.js"
 
 export const HistoryPanel = panel({
 	label: "history",
 	icon: icon_akar_history,
 	view: slate.obsidian({name: "history", styles}, use => ({}: PanelProps) => {
 
-		const {history} = use.context.tree
+		const {history} = use.context.edcore
 		const {past, future} = use.watch(() => history.annals)
 
 		const modeEnabled = use.context.gesture.modes.isEnabled("history")
@@ -37,7 +37,7 @@ export const HistoryPanel = panel({
 		})
 
 		function render_action(timeline: "future" | "past") {
-			return (action: HistoryAction.Record) => html`
+			return (action: ActionRecord) => html`
 				<li data-id="${action.id}" data-timeline="${timeline}">
 					<span class=purpose>${action.purpose.join(".")}</span>
 					<span class=id>#${action.id}</span>

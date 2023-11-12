@@ -20,11 +20,11 @@ export const OutlinerPanel = panel({
 	view: slate.obsidian({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
-		const {tree, drops, outline} = use.context
+		const {edcore, drops, outline} = use.context
 		const folderStates = use.prepare(() => new LocalFolderStates())
 
 		const outlinerMeta: OutlinerMeta = {
-			tree,
+			edcore,
 			outline,
 			folderStates,
 			drops: drops.outliner,

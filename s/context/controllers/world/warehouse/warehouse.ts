@@ -3,8 +3,8 @@ import {Scene} from "@babylonjs/core/scene.js"
 import {Signal, signal, watch} from "@benev/slate"
 import {SceneLoader} from "@babylonjs/core/Loading/sceneLoader.js"
 
-import {Tree} from "../../tree/controller.js"
 import {GlbSlot, Hash} from "../../../state.js"
+import {Edcore} from "../../edcore/controller.js"
 import {parse_props} from "./parts/parse_props.js"
 import {wire_up_lods} from "./parts/wire_up_lods.js"
 import {Id, freshId} from "../../../../tools/fresh_id.js"
@@ -15,14 +15,14 @@ export class Warehouse {
 	readonly glbs: Signal<Glb[]>
 
 	constructor(
-			private tree: Tree,
+			private edcore: Edcore,
 			private scene: Scene,
 		) {
 
 		this.glbs = signal([])
 
 		watch.track(
-			() => tree.state.slots,
+			() => edcore.state.slots,
 			() => this.prune_orphaned_glbs(),
 		)
 	}
@@ -32,7 +32,7 @@ export class Warehouse {
 	}
 
 	get manifest() {
-		return this.tree.state.slots
+		return this.edcore.state.slots
 			.filter(s => s.glb_hash)
 			.map(slot => ({
 				slot,
@@ -42,7 +42,7 @@ export class Warehouse {
 	}
 
 	trace_prop(ref: PropAddress): PropTrace {
-		const {slots} = this.tree.state
+		const {slots} = this.edcore.state
 
 		let slot: GlbSlot | undefined = (
 			slots.find(s => s.id === ref.slot)
@@ -70,7 +70,7 @@ export class Warehouse {
 	}
 
 	prune_orphaned_glbs() {
-		const {slots} = this.tree.state
+		const {slots} = this.edcore.state
 		const orphans = this.glbs.value
 			.filter(glb => !slots.some(s => s.glb_hash === glb.hash))
 			.map(glb => glb.hash)
@@ -81,7 +81,7 @@ export class Warehouse {
 	}
 
 	async add_glb_file(file: File, slot_id?: Id) {
-		const {actions} = this.tree
+		const {actions} = this.edcore
 		const hash = await quick_hash(file)
 		const already_exists = this.glbs.value.find(g => g.hash === hash)
 

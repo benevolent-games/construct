@@ -1,12 +1,12 @@
 
 import {LocalFolderStates} from "./local_folder_states.js"
 import {Item} from "../../../context/domains/outline/types.js"
-import {Tree} from "../../../context/controllers/tree/controller.js"
+import { Edcore } from "../../../context/controllers/edcore/controller.js"
 import {OutlineGenius} from "../../../context/controllers/outline_genius/controller.js"
 import {OutlinerDrops} from "../../../context/controllers/drop_coordinator/parts/outliner_drops.js"
 
 export type OutlinerMeta = {
-	tree: Tree
+	edcore: Edcore
 	drops: OutlinerDrops
 	outline: OutlineGenius
 	folderStates: LocalFolderStates

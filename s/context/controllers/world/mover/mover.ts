@@ -2,10 +2,10 @@
 import {Signal, signal} from "@benev/slate"
 
 import {magic} from "../magic.js"
-import {Tree} from "../../tree/controller.js"
 import {AnyUnit} from "../units/parts/types.js"
 import {Porthole} from "../porthole/porthole.js"
 import {Id} from "../../../../tools/fresh_id.js"
+import {Edcore} from "../../edcore/controller.js"
 import {InstanceUnit} from "../../world/units/instance.js"
 import {Spatial} from "../../../domains/outline/spatial.js"
 import {OutlineGenius} from "../../outline_genius/controller.js"
@@ -19,7 +19,7 @@ export class Mover {
 	grabbed: Signal<Grabbed | null>
 
 	constructor(
-			private tree: Tree,
+			private edcore: Edcore,
 			private outline: OutlineGenius,
 			private get_unit: (id: Id) => AnyUnit
 		) {
@@ -35,7 +35,7 @@ export class Mover {
 	}
 
 	#grab(porthole: Porthole) {
-		const {tree, outline} = this
+		const {edcore, outline} = this
 		const subjects = outline
 			.selected
 			.filter(item => item.kind === "instance")
@@ -49,7 +49,7 @@ export class Mover {
 				for (const {unit} of subjects)
 					unit[magic].setParent(null)
 
-				tree.actions.outline.set_spatial(...subjects.map(
+				edcore.actions.outline.set_spatial(...subjects.map(
 					({item, unit}) => ({
 						id: item.id,
 						spatial: {

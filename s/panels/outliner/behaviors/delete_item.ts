@@ -1,7 +1,7 @@
 
 import {ItemMeta} from "../utils/metas.js"
 
-export function delete_item({tree, item}: ItemMeta) {
-	tree.actions.outline.delete(item.id)
+export function delete_item({edcore, item}: ItemMeta) {
+	edcore.actions.outline.delete(item.id)
 }
 

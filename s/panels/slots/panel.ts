@@ -17,8 +17,8 @@ export const SlotsPanel = panel({
 	label: "slots",
 	icon: icon_tabler_layout_list,
 	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
-		const {tree, drops, world: {warehouse}} = use.context
-		const slots = use.watch(() => tree.state.slots)
+		const {edcore, drops, world: {warehouse}} = use.context
+		const slots = use.watch(() => edcore.state.slots)
 		const dnd = drops.slots
 
 		function render_id(id: Id) {
@@ -45,11 +45,11 @@ export const SlotsPanel = panel({
 
 			function handle_name_change(event: InputEvent) {
 				const input = event.target as HTMLInputElement
-				tree.actions.slots.rename(slot.id, input.value)
+				edcore.actions.slots.rename(slot.id, input.value)
 			}
 
 			function delete_slot() {
-				tree.actions.slots.delete(slot.id)
+				edcore.actions.slots.delete(slot.id)
 			}
 
 			return html`
@@ -94,7 +94,7 @@ export const SlotsPanel = panel({
 
 		function render_glb(slot: GlbSlot, glb: Glb) {
 			function delete_glb() {
-				tree.actions.slots.assign_glb(slot.id, null)
+				edcore.actions.slots.assign_glb(slot.id, null)
 			}
 			return html`
 				<div class="cap grip">
@@ -137,7 +137,7 @@ export const SlotsPanel = panel({
 		}
 
 		function create() {
-			tree.actions.slots.add({
+			edcore.actions.slots.add({
 				id: freshId(),
 				glb_hash: null,
 				name: "slot",

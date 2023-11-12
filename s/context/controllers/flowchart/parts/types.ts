@@ -1,13 +1,13 @@
 
 import {flows} from "../flows.js"
-import {Tree} from "../../tree/controller.js"
 import {World} from "../../world/controller.js"
+import {Edcore} from "../../edcore/controller.js"
 import {Gesture} from "../../gesture/controller.js"
 import {EditorMode} from "../../gesture/editor_binds.js"
 import {OutlineGenius} from "../../outline_genius/controller.js"
 
 export type FlowOptions = {
-	tree: Tree
+	edcore: Edcore
 	gesture: Gesture
 	world: World
 	outline: OutlineGenius

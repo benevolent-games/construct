@@ -1,6 +1,6 @@
 
-import {Tree} from "./controllers/tree/controller.js"
 import {World} from "./controllers/world/controller.js"
+import {Edcore} from "./controllers/edcore/controller.js"
 import {Flowchart} from "./controllers/flowchart/controller.js"
 import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
@@ -11,25 +11,25 @@ export interface ContextOptions extends MiniContextOptions {}
 
 export class Context extends MiniContext {
 
-	/** editor state tree */
-	tree = new Tree()
+	/** editor state tree with history */
+	edcore = new Edcore()
 
 	/** helper for asking questions about the outline */
-	outline = new OutlineGenius(() => this.tree.state.outline)
+	outline = new OutlineGenius(() => this.edcore.state.outline)
 
 	/** the 3d babylon world and glbs */
-	world = new World(this.tree, this.outline)
+	world = new World(this.edcore, this.outline)
 
 	/** manage mutually-exclusive editor modes */
 	flowchart = new Flowchart({
-		tree: this.tree,
+		edcore: this.edcore,
 		world: this.world,
 		gesture: this.gesture,
 		outline: this.outline,
 	})
 
 	/** manages all drag-and-drop operations */
-	drops = new DropCoordinator(this.tree, this.world.warehouse)
+	drops = new DropCoordinator(this.edcore, this.world.warehouse)
 
 	constructor(options: ContextOptions) {
 		super(options)

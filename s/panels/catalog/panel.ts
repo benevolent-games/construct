@@ -8,7 +8,7 @@ import {GlbSlot} from "../../context/state.js"
 import {freshId} from "../../tools/fresh_id.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_bytes} from "../../tools/human_bytes.js"
-import {Tree} from "../../context/controllers/tree/controller.js"
+import {Edcore} from "../../context/controllers/edcore/controller.js"
 import {init_spatial} from "../../context/domains/outline/spatial.js"
 import {icon_feather_book_open} from "../../icons/groups/feather/book-open.js"
 import {Glb, GlbProp} from "../../context/controllers/world/warehouse/parts/types.js"
@@ -19,14 +19,14 @@ export const CatalogPanel = panel({
 	label: "catalog",
 	icon: icon_feather_book_open,
 	view: slate.obsidian({name: "catalog", styles}, use => ({}: PanelProps) => {
-		const {tree, world: {warehouse}} = use.context
-		use.watch(() => tree.state.slots)
+		const {edcore, world: {warehouse}} = use.context
+		use.watch(() => edcore.state.slots)
 
 		const {manifest} = warehouse
 		const {
 			render_glb_stats,
 			render_glb_props,
-		} = helpers(tree)
+		} = helpers(edcore)
 
 		return html`
 			<div class="container">
@@ -49,10 +49,10 @@ export const CatalogPanel = panel({
 	}),
 })
 
-function helpers(tree: Tree) {
+function helpers(edcore: Edcore) {
 	function instance_into_world(slot: GlbSlot, prop: GlbProp) {
-		return () => tree.actions.outline.add([{
-			folderId: tree.state.outline.id,
+		return () => edcore.actions.outline.add([{
+			folderId: edcore.state.outline.id,
 			item: {
 				id: freshId(),
 				kind: "instance",

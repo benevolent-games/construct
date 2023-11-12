@@ -1,6 +1,6 @@
 
-import {Tree} from "../../tree/controller.js"
 import {Id} from "../../../../tools/fresh_id.js"
+import {Edcore} from "../../edcore/controller.js"
 import {ShockDragDrop} from "../../../../tools/shockdrop/drag_drop.js"
 
 export type OutlinerGrab = {itemIds: Id[]}
@@ -13,7 +13,7 @@ export namespace OutlinerHoverIntent {
 }
 
 export class OutlinerDrops {
-	constructor(private tree: Tree) {}
+	constructor(private edcore: Edcore) {}
 
 	dnd = new ShockDragDrop<OutlinerGrab, OutlinerHoverIntent.Any>({
 		handle_drop: (_event, grabbed, intent) => {
@@ -21,19 +21,19 @@ export class OutlinerDrops {
 			switch (intent.mode) {
 
 				case "above":
-					return this.tree.actions.outline.move_above_another_item({
+					return this.edcore.actions.outline.move_above_another_item({
 						itemIds,
 						targetItemId: intent.itemId,
 					})
 
 				case "into":
-					return this.tree.actions.outline.move_into_folder({
+					return this.edcore.actions.outline.move_into_folder({
 						itemIds,
 						folderId: intent.folderId,
 					})
 
 				case "below":
-					return this.tree.actions.outline.move_below_another_item({
+					return this.edcore.actions.outline.move_below_another_item({
 						itemIds,
 						targetItemId: intent.itemId,
 					})
