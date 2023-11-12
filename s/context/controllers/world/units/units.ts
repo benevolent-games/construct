@@ -8,15 +8,17 @@ import {Warehouse} from "../warehouse/warehouse.js"
 import {AnyUnit, UnitSource} from "./parts/types.js"
 import {make_unit_tools} from "./parts/unit_tools.js"
 import {Item} from "../../../domains/outline/types.js"
-import {make_outline_tools} from "../../../domains/outline/tools.js"
+import {OutlineGenius} from "../../outline_genius/controller.js"
 
 export class Units {
 	#warehouse: Warehouse
+	#outline: OutlineGenius
 	#map = new Map<Id, AnyUnit>
 	#tools: ReturnType<typeof make_unit_tools>
 
-	constructor(warehouse: Warehouse) {
+	constructor(warehouse: Warehouse, outline: OutlineGenius) {
 		this.#warehouse = warehouse
+		this.#outline = outline
 		this.#tools = make_unit_tools(this.#map, warehouse)
 	}
 
@@ -37,18 +39,17 @@ export class Units {
 		}
 	}
 
-	synchronize(outline: Item.Folder) {
-		const sources = this.#get_source_items(outline)
+	synchronize() {
+		const sources = this.#get_source_items()
 		this.#add_and_remove_pods_based_on_items(sources)
 		this.#handle_glb_changes_by_swapping_props(sources)
 		this.#sync_spatial_positions_and_such(sources)
 	}
 
-	#get_source_items(outline: Item.Folder): UnitSource[] {
-		const outlineTools = make_outline_tools(outline)
+	#get_source_items(): UnitSource[] {
 		return [
-			...outlineTools.instances,
-			...outlineTools.lights,
+			...this.#outline.instances,
+			...this.#outline.lights,
 		]
 	}
 

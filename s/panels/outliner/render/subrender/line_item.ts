@@ -7,9 +7,9 @@ import {delete_item} from "../../behaviors/delete_item.js"
 import {icon_feather_x} from "../../../../icons/groups/feather/x.js"
 
 export function render_line_item(meta: ItemMeta, content: TemplateResult) {
-	const {item, parents, isRoot, tools, drops} = meta
+	const {item, parents, isRoot, outline, drops} = meta
 	const {dnd} = drops
-	const isApparent = tools.isApparent(item.id)
+	const isApparent = outline.isApparent(item.id)
 
 	const is_deleteable = !isRoot
 

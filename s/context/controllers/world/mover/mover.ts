@@ -8,7 +8,7 @@ import {Porthole} from "../porthole/porthole.js"
 import {Id} from "../../../../tools/fresh_id.js"
 import {InstanceUnit} from "../../world/units/instance.js"
 import {Spatial} from "../../../domains/outline/spatial.js"
-import {make_outline_tools} from "../../../domains/outline/tools.js"
+import {OutlineGenius} from "../../outline_genius/controller.js"
 
 export type Grabbed = {
 	itemIds: Id[]
@@ -20,6 +20,7 @@ export class Mover {
 
 	constructor(
 			private tree: Tree,
+			private outline: OutlineGenius,
 			private get_unit: (id: Id) => AnyUnit
 		) {
 
@@ -34,9 +35,8 @@ export class Mover {
 	}
 
 	#grab(porthole: Porthole) {
-		const {tree} = this
-		const tools = make_outline_tools(tree.state.outline)
-		const subjects = tools
+		const {tree, outline} = this
+		const subjects = outline
 			.selected
 			.filter(item => item.kind === "instance")
 			.map(item => ({item, unit: this.get_unit(item.id) as InstanceUnit}))
@@ -49,7 +49,7 @@ export class Mover {
 				for (const {unit} of subjects)
 					unit[magic].setParent(null)
 
-				tree.actions.items.set_spatial(...subjects.map(
+				tree.actions.outline.set_spatial(...subjects.map(
 					({item, unit}) => ({
 						id: item.id,
 						spatial: {

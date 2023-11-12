@@ -13,7 +13,6 @@ import {Item} from "../../context/domains/outline/types.js"
 import {OutlinerMeta, make_item_meta} from "./utils/metas.js"
 import {clear_selection} from "./behaviors/clear_selection.js"
 import {LocalFolderStates} from "./utils/local_folder_states.js"
-import {make_outline_tools} from "../../context/domains/outline/tools.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",
@@ -21,8 +20,7 @@ export const OutlinerPanel = panel({
 	view: slate.obsidian({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
-		const {tree, drops} = use.context
-		const outline = use.watch(() => tree.state.outline)
+		const {tree, drops, outline} = use.context
 		const folderStates = use.prepare(() => new LocalFolderStates())
 
 		const outlinerMeta: OutlinerMeta = {
@@ -30,7 +28,6 @@ export const OutlinerPanel = panel({
 			outline,
 			folderStates,
 			drops: drops.outliner,
-			tools: make_outline_tools(outline),
 		}
 
 		function render_flat(
@@ -57,7 +54,7 @@ export const OutlinerPanel = panel({
 
 		return html`
 			<ol @click="${(event: MouseEvent) => clear_selection(outlinerMeta, event)}">
-				${render_flat(outline, [])}
+				${render_flat(outline.root, [])}
 			</ol>
 		`
 	}),

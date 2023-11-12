@@ -5,8 +5,8 @@ export function toggle_selection({tree, item, isRoot}: ItemMeta) {
 	if (isRoot)
 		return
 	if (item.selected)
-		tree.actions.items.deselect(item.id)
+		tree.actions.outline.deselect(item.id)
 	else
-		tree.actions.items.select(item.id)
+		tree.actions.outline.select(item.id)
 }
 

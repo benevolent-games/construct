@@ -1,10 +1,10 @@
 
 import {Item} from "../../types.js"
-import {OutlineTools} from "../../tools.js"
 import {Id} from "../../../../../tools/fresh_id.js"
+import {OutlineGenius} from "../../../../controllers/outline_genius/controller.js"
 
 export function ascertain_which_items_should_be_moved(
-		tools: OutlineTools,
+		outline: OutlineGenius,
 		itemIds: Id[],
 		targetReport: Item.Report,
 	) {
@@ -14,7 +14,7 @@ export function ascertain_which_items_should_be_moved(
 		? targetReport.item
 		: null
 
-	const ids_of_folders_being_moved = tools.folders
+	const ids_of_folders_being_moved = outline.folders
 		.filter(f => itemIds.includes(f.id))
 		.map(f => f.id)
 
@@ -37,7 +37,7 @@ export function ascertain_which_items_should_be_moved(
 		)
 	)
 
-	return tools.reports
+	return outline.reports
 		.filter(include_only_requested_items)
 		.filter(omit_items_whose_parents_are_already_selected)
 		.filter(do_not_move_a_folder_into_itself)

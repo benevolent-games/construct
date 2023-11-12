@@ -1,9 +1,9 @@
 
-import {Action} from "../action_namespace.js"
+import {HistoryAction} from "../history_action.js"
 
 export interface Annals<S> {
 	snapshots: S[]
-	past: Action.Base[]
-	future: Action.Base[]
+	past: HistoryAction.Record[]
+	future: HistoryAction.Record[]
 }
 

@@ -51,7 +51,7 @@ export const CatalogPanel = panel({
 
 function helpers(tree: Tree) {
 	function instance_into_world(slot: GlbSlot, prop: GlbProp) {
-		return () => tree.actions.items.add([{
+		return () => tree.actions.outline.add([{
 			folderId: tree.state.outline.id,
 			item: {
 				id: freshId(),

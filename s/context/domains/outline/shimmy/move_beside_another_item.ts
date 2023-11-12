@@ -1,27 +1,25 @@
 
-import {State} from "../../../state.js"
-import {make_outline_tools} from "../tools.js"
+import {actionate} from "../../actionate.js"
 import {Id} from "../../../../tools/fresh_id.js"
-import {Action} from "../../../framework/action_namespace.js"
-import {ascertain_which_items_should_be_moved} from "./utils/reports_for_items_being_moved.js"
+import {ascertain_which_items_should_be_moved} from "./utils/ascertain_which_items_should_be_moved.js"
 
-export const move_beside_another_item = (where: "above" | "below") =>
-	Action.fast((state: State) => (
+export const move_beside_another_item = (
+	(where: "above" | "below") =>
+	actionate.outline.action(outline => (
 		{itemIds, targetItemId}: {
 			itemIds: Id[],
 			targetItemId: Id,
-		},
+		}
 	) => {
 
 	const indexMod = where === "above"
 		? 0
 		: 1
 
-	const tools = make_outline_tools(state.outline)
-	const targetReport = tools.reports.find(r => r.item.id === targetItemId)!
+	const targetReport = outline.reports.find(r => r.item.id === targetItemId)!
 
 	const stuff_to_move = ascertain_which_items_should_be_moved(
-		tools,
+		outline,
 		itemIds,
 		targetReport,
 	)
@@ -42,5 +40,5 @@ export const move_beside_another_item = (where: "above" | "below") =>
 		0,
 		...stuff_to_move.map(r => r.item)
 	)
-})
+}))
 

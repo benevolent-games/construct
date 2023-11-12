@@ -5,7 +5,7 @@ import {Item} from "../../../context/domains/outline/types.js"
 
 export function create_new_folder({tree}: ItemMeta, parent: Item.Folder) {
 	const new_id = freshId()
-	tree.actions.items.add([{
+	tree.actions.outline.add([{
 		folderId: parent.id,
 		item: {
 			kind: "folder",

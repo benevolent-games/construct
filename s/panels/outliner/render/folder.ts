@@ -18,9 +18,9 @@ export function render_folder(
 		renderChild: (child: Item.Whatever) => TemplateResult,
 	) {
 
-	const {folderStates, tools} = meta
+	const {folderStates, outline} = meta
 	const item = meta.item as Item.Folder
-	const reports = tools.reports
+	const reports = outline.reports
 
 	const folderState = folderStates.obtain(item.id)
 

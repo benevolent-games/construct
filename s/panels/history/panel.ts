@@ -5,8 +5,8 @@ import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {human_time} from "../../tools/human_time.js"
-import {Action} from "../../context/framework/action_namespace.js"
 import {icon_akar_history} from "../../icons/groups/akar/history.js"
+import {HistoryAction} from "../../context/framework/history_action.js"
 import {icon_feather_rewind} from "../../icons/groups/feather/rewind.js"
 import {icon_feather_fast_forward} from "../../icons/groups/feather/fast-forward.js"
 
@@ -37,7 +37,7 @@ export const HistoryPanel = panel({
 		})
 
 		function render_action(timeline: "future" | "past") {
-			return (action: Action.Base) => html`
+			return (action: HistoryAction.Record) => html`
 				<li data-id="${action.id}" data-timeline="${timeline}">
 					<span class=purpose>${action.purpose.join(".")}</span>
 					<span class=id>#${action.id}</span>
