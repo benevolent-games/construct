@@ -2,6 +2,12 @@
 export * from "./context/controllers/layout/single_panel_layout.js"
 export * from "./elements/construct-editor/element.js"
 
+export * from "./context/framework/app_core.js"
+export * from "./context/framework/historian.js"
+export * from "./context/framework/utils/action_record.js"
+export * from "./context/framework/utils/annals.js"
+export * from "./context/framework/utils/history.js"
+
 export * from "./panels/panel_parts.js"
 export * from "./panels/placeholder_panel_styles.js"
 export * from "./panels/standard_panel_styles.js"
