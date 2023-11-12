@@ -69,19 +69,23 @@ li {
 		display: flex;
 		flex-direction: column;
 
+		> * {
+			flex: 1 1 auto;
+			width: 100%;
+			height: 100%;
+		}
+
+		&[data-drag-hover][data-drag-mode="above"] {
+			border-top: 2px solid red;
+		}
+
 		&[data-drag-hover][data-drag-mode="into"] {
-			background: color-mix(in srgb, var(--bravo) 50%, transparent 50%);
+			background: color-mix(in srgb, var(--bravo) 10%, transparent);
 			border: 2px solid var(--bravo);
 		}
 
 		&[data-drag-hover][data-drag-mode="below"] {
 			border-bottom: 2px solid var(--bravo);
-		}
-
-		> * {
-			flex: 1 1 auto;
-			width: 100%;
-			height: 100%;
 		}
 	}
 

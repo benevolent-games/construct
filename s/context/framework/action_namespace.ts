@@ -39,6 +39,15 @@ export namespace Action {
 		)
 	}
 
+	export const fast = <S, P extends any[]>(
+			fun: (state: S) => (...params: P) => void
+		) => (
+		(state: S) => (...params: P) => {
+			fun(state)(...params)
+			return state
+		}
+	)
+
 	export const specs = <S>() => (
 		<Sp extends Action.Specs<S>>(fun: (helper: Helper<S>) => Sp) =>
 			fun(new Helper())
