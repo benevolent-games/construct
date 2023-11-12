@@ -30,10 +30,10 @@ export function ascertain_which_items_should_be_moved(
 
 	const do_not_move_a_folder_into_itself = (
 		(report: Item.Report) => (
-			!destinationParentIds.includes(report.item.id)
-			&& destinationFolder
+			(!destinationParentIds.includes(report.item.id)) &&
+			(destinationFolder
 				? (report.item.id !== destinationFolder.id)
-				: true
+				: true)
 		)
 	)
 

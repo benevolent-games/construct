@@ -4,7 +4,12 @@ import {TemplateResult, html} from "@benev/slate"
 
 export function render_gripbox(meta: ItemMeta, content: TemplateResult) {
 	const {dnd} = meta
-	const itemId = meta.item.id
+
+	function dragstart(event: DragEvent) {
+		const selectedIds = meta.outline.selected.map(selected => selected.id)
+		const itemIds = [...new Set([meta.item.id, ...selectedIds])]
+		dnd.dragzone.dragstart({itemIds})(event)
+	}
 
 	return meta.isRoot ? html`
 		<div class=gripbox>
@@ -14,7 +19,7 @@ export function render_gripbox(meta: ItemMeta, content: TemplateResult) {
 		<div
 			class=gripbox
 			draggable=true
-			@dragstart=${dnd.dragzone.dragstart({itemIds: [itemId]})}
+			@dragstart=${dragstart}
 			@dragend=${dnd.dragzone.dragend()}>
 			${content}
 		</div>
