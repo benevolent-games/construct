@@ -1,18 +1,18 @@
 
 import {GlbSlot} from "../../state.js"
 import {Edcore} from "../edcore/controller.js"
-import {OutlinerDrops} from "./parts/outliner_drops.js"
 import {MiniDropCoordinator} from "./mini_controller.js"
 import {Warehouse} from "../world/warehouse/warehouse.js"
+import {OutlinerDragDrop} from "./parts/outliner_drag_drop.js"
 import {ShockDragDrop} from "../../../tools/shockdrop/drag_drop.js"
 import {drag_has_files} from "../../../tools/shockdrop/utils/drag_has_files.js"
 
 export class DropCoordinator extends MiniDropCoordinator {
-	outliner: OutlinerDrops
+	outliner: OutlinerDragDrop
 
 	constructor(public edcore: Edcore, public warehouse: Warehouse) {
 		super()
-		this.outliner = new OutlinerDrops(this.edcore)
+		this.outliner = new OutlinerDragDrop(this.edcore)
 	}
 
 	slots = new ShockDragDrop<GlbSlot, GlbSlot>({

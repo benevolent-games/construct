@@ -3,7 +3,7 @@ import {ItemMeta} from "../../utils/metas.js"
 import {TemplateResult, html} from "@benev/slate"
 
 export function render_gripbox(meta: ItemMeta, content: TemplateResult) {
-	const {dnd} = meta.drops
+	const {dnd} = meta
 	const itemId = meta.item.id
 
 	return meta.isRoot ? html`

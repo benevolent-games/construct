@@ -7,8 +7,7 @@ import {delete_item} from "../../behaviors/delete_item.js"
 import {icon_feather_x} from "../../../../icons/groups/feather/x.js"
 
 export function render_line_item(meta: ItemMeta, content: TemplateResult) {
-	const {item, parents, isRoot, outline, drops} = meta
-	const {dnd} = drops
+	const {item, parents, isRoot, outline, dnd} = meta
 	const isApparent = outline.isApparent(item.id)
 
 	const is_deleteable = !isRoot
@@ -22,7 +21,7 @@ export function render_line_item(meta: ItemMeta, content: TemplateResult) {
 			?data-selected="${item.selected}"
 			@dragleave=${dnd.dropzone.dragleave()}>
 
-			${Dropzone(meta, drops, item)}
+			${Dropzone(meta, dnd, item)}
 
 			<div class=gutter-group>
 				${parents.map(() => html`

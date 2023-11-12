@@ -27,7 +27,7 @@ export const OutlinerPanel = panel({
 			edcore,
 			outline,
 			folderStates,
-			drops: drops.outliner,
+			dnd: drops.outliner,
 		}
 
 		function render_flat(

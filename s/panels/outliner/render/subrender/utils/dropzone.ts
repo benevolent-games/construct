@@ -3,15 +3,13 @@ import {html} from "@benev/slate"
 import {ItemMeta} from "../../../utils/metas.js"
 import {slate} from "../../../../../context/slate.js"
 import {Item} from "../../../../../context/domains/outline/types.js"
-import {OutlinerDrops, OutlinerHoverIntent} from "../../../../../context/controllers/drop_coordinator/parts/outliner_drops.js"
+import {OutlinerDragDrop, OutlinerHoverIntent} from "../../../../../context/controllers/drop_coordinator/parts/outliner_drag_drop.js"
 
 export const Dropzone = slate.light_view(_use => (
 		meta: ItemMeta,
-		drops: OutlinerDrops,
+		dnd: OutlinerDragDrop,
 		item: Item.Whatever,
 	) => {
-
-	const {dnd} = drops
 
 	if (!dnd.grabbed)
 		return
@@ -22,7 +20,7 @@ export const Dropzone = slate.light_view(_use => (
 			: dnd.hovering.itemId === item.id
 	)
 
-	const intents = drops.make_hover_intents(item.id)
+	const intents = dnd.make_hover_intents(item.id)
 
 	const indicator = (className: string, intent: OutlinerHoverIntent.Any) => html`
 		<div
