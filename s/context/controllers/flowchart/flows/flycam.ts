@@ -1,12 +1,13 @@
 
-import {Flow, FlowOptions, m} from "../parts/types.js"
+import {Flow, m} from "../parts/flow.js"
+import {FlowOptions} from "../parts/types.js"
 
 export class FlycamFlow extends Flow {
 	modes = m(
 		"flycam",
 		"fps",
 		"history",
-		"selectable",
+		"outline",
 	)
 
 	constructor(options: FlowOptions, lol: number) {

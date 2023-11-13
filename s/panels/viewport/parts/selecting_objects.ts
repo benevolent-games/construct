@@ -13,7 +13,7 @@ export const selecting_objects = (
 		pointerTracker: PointerTracker,
 	) => setupFn(() => {
 
-	return gesture.on.selectable.buttons.select(input => {
+	return gesture.on.outline.buttons.select(input => {
 		flowchart.handle("NormalFlow", situation => {
 			const user_is_engaging_select_process = (
 				input.down &&

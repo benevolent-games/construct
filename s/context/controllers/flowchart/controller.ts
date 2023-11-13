@@ -23,8 +23,12 @@ export class Flowchart {
 	}
 
 	assign<N extends FlowName>(name: N, ...more: MoreParams<FlowClassByName<N>>) {
+		if (this.flow)
+			this.flow.deinit()
+
 		const FlowClass = flows[name] as any
 		const instance = new FlowClass(this.options, ...more)
+
 		this.options.gesture.modes.assign(...instance.modes)
 		this.#flow.value = instance
 		return instance as FlowByName<N>
@@ -34,13 +38,20 @@ export class Flowchart {
 		return this.flow instanceof flows[name]
 	}
 
+	use<N extends FlowName>(name: N) {
+		return (this.flow instanceof flows[name])
+			? this.flow as FlowByName<N>
+			: null
+	}
+
 	handle<N extends FlowName, R>(
 			name: N,
 			fn: (situation: FlowByName<N>) => R,
-		) {
+		): R | null {
 		const FlowClass = flows[name]
 		if (this.flow instanceof FlowClass)
 			return fn(this.flow as any)
+		return null
 	}
 
 	handlers(handlers: Partial<FlowHandlers>) {

@@ -13,6 +13,7 @@ import {Item} from "../../context/domains/outline/types.js"
 import {OutlinerMeta, make_item_meta} from "./utils/metas.js"
 import {clear_selection} from "./behaviors/clear_selection.js"
 import {LocalFolderStates} from "./utils/local_folder_states.js"
+import { make_outliner_behaviors } from "./utils/make_outliner_behaviors.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",
@@ -20,15 +21,18 @@ export const OutlinerPanel = panel({
 	view: slate.obsidian({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
-		const {edcore, drops, outline} = use.context
+		const {edcore, drops, outline, flowchart} = use.context
 		const folderStates = use.prepare(() => new LocalFolderStates())
 
 		const outlinerMeta: OutlinerMeta = {
 			edcore,
 			outline,
+			flowchart,
 			folderStates,
 			dnd: drops.outliner,
 		}
+
+		const behaviors = make_outliner_behaviors(outlinerMeta)
 
 		function render_flat(
 				item: Item.Whatever,
@@ -39,14 +43,15 @@ export const OutlinerPanel = panel({
 
 			switch (item.kind) {
 				case "instance":
-					return render_instance(meta)
+					return render_instance(meta, behaviors)
 
 				case "light":
-					return render_light(meta)
+					return render_light(meta, behaviors)
 
 				case "folder":
 					return render_folder(
 						meta,
+						behaviors,
 						child => render_flat(child, [...parents, item]),
 					)
 			}

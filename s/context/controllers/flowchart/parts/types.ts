@@ -3,7 +3,6 @@ import {flows} from "../flows.js"
 import {World} from "../../world/controller.js"
 import {Edcore} from "../../edcore/controller.js"
 import {Gesture} from "../../gesture/controller.js"
-import {EditorMode} from "../../gesture/editor_binds.js"
 import {OutlineGenius} from "../../outline_genius/controller.js"
 
 export type FlowOptions = {
@@ -12,13 +11,6 @@ export type FlowOptions = {
 	world: World
 	outline: OutlineGenius
 }
-
-export abstract class Flow {
-	constructor(protected options: FlowOptions, ..._more: any[]) {}
-	abstract modes: EditorMode[]
-}
-
-export const m = (...m: EditorMode[]) => m
 
 export type AnyFlow = InstanceType<
 	(typeof flows)[keyof typeof flows]

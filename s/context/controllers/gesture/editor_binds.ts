@@ -45,15 +45,18 @@ export const editor_binds = () => binds(({
 	history: mode({
 		vectors: {},
 		buttons: {
-			undo: buttons(b("KeyZ", ctrl)),
-			redo: buttons(b("KeyZ", ctrl, shift)),
+			undo: buttons(b("KeyZ", ctrl), b("KeyZ")),
+			redo: buttons(b("KeyZ", ctrl, shift), b("KeyZ", shift)),
 		},
 	}),
 
-	selectable: mode({
+	outline: mode({
 		vectors: {},
 		buttons: {
 			select: buttons(b("LMB")),
+			select_visible: buttons(b("KeyA"), b("KeyE")),
+			select_everything: buttons(b("KeyA", shift)),
+			delete_selected: buttons(b("KeyX")),
 		},
 	}),
 

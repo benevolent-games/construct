@@ -22,6 +22,9 @@ export class OutlineGenius {
 	get reports() { return this.#stuff.value.reports }
 	get items() { return this.#stuff.value.items }
 
+	get nonrootReports() { return this.#stuff.value.nonrootReports }
+	get nonrootItems() { return this.#stuff.value.nonrootItems }
+
 	get folders() { return this.#stuff.value.folders }
 	get instances() { return this.#stuff.value.instances }
 	get lights() { return this.#stuff.value.lights }

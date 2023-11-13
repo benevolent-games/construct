@@ -8,10 +8,19 @@ export function compute_outline_stuff(root: Item.Folder) {
 	const reports = produce_item_reports(root)
 	const items = reports.map(report => report.item)
 
+	const nonrootReports = reports
+		.filter(report => report.item.id !== root.id)
+
+	const nonrootItems = items
+		.filter(item => item.id !== root.id)
+
 	return {
 		root,
 		reports,
 		items,
+
+		nonrootReports,
+		nonrootItems,
 
 		folders: items
 			.filter(item => item.kind === "folder") as Item.Folder[],
@@ -22,7 +31,7 @@ export function compute_outline_stuff(root: Item.Folder) {
 		lights: items
 			.filter(item => item.kind === "light") as Item.Light[],
 
-		selected: items
+		selected: nonrootItems
 			.filter(item => item.selected) as Item.Whatever[],
 	}
 }

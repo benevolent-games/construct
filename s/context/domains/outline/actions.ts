@@ -34,7 +34,8 @@ export const outline = actionate.outline.blueprint(action => ({
 	select: action(outline => (...ids: Id[]) => {
 		const items = outline.items.filter(item => ids.includes(item.id))
 		for (const item of items)
-			item.selected = true
+			if (item.id !== outline.root.id)
+				item.selected = true
 	}),
 
 	deselect: action(outline => (...ids: Id[]) => {

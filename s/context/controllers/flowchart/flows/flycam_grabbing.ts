@@ -1,5 +1,5 @@
 
-import {Flow, m} from "../parts/types.js"
+import {Flow, m} from "../parts/flow.js"
 
 export class FlycamGrabbingFlow extends Flow {
 	modes = m(

@@ -7,16 +7,19 @@ import {render_gripbox} from "./subrender/gripbox.js"
 import {render_line_item} from "./subrender/line_item.js"
 import {render_visibility} from "./subrender/visibility.js"
 import {Item} from "../../../context/domains/outline/types.js"
-import {toggle_selection} from "../behaviors/toggle_selection.js"
 import {create_new_folder} from "../behaviors/create_new_folder.js"
+import {OutlinerBehaviors} from "../utils/make_outliner_behaviors.js"
 import {icon_tabler_folder_open} from "../../../icons/groups/tabler/folder-open.js"
 import {icon_tabler_folder_plus} from "../../../icons/groups/tabler/folder-plus.js"
 import {icon_tabler_folder_filled} from "../../../icons/groups/tabler/folder-filled.js"
 
 export function render_folder(
 		meta: ItemMeta,
+		behaviors: OutlinerBehaviors,
 		renderChild: (child: Item.Whatever) => TemplateResult,
 	) {
+
+	const select = behaviors.click_for_item_selections(meta)
 
 	const {folderStates, outline} = meta
 	const item = meta.item as Item.Folder
@@ -37,14 +40,14 @@ export function render_folder(
 	return html`
 		${render_line_item(meta, html`
 			${render_gripbox(meta, html`
-				<button @click=${toggle_opened}>
+				<button @pointerdown=${toggle_opened}>
 					${folderState.opened
 						? icon_tabler_folder_open
 						: icon_tabler_folder_filled}
 				</button>
 				<div
 					class=name
-					@click=${() => toggle_selection(meta)}>
+					@click=${select}>
 						${item.name}
 				</div>
 			`)}
@@ -52,7 +55,7 @@ export function render_folder(
 			<div
 				class=childcount
 				data-unnecessary
-				@click=${() => toggle_selection(meta)}>
+				@click=${select}>
 					${number_of_children}
 			</div>
 
@@ -60,7 +63,7 @@ export function render_folder(
 
 			<button
 				class=newfolder
-				@click=${() => create_new_folder(meta, item)}>
+				@pointerdown=${() => create_new_folder(meta, item)}>
 					${icon_tabler_folder_plus}
 			</button>
 
