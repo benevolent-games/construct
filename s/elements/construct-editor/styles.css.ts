@@ -16,6 +16,7 @@ export const styles = css`
 
 	--alpha: var(--alpha);
 	--bravo: var(--bravo);
+	--charlie: var(--charlie);
 	--bg-a: var(--bg-a);
 	--bg-b: var(--bg-b);
 	--taskbar-size: var(--taskbar-size);

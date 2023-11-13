@@ -3,12 +3,10 @@ import {html} from "@benev/slate"
 import {ItemMeta} from "../../../utils/metas.js"
 import {slate} from "../../../../../context/slate.js"
 import {Item} from "../../../../../context/domains/outline/types.js"
-import {OutlinerDragDrop, OutlinerHoverIntent} from "../../../../../context/controllers/drop_coordinator/parts/outliner_drag_drop.js"
+import {OutlinerHoverIntent} from "../../../../../context/controllers/drop_coordinator/parts/outliner_drag_drop.js"
 
 export const Dropzone = slate.light_view(_use => (
-		meta: ItemMeta,
-		dnd: OutlinerDragDrop,
-		item: Item.Whatever,
+		{dnd, item, isRoot, folderStates}: ItemMeta,
 	) => {
 
 	if (!dnd.grabbed)
@@ -34,17 +32,17 @@ export const Dropzone = slate.light_view(_use => (
 		if (item.children.length === 0)
 			return true
 		else
-			return !meta.folderStates.obtain(item.id).opened
+			return !folderStates.obtain(item.id).opened
 	}
 
 	return html`
 		<div
 			class=dropzone
-			?data-drag-hover="${is_hovering_over}"
-			data-drag-mode="${dnd.hovering?.mode}">
+			?data-drop-hover="${is_hovering_over}"
+			data-drop-mode="${dnd.hovering?.mode}">
 
 			${item.kind === "folder"
-				? meta.isRoot
+				? isRoot
 					? html`
 						${indicator("drop-into", intents.into)}
 					`

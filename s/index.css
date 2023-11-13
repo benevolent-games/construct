@@ -23,7 +23,8 @@ construct-editor {
 	height: 100vh;
 
 	--alpha: yellow;
-	--bravo: lime;
+	--bravo: aqua;
+	--charlie: indigo;
 	--bg-a: #181818;
 	--bg-b: #000;
 	--bg-c: #333;

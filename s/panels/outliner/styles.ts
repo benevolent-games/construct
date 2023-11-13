@@ -8,7 +8,24 @@ ${standard_panel_styles}
 
 :host {
 	overflow-y: auto;
+
 	--line-height: 1.5em;
+	--line-bg: transparent;
+	--line-bg-alt: #88888808;
+	--line-bg-hover: #8881;
+
+	--select: var(--alpha);
+	--drag: var(--charlie);
+	--drop: var(--bravo);
+
+	--select-bg: color-mix(in srgb, var(--select) 10%, transparent);
+	--select-border: color-mix(in srgb, var(--select) 30%, transparent);
+
+	--drag-bg: color-mix(in srgb, var(--drag) 10%, transparent);
+	--drag-border: color-mix(in srgb, var(--drag) 30%, transparent);
+
+	--drop-bg: color-mix(in srgb, var(--drop) 10%, transparent);
+	--drop-border: color-mix(in srgb, var(--drop) 30%, transparent);
 }
 
 ol {
@@ -30,13 +47,14 @@ li {
 	gap: 0.2em;
 	padding: 0 0.5em;
 	overflow: hidden;
+	background: var(--line-bg);
 
 	&:nth-child(odd) {
-		background: #88888808;
+		background: var(--line-bg-alt);
 	}
 
 	&:hover {
-		background: #8881;
+		background: var(--line-bg-hover);
 	}
 
 	&[data-not-apparent] {
@@ -49,8 +67,8 @@ li {
 		position: absolute;
 		inset: 0;
 		pointer-events: none;
-		background: color-mix(in srgb, var(--alpha) 10%, transparent);
-		border: 1px solid color-mix(in srgb, var(--alpha) 30%, transparent);
+		background: var(--select-bg);
+		border: 1px solid var(--select-border);
 	}
 
 	&[data-selected] + [data-selected]::before {
@@ -61,43 +79,59 @@ li {
 		flex: 0 0 auto;
 	}
 
-	& .dropzone {
+	& :is(.dragzone, .dropzone) {
 		z-index: 1;
-		opacity: 0.5;
 		position: absolute;
 		inset: 0;
 		display: flex;
 		flex-direction: column;
+	}
 
+	& .dragzone {
+		background: var(--drag-bg);
+		border: 1px solid var(--drag-border);
+	}
+
+	& .dropzone {
 		> * {
 			flex: 1 1 auto;
 			width: 100%;
 			height: 100%;
 		}
 
-		--drag-bg: color-mix(in srgb, var(--bravo) 30%, transparent);
-
-		&[data-drag-hover][data-drag-mode="above"] {
-			border-top: 2px solid var(--bravo);
+		&[data-drop-hover][data-drop-mode="above"] {
 			background: linear-gradient(
 				to bottom,
-				var(--drag-bg),
+				var(--drop-bg),
 				transparent
 			);
+			&::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+				border-top: 2px solid var(--drop-border);
+			}
 		}
 
-		&[data-drag-hover][data-drag-mode="into"] {
-			border: 2px solid var(--bravo);
-			background: var(--drag-bg);
+		&[data-drop-hover][data-drop-mode="into"] {
+			border: 2px solid var(--drop-border);
+			background: var(--drop-bg);
 		}
 
-		&[data-drag-hover][data-drag-mode="below"] {
-			border-bottom: 2px solid var(--bravo);
+		&[data-drop-hover][data-drop-mode="below"] {
 			background: linear-gradient(
 				to bottom,
 				transparent,
-				var(--drag-bg)
+				var(--drop-bg)
 			);
+			&::after {
+				content: "";
+				position: absolute;
+				inset: 0;
+				pointer-events: none;
+				border-bottom: 2px solid var(--drop-border);
+			}
 		}
 	}
 

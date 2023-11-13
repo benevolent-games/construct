@@ -1,6 +1,7 @@
 
 import {TemplateResult, html} from "@benev/slate"
 
+import {Dragzone} from "./utils/dragzone.js"
 import {Dropzone} from "./utils/dropzone.js"
 import {ItemMeta} from "../../utils/metas.js"
 import {delete_item} from "../../behaviors/delete_item.js"
@@ -18,10 +19,11 @@ export function render_line_item(meta: ItemMeta, content: TemplateResult) {
 			data-kind="${item.kind}"
 			?data-visible="${item.visible}"
 			?data-not-apparent="${!isApparent}"
-			?data-selected="${item.selected}"
+			?data-selected="${!dnd.grabbed && item.selected}"
 			@dragleave=${dnd.dropzone.dragleave()}>
 
-			${Dropzone(meta, dnd, item)}
+			${Dragzone(meta)}
+			${Dropzone(meta)}
 
 			<div class=gutter-group>
 				${parents.map(() => html`
