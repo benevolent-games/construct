@@ -1,10 +1,15 @@
 
+import {ZipAction} from "@benev/slate"
+
 import {Spatial} from "./spatial.js"
 import {Item} from "../outline/types.js"
 import {actionate} from "../actionate.js"
 import {Id} from "../../../tools/fresh_id.js"
 import {move_into_folder} from "./shimmy/move_into_folder.js"
+import {OutlineGenius} from "../../controllers/outline_genius/controller.js"
 import {move_beside_another_item} from "./shimmy/move_beside_another_item.js"
+
+export type OutlineActions = ZipAction.Callable<typeof outline>
 
 export const outline = actionate.outline.blueprint(action => ({
 	move_into_folder,
@@ -31,23 +36,41 @@ export const outline = actionate.outline.blueprint(action => ({
 			)
 	}),
 
-	select: action(outline => (...ids: Id[]) => {
-		const items = outline.items.filter(item => ids.includes(item.id))
-		for (const item of items)
-			if (item.id !== outline.root.id)
-				item.selected = true
-	}),
+	...(() => {
+		const select = (outline: OutlineGenius) => (...ids: Id[]) => {
+			const items = outline.items.filter(item => ids.includes(item.id))
+			for (const item of items)
+				if (item.id !== outline.root.id)
+					item.selected = true
+		}
 
-	deselect: action(outline => (...ids: Id[]) => {
-		const items = outline.items.filter(item => ids.includes(item.id))
-		for (const item of items)
-			item.selected = false
-	}),
+		const deselect = (outline: OutlineGenius) => (...ids: Id[]) => {
+			const items = outline.items.filter(item => ids.includes(item.id))
+			for (const item of items)
+				item.selected = false
+		}
 
-	clear_selection: action(outline => () => {
-		for (const item of outline.items)
-			item.selected = false
-	}),
+		const clear_selection = (outline: OutlineGenius) => () => {
+			for (const item of outline.items)
+				item.selected = false
+		}
+
+		return {
+			select: action(select),
+			clear_selection: action(clear_selection),
+			deselect: action(deselect),
+
+			clear_then_select: action(outline => (...ids: Id[]) => {
+				clear_selection(outline)()
+				select(outline)(...ids)
+			}),
+
+			clear_then_deselect: action(outline => (...ids: Id[]) => {
+				clear_selection(outline)()
+				deselect(outline)(...ids)
+			}),
+		}
+	})(),
 
 	show: action(outline => (...ids: Id[]) => {
 		const items = outline.items.filter(item => ids.includes(item.id))

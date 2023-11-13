@@ -14,7 +14,7 @@ export const selecting_objects = (
 	) => setupFn(() => {
 
 	return gesture.on.outline.buttons.select(input => {
-		flowchart.handle("NormalFlow", situation => {
+		flowchart.handle("NormalFlow", flow => {
 			const user_is_engaging_select_process = (
 				input.down &&
 				pointerTracker.canvasCoordinates
@@ -27,7 +27,7 @@ export const selecting_objects = (
 				return
 
 			const id = porthole.pick_on_canvas(pointerTracker.canvasCoordinates)
-			situation.user_clicked_to_select_item_in_viewport(id)
+			flow.selectionClicks.click_item_in_viewport(id)
 		})
 	})
 })

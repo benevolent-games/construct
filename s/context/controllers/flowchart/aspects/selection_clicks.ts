@@ -1,18 +1,30 @@
 
 import {Id} from "../../../../tools/fresh_id.js"
-import {Edcore} from "../../edcore/controller.js"
 import {OutlineGenius} from "../../outline_genius/controller.js"
+import {OutlineActions} from "../../../domains/outline/actions.js"
 
 export class SelectionClicks {
 	#additive = true
 	#lastSelected: Id | null = null
 
 	constructor(
-			private edcore: Edcore,
-			private outline: OutlineGenius,
-		) {}
+		private actions: OutlineActions,
+		private outline: OutlineGenius,
+	) {}
 
-	click(id: Id) {
+	click_item_in_viewport(id: Id | null) {
+		const {outline, actions} = this
+		if (id) {
+			if (outline.isSelected(id))
+				actions.deselect(id)
+			else
+				actions.select(id)
+		}
+		else
+			actions.clear_selection()
+	}
+
+	click_item_in_outliner_panel(id: Id) {
 		return (event: PointerEvent) => {
 
 			if (event.ctrlKey)
@@ -34,9 +46,9 @@ export class SelectionClicks {
 		this.#lastSelected = id
 
 		if (this.outline.isSelected(id))
-			this.edcore.actions.outline.deselect(id)
+			this.actions.deselect(id)
 		else
-			this.edcore.actions.outline.select(id)
+			this.actions.select(id)
 	}
 
 	#range_select(id: Id) {
@@ -65,20 +77,20 @@ export class SelectionClicks {
 				range.push(item.id)
 		})
 
-		if (!this.#additive)
-			this.edcore.actions.outline.clear_selection()
-
-		this.edcore.actions.outline.select(...range)
+		if (this.#additive)
+			this.actions.select(...range)
+		else
+			this.actions.clear_then_select(...range)
 	}
 
 	#select_only_this_one_thing(id: Id) {
 		this.#lastSelected = id
 		const already_selected = this.outline.isSelected(id)
 
-		this.edcore.actions.outline.clear_selection()
-
-		if (!already_selected)
-			this.edcore.actions.outline.select(id)
+		if (already_selected)
+			this.actions.clear_then_deselect(id)
+		else
+			this.actions.clear_then_select(id)
 	}
 }
 

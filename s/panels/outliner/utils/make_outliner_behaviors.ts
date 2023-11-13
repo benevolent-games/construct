@@ -7,7 +7,7 @@ export function make_outliner_behaviors({flowchart}: OutlinerMeta) {
 	const normal = flowchart.use("NormalFlow")
 	return {
 		click_for_item_selections: ({item}: ItemMeta) => normal
-			?.selectionClicks.click(item.id)
+			?.selectionClicks.click_item_in_outliner_panel(item.id)
 			?? (() => {})
 	}
 }
