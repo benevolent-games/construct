@@ -1,15 +1,15 @@
 
+import {Initiator} from "@benev/slate"
 import {V2} from "@benev/toolbox/x/utils/v2.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 import {magic} from "../magic.js"
 import {Id} from "../../../../tools/fresh_id.js"
-import {CleanInitiator} from "./parts/clean_initiator.js"
 import {ray_for_picking_on_canvas} from "./parts/ray_for_picking_on_canvas.js"
 import {Babylon} from "../../../../context/controllers/world/babylon/babylon.js"
 import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
 
-export class Porthole extends CleanInitiator {
+export class Porthole extends Initiator {
 	#babylon: Babylon
 	#fly: ReturnType<typeof make_fly_camera>
 	#find_id_for_mesh: (mesh: AbstractMesh) => (Id | undefined)

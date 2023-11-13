@@ -6,21 +6,19 @@ import {PointerMovements} from "../../../tools/impulse/devices/pointer_movements
 
 export class PointerTracker extends Initiator {
 	canvasCoordinates: V2 | null = null
-	deinit: () => void
 
 	constructor(
 			pointerMovements: PointerMovements,
 			canvas: HTMLCanvasElement,
 		) {
-
 		super()
 
-		this.deinit = pointerMovements.onInput(() => {
+		this.cleanup(pointerMovements.onInput(() => {
 			this.canvasCoordinates = coordinates_in_rect(
 				pointerMovements.coordinates,
 				canvas.getBoundingClientRect(),
 			)
-		})
+		}))
 	}
 }
 
