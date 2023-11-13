@@ -9,7 +9,7 @@ export const Dragzone = slate.light_view(_use => (
 
 	const grabbedIds = dnd.grabbed?.itemIds ?? []
 
-	return grabbedIds.includes(item.id)
+	return (!item.selected && grabbedIds.includes(item.id))
 		? html`<div class=dragzone></div>`
 		: undefined
 })

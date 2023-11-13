@@ -19,7 +19,7 @@ export function render_line_item(meta: ItemMeta, content: TemplateResult) {
 			data-kind="${item.kind}"
 			?data-visible="${item.visible}"
 			?data-not-apparent="${!isApparent}"
-			?data-selected="${!dnd.grabbed && item.selected}"
+			?data-selected="${item.selected}"
 			@dragleave=${dnd.dropzone.dragleave()}>
 
 			${Dragzone(meta)}
