@@ -4,6 +4,7 @@ import {Edcore} from "./controllers/edcore/controller.js"
 import {Flowchart} from "./controllers/flowchart/controller.js"
 import {MiniContext, MiniContextOptions} from "./mini_context.js"
 import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
+import {establish_hotkeys} from "./controllers/hotkeys/controller.js"
 import {OutlineGenius} from "./controllers/outline_genius/controller.js"
 import {DropCoordinator} from "./controllers/drop_coordinator/controller.js"
 
@@ -34,6 +35,14 @@ export class Context extends MiniContext {
 	constructor(options: ContextOptions) {
 		super(options)
 
+		// assign commands to various hotkeys
+		establish_hotkeys(
+			this.edcore,
+			this.outline,
+			this.gesture,
+		)
+
+		// handle GLB file drops
 		this.drops.on_file_drop(files => {
 			for (const file of files) {
 				if (file_is_glb(file))
