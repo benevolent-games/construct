@@ -56,7 +56,7 @@ export const editor_binds = () => binds(({
 			select: buttons(b("LMB")),
 			select_visible: buttons(b("KeyA"), b("KeyE")),
 			select_everything: buttons(b("KeyA", shift)),
-			delete_selected: buttons(b("KeyX")),
+			delete_selected: buttons(b("KeyX"), b("Backspace")),
 		},
 	}),
 
