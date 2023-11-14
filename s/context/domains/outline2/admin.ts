@@ -24,10 +24,16 @@ export class OutlineAdmin extends OutlineModel {
 		}
 	}
 
-	discard_orphans() {
+	discard_dead_data() {
 		const ids = this.orphans.map(item => item.id)
 		this.state.items = this.state.items
 			.filter(item => !ids.includes(item.id))
+
+		if (this.state.isolate) {
+			const isolated = this.find(this.state.isolate)
+			if (!isolated)
+				this.state.isolate = null
+		}
 	}
 }
 

@@ -11,12 +11,20 @@ export class OutlineModel {
 		this.#signal = data
 	}
 
+	get #state() {
+		return this.#signal.value
+	}
+
 	get root() {
 		return this.#state.root
 	}
 
-	get #state() {
-		return this.#signal.value
+	get items() {
+		return this.#state.items
+	}
+
+	get isolate() {
+		return this.#state.isolate
 	}
 
 	find(id: Id) {
@@ -63,10 +71,6 @@ export class OutlineModel {
 		return report.parents.length
 			? report.parents.at(-1)!.children
 			: this.root
-	}
-
-	get items() {
-		return this.#state.items
 	}
 
 	get containers() {

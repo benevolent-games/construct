@@ -26,6 +26,7 @@ export const default_state = (): State => ({
 	outline2: {
 		items: [],
 		root: [],
+		isolate: null,
 	},
 	outline: {
 		id: freshId(),

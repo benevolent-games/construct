@@ -24,7 +24,7 @@ export const outline_item_actions = actionate.outline2.blueprint(action => ({
 
 	delete: action(outline => (...ids: Id[]) => {
 		outline.detach_item_from_tree(...ids)
-		outline.discard_orphans()
+		outline.discard_dead_data()
 	}),
 }))
 

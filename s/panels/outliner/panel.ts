@@ -13,7 +13,7 @@ import {Item} from "../../context/domains/outline/types.js"
 import {OutlinerMeta, make_item_meta} from "./utils/metas.js"
 import {clear_selection} from "./behaviors/clear_selection.js"
 import {LocalFolderStates} from "./utils/local_folder_states.js"
-import { make_outliner_behaviors } from "./utils/make_outliner_behaviors.js"
+import {make_outliner_behaviors} from "./utils/make_outliner_behaviors.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",

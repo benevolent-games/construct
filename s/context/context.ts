@@ -1,5 +1,6 @@
 
 import {World} from "./controllers/world/controller.js"
+import {OutlineModel} from "./domains/outline2/model.js"
 import {Edcore} from "./controllers/edcore/controller.js"
 import {Flowchart} from "./controllers/flowchart/controller.js"
 import {MiniContext, MiniContextOptions} from "./mini_context.js"
@@ -7,6 +8,7 @@ import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 import {establish_hotkeys} from "./controllers/hotkeys/controller.js"
 import {OutlineGenius} from "./controllers/outline_genius/controller.js"
 import {DropCoordinator} from "./controllers/drop_coordinator/controller.js"
+import { watch } from "@benev/slate"
 
 export interface ContextOptions extends MiniContextOptions {}
 
@@ -17,6 +19,11 @@ export class Context extends MiniContext {
 
 	/** helper for asking questions about the outline */
 	outline = new OutlineGenius(() => this.edcore.state.outline)
+
+	/** helper for asking questions about the outline */
+	outline2 = new OutlineModel(
+		watch.computed(() => this.edcore.state.outline2)
+	)
 
 	/** the 3d babylon world and glbs */
 	world = new World(this.edcore, this.outline)
