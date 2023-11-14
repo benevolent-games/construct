@@ -1,10 +1,10 @@
 
 import {ItemMeta} from "../utils/metas.js"
 
-export function toggle_visibility({edcore, item}: ItemMeta) {
+export function toggle_visibility({item, outlineActions}: ItemMeta) {
 	if (item.visible)
-		edcore.actions.outline.hide(item.id)
+		outlineActions.visibility.hide(item.id)
 	else
-		edcore.actions.outline.show(item.id)
+		outlineActions.visibility.show(item.id)
 }
 

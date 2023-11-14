@@ -16,7 +16,7 @@ export const move_beside_another_item = (
 		? 0
 		: 1
 
-	const targetReport = outline.reports.find(r => r.item.id === targetItemId)!
+	const targetReport = outline.getReport(targetItemId)
 
 	const ids_to_move = ascertain_which_items_should_be_moved(
 		outline,

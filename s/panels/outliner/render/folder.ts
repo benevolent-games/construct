@@ -6,8 +6,8 @@ import {render_id} from "./subrender/id.js"
 import {render_gripbox} from "./subrender/gripbox.js"
 import {render_line_item} from "./subrender/line_item.js"
 import {render_visibility} from "./subrender/visibility.js"
-import {Item} from "../../../context/domains/outline/types.js"
 import {create_new_folder} from "../behaviors/create_new_folder.js"
+import {Item} from "../../../context/domains/outline2/types/item.js"
 import {OutlinerBehaviors} from "../utils/make_outliner_behaviors.js"
 import {icon_tabler_folder_open} from "../../../icons/groups/tabler/folder-open.js"
 import {icon_tabler_folder_plus} from "../../../icons/groups/tabler/folder-plus.js"
@@ -16,13 +16,13 @@ import {icon_tabler_folder_filled} from "../../../icons/groups/tabler/folder-fil
 export function render_folder(
 		meta: ItemMeta,
 		behaviors: OutlinerBehaviors,
-		renderChild: (child: Item.Whatever) => TemplateResult,
+		renderChild: (child: Item.Report) => TemplateResult,
 	) {
 
 	const select = behaviors.click_for_item_selections(meta)
 
 	const {folderStates, outline} = meta
-	const item = meta.item as Item.Folder
+	const item = meta.item as Item.Container
 	const reports = outline.reports
 
 	const folderState = folderStates.obtain(item.id)
@@ -35,6 +35,11 @@ export function render_folder(
 		(previous, current) =>
 			previous + (current.parents.map(p => p.id)
 				.includes(item.id) ? 1 : 0), 0
+	)
+
+	const click_new_folder = () => create_new_folder(
+		meta.outlineActions,
+		meta.item.id,
 	)
 
 	return html`
@@ -63,7 +68,7 @@ export function render_folder(
 
 			<button
 				class=newfolder
-				@pointerdown=${() => create_new_folder(meta, item)}>
+				@pointerdown="${click_new_folder}">
 					${icon_tabler_folder_plus}
 			</button>
 
@@ -71,7 +76,7 @@ export function render_folder(
 		`)}
 
 		${folderState.opened
-			? item.children.map(renderChild)
+			? item.children.map(id => renderChild(outline.getReport(id)))
 			: undefined}
 	`
 }

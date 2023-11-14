@@ -11,11 +11,7 @@ export function render_gripbox(meta: ItemMeta, content: TemplateResult) {
 		dnd.dragzone.dragstart({itemIds})(event)
 	}
 
-	return meta.isRoot ? html`
-		<div class=gripbox>
-			${content}
-		</div>
-	` : html`
+	return html`
 		<div
 			class=gripbox
 			draggable=true

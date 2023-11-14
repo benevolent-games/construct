@@ -1,6 +1,6 @@
 
 import {Id} from "../../../../tools/fresh_id.js"
-import {Edcore} from "../../edcore/controller.js"
+import {OutlineActions} from "../../../domains/outline2/actions.js"
 import {ShockDragDrop} from "../../../../tools/shockdrop/drag_drop.js"
 
 export type OutlinerGrab = {itemIds: Id[]}
@@ -26,26 +26,26 @@ export class OutlinerDragDrop
 		}
 	}
 
-	constructor(edcore: Edcore) {
+	constructor(actions: OutlineActions) {
 		super({
 			handle_drop: (_event, grabbed, intent) => {
 				const {itemIds} = grabbed!
 				switch (intent.mode) {
 
 					case "above":
-						return edcore.actions.outline.move_above_another_item({
+						return actions.moving.move_above_another_item({
 							itemIds,
 							targetItemId: intent.itemId,
 						})
 
 					case "into":
-						return edcore.actions.outline.move_into_folder({
+						return actions.moving.move_into_container({
 							itemIds,
-							folderId: intent.folderId,
+							containerId: intent.folderId,
 						})
 
 					case "below":
-						return edcore.actions.outline.move_below_another_item({
+						return actions.moving.move_below_another_item({
 							itemIds,
 							targetItemId: intent.itemId,
 						})

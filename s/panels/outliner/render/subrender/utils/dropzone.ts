@@ -2,11 +2,11 @@
 import {html} from "@benev/slate"
 import {ItemMeta} from "../../../utils/metas.js"
 import {slate} from "../../../../../context/slate.js"
-import {Item} from "../../../../../context/domains/outline/types.js"
+import {Item} from "../../../../../context/domains/outline2/types/item.js"
 import {OutlinerHoverIntent} from "../../../../../context/controllers/drop_coordinator/parts/outliner_drag_drop.js"
 
 export const Dropzone = slate.light_view(_use => (
-		{dnd, item, isRoot, folderStates}: ItemMeta,
+		{dnd, item, folderStates}: ItemMeta,
 	) => {
 
 	if (!dnd.grabbed)
@@ -28,7 +28,7 @@ export const Dropzone = slate.light_view(_use => (
 		></div>
 	`
 
-	function folder_allows_drop_below(item: Item.Folder) {
+	function folder_allows_drop_below(item: Item.Container) {
 		if (item.children.length === 0)
 			return true
 		else
@@ -41,18 +41,14 @@ export const Dropzone = slate.light_view(_use => (
 			?data-drop-hover="${is_hovering_over}"
 			data-drop-mode="${dnd.hovering?.mode}">
 
-			${item.kind === "folder"
-				? isRoot
-					? html`
-						${indicator("drop-into", intents.into)}
-					`
-					: html`
-						${indicator("drop-above", intents.above)}
-						${indicator("drop-into", intents.into)}
-						${folder_allows_drop_below(item)
-							? indicator("drop-below", intents.below)
-							: null}
-					`
+			${item.kind === "container"
+				? html`
+					${indicator("drop-above", intents.above)}
+					${indicator("drop-into", intents.into)}
+					${folder_allows_drop_below(item)
+						? indicator("drop-below", intents.below)
+						: null}
+				`
 				: html`
 					${indicator("drop-above", intents.above)}
 					${indicator("drop-below", intents.below)}

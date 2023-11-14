@@ -8,10 +8,10 @@ import {delete_item} from "../../behaviors/delete_item.js"
 import {icon_feather_x} from "../../../../icons/groups/feather/x.js"
 
 export function render_line_item(meta: ItemMeta, content: TemplateResult) {
-	const {item, parents, isRoot, outline, dnd} = meta
-	const isApparent = outline.isApparent(item.id)
+	const {item, parents, outline, dnd} = meta
+	const isApparent = outline.isImplicityVisible(item.id)
 
-	const is_deleteable = !isRoot
+	const is_deleteable = true
 
 	return html`
 		<li

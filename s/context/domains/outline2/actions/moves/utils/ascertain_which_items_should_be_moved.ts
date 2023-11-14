@@ -14,6 +14,11 @@ export function ascertain_which_items_should_be_moved(
 		? targetReport.item
 		: null
 
+	const path_of_container_ids_to_destination = [
+		...destinationParentIds,
+		...(destinationContainer?.id ?? []),
+	]
+
 	const ids_of_folders_being_moved = outline.containers
 		.filter(f => itemIds.includes(f.id))
 		.map(f => f.id)
@@ -30,10 +35,7 @@ export function ascertain_which_items_should_be_moved(
 
 	const do_not_move_a_folder_into_itself = (
 		(report: Item.Report) => (
-			(!destinationParentIds.includes(report.item.id)) &&
-			(destinationContainer
-				? (report.item.id !== destinationContainer.id)
-				: true)
+			!path_of_container_ids_to_destination.includes(report.item.id)
 		)
 	)
 

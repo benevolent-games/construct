@@ -43,8 +43,8 @@ export namespace Item {
 		| Light
 	)
 
-	export type Report = {
-		item: Whatever
+	export type Report<I extends Whatever = Whatever> = {
+		item: I
 		parents: Container[]
 	}
 }

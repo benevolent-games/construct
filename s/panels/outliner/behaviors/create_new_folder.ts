@@ -1,20 +1,23 @@
 
-import {ItemMeta} from "../utils/metas.js"
-import {freshId} from "../../../tools/fresh_id.js"
-import {Item} from "../../../context/domains/outline/types.js"
+import {Id, freshId} from "../../../tools/fresh_id.js"
+import {OutlineActions} from "../../../context/domains/outline2/actions.js"
 
-export function create_new_folder({edcore}: ItemMeta, parent: Item.Folder) {
-	const new_id = freshId()
-	edcore.actions.outline.add([{
-		folderId: parent.id,
+export function create_new_folder(
+		actions: OutlineActions,
+		into: Id | null,
+	) {
+
+	actions.items.add({
+		into,
 		item: {
-			kind: "folder",
-			id: new_id,
-			name: `folder`,
+			id: freshId(),
+			kind: "container",
+			name: "folder",
 			selected: false,
 			visible: true,
+			spatial: null,
 			children: [],
 		},
-	}])
+	})
 }
 

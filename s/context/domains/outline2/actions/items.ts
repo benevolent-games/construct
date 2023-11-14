@@ -5,7 +5,7 @@ import {Id} from "../../../../tools/fresh_id.js"
 
 export const outline_item_actions = actionate.outline2.blueprint(action => ({
 
-	add: action(outline => (additions: {
+	add: action(outline => (...additions: {
 			item: Item.Whatever,
 			into: Id | null,
 		}[]) => {
