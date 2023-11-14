@@ -1,99 +1,45 @@
 
 import {Spatial} from "./spatial.js"
 import {Id} from "../../../tools/fresh_id.js"
-import {V3} from "@benev/toolbox/x/utils/v3.js"
 import {PropAddress} from "../../controllers/world/warehouse/parts/types.js"
 
 export namespace Item {
-	export type Kind = (
-		| "folder"
-		| "instance"
-		| "light"
-		| "placement"
-	)
-
-	export type FolderSubtype = (
-		| "root"
-		| "subroot"
-		| "scene"
-		| "subscene"
-		| "arrangement"
-	)
+	export type Kind = "folder" | "instance" | "light"
 
 	export interface Base {
 		kind: Kind
 		id: Id
 		name: string
 		selected: boolean
+		visible: boolean
 	}
 
 	export interface Folder extends Base {
 		kind: "folder"
-		subtype: FolderSubtype
-		children: Anything[]
+		name: string
+		children: Whatever[]
 	}
 
-	export interface Manifestation extends Base {
-		visible: boolean
+	export interface Instance extends Base {
+		kind: "instance"
+		name: string
+		address: PropAddress
 		spatial: Spatial
 	}
 
-	export type RootChild = SubrootFolder | Scene
-	export type ArrangementChild = SubsceneFolder | Instance | Light
-	export type SceneChild = ArrangementFolder | ArrangementChild
-
-	//////
-	//////
-	//////
-
-	export interface Root extends Folder {
-		folder: "root"
-		children: RootChild[]
-		selected: false
-	}
-
-	export interface SubrootFolder extends Folder {
-		subtype: "subroot"
-		children: RootChild[]
-	}
-
-	export interface Scene extends Folder {
-		subtype: "scene"
-		children: SceneChild[]
-	}
-
-	export interface SubsceneFolder extends Folder {
-		subtype: "subscene"
-		children: SceneChild[]
-	}
-
-	export interface ArrangementFolder extends Folder {
-		subtype: "arrangement"
-		children: ArrangementChild[]
-		pivot: V3
-	}
-
-	export interface Instance extends Manifestation {
-		kind: "instance"
-		address: PropAddress
-	}
-
-	export interface Light extends Manifestation {
+	export interface Light extends Base {
 		kind: "light"
+		name: string
+		spatial: Spatial
 	}
 
-	export interface Placement extends Manifestation {
-		kind: "placement"
-	}
+	export type Whatever = Folder | Instance | Light
 
-	export type Anything = Root | Scene | Folder | Instance | Light | Placement
-
-	//////
-	//////
-	//////
+	////////
+	////////
 
 	export type Report = {
-		item: Item.Anything
+		item: Item.Whatever
 		parent: Item.Folder
 		parents: Item.Folder[]
 	}

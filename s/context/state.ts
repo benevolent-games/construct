@@ -1,10 +1,13 @@
 
 import {Item} from "./domains/outline/types.js"
 import {Id, freshId} from "../tools/fresh_id.js"
+import {OutlineState} from "./domains/outline2/types/state.js"
 
 export interface State {
-	outline: Item.Folder
+	outline2: OutlineState
 	slots: GlbSlot[]
+
+	outline: Item.Folder
 }
 
 //////
@@ -20,6 +23,10 @@ export interface GlbSlot {
 }
 
 export const default_state = (): State => ({
+	outline2: {
+		items: [],
+		root: [],
+	},
 	outline: {
 		id: freshId(),
 		name: "root",
