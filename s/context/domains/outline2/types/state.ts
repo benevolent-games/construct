@@ -1,36 +1,16 @@
 
-import {Item} from "./item.js"
 import {Id} from "../../../../tools/fresh_id.js"
+import {EditorBlock, EditorRef} from "../editor_data.js"
 
 export type OutlineState = {
 
-	/** data blocks with details about things in this project */
-	items: Item.Whatever[]
+	/** data-blocks about things in this project */
+	blocks: EditorBlock[]
 
-	references: Item.Reference[]
+	/** references to data blocks, which can have their own data */
+	references: EditorRef[]
 
-	/** reference ids that are to be rendered at the root of the hierarchy */
+	/** root-level references that are blocks */
 	root: Id[]
-
-	isolate: Id | null
 }
-
-/*
-
-items [
-	{id, whatever},
-	{id, whatever},
-	{id, whatever},
-	{id, whatever},
-]
-
-references: [
-	[ref, id],
-	[ref, id],
-	[ref, id],
-],
-
-root: [ref, ref, ref, ref]
-
-*/
 
