@@ -10,6 +10,7 @@ import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 import {establish_hotkeys} from "./controllers/hotkeys/controller.js"
 import {OutlineGenius} from "./controllers/outline_genius/controller.js"
 import {DropCoordinator} from "./controllers/drop_coordinator/controller.js"
+import { editorDataFacility } from "./domains/outline2/editor_data.js"
 
 export interface ContextOptions extends MiniContextOptions {}
 
@@ -27,6 +28,8 @@ export class Context extends MiniContext {
 	outline2 = new OutlineModel(
 		watch.computed(() => this.edcore.state.outline2)
 	)
+
+	dataFacility = editorDataFacility
 
 	/** the 3d babylon world and glbs */
 	world = new World(

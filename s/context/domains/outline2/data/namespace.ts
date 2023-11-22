@@ -64,5 +64,11 @@ export namespace Data {
 			ref: RefFor<C[K]>
 		}
 	}
+
+	export type Report = {
+		ref: Ref
+		block: Block
+		otherRefs: Ref[]
+	}
 }
 

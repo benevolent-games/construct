@@ -23,7 +23,7 @@ export class DataFacility<C extends Data.Concepts> {
 		return this.#concepts[kind]
 	}
 
-	block<K extends keyof C>(
+	make_block<K extends keyof C>(
 			{kind, name}: {
 				kind: K
 				name: string
@@ -43,7 +43,7 @@ export class DataFacility<C extends Data.Concepts> {
 		}
 	}
 
-	ref<K extends keyof C>(
+	make_ref<K extends keyof C>(
 			{kind, label, blockId}: {
 				kind: K
 				label: string

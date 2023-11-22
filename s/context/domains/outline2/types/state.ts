@@ -8,9 +8,9 @@ export type OutlineState = {
 	blocks: EditorBlock[]
 
 	/** references to data blocks, which can have their own data */
-	references: EditorRef[]
+	refs: EditorRef[]
 
-	/** root-level references that are blocks */
+	/** root-level references */
 	root: Id[]
 }
 
