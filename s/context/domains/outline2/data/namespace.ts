@@ -2,73 +2,96 @@
 import {Pojo} from "@benev/slate"
 import {Id} from "../../../../tools/fresh_id.js"
 
+type Key = string | symbol | number
+
 export namespace Data {
-	export type Block<P = any> = {
+	export type Block<C = any> = {
 		id: Id
-		kind: string
+		kind: Key
 		name: string
-		cargo: P
-		childRefs: Id[] | null
+		cargo: C
+		childReferences: Id[] | null
 	}
 
-	export type Ref<P = any> = {
+	export type Reference<C = any> = {
 		id: Id
 		blockId: Id
 		label: string
-		payload: P
-	}
-
-	export type Init<P = any> = (...p: any[]) => P
-
-	export type Concept<Cargo, Payload> = {
-		block: Init<Cargo>
-		ref: Init<Payload>
-		children?: {
-			allowChild: (block: Block, ref: Ref) => boolean
-		}
-	}
-
-	export type BlockParamsFor<C extends Concept<any, any>> = (
-		Parameters<C["block"]>
-	)
-
-	export type BlockCargoFor<C extends Concept<any, any>> = (
-		ReturnType<C["block"]>
-	)
-
-	export type BlockFor<C extends Concept<any, any>> = (
-		Block<ReturnType<C["block"]>>
-	)
-
-	export type RefParamsFor<C extends Concept<any, any>> = (
-		Parameters<C["ref"]>
-	)
-
-	export type RefPayloadFor<C extends Concept<any, any>> = (
-		ReturnType<C["ref"]>
-	)
-
-	export type RefFor<C extends Concept<any, any>> = (
-		Ref<ReturnType<C["ref"]>>
-	)
-
-	export function concept<C extends Concept<any, any>>(c: C) {
-		return c
-	}
-
-	export type Concepts = Pojo<Concept<any, any>>
-
-	export type Schema<C extends Concepts> = {
-		[K in keyof C]: {
-			block: BlockFor<C[K]>
-			ref: RefFor<C[K]>
-		}
+		cargo: C
 	}
 
 	export type Report = {
-		ref: Ref
+		reference: Reference
 		block: Block
-		otherRefs: Ref[]
+		otherReferences: Reference[]
 	}
+
+	//////////////////////////
+
+	export type Cargoes<BC extends {}, RC extends {}> = {
+		block: BC
+		reference: RC
+	}
+
+	export type Concepts = Pojo<Cargoes<{}, {}>>
+
+	export type AsConcepts<C extends Pojo<Cargoes<{}, {}>>> = C
+
+	export type Config<C extends Concepts> = {
+		[K in keyof C]: {
+			allowChild?: (
+				parentBlock: Block,
+				childBlock: Block,
+				childReference: Reference,
+			) => boolean
+		}
+	}
+
+	// export type Init<P = any> = (...p: any[]) => P
+
+	// export type Concept<BlockCargo, ReferenceCargo> = {
+	// 	block: Init<BlockCargo>
+	// 	reference: Init<ReferenceCargo>
+	// 	children?: {
+	// 		allowChild: (block: Block, reference: Reference) => boolean
+	// 	}
+	// }
+
+	// export type ConceptBlockParams<C extends Concept<any, any>> = (
+	// 	Parameters<C["block"]>
+	// )
+
+	// export type ConceptBlockCargo<C extends Concept<any, any>> = (
+	// 	ReturnType<C["block"]>
+	// )
+
+	// export type ConceptBlock<C extends Concept<any, any>> = (
+	// 	Block<ReturnType<C["block"]>>
+	// )
+
+	// export type ConceptReferenceParams<C extends Concept<any, any>> = (
+	// 	Parameters<C["reference"]>
+	// )
+
+	// export type ConceptReferenceCargo<C extends Concept<any, any>> = (
+	// 	ReturnType<C["reference"]>
+	// )
+
+	// export type ConceptReference<C extends Concept<any, any>> = (
+	// 	Reference<ReturnType<C["reference"]>>
+	// )
+
+	// export function concept<C extends Concept<any, any>>(c: C) {
+	// 	return c
+	// }
+
+	// export type Concepts = Pojo<Concept<any, any>>
+
+	// export type Schema<C extends Concepts> = {
+	// 	[K in keyof C]: {
+	// 		block: ConceptBlock<C[K]>
+	// 		ref: ConceptReference<C[K]>
+	// 	}
+	// }
 }
 

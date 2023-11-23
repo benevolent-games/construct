@@ -10,10 +10,10 @@ export type WalkReport = {
 	parents: Data.Report[]
 }
 
-export class OutlineModel {
-	#signal: Signal<OutlineState>
+export class OutlineModel<C extends Data.Concepts> {
+	#signal: Signal<OutlineState<C>>
 
-	constructor(data: Signal<OutlineState>) {
+	constructor(data: Signal<OutlineState<C>>) {
 		this.#signal = data
 	}
 
@@ -29,8 +29,8 @@ export class OutlineModel {
 		return this.#state.blocks
 	}
 
-	get refs() {
-		return this.#state.refs
+	get references() {
+		return this.#state.references
 	}
 
 	block(id: Id) {
@@ -40,38 +40,38 @@ export class OutlineModel {
 		return block
 	}
 
-	ref(id: Id) {
-		const ref = this.#state.refs.find(reference => reference.id === id)
+	reference(id: Id) {
+		const ref = this.#state.references.find(ref => ref.id === id)
 		if (!ref)
 			throw new Error(`reference not found "${ref}"`)
 		return ref
 	}
 
-	get relations() {
-		const relations = new Map<Id, {block: Data.Block, refs: Data.Ref[]}>(
+	get block_relations() {
+		const relations = new Map<Id, {block: Data.Block, refs: Data.Reference[]}>(
 			this.blocks.map(block => [block.id, {block, refs: []}])
 		)
-		for (const ref of this.refs) {
+		for (const ref of this.references) {
 			const relation = relations.get(ref.blockId)!
 			relation.refs.push(ref)
 		}
 		return relations
 	}
 
-	all_refs_for_block(blockId: Id) {
-		return this.refs.filter(ref => ref.blockId === blockId)
+	all_references_for_block(blockId: Id) {
+		return this.references.filter(ref => ref.blockId === blockId)
 	}
 
 	report(refId: Id): Data.Report {
-		const ref = this.ref(refId)
-		const block = this.block(ref.blockId)
-		const otherRefs = this.all_refs_for_block(ref.blockId)
-			.filter(r => r.id !== ref.id)
-		return {block, ref, otherRefs}
+		const reference = this.reference(refId)
+		const block = this.block(reference.blockId)
+		const otherReferences = this.all_references_for_block(reference.blockId)
+			.filter(r => r.id !== reference.id)
+		return {block, reference, otherReferences}
 	}
 
 	get reports() {
-		return this.refs.map(ref => this.report(ref.id))
+		return this.references.map(ref => this.report(ref.id))
 	}
 
 	get_specific_reports(...refIds: Id[]) {
@@ -81,12 +81,11 @@ export class OutlineModel {
 	walk() {
 		const results: WalkReport[] = []
 
-		const recurse = (ids: Id[], parents: Data.Report[]) => {
-			const reports = this.get_specific_reports(...ids)
-			for (const report of reports) {
+		const recurse = (refIds: Id[], parents: Data.Report[]) => {
+			for (const report of this.get_specific_reports(...refIds)) {
 				results.push({report, parents})
-				if (report.block.childRefs)
-					recurse(report.block.childRefs, [...parents, report])
+				if (report.block.childReferences)
+					recurse(report.block.childReferences, [...parents, report])
 			}
 		}
 
@@ -94,10 +93,18 @@ export class OutlineModel {
 		return results
 	}
 
+	get orphaned_references() {
+		const tree = this.walk()
+		return this.references.filter(reference =>
+			!tree.some(({report}) => report.reference.id === reference.id)
+		)
+	}
+
 	get orphaned_blocks() {
-		return [...this.relations.values()]
-			.filter(({refs}) => refs.length === 0)
-			.map(({block}) => block)
+		const tree = this.walk()
+		return this.blocks.filter(block =>
+			!tree.some(({report}) => report.block.id === block.id)
+		)
 	}
 }
 

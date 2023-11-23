@@ -35,7 +35,7 @@ export const OutlinerPanel = panel({
 		const behaviors = make_outliner_behaviors(outlinerMeta)
 
 		function render_flat(report: Data.Report): TemplateResult {
-			const isFolder = report.block.childRefs !== null
+			const isFolder = report.block.childReferences !== null
 			const meta = make_item_meta(outlinerMeta, report)
 
 			if (isFolder)

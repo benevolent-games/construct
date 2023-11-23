@@ -21,7 +21,7 @@ export function render_folder2(
 
 	const select = behaviors.click_for_item_selections(meta)
 
-	const {ref, block, folderStates, outline} = meta
+	const {reference: ref, block, folderStates, outline} = meta
 	// const item = meta.item as Item.Container
 	// const reports = outline.reports
 
@@ -31,7 +31,7 @@ export function render_folder2(
 		folderState.opened = !folderState.opened
 	}
 
-	const number_of_children = block.childRefs!.length
+	const number_of_children = block.childReferences!.length
 
 	// const number_of_children = reports.reduce(
 	// 	(previous, current) =>
@@ -80,7 +80,7 @@ export function render_folder2(
 		`)}
 
 		${folderState.opened
-			? block.childRefs!.map(refId => renderChild(outline.report(refId)))
+			? block.childReferences!.map(refId => renderChild(outline.report(refId)))
 			: undefined}
 	`
 }
