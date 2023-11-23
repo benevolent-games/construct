@@ -2,7 +2,7 @@
 import {watch} from "@benev/slate"
 
 import {World} from "./controllers/world/controller.js"
-import {OutlineModel} from "./domains/outline2/model.js"
+import {OutlineModel} from "./domains/outline2/model/model.js"
 import {Edcore} from "./controllers/edcore/controller.js"
 import {Flowchart} from "./controllers/flowchart/controller.js"
 import {MiniContext, MiniContextOptions} from "./mini_context.js"

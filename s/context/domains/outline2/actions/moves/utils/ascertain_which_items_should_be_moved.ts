@@ -1,6 +1,6 @@
 
 import {Item} from "../../../types/item.js"
-import {OutlineAdmin} from "../../../admin.js"
+import {OutlineAdmin} from "../../../model/admin.js"
 import {Id} from "../../../../../../tools/fresh_id.js"
 
 export function ascertain_which_items_should_be_moved(

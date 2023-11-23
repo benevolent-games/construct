@@ -1,6 +1,6 @@
 
 import {LocalFolderStates} from "./local_folder_states.js"
-import {OutlineModel} from "../../../context/domains/outline2/model.js"
+import {OutlineModel} from "../../../context/domains/outline2/model/model.js"
 import {Data} from "../../../context/domains/outline2/data/namespace.js"
 import {OutlineActions} from "../../../context/domains/outline2/actions.js"
 import {Flowchart} from "../../../context/controllers/flowchart/controller.js"

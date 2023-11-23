@@ -1,10 +1,10 @@
 
 import {Signal} from "@benev/slate"
 import {OutlineModel} from "./model.js"
-import {Data} from "./data/namespace.js"
-import {OutlineState} from "./types/state.js"
-import {DataFacility} from "./data/facility.js"
-import {Id, freshId} from "../../../tools/fresh_id.js"
+import {Data} from "../data/namespace.js"
+import {OutlineState} from "../types/state.js"
+import {DataFacility} from "../data/facility.js"
+import {Id, freshId} from "../../../../tools/fresh_id.js"
 
 export class OutlineAdmin<C extends Data.Concepts> extends OutlineModel<C> {
 

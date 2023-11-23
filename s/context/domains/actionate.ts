@@ -2,7 +2,7 @@
 import {ZipAction} from "@benev/slate"
 
 import {State} from "../state.js"
-import {OutlineAdmin} from "./outline2/admin.js"
+import {OutlineAdmin} from "./outline2/model/admin.js"
 import {editorDataFacility} from "./outline2/editor_data.js"
 import {OutlineGenius} from "../controllers/outline_genius/controller.js"
 

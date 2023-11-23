@@ -1,5 +1,5 @@
 
-import {OutlineAdmin} from "../admin.js"
+import {OutlineAdmin} from "../model/admin.js"
 import {actionate} from "../../actionate.js"
 import {Id} from "../../../../tools/fresh_id.js"
 
