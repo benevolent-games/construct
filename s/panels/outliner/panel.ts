@@ -40,7 +40,7 @@ export const OutlinerPanel = panel({
 			const isFolder = report.block.childReferences !== null
 			// const meta = make_item_meta(outlinerMeta, report)
 			return html`
-				<li>${report.reference.label} ${isFolder ? "(folder)" : null}</li>
+				<li>${report.reference.name} ${isFolder ? "(folder)" : null}</li>
 			`
 		}
 

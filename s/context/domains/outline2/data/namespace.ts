@@ -16,7 +16,7 @@ export namespace Data {
 	export type Reference<C = any> = {
 		id: Id
 		blockId: Id
-		label: string
+		name: string
 		cargo: C
 	}
 

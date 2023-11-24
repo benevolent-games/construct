@@ -19,7 +19,7 @@ export const outline_core_actions = actionate.outline2.blueprint(action => ({
 		const reference = outline.create_reference({
 			blockId: block.id,
 			cargo: {spatial: null},
-			label: name,
+			name,
 		})
 
 		if (parentBlockId)
