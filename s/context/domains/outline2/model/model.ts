@@ -5,7 +5,7 @@ import {Data} from "../data/namespace.js"
 import {OutlineState} from "../types/state.js"
 import {Id} from "../../../../tools/fresh_id.js"
 
-export type WalkReport = {
+export type GraphReport = {
 	report: Data.Report
 	parents: Data.Report[]
 }
@@ -78,8 +78,8 @@ export class OutlineModel<C extends Data.Concepts> {
 		return refIds.map(refId => this.report(refId))
 	}
 
-	walk() {
-		const results: WalkReport[] = []
+	get graph() {
+		const results: GraphReport[] = []
 
 		const recurse = (refIds: Id[], parents: Data.Report[]) => {
 			for (const report of this.get_specific_reports(...refIds)) {
@@ -94,16 +94,16 @@ export class OutlineModel<C extends Data.Concepts> {
 	}
 
 	get orphaned_references() {
-		const tree = this.walk()
+		const {graph} = this
 		return this.references.filter(reference =>
-			!tree.some(({report}) => report.reference.id === reference.id)
+			!graph.some(({report}) => report.reference.id === reference.id)
 		)
 	}
 
 	get orphaned_blocks() {
-		const tree = this.walk()
+		const {graph} = this
 		return this.blocks.filter(block =>
-			!tree.some(({report}) => report.block.id === block.id)
+			!graph.some(({report}) => report.block.id === block.id)
 		)
 	}
 }

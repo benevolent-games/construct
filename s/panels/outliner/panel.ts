@@ -5,13 +5,12 @@ import {icon_feather_layers} from "../../icons/groups/feather/layers.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
-import {render_folder2} from "./render/folder2.js"
 import {PanelProps, panel} from "../panel_parts.js"
 import {OutlinerMeta, make_item_meta} from "./utils/metas.js"
 import {clear_selection} from "./behaviors/clear_selection.js"
 import {LocalFolderStates} from "./utils/local_folder_states.js"
 import {create_new_folder} from "./behaviors/create_new_folder.js"
-import {Data} from "../../context/domains/outline2/data/namespace.js"
+import {GraphReport} from "../../context/domains/outline2/model/model.js"
 import {make_outliner_behaviors} from "./utils/make_outliner_behaviors.js"
 
 export const OutlinerPanel = panel({
@@ -34,13 +33,12 @@ export const OutlinerPanel = panel({
 
 		const behaviors = make_outliner_behaviors(outlinerMeta)
 
-		function render_flat(report: Data.Report): TemplateResult {
+		function render_flat({report}: GraphReport): TemplateResult {
 			const isFolder = report.block.childReferences !== null
 			const meta = make_item_meta(outlinerMeta, report)
-
-			if (isFolder)
-				return render_folder2(meta, behaviors, childReport => render_flat(childReport))
-			return html``
+			return html`
+				<li>${report.reference.label}</li>
+			`
 		}
 
 		// function render_flat(report: Item.Report): TemplateResult {
@@ -62,12 +60,15 @@ export const OutlinerPanel = panel({
 		// 	}
 		// }
 
+		const {graph} = outline
+
 		return html`
 			<div>
 				<button @click="${() => create_new_folder(outlineActions, null)}">add folder</button>
 			</div>
 			<ol @click="${(event: MouseEvent) => clear_selection(outlinerMeta, event)}">
-				${outline.reports(...outline.root)
+
+				${graph
 					.map(render_flat)}
 			</ol>
 		`

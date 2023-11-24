@@ -19,9 +19,9 @@ export class DataFacility<C extends Data.Concepts> {
 
 ////////////////////////
 
-export type ConceptsFromFacility<F extends DataFacility<any>> = (
-	F extends DataFacility<infer C>
-		? C
-		: never
-)
+// export type ConceptsFromFacility<F extends DataFacility<any>> = (
+// 	F extends DataFacility<infer C>
+// 		? C
+// 		: never
+// )
 

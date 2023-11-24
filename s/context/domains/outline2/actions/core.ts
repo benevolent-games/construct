@@ -2,7 +2,7 @@
 import {actionate} from "../../actionate.js"
 import {Id} from "../../../../tools/fresh_id.js"
 
-export const outline_item_actions = actionate.outline2.blueprint(action => ({
+export const outline_core_actions = actionate.outline2.blueprint(action => ({
 
 	make_new_folder: action(outline => ({name, parentBlockId}: {
 			name: string
