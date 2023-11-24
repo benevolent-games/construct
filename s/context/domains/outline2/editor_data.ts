@@ -7,7 +7,6 @@ import {DataFacility} from "./data/facility.js"
 import {PropAddress} from "../../controllers/world/warehouse/parts/types.js"
 
 export type EditorConcepts = Data.AsConcepts<{
-
 	folder: {
 		block: {}
 		reference: {spatial: null | Spatial}
@@ -28,7 +27,7 @@ export type EditorConcepts = Data.AsConcepts<{
 	}
 }>
 
-export const editorDataFacility = new DataFacility<EditorConcepts>({
+export const editorData = new DataFacility<EditorConcepts>({
 	folder: {allowChild: () => true},
 	prop: {},
 	light: {},

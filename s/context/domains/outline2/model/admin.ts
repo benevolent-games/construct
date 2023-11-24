@@ -1,5 +1,6 @@
 
 import {Signal} from "@benev/slate"
+
 import {OutlineModel} from "./model.js"
 import {Data} from "../data/namespace.js"
 import {OutlineState} from "../types/state.js"
@@ -30,8 +31,7 @@ export class OutlineAdmin<C extends Data.Concepts> extends OutlineModel<C> {
 	}
 
 	create_reference<K extends keyof C>(
-			partial: {kind: K}
-				& Omit<Data.Reference<C[K]["reference"]>, "id">
+			partial: Omit<Data.Reference<C[K]["reference"]>, "id">
 		) {
 
 		const reference = {

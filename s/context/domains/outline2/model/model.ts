@@ -2,8 +2,8 @@
 import {Signal} from "@benev/slate"
 
 import {Data} from "../data/namespace.js"
-import {Id} from "../../../../tools/fresh_id.js"
 import {OutlineState} from "../types/state.js"
+import {Id} from "../../../../tools/fresh_id.js"
 
 export type WalkReport = {
 	report: Data.Report

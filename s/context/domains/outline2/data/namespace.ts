@@ -46,52 +46,5 @@ export namespace Data {
 			) => boolean
 		}
 	}
-
-	// export type Init<P = any> = (...p: any[]) => P
-
-	// export type Concept<BlockCargo, ReferenceCargo> = {
-	// 	block: Init<BlockCargo>
-	// 	reference: Init<ReferenceCargo>
-	// 	children?: {
-	// 		allowChild: (block: Block, reference: Reference) => boolean
-	// 	}
-	// }
-
-	// export type ConceptBlockParams<C extends Concept<any, any>> = (
-	// 	Parameters<C["block"]>
-	// )
-
-	// export type ConceptBlockCargo<C extends Concept<any, any>> = (
-	// 	ReturnType<C["block"]>
-	// )
-
-	// export type ConceptBlock<C extends Concept<any, any>> = (
-	// 	Block<ReturnType<C["block"]>>
-	// )
-
-	// export type ConceptReferenceParams<C extends Concept<any, any>> = (
-	// 	Parameters<C["reference"]>
-	// )
-
-	// export type ConceptReferenceCargo<C extends Concept<any, any>> = (
-	// 	ReturnType<C["reference"]>
-	// )
-
-	// export type ConceptReference<C extends Concept<any, any>> = (
-	// 	Reference<ReturnType<C["reference"]>>
-	// )
-
-	// export function concept<C extends Concept<any, any>>(c: C) {
-	// 	return c
-	// }
-
-	// export type Concepts = Pojo<Concept<any, any>>
-
-	// export type Schema<C extends Concepts> = {
-	// 	[K in keyof C]: {
-	// 		block: ConceptBlock<C[K]>
-	// 		ref: ConceptReference<C[K]>
-	// 	}
-	// }
 }
 
