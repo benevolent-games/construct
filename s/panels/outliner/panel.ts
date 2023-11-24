@@ -5,13 +5,16 @@ import {icon_feather_layers} from "../../icons/groups/feather/layers.js"
 
 import {styles} from "./styles.js"
 import {slate} from "../../context/slate.js"
+import {OutlinerMeta} from "./utils/metas.js"
 import {PanelProps, panel} from "../panel_parts.js"
-import {OutlinerMeta, make_item_meta} from "./utils/metas.js"
-import {clear_selection} from "./behaviors/clear_selection.js"
 import {LocalFolderStates} from "./utils/local_folder_states.js"
-import {create_new_folder} from "./behaviors/create_new_folder.js"
-import {GraphReport} from "../../context/domains/outline2/model/model.js"
-import {make_outliner_behaviors} from "./utils/make_outliner_behaviors.js"
+import {Data} from "../../context/domains/outline2/data/namespace.js"
+import {GraphReport, OutlineModel} from "../../context/domains/outline2/model/model.js"
+// import {clear_selection} from "./behaviors/clear_selection.js"
+// import {LocalFolderStates} from "./utils/local_folder_states.js"
+// import {create_new_folder} from "./behaviors/create_new_folder.js"
+// import {GraphReport} from "../../context/domains/outline2/model/model.js"
+// import {make_outliner_behaviors} from "./utils/make_outliner_behaviors.js"
 
 export const OutlinerPanel = panel({
 	label: "outliner",
@@ -24,20 +27,20 @@ export const OutlinerPanel = panel({
 		const folderStates = use.prepare(() => new LocalFolderStates())
 
 		const outlinerMeta: OutlinerMeta = {
-			outline,
+			outline: outline as unknown as OutlineModel<Data.Concepts>,
 			flowchart,
 			folderStates,
 			outlineActions,
 			dnd: drops.outliner,
 		}
 
-		const behaviors = make_outliner_behaviors(outlinerMeta)
+		// const behaviors = make_outliner_behaviors(outlinerMeta)
 
 		function render_flat({report}: GraphReport): TemplateResult {
 			const isFolder = report.block.childReferences !== null
-			const meta = make_item_meta(outlinerMeta, report)
+			// const meta = make_item_meta(outlinerMeta, report)
 			return html`
-				<li>${report.reference.label}</li>
+				<li>${report.reference.label} ${isFolder ? "(folder)" : null}</li>
 			`
 		}
 
@@ -62,12 +65,22 @@ export const OutlinerPanel = panel({
 
 		const {graph} = outline
 
+		function create_new_folder() {
+			outlineActions.core.make_new_folder({
+				name: "new folder",
+				parentBlockId: null,
+			})
+		}
+
+		function clear_selection() {
+			console.log("clear selection??")
+		}
+
 		return html`
 			<div>
-				<button @click="${() => create_new_folder(outlineActions, null)}">add folder</button>
+				<button @click="${create_new_folder}">add folder</button>
 			</div>
-			<ol @click="${(event: MouseEvent) => clear_selection(outlinerMeta, event)}">
-
+			<ol @click="${clear_selection}">
 				${graph
 					.map(render_flat)}
 			</ol>

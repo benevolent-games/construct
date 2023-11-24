@@ -30,26 +30,27 @@ export class OutlinerDragDrop
 		super({
 			handle_drop: (_event, grabbed, intent) => {
 				const {itemIds} = grabbed!
-				switch (intent.mode) {
+				console.log("TODO outline dnd")
+				// switch (intent.mode) {
 
-					case "above":
-						return actions.moving.move_above_another_item({
-							itemIds,
-							targetItemId: intent.itemId,
-						})
+				// 	case "above":
+				// 		return actions.moving.move_above_another_item({
+				// 			itemIds,
+				// 			targetItemId: intent.itemId,
+				// 		})
 
-					case "into":
-						return actions.moving.move_into_container({
-							itemIds,
-							containerId: intent.folderId,
-						})
+				// 	case "into":
+				// 		return actions.moving.move_into_container({
+				// 			itemIds,
+				// 			containerId: intent.folderId,
+				// 		})
 
-					case "below":
-						return actions.moving.move_below_another_item({
-							itemIds,
-							targetItemId: intent.itemId,
-						})
-				}
+				// 	case "below":
+				// 		return actions.moving.move_below_another_item({
+				// 			itemIds,
+				// 			targetItemId: intent.itemId,
+				// 		})
+				// }
 			}
 		})
 	}

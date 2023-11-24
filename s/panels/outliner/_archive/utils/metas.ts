@@ -8,22 +8,22 @@ import {OutlinerDragDrop} from "../../../context/controllers/drop_coordinator/pa
 
 export type OutlinerMeta = {
 	dnd: OutlinerDragDrop
+	outline: OutlineModel
 	flowchart: Flowchart
 	outlineActions: OutlineActions
-	outline: OutlineModel<Data.Concepts>
 	folderStates: LocalFolderStates
 }
 
-// export type ItemMeta = Data.Report & OutlinerMeta
+export type ItemMeta = Data.Report & OutlinerMeta
 
-// export function make_item_meta(
-// 		outlinerMeta: OutlinerMeta,
-// 		report: Data.Report,
-// 	): ItemMeta {
+export function make_item_meta(
+		outlinerMeta: OutlinerMeta,
+		report: Data.Report,
+	): ItemMeta {
 
-// 	return {
-// 		...outlinerMeta,
-// 		...report,
-// 	}
-// }
+	return {
+		...outlinerMeta,
+		...report,
+	}
+}
 
