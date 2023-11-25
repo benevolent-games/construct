@@ -26,6 +26,10 @@ export namespace Data {
 		otherReferences: Reference[]
 	}
 
+	export type GraphReport = Report & {
+		parents: Data.Report[]
+	}
+
 	//////////////////////////
 
 	export type Cargoes<BC extends {}, RC extends {}> = {

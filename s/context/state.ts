@@ -28,6 +28,7 @@ export const default_state = (): State => ({
 		blocks: [],
 		references: [],
 		root: [],
+		isolated: null,
 	},
 	outline: {
 		id: freshId(),

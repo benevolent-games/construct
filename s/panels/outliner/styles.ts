@@ -9,10 +9,12 @@ ${standard_panel_styles}
 :host {
 	overflow-y: auto;
 
+	--header-bg: color-mix(in srgb, var(--bg-a), var(--bg-c) 40%);
+
 	--line-height: 1.5em;
 	--line-bg: transparent;
-	--line-bg-alt: #88888808;
-	--line-bg-hover: #8881;
+	--line-bg-alt: color-mix(in srgb, var(--bg-a), var(--bg-c) 10%);
+	--line-bg-hover: color-mix(in srgb, var(--bg-a), var(--bg-c) 20%);
 
 	--select: var(--alpha);
 	--drag: var(--charlie);
@@ -26,6 +28,47 @@ ${standard_panel_styles}
 
 	--drop-bg: color-mix(in srgb, var(--drop) 10%, transparent);
 	--drop-border: color-mix(in srgb, var(--drop) 30%, transparent);
+}
+
+:is(button, .icon) {
+	flex: 0 0 auto;
+	opacity: 0.5;
+	display: flex;
+	place-content: center;
+	place-items: center;
+
+	&:is(button) {
+		&:hover { opacity: 0.9; }
+		&:active { opacity: 1; }
+		&.delete:hover { color: red; }
+	}
+
+	> svg {
+		display: block;
+		width: 1em;
+		height: 1em;
+	}
+}
+
+header {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	padding: 0.2em 1em;
+	user-select: none;
+	line-height: 1em;
+	background: var(--header-bg);
+
+	> .isolation {
+		display: flex;
+		flex-direction: row;
+	}
+
+	> .buttonbar {
+		display: flex;
+		flex-direction: row;
+		margin-left: auto;
+	}
 }
 
 ol {
@@ -156,26 +199,6 @@ li {
 		display: flex;
 		gap: 0.2em;
 		overflow: hidden;
-	}
-
-	& :is(button, .icon) {
-		flex: 0 0 auto;
-		opacity: 0.5;
-		display: flex;
-		place-content: center;
-		place-items: center;
-
-		&:is(button) {
-			&:hover { opacity: 0.9; }
-			&:active { opacity: 1; }
-			&.delete:hover { color: red; }
-		}
-
-		> svg {
-			display: block;
-			width: 1em;
-			height: 1em;
-		}
 	}
 
 	& .name {

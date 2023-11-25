@@ -5,11 +5,6 @@ import {Data} from "../data/namespace.js"
 import {OutlineState} from "../types/state.js"
 import {Id} from "../../../../tools/fresh_id.js"
 
-export type GraphReport = {
-	report: Data.Report
-	parents: Data.Report[]
-}
-
 export class OutlineModel<C extends Data.Concepts> {
 	#signal: Signal<OutlineState<C>>
 
@@ -31,6 +26,13 @@ export class OutlineModel<C extends Data.Concepts> {
 
 	get references() {
 		return this.#state.references
+	}
+
+	get isolation_report() {
+		const {isolated} = this.#state
+		return isolated
+			? this.report(isolated)
+			: null
 	}
 
 	block(id: Id) {
@@ -78,37 +80,39 @@ export class OutlineModel<C extends Data.Concepts> {
 		return refIds.map(refId => this.report(refId))
 	}
 
-	get graph() {
-		const results: GraphReport[] = []
+	graph_from(...ids: Id[]) {
+		const results: Data.GraphReport[] = []
 
 		const recurse = (refIds: Id[], parents: Data.Report[]) => {
 			for (const report of this.get_specific_reports(...refIds)) {
-				results.push({report, parents})
+				results.push({...report, parents})
 				if (report.block.childReferences)
 					recurse(report.block.childReferences, [...parents, report])
 			}
 		}
 
-		recurse(this.root, [])
+		recurse(ids, [])
 		return results
+	}
+
+	get graph() {
+		return this.graph_from(...this.root)
 	}
 
 	get orphaned_references() {
 		const {graph} = this
 		return this.references.filter(reference =>
-			!graph.some(({report}) => report.reference.id === reference.id)
+			!graph.some(report => report.reference.id === reference.id)
 		)
 	}
 
 	get orphaned_blocks() {
 		const {graph} = this
 		return this.blocks.filter(block =>
-			!graph.some(({report}) => report.block.id === block.id)
+			!graph.some(report => report.block.id === block.id)
 		)
 	}
 }
-
-
 
 // export class OutlineModel {
 // 	#signal: Signal<OutlineState>

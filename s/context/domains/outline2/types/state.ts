@@ -12,5 +12,8 @@ export type OutlineState<C extends Data.Concepts> = {
 
 	/** root-level references */
 	root: Id[]
+
+	/** viewport rendering is restricted to this reference */
+	isolated: Id | null
 }
 
