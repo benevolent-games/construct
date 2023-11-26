@@ -1,11 +1,11 @@
 
 import {Item} from "./domains/outline/types.js"
 import {Id, freshId} from "../tools/fresh_id.js"
+import {Data} from "./domains/outline2/data/namespace.js"
 import {OutlineState} from "./domains/outline2/types/state.js"
-import {EditorConcepts} from "./domains/outline2/editor_data.js"
 
 export interface State {
-	outline2: OutlineState<EditorConcepts>
+	outline2: OutlineState<Data.Concepts>
 	slots: GlbSlot[]
 
 	outline: Item.Folder

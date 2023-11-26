@@ -4,14 +4,12 @@ import {Signal} from "@benev/slate"
 import {OutlineModel} from "./model.js"
 import {Data} from "../data/namespace.js"
 import {OutlineState} from "../types/state.js"
-import {DataFacility} from "../data/facility.js"
 import {Id, freshId} from "../../../../tools/fresh_id.js"
 
 export class OutlineAdmin<C extends Data.Concepts> extends OutlineModel<C> {
 
 	constructor(
 			public state: OutlineState<C>,
-			public facility: DataFacility<C>,
 		) {
 		super(new Signal(state))
 	}
@@ -54,19 +52,14 @@ export class OutlineAdmin<C extends Data.Concepts> extends OutlineModel<C> {
 		const parentBlock = this.block(parentBlockId)
 		const childBlock = this.block(childBlockId)
 		const childReference = this.reference(childReferenceId)
-		const config = this.facility.getConfig(parentBlock.kind as keyof C)
 
 		const allowed_to_add_child = (
-			config.allowChild &&
 			parentBlock.childReferences &&
-			parentBlock.id !== childBlock.id &&
-			config.allowChild(parentBlock, childBlock, childReference)
+			parentBlock.id !== childBlock.id
 		)
 
 		if (allowed_to_add_child)
 			parentBlock.childReferences!.push(childReference.id)
-
-		return allowed_to_add_child
 	}
 
 	detach_refs_from_tree(...ids: Id[]) {

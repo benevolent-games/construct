@@ -39,7 +39,7 @@ export namespace Data {
 
 	export type Concepts = Pojo<Cargoes<{}, {}>>
 
-	export type AsConcepts<C extends Pojo<Cargoes<{}, {}>>> = C
+	export type AsConcepts<C extends Concepts> = C
 
 	export type Config<C extends Concepts> = {
 		[K in keyof C]: {

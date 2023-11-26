@@ -12,6 +12,8 @@ import {LocalFolderStates} from "./utils/local_folder_states.js"
 import {Data} from "../../context/domains/outline2/data/namespace.js"
 import {OutlineModel} from "../../context/domains/outline2/model/model.js"
 import {icon_tabler_folder_plus} from "../../icons/groups/tabler/folder-plus.js"
+import { icon_tabler_folder_open } from "../../icons/groups/tabler/folder-open.js"
+import { icon_tabler_folder } from "../../icons/groups/tabler/folder.js"
 // import {clear_selection} from "./behaviors/clear_selection.js"
 // import {LocalFolderStates} from "./utils/local_folder_states.js"
 // import {create_new_folder} from "./behaviors/create_new_folder.js"
@@ -24,7 +26,7 @@ export const OutlinerPanel = panel({
 	view: slate.obsidian({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
-		const {edcore, drops, outline2: outline, flowchart} = use.context
+		const {edcore, drops, outline2: outline, flowchart, outlinerVisions} = use.context
 		const {graph} = outline
 		const actions = edcore.actions.outline2
 		const folderStates = use.prepare(() => new LocalFolderStates())
@@ -40,8 +42,10 @@ export const OutlinerPanel = panel({
 		// const behaviors = make_outliner_behaviors(outlinerMeta)
 
 		function render_flat(report: Data.GraphReport): TemplateResult {
+			const kind = report.block.kind as keyof typeof outlinerVisions
 			const is_container = report.block.childReferences !== null
 			const meta: ReportMeta = {...outlinerMeta, ...report}
+			const vision = outlinerVisions[kind]
 
 			// TODO extensible rendering.
 			// just like editor data.
@@ -50,32 +54,29 @@ export const OutlinerPanel = panel({
 			// or maybe even create a new thing on the context
 			// that harbors special renderers for each editor concept..
 
-			function render_folder() {
-				const {block, reference, otherReferences} = report
-				const is_prefab = otherReferences.length > 0
-				return html`
-					<li>${report.reference.name} ${is_prefab ? "prefab" : "folder"}</li>
-				`
-			}
+			const {block, reference, otherReferences} = report
+			const is_prefab = otherReferences.length > 0
 
-			function render_prop() {
-				return html`<li>prop</li>`
-			}
+			return html`
+				<li>
+					<span class=icon>
+						${vision.render_icon(meta)}
+					</span>
+					<span class=name>
+						${report.reference.name} ${is_prefab ? "prefab" : "folder"}
+					</span>
+					<button>
+						${icon_tabler_folder}
+					</button>
+				</li>
 
-			function render_light() {
-				return html`<li>light</li>`
-			}
-
-			switch (report.block.kind) {
-				case "prop":
-					return render_prop()
-				case "light":
-					return render_light()
-				case "folder":
-					return render_folder()
-				default:
-					return html`<li>unknown "${report.block.kind}"</li>`
-			}
+				${is_container
+					? folderStates.obtain(block.id).opened
+						? outline.graph_from(...block.childReferences!)
+							.map(report => render_flat(report))
+						: null
+					: null}
+			`
 		}
 
 		// function render_flat(report: Item.Report): TemplateResult {
