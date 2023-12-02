@@ -8,60 +8,49 @@ import {file_is_glb} from "../tools/shockdrop/utils/file_is_glb.js"
 import {establish_hotkeys} from "./controllers/hotkeys/controller.js"
 import {OutlineGenius} from "./controllers/outline_genius/controller.js"
 import {DropCoordinator} from "./controllers/drop_coordinator/controller.js"
-import { StateTree, watch } from "@benev/slate"
-import { State as BaseState, default_state } from "./state.js"
-import { actions_blueprint } from "./actions_blueprint.js"
-import { Historian } from "../common.js"
+import {StateTree, watch} from "@benev/slate"
+import {State as BaseState, default_state} from "./state.js"
+import {BaseActionsBlueprint, actions_blueprint} from "./actions_blueprint.js"
 
-type BaseActions = typeof actions_blueprint
 
 export interface ContextOptions<
 		State extends BaseState,
-		Actions extends BaseActions
+		Actions extends BaseActionsBlueprint
 	> extends MiniContextOptions {
 
 	initial_state: State
-
 }
 
 export class Context<
 		State extends BaseState,
-		Actions extends BaseActions
+		Actions extends BaseActionsBlueprint
 	> extends MiniContext {
 
 	#tree: StateTree<State>
 	#actions: Actions<State>
 	#historian: Historian<State, Actions>
 
-	// #tree = watch.stateTree<State>()
-
-	// edcore = new Edcore()
-
-	// outline = new OutlineGenius(
-	// 	() => this.edcore.state.outline
-	// )
-
-	// world = new World(
-	// 	this.edcore,
-	// 	this.outline,
-	// )
-
-	// flowchart = new Flowchart({
-	// 	edcore: this.edcore,
-	// 	world: this.world,
-	// 	gesture: this.gesture,
-	// 	outline: this.outline,
-	// })
-
-	// drops = new DropCoordinator(
-	// 	this.edcore.actions,
-	// 	this.world.warehouse,
-	// )
-
 	constructor(options: ContextOptions<State, Actions>) {
 		super(options)
 
+		this.#tree = watch.stateTree<State>(options.initial_state)
 
+		// const world = new World(
+		// 	this.edcore,
+		// 	this.outline,
+		// )
+
+		// flowchart = new Flowchart({
+		// 	edcore: this.edcore,
+		// 	world: this.world,
+		// 	gesture: this.gesture,
+		// 	outline: this.outline,
+		// })
+
+		// drops = new DropCoordinator(
+		// 	this.edcore.actions,
+		// 	this.world.warehouse,
+		// )
 
 		// assign commands to various hotkeys
 		establish_hotkeys(
