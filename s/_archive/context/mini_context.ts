@@ -33,7 +33,6 @@ export class MiniContext extends SlateContext {
 	drops = new MiniDropCoordinator()
 
 	constructor({panels, layouts}: MiniContextOptions) {
-
 		super()
 
 		this.panels = panels
