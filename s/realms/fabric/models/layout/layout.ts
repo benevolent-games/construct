@@ -9,7 +9,7 @@ import {StockLayouts} from "./parts/utils/stock_layouts.js"
 
 export const save_delay = 300
 
-export class LayoutController {
+export class LayoutModel {
 	#tree: StateTree<Layout.Cell>
 	actions: ReturnType<typeof prepare_layout_actions>
 
