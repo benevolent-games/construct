@@ -4,11 +4,10 @@ import {Id, freshId} from "../tools/fresh_id.js"
 
 export namespace Core {
 	export type Node = Set<Id>
-
-	export type Aspect = {
-		kind: string
-		[key: string]: any
-	}
+	export type Aspect = any
+	export type Kind = string
+	export type AspectSchema = {[kind: Kind]: Aspect}
+	export type AsAspectSchema<AS extends AspectSchema> = AS
 
 	export abstract class System {
 		abstract name: string
@@ -17,10 +16,10 @@ export namespace Core {
 
 	export type File = {
 		nodes: [Id, Id[]][]
-		aspects: [Id, Aspect][]
+		aspects: [Id, [Kind, Aspect]][]
 	}
 
-	export class Safe {
+	export class Safe<AS extends AspectSchema> {
 		static load(file: File) {
 			const safe = new this()
 
@@ -32,7 +31,7 @@ export namespace Core {
 		}
 
 		#nodes = new Map<Id, Node>()
-		#aspects = new Map<Id, Aspect>()
+		#aspects = new Map<Id, [string, any]>()
 
 		node(id: Id) {
 			const node = this.#nodes.get(id)
@@ -41,11 +40,11 @@ export namespace Core {
 			return node
 		}
 
-		aspect(id: Id) {
+		aspect<A extends AS[keyof AS] = AS[keyof AS]>(id: Id) {
 			const aspect = this.#aspects.get(id)
 			if (!aspect)
 				throw new Error(`node not found`)
-			return aspect
+			return aspect as A
 		}
 
 		create_node(...aspectIds: Id[]) {
@@ -57,26 +56,36 @@ export namespace Core {
 			return [id, node]
 		}
 
-		create_aspect<A extends Aspect>(aspect: A): [Id, A] {
+		create_aspect<A extends AS[keyof AS]>(aspect: A): [Id, A] {
 			const id = freshId()
 			this.#aspects.set(id, aspect)
 			return [id, aspect]
 		}
 
-		*select(...kinds: string[]) {
+		*select<Kinds extends keyof AS>(...kinds: Kinds[]) {
 			for (const [nodeId, node] of this.#nodes) {
-				const aspects = [...node]
-					.map(aspectId => [aspectId, this.aspect(aspectId)] as [Id, Aspect])
-
-				const match = kinds.every(kind =>
-					aspects.some(([,aspect]) => aspect.kind === kind)
+				const aspects_array = (
+					[...node].map(aspectId => [
+						aspectId,
+						this.aspect(aspectId),
+					] as any as [Id, Aspect])
 				)
 
-				if (match)
+				const match = kinds.every(kind =>
+					aspects_array.some(([,aspect]) => aspect.kind === kind)
+				)
+
+				if (match) {
+					const aspects = {} as any
+
+					for (const [,aspect] of aspects_array)
+						aspects[aspect.kind] = aspect
+
 					yield [
 						nodeId,
 						aspects,
-					]
+					] as [Id, {[K in Kinds]: AS[K]}]
+				}
 			}
 		}
 
@@ -88,5 +97,22 @@ export namespace Core {
 			}
 		}
 	}
+}
+
+type MyAspects = Core.AsAspectSchema<{
+	position: {
+		kind: "position"
+		vector: [number, number, number]
+	}
+	name: {
+		kind: "name"
+		text: string
+	}
+}>
+
+const safe = new Core.Safe<MyAspects>()
+
+for (const [id, node] of safe.select("name", "position")) {
+	node.position
 }
 
