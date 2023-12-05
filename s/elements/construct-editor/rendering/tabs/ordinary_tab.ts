@@ -13,7 +13,7 @@ const inside_x_button = (event: MouseEvent) => {
 	return event.target === x || x.contains(target)
 }
 
-export const OrdinaryTab = slate.quartz(use => ({
+export const OrdinaryTab = slate.light_view(use => ({
 		meta, pane, leaf, leafIndex,
 	}: {
 		meta: LayoutMeta

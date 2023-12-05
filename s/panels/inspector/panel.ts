@@ -9,7 +9,7 @@ import {icon_feather_sliders} from "../../icons/groups/feather/sliders.js"
 export const InspectorPanel = panel({
 	label: "inspector",
 	icon: icon_feather_sliders,
-	view: slate.obsidian({name: "inspector", styles}, () => ({}: PanelProps) => {
+	view: slate.shadow_view({name: "inspector", styles}, () => ({}: PanelProps) => {
 		return html`
 			<h1>inspector</h1>
 		`

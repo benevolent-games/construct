@@ -18,7 +18,7 @@ import { make_outliner_behaviors } from "./utils/make_outliner_behaviors.js"
 export const OutlinerPanel = panel({
 	label: "outliner",
 	icon: icon_feather_layers,
-	view: slate.obsidian({name: "outliner", styles},
+	view: slate.shadow_view({name: "outliner", styles},
 		use => ({}: PanelProps) => {
 
 		const {edcore, drops, outline, flowchart} = use.context

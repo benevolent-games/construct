@@ -13,7 +13,7 @@ import { ActionRecord } from "../../context/framework/utils/action_record.js"
 export const HistoryPanel = panel({
 	label: "history",
 	icon: icon_akar_history,
-	view: slate.obsidian({name: "history", styles}, use => ({}: PanelProps) => {
+	view: slate.shadow_view({name: "history", styles}, use => ({}: PanelProps) => {
 
 		const {history} = use.context.edcore
 		const {past, future} = use.watch(() => history.annals)

@@ -6,7 +6,7 @@ import {miniSlate as slate} from "../../../../context/mini_slate.js"
 import {icon_feather_plus} from "../../../../icons/groups/feather/plus.js"
 import {Layout} from "../../../../context/controllers/layout/parts/types.js"
 
-export const AdderTab = slate.quartz(_ => ({meta, pane}: {
+export const AdderTab = slate.light_view(_ => ({meta, pane}: {
 		meta: LayoutMeta
 		pane: Layout.Pane
 	}) => {

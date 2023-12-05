@@ -16,7 +16,7 @@ import {Glb} from "../../context/controllers/world/warehouse/parts/types.js"
 export const SlotsPanel = panel({
 	label: "slots",
 	icon: icon_tabler_layout_list,
-	view: slate.obsidian({name: "slots", styles}, use => ({}: PanelProps) => {
+	view: slate.shadow_view({name: "slots", styles}, use => ({}: PanelProps) => {
 		const {edcore, drops, world: {warehouse}} = use.context
 		const slots = use.watch(() => edcore.state.slots)
 		const dnd = drops.slots

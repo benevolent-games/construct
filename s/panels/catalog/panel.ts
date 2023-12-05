@@ -18,7 +18,7 @@ const placeholder_asset_icon = "https://i.imgur.com/LtadIlN.webp"
 export const CatalogPanel = panel({
 	label: "catalog",
 	icon: icon_feather_book_open,
-	view: slate.obsidian({name: "catalog", styles}, use => ({}: PanelProps) => {
+	view: slate.shadow_view({name: "catalog", styles}, use => ({}: PanelProps) => {
 		const {edcore, world: {warehouse}} = use.context
 		use.watch(() => edcore.state.slots)
 

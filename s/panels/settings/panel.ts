@@ -9,7 +9,7 @@ import {icon_feather_settings} from "../../icons/groups/feather/settings.js"
 export const SettingsPanel = panel({
 	label: "settings",
 	icon: icon_feather_settings,
-	view: slate.obsidian({name: "settings", styles}, use => ({}: PanelProps) => {
+	view: slate.shadow_view({name: "settings", styles}, use => ({}: PanelProps) => {
 
 		function reset_layout() {
 			use.context.layout.reset_to_default()
