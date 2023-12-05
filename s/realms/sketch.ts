@@ -3,11 +3,22 @@ import {Pojo} from "@benev/slate"
 import {Id, freshId} from "../tools/fresh_id.js"
 
 export namespace Core {
-	export type Node = Set<Id>
 	export type Aspect = any
 	export type Kind = string
+
 	export type AspectSchema = {[kind: Kind]: Aspect}
 	export type AsAspectSchema<AS extends AspectSchema> = AS
+
+	export type AspectReport<K extends keyof any, A> = {
+		id: Id
+		kind: K
+		aspect: A
+	}
+
+	export type NodeReport<Aspects extends Partial<AspectSchema> = Partial<AspectSchema>> = {
+		id: Id,
+		aspects: Aspects,
+	}
 
 	export abstract class System {
 		abstract name: string
@@ -15,104 +26,107 @@ export namespace Core {
 	}
 
 	export type File = {
-		nodes: [Id, Id[]][]
-		aspects: [Id, [Kind, Aspect]][]
+		aspects: [Id, Kind, Aspect][]
+
+		nodes: [Id, ...Id[]][]
+		 //     ↑      ↑
+		 // node_id,  aspect_ids
 	}
 
 	export class Safe<AS extends AspectSchema> {
-		static load(file: File) {
-			const safe = new this()
-
-			for (const [id, aspect] of file.aspects)
-				safe.#aspects.set(id, aspect)
-
-			for (const [id, node] of file.nodes)
-				safe.#nodes.set(id, new Set(node))
-		}
-
-		#nodes = new Map<Id, Node>()
-		#aspects = new Map<Id, [string, any]>()
+		#nodes = new Map<Id, Set<Id>>()
+		#aspects = new Map<Id, [Kind, Aspect]>()
 
 		node(id: Id) {
-			const node = this.#nodes.get(id)
-			if (!node)
-				throw new Error(`node not found`)
-			return node
+			const set = this.#nodes.get(id)
+			if (!set)
+				throw new Error(`node not found "${id}"`)
+			return {id, aspects: this.#assemble_aspects(...set)} as NodeReport
 		}
 
-		aspect<A extends AS[keyof AS] = AS[keyof AS]>(id: Id) {
-			const aspect = this.#aspects.get(id)
-			if (!aspect)
-				throw new Error(`node not found`)
-			return aspect as A
+		aspect<Kind extends keyof AS = keyof AS>(id: Id) {
+			const result = this.#aspects.get(id)
+			if (!result)
+				throw new Error(`aspect not found "${id}"`)
+			const [kind, aspect] = result as [Kind, AS[Kind]]
+			return {id, kind, aspect} as AspectReport<Kind, AS[Kind]>
 		}
 
 		create_node(...aspectIds: Id[]) {
 			for (const aspectId of aspectIds)
 				this.aspect(aspectId)
 			const id = freshId()
-			const node = new Set<Id>(aspectIds)
-			this.#nodes.set(id, node)
-			return [id, node]
+			const set = new Set<Id>(aspectIds)
+			this.#nodes.set(id, set)
+			return [id, set]
 		}
 
-		create_aspect<A extends AS[keyof AS]>(aspect: A): [Id, A] {
+		create_aspect<Kind extends keyof AS>(kind: Kind, aspect: AS[Kind]) {
 			const id = freshId()
 			this.#aspects.set(id, aspect)
-			return [id, aspect]
+			return {id, kind, aspect} as AspectReport<Kind, AS[Kind]>
 		}
 
-		*select<Kinds extends keyof AS>(...kinds: Kinds[]) {
-			for (const [nodeId, node] of this.#nodes) {
-				const aspects_array = (
-					[...node].map(aspectId => [
-						aspectId,
-						this.aspect(aspectId),
-					] as any as [Id, Aspect])
-				)
+		#assemble_aspects(...ids: Id[]) {
+			const aspects: Partial<AS> = {}
 
-				const match = kinds.every(kind =>
-					aspects_array.some(([,aspect]) => aspect.kind === kind)
-				)
-
-				if (match) {
-					const aspects = {} as any
-
-					for (const [,aspect] of aspects_array)
-						aspects[aspect.kind] = aspect
-
-					yield [
-						nodeId,
-						aspects,
-					] as [Id, {[K in Kinds]: AS[K]}]
-				}
+			for (const id of ids) {
+				const {kind, aspect} = this.aspect(id)
+				aspects[kind] = aspect
 			}
+
+			return aspects
+		}
+
+		*select<Kind extends keyof AS>(...kinds: Kind[]) {
+			for (const [id, aspectIds] of this.#nodes) {
+				const aspects = this.#assemble_aspects(...aspectIds)
+				const node_matches_selector = kinds.every(kind => kind in aspects)
+
+				if (node_matches_selector)
+					yield {
+						id,
+						aspects,
+					} as NodeReport<{[K in Kind]: AS[K]} & Partial<AS>>
+			}
+		}
+
+		static load(file: File) {
+			const safe = new this()
+
+			for (const [aspectId, kind, aspect] of file.aspects)
+				safe.#aspects.set(aspectId, [kind, aspect])
+
+			for (const [nodeId, ...aspectIds] of file.nodes)
+				safe.#nodes.set(nodeId, new Set(aspectIds))
 		}
 
 		save(): File {
 			return {
+
 				nodes: [...this.#nodes.entries()]
-					.map(([entityId, componentIds]) => [entityId, [...componentIds]]),
-				aspects: [...this.#aspects.entries()],
+					.map(([entityId, componentIds]) => [entityId, ...componentIds]),
+
+				aspects: [...this.#aspects.entries()]
+					.map(([id, [kind, aspect]]) => [id, kind, aspect]),
 			}
 		}
 	}
 }
 
+//////////////////////////
+//////////////////////////
+
 type MyAspects = Core.AsAspectSchema<{
-	position: {
-		kind: "position"
-		vector: [number, number, number]
-	}
-	name: {
-		kind: "name"
-		text: string
-	}
+	position: [number, number, number]
+	name: string
 }>
 
 const safe = new Core.Safe<MyAspects>()
 
-for (const [id, node] of safe.select("name", "position")) {
-	node.position
+const lol = safe.aspect<"position">("")
+
+for (const {aspects} of safe.select("position")) {
+	aspects.position
 }
 
