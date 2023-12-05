@@ -31,6 +31,17 @@ export namespace Core {
 		#nodes = new Map<Id, Set<Id>>()
 		#aspects = new Map<Id, [Kind, Aspect]>()
 
+		#assemble_aspects(...ids: Id[]) {
+			const aspects: Partial<AS> = {}
+
+			for (const id of ids) {
+				const [aspect, kind] = this.aspect(id)
+				aspects[kind] = aspect
+			}
+
+			return aspects
+		}
+
 		node(id: Id): Partial<AS> {
 			const set = this.#nodes.get(id)
 			if (!set)
@@ -61,15 +72,12 @@ export namespace Core {
 			return id
 		}
 
-		#assemble_aspects(...ids: Id[]) {
-			const aspects: Partial<AS> = {}
+		attach(nodeId: Id, aspectId: Id) {
+			this.#nodes.get(nodeId)!.add(aspectId)
+		}
 
-			for (const id of ids) {
-				const [aspect, kind] = this.aspect(id)
-				aspects[kind] = aspect
-			}
-
-			return aspects
+		detach(nodeId: Id, aspectId: Id) {
+			this.#nodes.get(nodeId)!.delete(aspectId)
 		}
 
 		*select<Kind extends keyof AS>(...kinds: Kind[]) {
@@ -83,6 +91,25 @@ export namespace Core {
 						nodeId,
 					] as [{[K in Kind]: AS[K]} & Partial<AS>, Id]
 			}
+		}
+
+		delete_node(id: Id) {
+			this.#nodes.delete(id)
+		}
+
+		delete_orphaned_aspects() {
+			const connected = new Set<Id>()
+
+			for (const [,set] of this.#nodes)
+				for (const aspectId of set)
+					connected.add(aspectId)
+
+			const aspect_ids_to_delete = [...this.#aspects]
+				.map(([aspectId]) => aspectId)
+				.filter(aspectId => !connected.has(aspectId))
+
+			for (const aspectId of aspect_ids_to_delete)
+				this.#aspects.delete(aspectId)
 		}
 
 		static load(file: File) {
