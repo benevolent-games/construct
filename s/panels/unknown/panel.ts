@@ -9,7 +9,9 @@ import {icon_feather_help_circle} from "../../icons/groups/feather/help-circle.j
 export const UnknownPanel = panel({
 	label: "unknown",
 	icon: icon_feather_help_circle,
-	view: slate.shadow_view({name: "unknown", styles}, _use => ({}: PanelProps) => {
+	view: slate.shadow_view(use => ({}: PanelProps) => {
+		use.styles(styles)
+		use.name("unknown")
 		return html`
 			<h1>unknown</h1>
 		`

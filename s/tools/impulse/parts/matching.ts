@@ -1,5 +1,5 @@
 
-import {deepEqual} from "@benev/slate"
+import {deep} from "@benev/slate"
 
 import {Btn} from "../binds.js"
 import {Input} from "../input.js"
@@ -21,7 +21,7 @@ export function input_matches_button(
 
 		// pass when modifiers match exactly
 		else
-			return deepEqual(opts, input.mods)
+			return deep.equal(opts, input.mods)
 	})
 }
 

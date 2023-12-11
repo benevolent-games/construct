@@ -8,7 +8,9 @@ import {leaf_management} from "./parts/leaf_management.js"
 import {miniSlate as slate} from "../../context/mini_slate.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
 
-export const ConstructEditor = slate.shadow_component({styles}, use => {
+export const ConstructEditor = slate.shadow_component(use => {
+	use.styles(styles)
+
 	const {layout, panels, drops} = use.context
 	const dropzone = drops.editor
 

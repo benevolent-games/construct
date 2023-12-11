@@ -17,9 +17,9 @@ import {user_controls_fly_camera} from "./parts/user_controls_fly_camera.js"
 export const ViewportPanel = panel({
 	label: "viewport",
 	icon: icon_feather_box,
-	view: slate.shadow_view({name: "viewport", styles},
-		use => ({leafId}: PanelProps) => {
-
+	view: slate.shadow_view(use => ({leafId}: PanelProps) => {
+		use.styles(styles)
+		use.name("viewport")
 		const {flowchart, gesture, world} = use.context
 
 		const canvas = use.init(canvas_with_resizing)

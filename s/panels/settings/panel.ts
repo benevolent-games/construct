@@ -9,7 +9,9 @@ import {icon_feather_settings} from "../../icons/groups/feather/settings.js"
 export const SettingsPanel = panel({
 	label: "settings",
 	icon: icon_feather_settings,
-	view: slate.shadow_view({name: "settings", styles}, use => ({}: PanelProps) => {
+	view: slate.shadow_view(use => ({}: PanelProps) => {
+		use.styles(styles)
+		use.name("settings")
 
 		function reset_layout() {
 			use.context.layout.reset_to_default()
