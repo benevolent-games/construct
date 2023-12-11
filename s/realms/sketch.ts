@@ -1,6 +1,37 @@
 
-import {Pojo} from "@benev/slate"
 import {Id, freshId} from "../tools/fresh_id.js"
+import {Pojo, ZipAction, watch} from "@benev/slate"
+
+export type EditorState = {
+	safe: Core.SafeState
+}
+
+export const actionate = {
+	safe: ZipAction.prep(
+		(state: EditorState) => state.safe,
+	)
+}
+
+export const action_blueprints = {
+	safe: actionate.safe.blueprint(action => ({
+		refl: action(state => (num: boolean) => {
+
+		}),
+	})),
+}
+
+export class AppCore {
+	#tree = watch.stateTree<EditorState>({
+		safe: {
+			nodes: new Map(),
+			aspects: new Map(),
+		},
+	})
+
+	get state() {
+		return this.#tree.state
+	}
+}
 
 export namespace Core {
 	export type Aspect = any
@@ -27,9 +58,19 @@ export namespace Core {
 		 // node_id,  aspect_ids
 	}
 
+	export type SafeState = {
+		nodes: Map<Id, Set<Id>>
+		aspects: Map<Id, [Kind, Aspect]>
+	}
+
 	export class Safe<AS extends AspectSchema> {
-		#nodes = new Map<Id, Set<Id>>()
-		#aspects = new Map<Id, [Kind, Aspect]>()
+		#appCore: AppCore
+
+		constructor(appCore: AppCore) {
+			this.#appCore = appCore
+		}
+
+		get #nodes() {}
 
 		#assemble_aspects(...ids: Id[]) {
 			const aspects: Partial<AS> = {}
