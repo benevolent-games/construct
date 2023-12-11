@@ -17,7 +17,7 @@ export function history_actualize<S, B extends ZipAction.Blueprint<S>>({
 	let action_count = 1
 
 	function recurse(specs: ZipAction.Blueprint<S>, purpose: string[]): any {
-		return ob.map(specs, (spec, name) => (
+		return ob(specs).map((spec, name) => (
 
 			(typeof spec === "function")
 

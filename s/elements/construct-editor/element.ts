@@ -8,13 +8,15 @@ import {leaf_management} from "./parts/leaf_management.js"
 import {miniSlate as slate} from "../../context/mini_slate.js"
 import {make_layout_renderer} from "./rendering/utils/make_layout_renderer.js"
 
-export const ConstructEditor = slate.shadow_component({styles}, use => {
+export const ConstructEditor = slate.shadow_component(use => {
+	use.styles(styles)
+
 	const {layout, panels, drops} = use.context
 	const dropzone = drops.editor
 
 	use.watch(() => layout.root)
 
-	const leaves = use.prepare(leaf_management({
+	const leaves = use.once(leaf_management({
 		panels,
 		element: use.element,
 		seeker: layout.seeker,
@@ -23,9 +25,9 @@ export const ConstructEditor = slate.shadow_component({styles}, use => {
 	leaves.add_new_leaves()
 	leaves.delete_old_leaves()
 
-	const resizer = use.prepare(() => new Resizer(layout))
+	const resizer = use.once(() => new Resizer(layout))
 
-	const render_layout = use.prepare(() => make_layout_renderer({
+	const render_layout = use.once(() => make_layout_renderer({
 		layout,
 		resizer,
 		panels: use.context.panels,

@@ -1,5 +1,5 @@
 
-import {setupFn} from "@benev/slate"
+import {mountFn} from "@benev/slate"
 
 import {PointerTracker} from "./pointer_tracker.js"
 import {Gesture} from "../../../context/controllers/gesture/controller.js"
@@ -11,7 +11,7 @@ export const selecting_objects = (
 		gesture: Gesture,
 		porthole: Porthole,
 		pointerTracker: PointerTracker,
-	) => setupFn(() => {
+	) => mountFn(() => {
 
 	return gesture.on.outline.buttons.select(input => {
 		flowchart.handle("NormalFlow", flow => {

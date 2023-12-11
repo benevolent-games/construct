@@ -18,11 +18,12 @@ import { make_outliner_behaviors } from "./utils/make_outliner_behaviors.js"
 export const OutlinerPanel = panel({
 	label: "outliner",
 	icon: icon_feather_layers,
-	view: slate.shadow_view({name: "outliner", styles},
-		use => ({}: PanelProps) => {
+	view: slate.shadow_view(use => ({}: PanelProps) => {
+		use.styles(styles)
+		use.name("outliner")
 
 		const {edcore, drops, outline, flowchart} = use.context
-		const folderStates = use.prepare(() => new LocalFolderStates())
+		const folderStates = use.once(() => new LocalFolderStates())
 
 		const outlinerMeta: OutlinerMeta = {
 			edcore,

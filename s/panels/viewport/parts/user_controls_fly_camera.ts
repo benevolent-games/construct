@@ -1,6 +1,6 @@
 
-import {setupFn} from "@benev/slate"
-import {v2} from "@benev/toolbox/x/utils/v2.js"
+import {vec2} from "@benev/toolbox"
+import {mountFn} from "@benev/slate"
 
 import {axis} from "./axis.js"
 import {LookVector} from "./look_vector.js"
@@ -15,7 +15,7 @@ export const user_controls_fly_camera = (
 		gesture: Gesture,
 		porthole: Porthole,
 		lookVector: LookVector,
-	) => setupFn(() => world.onRender(() => {
+	) => mountFn(() => world.onRender(() => {
 
 	const this_leaf_is_not_focal = gesture.focal.value?.leafId !== leafId
 	const this_leaf_is_pointer_locked = gesture.pointerLock.value?.leafId === leafId
@@ -33,7 +33,7 @@ export const user_controls_fly_camera = (
 		axis(forward, backward),
 	])
 
-	porthole.add_look(v2.multiplyBy([
+	porthole.add_look(vec2.multiplyBy([
 		axis(right, left),
 		axis(up, down),
 	], 0.05))

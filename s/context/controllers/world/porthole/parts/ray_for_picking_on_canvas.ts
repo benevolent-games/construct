@@ -1,5 +1,5 @@
 
-import {V2} from "@benev/toolbox/x/utils/v2.js"
+import {Vec2} from "@benev/toolbox"
 import {Ray} from "@babylonjs/core/Culling/ray.js"
 import {Camera} from "@babylonjs/core/Cameras/camera.js"
 import {Matrix, Vector3} from "@babylonjs/core/Maths/math.vector.js"
@@ -7,7 +7,7 @@ import {Matrix, Vector3} from "@babylonjs/core/Maths/math.vector.js"
 export function ray_for_picking_on_canvas(
 		camera: Camera,
 		canvas: HTMLCanvasElement,
-		canvasCoordinates: V2,
+		canvasCoordinates: Vec2,
 	) {
 
 	const [x, y] = canvasCoordinates

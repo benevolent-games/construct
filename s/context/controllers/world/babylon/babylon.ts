@@ -15,7 +15,7 @@ import {PBRMaterial} from "@babylonjs/core/Materials/PBR/pbrMaterial.js"
 import {HemisphericLight} from "@babylonjs/core/Lights/hemisphericLight.js"
 
 import {pub} from "@benev/slate"
-import {spawn_boxes} from "@benev/toolbox/x/demo/spawn_boxes.js"
+import {Rand, Vec3, babylonian, loop} from "@benev/toolbox"
 
 export class Babylon {
 	canvas = new OffscreenCanvas(160, 90)
@@ -57,5 +57,32 @@ export class Babylon {
 			scene.render()
 		})
 	}
+}
+
+export function spawn_boxes(scene: Scene) {
+	const material = new PBRMaterial("material", scene)
+	material.albedoColor = new Color3(0.8, 0.8, 0.8)
+	material.roughness = 0.5
+	material.metallic = 0.5
+
+	const randy = Rand.seed(4)
+
+	function rand() {
+		const sign = randy.roll(0.5)
+		const coordinate = randy.between(5, 20)
+		return sign
+			? coordinate
+			: -coordinate
+	}
+
+	function make_a_random_box() {
+		const position: Vec3 = [rand(), rand(), rand()]
+		const box = MeshBuilder.CreateBox("box", {size: 2}, scene)
+		box.material = material
+		box.position = babylonian.from.vec3(position)
+	}
+
+	for (const _ of loop(200))
+		make_a_random_box()
 }
 

@@ -17,9 +17,9 @@ import {user_controls_fly_camera} from "./parts/user_controls_fly_camera.js"
 export const ViewportPanel = panel({
 	label: "viewport",
 	icon: icon_feather_box,
-	view: slate.shadow_view({name: "viewport", styles},
-		use => ({leafId}: PanelProps) => {
-
+	view: slate.shadow_view(use => ({leafId}: PanelProps) => {
+		use.styles(styles)
+		use.name("viewport")
 		const {flowchart, gesture, world} = use.context
 
 		const canvas = use.init(canvas_with_resizing)
@@ -35,7 +35,7 @@ export const ViewportPanel = panel({
 			))
 		)
 
-		use.setup(selecting_objects(
+		use.mount(selecting_objects(
 			flowchart,
 			gesture,
 			porthole,
@@ -44,7 +44,7 @@ export const ViewportPanel = panel({
 
 		const lookVector = use.init(look_vector_wired_for_inputs(gesture))
 
-		use.setup(user_controls_fly_camera(
+		use.mount(user_controls_fly_camera(
 			leafId,
 			world,
 			gesture,
@@ -52,7 +52,7 @@ export const ViewportPanel = panel({
 			lookVector,
 		))
 
-		use.setup(fly_mode_manipulations(
+		use.mount(fly_mode_manipulations(
 			leafId,
 			gesture,
 			flowchart,

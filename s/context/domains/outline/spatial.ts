@@ -1,16 +1,15 @@
 
-import {V3, v3} from "@benev/toolbox/x/utils/v3.js"
-import {Quat} from "@benev/toolbox/x/utils/quat.js"
+import {vec3, Vec3, Quat} from "@benev/toolbox"
 
 export type Spatial = {
-	position: V3
-	scale: V3
+	position: Vec3
+	scale: Vec3
 	rotation: Quat
 }
 
 export function init_spatial(): Spatial {
 	return {
-		position: v3.zero(),
+		position: vec3.zero(),
 		scale: [1, 1, 1],
 		rotation: [0, 0, 0, 1],
 	}

@@ -1,7 +1,6 @@
 
 import {Node} from "@babylonjs/core/node.js"
-import {V3, v3} from "@benev/toolbox/x/utils/v3.js"
-import {Quat, quat} from "@benev/toolbox/x/utils/quat.js"
+import {Vec3, Quat, babylonian} from "@benev/toolbox"
 import {Color4} from "@babylonjs/core/Maths/math.color.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 import {TransformNode} from "@babylonjs/core/Meshes/transformNode.js"
@@ -32,22 +31,22 @@ export class InstanceUnit extends BaseUnit {
 	}
 
 	get position() {
-		return v3.fromBabylon(this.#node.position)
-	} set position(vector: V3) {
+		return babylonian.to.vec3(this.#node.position)
+	} set position(vector: Vec3) {
 		this.#node.position.set(...vector)
 	}
 
 	get rotation() {
-		return quat.fromBabylon(this.#node.absoluteRotationQuaternion)
+		return babylonian.to.quat(this.#node.absoluteRotationQuaternion)
 	} set rotation(quaternion: Quat) {
 		this.#node.rotationQuaternion = this.#node.rotationQuaternion
 			? this.#node.rotationQuaternion.set(...quaternion)
-			: quat.toBabylon(quaternion)
+			: babylonian.from.quat(quaternion)
 	}
 
 	get scale() {
-		return v3.fromBabylon(this.#node.scaling)
-	} set scale(vector: V3) {
+		return babylonian.to.vec3(this.#node.scaling)
+	} set scale(vector: Vec3) {
 		this.#node.scaling.set(...vector)
 	}
 

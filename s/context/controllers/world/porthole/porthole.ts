@@ -1,13 +1,16 @@
 
+import {Vec2} from "@benev/toolbox"
 import {Initiator} from "@benev/slate"
-import {V2} from "@benev/toolbox/x/utils/v2.js"
 import {AbstractMesh} from "@babylonjs/core/Meshes/abstractMesh.js"
 
 import {magic} from "../magic.js"
 import {Id} from "../../../../tools/fresh_id.js"
 import {ray_for_picking_on_canvas} from "./parts/ray_for_picking_on_canvas.js"
 import {Babylon} from "../../../../context/controllers/world/babylon/babylon.js"
-import {make_fly_camera} from "@benev/toolbox/x/babylon/flycam/make_fly_camera.js"
+
+function make_fly_camera(...args: any[]): any {
+	throw new Error("make_fly_camera not implemented")
+}
 
 export class Porthole extends Initiator {
 	#babylon: Babylon
@@ -47,11 +50,11 @@ export class Porthole extends Initiator {
 		},
 	}
 
-	add_look(vector: V2) {
+	add_look(vector: Vec2) {
 		this.#fly.add_look(vector)
 	}
 
-	add_move(vector: V2) {
+	add_move(vector: Vec2) {
 		this.#fly.add_move(vector)
 	}
 
@@ -59,7 +62,7 @@ export class Porthole extends Initiator {
 		this.#fly.add_move_vertical(y)
 	}
 
-	pick_on_canvas(coordinates: V2): Id | null {
+	pick_on_canvas(coordinates: Vec2): Id | null {
 		const pick = this.#babylon.scene.pickWithRay(
 			ray_for_picking_on_canvas(
 				this.#fly.camera,

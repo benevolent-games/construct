@@ -13,7 +13,9 @@ import { ActionRecord } from "../../context/framework/utils/action_record.js"
 export const HistoryPanel = panel({
 	label: "history",
 	icon: icon_akar_history,
-	view: slate.shadow_view({name: "history", styles}, use => ({}: PanelProps) => {
+	view: slate.shadow_view(use => ({}: PanelProps) => {
+		use.styles(styles)
+		use.name("history")
 
 		const {history} = use.context.edcore
 		const {past, future} = use.watch(() => history.annals)
@@ -31,7 +33,7 @@ export const HistoryPanel = panel({
 				redo: () => {},
 			}
 
-		use.setup(() => {
+		use.mount(() => {
 			const interval = setInterval(() => use.rerender(), 1000)
 			return () => clearInterval(interval)
 		})

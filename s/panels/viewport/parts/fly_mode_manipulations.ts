@@ -1,5 +1,5 @@
 
-import {setupFn} from "@benev/slate"
+import {mountFn} from "@benev/slate"
 
 import {Id} from "../../../tools/fresh_id.js"
 import {Mover} from "../../../context/controllers/world/mover/mover.js"
@@ -15,7 +15,7 @@ export const fly_mode_manipulations = (
 		// mover: Mover,
 		// porthole: Porthole,
 		canvas: HTMLCanvasElement,
-	) => setupFn(() => {
+	) => mountFn(() => {
 
 	const is_focal = () => gesture.focal.value?.leafId === leafId
 	const is_pointer_locked = () => gesture.pointerLock.value?.leafId === leafId

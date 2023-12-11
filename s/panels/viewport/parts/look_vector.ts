@@ -1,12 +1,12 @@
 
 import {initFn} from "@benev/slate"
-import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
+import {Vec2, vec2} from "@benev/toolbox"
 import {Gesture} from "../../../context/controllers/gesture/controller"
 
 export class LookVector {
-	#look = v2.zero()
+	#look = vec2.zero()
 	#sensitivity: number
-	#invert: V2
+	#invert: Vec2
 
 	constructor(options: {
 			sensitivity: number
@@ -20,15 +20,15 @@ export class LookVector {
 		]
 	}
 
-	accumulate(more: V2) {
-		this.#look = v2.add(this.#look, more)
+	accumulate(more: Vec2) {
+		this.#look = vec2.add(this.#look, more)
 	}
 
 	grab_and_reset() {
 		const vector = this.#look
-		this.#look = v2.zero()
-		return v2.multiplyBy(
-			v2.multiply(vector, this.#invert),
+		this.#look = vec2.zero()
+		return vec2.multiplyBy(
+			vec2.multiply(vector, this.#invert),
 			this.#sensitivity,
 		)
 	}

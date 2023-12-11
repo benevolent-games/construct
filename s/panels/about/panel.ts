@@ -10,7 +10,9 @@ import {icon_feather_info} from "../../icons/groups/feather/info.js"
 export const AboutPanel = panel({
 	label: "about",
 	icon: icon_feather_info,
-	view: slate.shadow_view({name: "about", styles}, _use => ({}: PanelProps) => {
+	view: slate.shadow_view(use => ({}: PanelProps) => {
+		use.styles(styles)
+		use.name("about")
 		return html`
 			<div class=logo>
 				${icon_benev_b}

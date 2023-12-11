@@ -1,5 +1,5 @@
 
-import {V2, v2} from "@benev/toolbox/x/utils/v2.js"
+import {Vec2, vec2} from "@benev/toolbox"
 import {Pub, flat, ob, pub} from "@benev/slate"
 
 import {Input} from "./input.js"
@@ -24,7 +24,7 @@ export class Impulse<B extends Binds> {
 	readonly report: {
 		[M in keyof B]: {
 			buttons: {[P in keyof B[M]["buttons"]]: boolean}
-			vectors: {[P in keyof B[M]["vectors"]]: V2}
+			vectors: {[P in keyof B[M]["vectors"]]: Vec2}
 		}
 	}
 
@@ -44,19 +44,17 @@ export class Impulse<B extends Binds> {
 		this.binds = binds
 		this.add(...devices)
 
-		this.report = ob.map(
-			binds,
-			({buttons, vectors}) => ({
-				buttons: flat.state(ob.map(buttons, () => false)) as any,
-				vectors: flat.state(ob.map(vectors, () => v2.zero())) as any,
+		this.report = ob(binds)
+			.map(({buttons, vectors}) => ({
+				buttons: flat.state(ob(buttons).map(() => false)) as any,
+				vectors: flat.state(ob(vectors).map(() => vec2.zero())) as any,
 			}),
 		)
 
-		this.on = ob.map(
-			binds,
-			({buttons, vectors}) => ({
-				buttons: ob.map(buttons, () => pub()) as any,
-				vectors: ob.map(vectors, () => pub()) as any,
+		this.on = ob(binds)
+			.map(({buttons, vectors}) => ({
+				buttons: ob(buttons).map(() => pub()) as any,
+				vectors: ob(vectors).map(() => pub()) as any,
 			}),
 		)
 	}

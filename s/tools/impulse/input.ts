@@ -1,5 +1,5 @@
 
-import {V2} from "@benev/toolbox/x/utils/v2.js"
+import {Vec2} from "@benev/toolbox"
 
 export namespace Input {
 	export type Kind = "button" | "vector"
@@ -25,7 +25,7 @@ export namespace Input {
 	export interface Vector extends Base {
 		kind: "vector"
 		channel: string
-		vector: V2
+		vector: Vec2
 	}
 
 	export type Whatever = Button | Vector

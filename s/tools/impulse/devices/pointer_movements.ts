@@ -1,14 +1,14 @@
 
 import {pub} from "@benev/slate"
-import {V2} from "@benev/toolbox/x/utils/v2.js"
+import {Vec2} from "@benev/toolbox"
 
 import {Input} from "../input.js"
 import {Device} from "../device.js"
 
 export class PointerMovements extends Device {
 	dispose: () => void
-	movement: V2 = [0, 0]
-	coordinates: V2 = [0, 0]
+	movement: Vec2 = [0, 0]
+	coordinates: Vec2 = [0, 0]
 
 	onInput = pub<Input.Vector>()
 
@@ -21,7 +21,7 @@ export class PointerMovements extends Device {
 				event.clientY,
 			]
 
-			const movement: V2 = [
+			const movement: Vec2 = [
 				event.movementX,
 				event.movementY,
 			]

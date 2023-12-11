@@ -1,5 +1,5 @@
 
-import {deepEqual} from "@benev/slate"
+import {deep} from "@benev/slate"
 
 import {AnyUnit} from "./types.js"
 import {Id} from "../../../../../tools/fresh_id.js"
@@ -63,7 +63,7 @@ export function make_unit_tools(
 
 	function update_prop_if_glb_changed(item: Item.Instance) {
 		const old_address = addresses.get(item.id)
-		if (deepEqual(item.address, old_address)) {
+		if (deep.equal(item.address, old_address)) {
 			delete_by_id(item.id)
 			add_for_item(item)
 		}

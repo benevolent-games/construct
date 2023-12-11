@@ -1,11 +1,11 @@
 
+import {Vec2} from "@benev/toolbox"
 import {Initiator} from "@benev/slate"
-import {V2} from "@benev/toolbox/x/utils/v2.js"
 import {coordinates_in_rect} from "../../../tools/coordinates_in_rect.js"
 import {PointerMovements} from "../../../tools/impulse/devices/pointer_movements.js"
 
 export class PointerTracker extends Initiator {
-	canvasCoordinates: V2 | null = null
+	canvasCoordinates: Vec2 | null = null
 
 	constructor(
 			pointerMovements: PointerMovements,

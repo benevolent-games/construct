@@ -1,10 +1,10 @@
 
-import type {V2} from "@benev/toolbox/x/utils/v2.js"
+import type {Vec2} from "@benev/toolbox"
 
 export function coordinates_in_rect(
-		coordinates: V2,
+		coordinates: Vec2,
 		rect: DOMRect,
-	): V2 | null {
+	): Vec2 | null {
 
 	const [clientX, clientY] = coordinates
 	const x = clientX - rect.left
